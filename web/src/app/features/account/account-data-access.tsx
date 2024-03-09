@@ -1,8 +1,25 @@
+import { Anchor } from '@mantine/core'
+import { NotificationData } from '@mantine/notifications'
 import { toastError, toastSuccess } from '@pubkey-ui/core'
-import { useConnection, useWallet } from '@solana/wallet-adapter-react'
-import { TOKEN_2022_PROGRAM_ID, TOKEN_PROGRAM_ID } from '@solana/spl-token'
 import {
+  burnChecked,
+  closeAccount,
+  ExtensionType,
+  getExtensionTypes,
+  getMint,
+  getOrCreateAssociatedTokenAccount,
+  getTransferFeeConfig,
+  Mint,
+  TOKEN_2022_PROGRAM_ID,
+  TOKEN_PROGRAM_ID,
+  transferCheckedWithFee,
+  TransferFeeConfig,
+} from '@solana/spl-token'
+import { useConnection, useWallet } from '@solana/wallet-adapter-react'
+import {
+  Commitment,
   Connection,
+  Keypair,
   LAMPORTS_PER_SOL,
   PublicKey,
   SystemProgram,
@@ -13,14 +30,56 @@ import {
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 
 import { useCluster } from '../cluster/cluster-data-access'
-import { NotificationData } from '@mantine/notifications'
-import { Anchor } from '@mantine/core'
 
-export function useQueries({ address }: { address: PublicKey }) {
+export function useQueries({ address, commitment = 'confirmed' }: { address: PublicKey; commitment?: Commitment }) {
   const { connection } = useConnection()
   const wallet = useWallet()
 
   return {
+    burnToken: {
+      mutationKey: ['burnToken', { endpoint: connection?.rpcEndpoint, address }],
+      mutationFn: async (input: { amount: string; source: string; mint: string; feePayer: Keypair }) => {
+        const feePayer = input.feePayer
+        const mintPublicKey = new PublicKey(input.mint)
+        const sourceTokenAccount = new PublicKey(input.source)
+
+        const { mint, programId } = await getMintWithProgramId(connection, mintPublicKey, commitment)
+
+        return burnChecked(
+          connection,
+          feePayer,
+          sourceTokenAccount,
+          mintPublicKey,
+          feePayer,
+          parseFloat(input.amount) * 10 ** mint.decimals,
+          mint.decimals,
+          [],
+          undefined,
+          programId,
+        )
+      },
+    },
+    closeAccount: {
+      mutationKey: ['closeAccount', { endpoint: connection?.rpcEndpoint, address }],
+      mutationFn: async (input: { source: string; mint: string; feePayer: Keypair }) => {
+        const feePayer = input.feePayer
+        const mintPublicKey = new PublicKey(input.mint)
+        const sourceTokenAccount = new PublicKey(input.source)
+
+        const programId = await getProgramId(connection, mintPublicKey, commitment)
+
+        return closeAccount(
+          connection,
+          feePayer,
+          sourceTokenAccount,
+          feePayer.publicKey,
+          feePayer,
+          [],
+          undefined,
+          programId,
+        )
+      },
+    },
     getBalance: {
       queryKey: ['getBalance', { endpoint: connection?.rpcEndpoint, address }],
       queryFn: () => connection.getBalance(address),
@@ -59,6 +118,77 @@ export function useQueries({ address }: { address: PublicKey }) {
           await connection.confirmTransaction({ signature, ...latestBlockhash }, 'confirmed')
 
           return signature
+        } catch (error: unknown) {
+          console.log('error', `Transaction failed! ${error}`)
+          return
+        }
+      },
+    },
+    transferToken: {
+      mutationKey: ['transferToken', { endpoint: connection?.rpcEndpoint, address }],
+      mutationFn: async (input: {
+        amount: string
+        source: string
+        destination: string
+        mint: string
+        feePayer: Keypair
+      }) => {
+        const destinationPublicKey = new PublicKey(input.destination)
+        const feePayer = input.feePayer
+        const feePayerPublicKey = feePayer.publicKey
+        const mintPublicKey = new PublicKey(input.mint)
+        const sourceTokenAccount = new PublicKey(input.source)
+
+        try {
+          // Get the mint account and program ID
+          const { mint, programId } = await getMintWithProgramId(connection, mintPublicKey, commitment)
+
+          // Get or create associated token account for destination
+          const destinationTokenAccount = await getOrCreateAssociatedTokenAccount(
+            connection,
+            feePayer,
+            mintPublicKey,
+            destinationPublicKey,
+            undefined,
+            commitment,
+            undefined,
+            programId,
+          )
+
+          // Get the mint extensions
+          const extensions = getExtensionTypes(mint.tlvData)
+
+          // Check if mint has transfer fee
+          if (extensions.includes(ExtensionType.TransferFeeConfig)) {
+            const epoch = await connection.getEpochInfo(commitment)
+            const { feeCharged, transferAmount } = getTransferFeeForMintAmount(mint, epoch.epoch, input.amount)
+
+            return transferCheckedWithFee(
+              connection,
+              feePayer, // Transaction fee payer
+              sourceTokenAccount, // Source Token Account
+              mintPublicKey, // Mint Account address
+              destinationTokenAccount.address, // Destination Token Account
+              feePayerPublicKey, // Owner of Source Account
+              transferAmount, // Amount to transfer
+              mint.decimals, // Mint Account decimals
+              feeCharged, // Transfer fee
+              undefined, // Additional signers
+              undefined, // Confirmation options
+              programId, // Token Extension Program ID
+            )
+          }
+
+          console.log('This mint does not have a transfer fee')
+          console.log({
+            amount: input.amount,
+            source: new PublicKey(input.source),
+            destination: new PublicKey(input.destination),
+            destinationTokenAccount: destinationTokenAccount.address,
+            mint,
+          })
+
+          throw new Error('This mint does not have a transfer fee, I can only transfer tokens with a transfer fee')
         } catch (error: unknown) {
           console.log('error', `Transaction failed! ${error}`)
           return
@@ -131,7 +261,7 @@ async function requestAndConfirmAirdrop({
   return signature
 }
 
-function useOnTransactionSuccess({ address }: { address: PublicKey }) {
+export function useOnTransactionSuccess({ address }: { address: PublicKey }) {
   const { getExplorerUrl } = useCluster()
   const client = useQueryClient()
   const { getBalance, getSignatures } = useQueries({ address })
@@ -202,4 +332,95 @@ export async function createTransaction({
     transaction,
     latestBlockhash,
   }
+}
+
+export function useBurnToken({ address }: { address: PublicKey }) {
+  const {
+    burnToken: { mutationKey, mutationFn },
+  } = useQueries({ address })
+  const onSuccess = useOnTransactionSuccess({ address })
+  return useMutation({
+    mutationKey,
+    mutationFn,
+    onSuccess,
+    onError: (error: unknown) => {
+      toastError(`Burning token failed! ${error}`)
+    },
+  })
+}
+
+export function useCloseAccount({ address }: { address: PublicKey }) {
+  const {
+    closeAccount: { mutationKey, mutationFn },
+  } = useQueries({ address })
+  const onSuccess = useOnTransactionSuccess({ address })
+  return useMutation({
+    mutationKey,
+    mutationFn,
+    onSuccess,
+    onError: (error: unknown) => {
+      toastError(`Closing account failed! ${error}`)
+    },
+  })
+}
+
+export async function getProgramId(
+  connection: Connection,
+  mintPublicKey: PublicKey,
+  commitment: Commitment = 'confirmed',
+) {
+  return connection.getParsedAccountInfo(mintPublicKey, commitment).then((res) => {
+    if (!res.value?.owner) {
+      throw new Error(`Mint ${mintPublicKey} not found`)
+    }
+    return res.value?.owner
+  })
+}
+
+export function useTransferToken({ address }: { address: PublicKey }) {
+  const onSuccess = useOnTransactionSuccess({ address })
+  return useMutation({
+    ...useQueries({ address }).transferToken,
+    onSuccess,
+    onError: (error: unknown) => {
+      toastError(`Sending transaction failed! ${error}`)
+    },
+  })
+}
+
+function getTransferFeeForMintAmount(mint: Mint, epoch: number, amount: string) {
+  const transferFeeConfig: TransferFeeConfig | null = getTransferFeeConfig(mint)
+
+  if (!transferFeeConfig) {
+    throw new Error(`This mint has a transfer fee, but no transfer fee config!`)
+  }
+
+  const { maximumFee, transferFeeBasisPoints } =
+    epoch < transferFeeConfig.newerTransferFee.epoch
+      ? transferFeeConfig.olderTransferFee
+      : transferFeeConfig.newerTransferFee
+
+  // Transfer amount
+  const transferAmount = BigInt(Math.round(parseFloat(amount) * 10 ** mint.decimals))
+  // Calculate transfer fee
+  const fee = (transferAmount * BigInt(transferFeeBasisPoints)) / BigInt(10_000)
+  // Determine fee charged
+  const feeCharged = fee > maximumFee ? maximumFee : fee
+
+  return {
+    feeCharged,
+    transferAmount,
+  }
+}
+
+export async function getMintWithProgramId(
+  connection: Connection,
+  mintPublicKey: PublicKey,
+  commitment: Commitment = 'confirmed',
+) {
+  return getProgramId(connection, mintPublicKey, commitment).then(async (programId) => {
+    const mint = await getMint(connection, mintPublicKey, commitment, programId)
+
+    return { mint, programId }
+  })
 }

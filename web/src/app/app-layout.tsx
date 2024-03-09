@@ -1,7 +1,8 @@
 import { useDisclosure } from '@mantine/hooks'
 import { UiHeader, UiHeaderLink, UiLayout } from '@pubkey-ui/core'
 import { ReactNode } from 'react'
-import { AccountChecker } from './features/account/account-ui'
+
+import { AccountUiChecker } from './features/account/ui/account-ui-checker'
 import { ClusterChecker } from './features/cluster/cluster-ui'
 
 export function AppLayout({
@@ -17,7 +18,7 @@ export function AppLayout({
   return (
     <UiLayout header={<UiHeader opened={opened} toggle={toggle} links={links} profile={profile} />}>
       <ClusterChecker>
-        <AccountChecker />
+        <AccountUiChecker />
       </ClusterChecker>
       {children}
     </UiLayout>

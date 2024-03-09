@@ -1,6 +1,6 @@
 import { Anchor, AnchorProps, Button, Group, Menu, Modal, Select, Table, Text, TextInput } from '@mantine/core'
 import { useDisclosure } from '@mantine/hooks'
-import { UiWarning } from '@pubkey-ui/core'
+import { UiCopy, UiWarning } from '@pubkey-ui/core'
 import { useConnection } from '@solana/wallet-adapter-react'
 import { IconNetwork, IconNetworkOff, IconTrash } from '@tabler/icons-react'
 import { useQuery } from '@tanstack/react-query'
@@ -8,12 +8,20 @@ import { ReactNode, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { ClusterNetwork, useCluster } from './cluster-data-access'
 
-export function ExplorerLink({ path, label, ...props }: { path: string; label: string } & AnchorProps) {
+export function ExplorerLink({
+  copy,
+  path,
+  label = 'View on Explorer',
+  ...props
+}: { path: string; copy?: string; label?: ReactNode } & AnchorProps) {
   const { getExplorerUrl } = useCluster()
   return (
-    <Anchor href={getExplorerUrl(path)} target="_blank" rel="noopener noreferrer" {...props}>
-      {label}
-    </Anchor>
+    <Group align="start" gap={4} wrap="nowrap">
+      {copy ? <UiCopy text={copy} /> : null}
+      <Anchor href={getExplorerUrl(path)} target="_blank" rel="noopener noreferrer" {...props}>
+        {label}
+      </Anchor>
+    </Group>
   )
 }
 

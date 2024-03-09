@@ -2,7 +2,8 @@ import { Button, Title } from '@mantine/core'
 import { UiCard, UiLoader, UiStack } from '@pubkey-ui/core'
 import { PublicKey } from '@solana/web3.js'
 import { useMemo } from 'react'
-import { ellipsify } from '../../account/account-ui'
+
+import { ellipsify } from '../../account/ui/ellipsify'
 import { ExplorerLink } from '../../cluster/cluster-ui'
 import { usePubkeyProfileProgramAccount } from '../data-access'
 

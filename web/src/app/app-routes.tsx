@@ -5,6 +5,8 @@ import { Link, Navigate, RouteObject, useRoutes } from 'react-router-dom'
 import { AppLayout } from './app-layout'
 import { ClusterUiSelect } from './features/cluster/cluster-ui'
 import { DashboardFeature } from './features/dashboard/dashboard-feature'
+import { KeypairFeature } from './features/keypair/feature'
+import { KeypairUiBalance, KeypairUiSelect } from './features/keypair/ui'
 import { WalletIcon } from './features/solana/solana-provider'
 
 const AccountList = lazy(() => import('./features/account/account-feature-list'))
@@ -22,6 +24,7 @@ const routes: RouteObject[] = [
   { path: '/account', element: <AccountList /> },
   { path: '/account/:address', element: <AccountDetail /> },
   { path: '/clusters', element: <ClusterFeature /> },
+  { path: '/keypairs/*', element: <KeypairFeature /> },
   { path: '/pubkey-profile', element: <PubkeyProfileFeature /> },
 ]
 
@@ -38,6 +41,8 @@ export function AppRoutes() {
       links={links}
       profile={
         <Group>
+          <KeypairUiBalance />
+          <KeypairUiSelect />
           <ClusterUiSelect />
           <WalletIcon />
           <UiThemeSwitch />

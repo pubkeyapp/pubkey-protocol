@@ -1,7 +1,8 @@
 import { Group, Text, Title } from '@mantine/core'
 import { UiStack } from '@pubkey-ui/core'
 import { useWallet } from '@solana/wallet-adapter-react'
-import { ellipsify } from '../../account/account-ui'
+
+import { ellipsify } from '../../account/ui/ellipsify'
 import { ExplorerLink } from '../../cluster/cluster-ui'
 import { WalletButton } from '../../solana/solana-provider'
 import { usePubkeyProfileProgram } from '../data-access'

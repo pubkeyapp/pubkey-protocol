@@ -6,8 +6,12 @@ import { useMemo } from 'react'
 import { useParams } from 'react-router-dom'
 
 import { ExplorerLink } from '../cluster/cluster-ui'
+import { AccountUiTokens } from './account-ui-tokens'
 
-import { AccountBalance, AccountButtons, AccountTokens, AccountTransactions, ellipsify } from './account-ui'
+import { AccountUiBalance } from './ui/account-ui-balance'
+import { AccountUiButtons } from './ui/account-ui-buttons'
+import { AccountUiTransactions } from './ui/account-ui-transactions'
+import { ellipsify } from './ui/ellipsify'
 
 export default function AccountFeatureDetail() {
   const params = useParams()
@@ -28,14 +32,14 @@ export default function AccountFeatureDetail() {
   return (
     <Container py="xl" my="xl">
       <UiStack align="center" gap="xl">
-        <AccountBalance order={2} address={address} />
+        <AccountUiBalance order={2} address={address} />
         <ExplorerLink path={`account/${address}`} label={ellipsify(address.toString())} />
-        <AccountButtons address={address} />
+        <AccountUiButtons address={address} />
       </UiStack>
 
       <UiStack>
-        <AccountTokens address={address} />
-        <AccountTransactions address={address} />
+        <AccountUiTokens address={address} />
+        <AccountUiTransactions address={address} />
       </UiStack>
     </Container>
   )
