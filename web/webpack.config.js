@@ -7,6 +7,7 @@ module.exports = composePlugins(withNx(), withReact(), (config) => {
   // e.g. `config.plugins.push(new MyPlugin())`
   config.ignoreWarnings = [/Failed to parse source map/]
   config.resolve.fallback = {
+    buffer: require.resolve('buffer/'),
     crypto: false,
   }
   return config

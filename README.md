@@ -46,6 +46,12 @@ Build web app
 pnpm build:web
 ```
 
+Build the Anchor program
+
+```sh
+pnpm build:anchor
+```
+
 ### Lint
 
 Lint all projects

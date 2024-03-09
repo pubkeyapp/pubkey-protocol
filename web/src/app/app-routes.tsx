@@ -11,22 +11,27 @@ const AccountList = lazy(() => import('./features/account/account-feature-list')
 const AccountDetail = lazy(() => import('./features/account/account-feature-detail'))
 const ClusterFeature = lazy(() => import('./features/cluster/cluster-feature'))
 
+const PubkeyProfileFeature = lazy(() => import('./features/pubkey-profile/feature/pubkey-profile-feature'))
 const links: UiHeaderLink[] = [
   { label: 'Dashboard', link: '/dashboard' },
   { label: 'Account', link: '/account' },
   { label: 'Clusters', link: '/clusters' },
+  { label: 'PubKey Profile', link: '/pubkey-profile' },
 ]
 const routes: RouteObject[] = [
-  { path: '/', element: <Navigate to="/dashboard" replace /> },
   { path: '/account', element: <AccountList /> },
   { path: '/account/:address', element: <AccountDetail /> },
   { path: '/clusters', element: <ClusterFeature /> },
-  { path: '/dashboard', element: <DashboardFeature /> },
-  { path: '*', element: <UiNotFound /> },
+  { path: '/pubkey-profile', element: <PubkeyProfileFeature /> },
 ]
 
 export function AppRoutes() {
-  const router = useRoutes(routes)
+  const router = useRoutes([
+    { path: '/', element: <Navigate to="/dashboard" replace /> },
+    ...routes,
+    { path: '/dashboard', element: <DashboardFeature /> },
+    { path: '*', element: <UiNotFound /> },
+  ])
 
   return (
     <AppLayout
