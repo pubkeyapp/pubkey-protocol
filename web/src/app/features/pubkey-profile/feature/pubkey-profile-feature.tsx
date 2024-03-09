@@ -5,7 +5,7 @@ import { ellipsify } from '../../account/account-ui'
 import { ExplorerLink } from '../../cluster/cluster-ui'
 import { WalletButton } from '../../solana/solana-provider'
 import { usePubkeyProfileProgram } from '../data-access'
-import { PubkeyProfileUiCreate, PubkeyProfileUiList } from '../ui'
+import { PubkeyProfileUiCreate, PubkeyProfileUiDemo, PubkeyProfileUiList } from '../ui'
 
 export default function PubkeyProfileFeature() {
   const { publicKey } = useWallet()
@@ -24,6 +24,7 @@ export default function PubkeyProfileFeature() {
         <PubkeyProfileUiCreate />
       </Group>
       <PubkeyProfileUiList />
+      <PubkeyProfileUiDemo />
     </UiStack>
   ) : (
     <WalletButton />
