@@ -1,5 +1,5 @@
 import { Program } from '@coral-xyz/anchor'
-import { getPubkeyProfileProgramId, PubkeyProfileIDL } from '@pubkey-ui-starter/anchor'
+import { getPubkeyProfileProgramId, PubkeyProfileIDL } from '@pubkey-program-library/anchor'
 import { toastError } from '@pubkey-ui/core'
 import { useConnection } from '@solana/wallet-adapter-react'
 import { Cluster, Keypair } from '@solana/web3.js'
