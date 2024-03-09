@@ -37,7 +37,7 @@ export function PubkeyProfileUiCard({ account }: { account: PublicKey }) {
               }
               return setMutation.mutateAsync(parseInt(value))
             }}
-            disabled={setMutation.isPending}
+            loading={setMutation.isPending}
           >
             Set
           </Button>
@@ -45,7 +45,7 @@ export function PubkeyProfileUiCard({ account }: { account: PublicKey }) {
             size="xs"
             variant="outline"
             onClick={() => decrementMutation.mutateAsync()}
-            disabled={decrementMutation.isPending}
+            loading={decrementMutation.isPending}
           >
             Decrement
           </Button>
@@ -62,7 +62,7 @@ export function PubkeyProfileUiCard({ account }: { account: PublicKey }) {
               }
               return closeMutation.mutateAsync()
             }}
-            disabled={closeMutation.isPending}
+            loading={closeMutation.isPending}
           >
             Close
           </Button>

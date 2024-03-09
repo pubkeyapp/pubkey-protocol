@@ -6,8 +6,8 @@ export function PubkeyProfileUiCreate() {
   const { initialize } = usePubkeyProfileProgram()
 
   return (
-    <Button variant="light" onClick={() => initialize.mutateAsync(Keypair.generate())} disabled={initialize.isPending}>
-      Create {initialize.isPending && '...'}
+    <Button loading={initialize.isPending} variant="light" onClick={() => initialize.mutateAsync(Keypair.generate())}>
+      Create
     </Button>
   )
 }
