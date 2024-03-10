@@ -22,6 +22,8 @@ pub struct Profile {
     pub username: String,
     // Avatar URL
     pub avatar_url: String,
+    // Remote fee payer
+    pub fee_payer: Pubkey,
     // Authorities that have been delegated to
     pub authorities: Vec<Pubkey>,
     // Identities user have added onto
@@ -41,6 +43,7 @@ impl Profile {
         1 + // bump
         MAX_USERNAME_SIZE + // username
         MAX_AVATAR_URL_SIZE + // avatar_url
+        32 + // fee_payer
         authorities_size + // authorities
         identities_size // identities
     }
@@ -67,5 +70,9 @@ impl Profile {
         );
 
         Ok(())
+    }
+
+    pub fn check_for_authority(&self, authority: &Pubkey) -> bool {
+        self.authorities.binary_search(authority).is_ok()
     }
 }

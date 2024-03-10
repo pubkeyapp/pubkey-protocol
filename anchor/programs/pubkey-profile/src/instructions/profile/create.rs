@@ -1,15 +1,21 @@
 use anchor_lang::prelude::*;
 
+use crate::constants::*;
 use crate::errors::*;
 use crate::state::*;
 
 #[derive(Accounts)]
+#[instruction(args: CreateProfileArgs)]
 pub struct CreateProfile<'info> {
     #[account(
       init,
       payer = fee_payer,
       space = Profile::size(&[authority.key()], &[]),
-      seeds = [],
+      seeds = [
+        PREFIX,
+        PROFILE,
+        &args.username.as_bytes()
+      ],
       bump
     )]
     pub profile: Account<'info, Profile>,
@@ -27,6 +33,7 @@ pub struct CreateProfile<'info> {
 pub fn create(ctx: Context<CreateProfile>, args: CreateProfileArgs) -> Result<()> {
     let profile = &mut ctx.accounts.profile;
     let authority = ctx.accounts.authority.key();
+    let fee_payer = ctx.accounts.fee_payer.key();
 
     let CreateProfileArgs {
         username,
@@ -37,9 +44,12 @@ pub fn create(ctx: Context<CreateProfile>, args: CreateProfileArgs) -> Result<()
         bump: ctx.bumps.profile,
         username,
         avatar_url,
+        fee_payer,
         authorities: vec![authority],
         identities: vec![],
     });
+
+    // TODO: Mint a Token 22 NFT
 
     profile.validate()?;
 
