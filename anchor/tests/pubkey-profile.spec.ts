@@ -121,7 +121,7 @@ describe('pubkey-profile', () => {
     const [profile] = getProfilePda('sunguru98', program.programId)
 
     await program.methods
-      .removeAuthority({ authority: authority2.publicKey })
+      .removeAuthority({ authorityToRemove: authority2.publicKey })
       .accounts({ profile, authority: authority.publicKey, feePayer: feePayer.publicKey })
       .signers([authority])
       .rpc()

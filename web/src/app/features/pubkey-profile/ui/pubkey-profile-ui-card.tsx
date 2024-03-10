@@ -6,67 +6,114 @@ import { useMemo } from 'react'
 import { ellipsify } from '../../account/ui/ellipsify'
 import { ExplorerLink } from '../../cluster/cluster-ui'
 import { usePubkeyProfileProgramAccount } from '../data-access'
+import { sampleBeeman, sampleSundeep } from '../data-access/pubkey-profile.types'
+import { useKeypair } from '../../keypair/data-access'
+import { useAnchorProvider } from '../../solana/solana-provider'
 
 export function PubkeyProfileUiCard({ account }: { account: PublicKey }) {
-  const { accountQuery, incrementMutation, setMutation, decrementMutation, closeMutation } =
-    usePubkeyProfileProgramAccount({ account })
+  const { profileAccountQuery, updateAvatarUrl, addAuthority, removeAuthority, addIdentity, removeIdentity } =
+    usePubkeyProfileProgramAccount({
+      account,
+    })
+  const { keypair } = useKeypair()
+  const { publicKey } = useAnchorProvider()
+  const username = useMemo(() => profileAccountQuery.data?.username ?? 0, [profileAccountQuery.data?.username])
 
-  const count = useMemo(() => accountQuery.data?.count ?? 0, [accountQuery.data?.count])
+  const currentAuthority = useMemo(
+    () => profileAccountQuery.data?.authorities.find((a) => a.toString() === publicKey.toString()) ?? PublicKey.default,
+    [profileAccountQuery.data?.authorities, publicKey],
+  )
 
-  return accountQuery.isLoading ? (
+  return profileAccountQuery.isLoading ? (
     <UiLoader />
   ) : (
     <UiCard>
       <UiStack align="center">
-        <Title onClick={() => accountQuery.refetch()}>{count}</Title>
+        <Title onClick={() => profileAccountQuery.refetch()}>{username}</Title>
         <Button.Group>
           <Button
             size="xs"
             variant="outline"
-            onClick={() => incrementMutation.mutateAsync()}
-            disabled={incrementMutation.isPending}
+            onClick={() =>
+              updateAvatarUrl.mutateAsync({
+                newAvatarUrl: sampleBeeman.avatarUrl,
+                authority: currentAuthority,
+                feePayer: keypair.solana!,
+                username: sampleSundeep.username,
+              })
+            }
+            disabled={updateAvatarUrl.isPending}
           >
-            Increment
+            Update Avatar Url
           </Button>
           <Button
             size="xs"
             variant="outline"
-            onClick={() => {
-              const value = window.prompt('Set value to:', count.toString() ?? '0')
-              if (!value || parseInt(value) === count || isNaN(parseInt(value))) {
-                return
-              }
-              return setMutation.mutateAsync(parseInt(value))
-            }}
-            loading={setMutation.isPending}
+            onClick={() =>
+              addAuthority.mutateAsync({
+                newAuthority: new PublicKey('6MHnTjLtxQbD2kPd4XSPmUgDXKaAFvFiAbTZY2fEXhm'),
+                authority: currentAuthority,
+                feePayer: keypair.solana!,
+                username: sampleSundeep.username,
+              })
+            }
+            disabled={updateAvatarUrl.isPending}
           >
-            Set
+            Add Authority
           </Button>
           <Button
             size="xs"
             variant="outline"
-            onClick={() => decrementMutation.mutateAsync()}
-            loading={decrementMutation.isPending}
+            onClick={() =>
+              removeAuthority.mutateAsync({
+                authorityToRemove: new PublicKey('6MHnTjLtxQbD2kPd4XSPmUgDXKaAFvFiAbTZY2fEXhm'),
+                authority: currentAuthority,
+                feePayer: keypair.solana!,
+                username: sampleSundeep.username,
+              })
+            }
+            disabled={updateAvatarUrl.isPending}
           >
-            Decrement
+            Remove Authority
+          </Button>
+        </Button.Group>
+        <Button.Group>
+          <Button
+            size="xs"
+            variant="outline"
+            onClick={() =>
+              addIdentity.mutateAsync({
+                authority: currentAuthority,
+                feePayer: keypair.solana!,
+                nickname: sampleSundeep.identities[0].name,
+                providerId: sampleSundeep.identities[0].providerId,
+                providerName: sampleSundeep.identities[0].provider,
+                username: sampleSundeep.username,
+              })
+            }
+            disabled={addIdentity.isPending}
+          >
+            Add identity
+          </Button>
+          <Button
+            size="xs"
+            variant="outline"
+            onClick={() =>
+              removeIdentity.mutateAsync({
+                authority: currentAuthority,
+                feePayer: keypair.solana!,
+                providerId: sampleSundeep.identities[0].providerId,
+                providerName: sampleSundeep.identities[0].provider,
+                username: sampleSundeep.username,
+              })
+            }
+            disabled={removeIdentity.isPending}
+          >
+            Remove identity
           </Button>
         </Button.Group>
         <UiStack>
           <ExplorerLink path={`account/${account}`} label={ellipsify(account.toString())} />
-          <Button
-            size="xs"
-            variant="outline"
-            color="red"
-            onClick={() => {
-              if (!window.confirm('Are you sure you want to close this account?')) {
-                return
-              }
-              return closeMutation.mutateAsync()
-            }}
-            loading={closeMutation.isPending}
-          >
-            Close
-          </Button>
         </UiStack>
       </UiStack>
     </UiCard>

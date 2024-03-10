@@ -30,7 +30,7 @@ pub struct RemoveAuthority<'info> {
 
 pub fn remove_authority(ctx: Context<RemoveAuthority>, args: RemoveAuthorityArgs) -> Result<()> {
     let profile = &mut ctx.accounts.profile;
-    let authority_to_remove = args.authority;
+    let authority_to_remove = args.authority_to_remove;
 
     require!(
         profile.authorities.len() > 1,
@@ -54,5 +54,5 @@ pub fn remove_authority(ctx: Context<RemoveAuthority>, args: RemoveAuthorityArgs
 
 #[derive(AnchorSerialize, AnchorDeserialize)]
 pub struct RemoveAuthorityArgs {
-    pub authority: Pubkey,
+    pub authority_to_remove: Pubkey,
 }

@@ -4,7 +4,7 @@ import { usePubkeyProfileProgram } from '../data-access'
 import { PubkeyProfileUiCard } from './pubkey-profile-ui-card'
 
 export function PubkeyProfileUiList() {
-  const { accounts, getProgramAccount } = usePubkeyProfileProgram()
+  const { profileAccounts, getProgramAccount, pointerAccounts } = usePubkeyProfileProgram()
 
   if (getProgramAccount.isLoading) {
     return <UiLoader />
@@ -23,18 +23,25 @@ export function PubkeyProfileUiList() {
 
   return (
     <UiStack>
-      {accounts.isLoading ? (
+      {profileAccounts.isLoading ? (
         <UiLoader />
-      ) : accounts.data?.length ? (
+      ) : profileAccounts.data?.length ? (
         <SimpleGrid cols={{ base: 1, sm: 2, lg: 3 }}>
-          {accounts.data?.map((account) => (
+          {profileAccounts.data?.map((account) => (
             <PubkeyProfileUiCard key={account.publicKey.toString()} account={account.publicKey} />
           ))}
         </SimpleGrid>
       ) : (
-        <UiInfo title="No accounts" message="No accounts found. Create one above to get started." />
+        <UiInfo title="No Profiles" message="No Profiles found. Create one above to get started." />
       )}
-      <UiDebug data={{ gpa: getProgramAccount.data, accounts: accounts.data, err: accounts.error }} />
+      <UiDebug
+        data={{
+          gpa: getProgramAccount.data,
+          profileAccounts: profileAccounts.data,
+          pointerAccounts: pointerAccounts.data,
+          err: profileAccounts.error,
+        }}
+      />
     </UiStack>
   )
 }

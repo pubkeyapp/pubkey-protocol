@@ -327,7 +327,7 @@ export type PubkeyProfile = {
         "kind": "struct",
         "fields": [
           {
-            "name": "authority",
+            "name": "authorityToRemove",
             "type": "publicKey"
           }
         ]
@@ -773,7 +773,7 @@ export const IDL: PubkeyProfile = {
         "kind": "struct",
         "fields": [
           {
-            "name": "authority",
+            "name": "authorityToRemove",
             "type": "publicKey"
           }
         ]
