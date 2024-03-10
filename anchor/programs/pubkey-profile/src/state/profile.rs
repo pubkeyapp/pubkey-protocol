@@ -4,16 +4,6 @@ use crate::utils::*;
 
 use anchor_lang::prelude::*;
 
-#[derive(AnchorSerialize, AnchorDeserialize, Clone)]
-pub struct Identity {
-    // The provider name
-    pub provider: String,
-    // The provider ID (address incase of blockchain)
-    pub provider_id: String,
-    // Nickname given to the identity
-    pub name: String,
-}
-
 #[account]
 pub struct Profile {
     // Bump of the PDA
@@ -36,8 +26,7 @@ impl Profile {
         (authorities.len() * 32); // Total authorities pubkey length
 
         let identities_size = 4 + // Vector discriminator
-            (identities.len() // Total identities length
-                * (MAX_PROVIDER_SIZE + MAX_PROVIDER_ID_SIZE + MAX_PROVIDER_NAME_SIZE));
+            (identities.len() * Identity::size()); // Total identities length
 
         8 + // Anchor discriminator
         1 + // bump
@@ -70,19 +59,69 @@ impl Profile {
             PubkeyProfileError::InvalidAvatarURL
         );
 
+        // Authorities
         require!(
             authorities_len <= MAX_VECTOR_SIZE.into(),
             PubkeyProfileError::MaxSizeReached
         );
+
+        // Identities
         require!(
             identities_len <= MAX_VECTOR_SIZE.into(),
             PubkeyProfileError::MaxSizeReached
         );
+        for identity in self.identities.clone() {
+            identity.validate()?;
+        }
 
         Ok(())
     }
 
     pub fn check_for_authority(&self, authority: &Pubkey) -> bool {
         self.authorities.binary_search(authority).is_ok()
+    }
+}
+
+#[derive(AnchorSerialize, AnchorDeserialize, Clone)]
+pub struct Identity {
+    // The provider name
+    pub provider: String,
+    // The provider ID (address incase of blockchain)
+    pub provider_id: String,
+    // Nickname given to the identity
+    pub name: String,
+}
+
+impl Identity {
+    pub fn size() -> usize {
+        MAX_PROVIDER_SIZE + // provider
+        MAX_PROVIDER_ID_SIZE + // provider_id
+        MAX_PROVIDER_NAME_SIZE // name
+    }
+
+    pub fn validate(&self) -> Result<()> {
+        let provider_len = self.provider.len();
+        let provider_id_len = self.provider_id.len();
+        let provider_name_len = self.name.len();
+
+        // provider
+        require!(
+            provider_len <= MAX_PROVIDER_SIZE.into(),
+            PubkeyProfileError::InvalidProvider
+        );
+
+        // provider_id
+        require!(
+            provider_id_len <= MAX_PROVIDER_ID_SIZE.into(),
+            PubkeyProfileError::InvalidProviderID
+        );
+
+        // name
+        require!(
+            provider_name_len <= MAX_PROVIDER_NAME_SIZE.into(),
+            PubkeyProfileError::InvalidName
+        );
+
+        Ok(())
     }
 }

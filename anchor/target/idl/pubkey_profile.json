@@ -123,6 +123,26 @@
       "name": "addIdentity",
       "accounts": [
         {
+          "name": "profile",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "pointer",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "authority",
+          "isMut": false,
+          "isSigner": true
+        },
+        {
+          "name": "feePayer",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
           "name": "systemProgram",
           "isMut": false,
           "isSigner": false
@@ -165,6 +185,18 @@
           {
             "name": "bump",
             "type": "u8"
+          },
+          {
+            "name": "providerName",
+            "type": "string"
+          },
+          {
+            "name": "providerId",
+            "type": "string"
+          },
+          {
+            "name": "profile",
+            "type": "publicKey"
           }
         ]
       }
@@ -213,7 +245,20 @@
       "name": "AddIdentityArgs",
       "type": {
         "kind": "struct",
-        "fields": []
+        "fields": [
+          {
+            "name": "providerName",
+            "type": "string"
+          },
+          {
+            "name": "providerId",
+            "type": "string"
+          },
+          {
+            "name": "nickname",
+            "type": "string"
+          }
+        ]
       }
     },
     {
@@ -323,28 +368,53 @@
     },
     {
       "code": 6004,
+      "name": "InvalidProvider",
+      "msg": "Invalid Provider"
+    },
+    {
+      "code": 6005,
+      "name": "InvalidProviderID",
+      "msg": "Invalid Provider ID"
+    },
+    {
+      "code": 6006,
+      "name": "InvalidName",
+      "msg": "Invalid Name"
+    },
+    {
+      "code": 6007,
       "name": "InvalidAccountOwner",
       "msg": "Account not owned by program"
     },
     {
-      "code": 6005,
+      "code": 6008,
       "name": "AuthorityAlreadyExists",
       "msg": "Authority already exists"
     },
     {
-      "code": 6006,
-      "name": "CannotRemoveSoloAuthority",
-      "msg": "Cannot remove last remaining authority"
-    },
-    {
-      "code": 6007,
+      "code": 6009,
       "name": "AuthorityNonExistant",
       "msg": "Authority does not exist"
     },
     {
-      "code": 6008,
+      "code": 6010,
+      "name": "CannotRemoveSoloAuthority",
+      "msg": "Cannot remove last remaining authority"
+    },
+    {
+      "code": 6011,
       "name": "MaxSizeReached",
       "msg": "Array reached max size"
+    },
+    {
+      "code": 6012,
+      "name": "IdentityAlreadyExists",
+      "msg": "Identity already exists"
+    },
+    {
+      "code": 6013,
+      "name": "IdentityNonExistant",
+      "msg": "Identity does not exist"
     }
   ]
 }
