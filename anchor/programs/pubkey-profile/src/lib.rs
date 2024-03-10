@@ -1,70 +1,47 @@
 #![allow(clippy::result_large_err)]
 
 use anchor_lang::prelude::*;
+use instructions::*;
 
-declare_id!("DzWrqkdRfCTc9nQKc67KjVuSZpH7agSezbvZcYHEeLnK");
+pub mod constants;
+pub mod errors;
+pub mod instructions;
+pub mod state;
+pub mod utils;
+
+declare_id!("PPLxLRPKPFvjKf3Xe48gXxispUXAuGb8GgkzG9aJetB");
 
 #[program]
 pub mod pubkey_profile {
     use super::*;
 
-  pub fn close(_ctx: Context<ClosePubkeyProfile>) -> Result<()> {
-    Ok(())
-  }
+    pub fn create_profile(ctx: Context<CreateProfile>, args: CreateProfileArgs) -> Result<()> {
+        profile::create(ctx, args)
+    }
 
-  pub fn decrement(ctx: Context<Update>) -> Result<()> {
-    ctx.accounts.pubkey_profile.count = ctx.accounts.pubkey_profile.count.checked_sub(1).unwrap();
-    Ok(())
-  }
+    pub fn update_avatar_url(
+        ctx: Context<UpdateAvatarUrl>,
+        args: UpdateAvatarUrlArgs,
+    ) -> Result<()> {
+        profile::update_avatar_url(ctx, args)
+    }
 
-  pub fn increment(ctx: Context<Update>) -> Result<()> {
-    ctx.accounts.pubkey_profile.count = ctx.accounts.pubkey_profile.count.checked_add(1).unwrap();
-    Ok(())
-  }
+    pub fn add_authority(ctx: Context<AddAuthority>, args: AddAuthorityArgs) -> Result<()> {
+        profile::add_authority(ctx, args)
+    }
 
-  pub fn initialize(_ctx: Context<InitializePubkeyProfile>) -> Result<()> {
-    Ok(())
-  }
+    pub fn remove_authority(
+        ctx: Context<RemoveAuthority>,
+        args: RemoveAuthorityArgs,
+    ) -> Result<()> {
+        profile::remove_authority(ctx, args)
+    }
 
-  pub fn set(ctx: Context<Update>, value: u8) -> Result<()> {
-    ctx.accounts.pubkey_profile.count = value.clone();
-    Ok(())
-  }
-}
+    pub fn add_identity(ctx: Context<AddIdentity>, args: AddIdentityArgs) -> Result<()> {
+        identity::add(ctx, args)
+    }
 
-#[derive(Accounts)]
-pub struct InitializePubkeyProfile<'info> {
-  #[account(mut)]
-  pub payer: Signer<'info>,
-
-  #[account(
-  init,
-  space = 8 + PubkeyProfile::INIT_SPACE,
-  payer = payer
-  )]
-  pub pubkey_profile: Account<'info, PubkeyProfile>,
-  pub system_program: Program<'info, System>,
-}
-#[derive(Accounts)]
-pub struct ClosePubkeyProfile<'info> {
-  #[account(mut)]
-  pub payer: Signer<'info>,
-
-  #[account(
-  mut,
-  close = payer, // close account and return lamports to payer
-  )]
-  pub pubkey_profile: Account<'info, PubkeyProfile>,
-}
-
-#[derive(Accounts)]
-pub struct Update<'info> {
-  #[account(mut)]
-  pub pubkey_profile: Account<'info, PubkeyProfile>,
-}
-
-#[account]
-#[derive(InitSpace)]
-pub struct PubkeyProfile {
-  count: u8,
+    pub fn remove_identity(ctx: Context<RemoveIdentity>, args: RemoveIdentityArgs) -> Result<()> {
+        identity::remove(ctx, args)
+    }
 }
