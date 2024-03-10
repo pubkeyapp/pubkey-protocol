@@ -12,7 +12,7 @@ pub fn is_valid_url(url: &str) -> bool {
     let has_content_after_protocol = !after_protocol.is_empty() && after_protocol != "/";
 
     let dot_parts = url.split('.').collect::<Vec<&str>>();
-    let is_ipv6 = url.contains("[::1]") || url.contains("[") && url.contains("]");
+    let is_ipv6 = url.contains("[::1]") || url.contains('[') && url.contains(']');
 
     // Simplified check for IPv6
     let has_valid_domain = dot_parts.len() >= 2

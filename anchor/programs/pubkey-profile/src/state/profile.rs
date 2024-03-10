@@ -45,7 +45,7 @@ impl Profile {
 
         // Username
         require!(
-            username_len >= 3 && username_len <= MAX_USERNAME_SIZE,
+            (3..=MAX_USERNAME_SIZE).contains(&username_len),
             PubkeyProfileError::InvalidUsername
         );
 
@@ -106,19 +106,19 @@ impl Identity {
 
         // provider
         require!(
-            provider_len <= MAX_PROVIDER_SIZE.into(),
+            provider_len <= MAX_PROVIDER_SIZE,
             PubkeyProfileError::InvalidProvider
         );
 
         // provider_id
         require!(
-            provider_id_len <= MAX_PROVIDER_ID_SIZE.into(),
+            provider_id_len <= MAX_PROVIDER_ID_SIZE,
             PubkeyProfileError::InvalidProviderID
         );
 
         // name
         require!(
-            provider_name_len <= MAX_PROVIDER_NAME_SIZE.into(),
+            provider_name_len <= MAX_PROVIDER_NAME_SIZE,
             PubkeyProfileError::InvalidName
         );
 

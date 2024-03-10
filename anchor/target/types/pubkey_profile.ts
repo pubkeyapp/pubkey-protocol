@@ -161,6 +161,26 @@ export type PubkeyProfile = {
       "name": "removeIdentity",
       "accounts": [
         {
+          "name": "profile",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "pointer",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "authority",
+          "isMut": false,
+          "isSigner": true
+        },
+        {
+          "name": "feePayer",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
           "name": "systemProgram",
           "isMut": false,
           "isSigner": false
@@ -265,7 +285,12 @@ export type PubkeyProfile = {
       "name": "RemoveIdentityArgs",
       "type": {
         "kind": "struct",
-        "fields": []
+        "fields": [
+          {
+            "name": "providerId",
+            "type": "string"
+          }
+        ]
       }
     },
     {
@@ -582,6 +607,26 @@ export const IDL: PubkeyProfile = {
       "name": "removeIdentity",
       "accounts": [
         {
+          "name": "profile",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "pointer",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "authority",
+          "isMut": false,
+          "isSigner": true
+        },
+        {
+          "name": "feePayer",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
           "name": "systemProgram",
           "isMut": false,
           "isSigner": false
@@ -686,7 +731,12 @@ export const IDL: PubkeyProfile = {
       "name": "RemoveIdentityArgs",
       "type": {
         "kind": "struct",
-        "fields": []
+        "fields": [
+          {
+            "name": "providerId",
+            "type": "string"
+          }
+        ]
       }
     },
     {
