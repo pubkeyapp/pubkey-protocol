@@ -14,4 +14,10 @@ pub enum PubkeyProfileError {
     InvalidAccountOwner,
     #[msg("Authority already exists")]
     AuthorityAlreadyExists,
+    #[msg("Cannot remove last remaining authority")]
+    CannotRemoveSoloAuthority,
+    #[msg("Authority does not exist")]
+    AuthorityNonExistant,
+    #[msg("Array reached max size")]
+    MaxSizeReached,
 }

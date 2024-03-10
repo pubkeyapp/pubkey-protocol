@@ -31,7 +31,6 @@ pub struct AddAuthority<'info> {
 }
 
 pub fn add_authority(ctx: Context<AddAuthority>, args: AddAuthorityArgs) -> Result<()> {
-    let authority = &ctx.accounts.authority;
     let profile = &mut ctx.accounts.profile;
 
     let fee_payer = &mut ctx.accounts.fee_payer;

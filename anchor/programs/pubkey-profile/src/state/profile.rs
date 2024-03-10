@@ -51,6 +51,8 @@ impl Profile {
     pub fn validate(&self) -> Result<()> {
         let username_len = self.username.len();
         let avatar_url_len = self.avatar_url.len();
+        let identities_len = self.identities.len();
+        let authorities_len = self.authorities.len();
 
         // Username
         require!(
@@ -63,10 +65,18 @@ impl Profile {
             is_valid_url(&self.avatar_url),
             PubkeyProfileError::InvalidAvatarURL
         );
-
         require!(
             avatar_url_len > 0 && avatar_url_len <= MAX_AVATAR_URL_SIZE,
             PubkeyProfileError::InvalidAvatarURL
+        );
+
+        require!(
+            authorities_len <= MAX_VECTOR_SIZE.into(),
+            PubkeyProfileError::MaxSizeReached
+        );
+        require!(
+            identities_len <= MAX_VECTOR_SIZE.into(),
+            PubkeyProfileError::MaxSizeReached
         );
 
         Ok(())

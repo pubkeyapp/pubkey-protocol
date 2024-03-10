@@ -29,6 +29,26 @@ pub struct RemoveAuthority<'info> {
 }
 
 pub fn remove_authority(ctx: Context<RemoveAuthority>, args: RemoveAuthorityArgs) -> Result<()> {
+    let profile = &mut ctx.accounts.profile;
+    let authority_to_remove = args.authority;
+
+    require!(
+        profile.authorities.len() > 1,
+        PubkeyProfileError::CannotRemoveSoloAuthority
+    );
+
+    // TODO: Not sure if this check should be there
+    // require!(authority_to_remove.ne(&ctx.accounts.authority.key()), "Cannot remove yourself");
+
+    match profile.authorities.binary_search(&authority_to_remove) {
+        Ok(authority_to_remove_index) => {
+            profile.authorities.remove(authority_to_remove_index);
+        }
+        Err(_) => return err!(PubkeyProfileError::AuthorityNonExistant),
+    }
+
+    profile.validate()?;
+
     Ok(())
 }
 

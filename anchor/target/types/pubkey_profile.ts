@@ -330,6 +330,21 @@ export type PubkeyProfile = {
       "code": 6005,
       "name": "AuthorityAlreadyExists",
       "msg": "Authority already exists"
+    },
+    {
+      "code": 6006,
+      "name": "CannotRemoveSoloAuthority",
+      "msg": "Cannot remove last remaining authority"
+    },
+    {
+      "code": 6007,
+      "name": "AuthorityNonExistant",
+      "msg": "Authority does not exist"
+    },
+    {
+      "code": 6008,
+      "name": "MaxSizeReached",
+      "msg": "Array reached max size"
     }
   ]
 };
@@ -666,6 +681,21 @@ export const IDL: PubkeyProfile = {
       "code": 6005,
       "name": "AuthorityAlreadyExists",
       "msg": "Authority already exists"
+    },
+    {
+      "code": 6006,
+      "name": "CannotRemoveSoloAuthority",
+      "msg": "Cannot remove last remaining authority"
+    },
+    {
+      "code": 6007,
+      "name": "AuthorityNonExistant",
+      "msg": "Authority does not exist"
+    },
+    {
+      "code": 6008,
+      "name": "MaxSizeReached",
+      "msg": "Array reached max size"
     }
   ]
 };

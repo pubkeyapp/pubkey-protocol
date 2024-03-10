@@ -7,3 +7,4 @@ pub const MAX_AVATAR_URL_SIZE: usize = 100;
 pub const MAX_PROVIDER_SIZE: usize = 50;
 pub const MAX_PROVIDER_ID_SIZE: usize = 50;
 pub const MAX_PROVIDER_NAME_SIZE: usize = 50;
+pub const MAX_VECTOR_SIZE: u16 = u16::MAX;
