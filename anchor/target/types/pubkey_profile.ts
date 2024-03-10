@@ -6,6 +6,21 @@ export type PubkeyProfile = {
       "name": "createProfile",
       "accounts": [
         {
+          "name": "profile",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "authority",
+          "isMut": false,
+          "isSigner": true
+        },
+        {
+          "name": "feePayer",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
           "name": "systemProgram",
           "isMut": false,
           "isSigner": false
@@ -24,9 +39,14 @@ export type PubkeyProfile = {
       "name": "updateAvatarUrl",
       "accounts": [
         {
-          "name": "systemProgram",
-          "isMut": false,
+          "name": "profile",
+          "isMut": true,
           "isSigner": false
+        },
+        {
+          "name": "feePayer",
+          "isMut": true,
+          "isSigner": true
         }
       ],
       "args": [
@@ -41,6 +61,21 @@ export type PubkeyProfile = {
     {
       "name": "addAuthority",
       "accounts": [
+        {
+          "name": "profile",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "authority",
+          "isMut": false,
+          "isSigner": true
+        },
+        {
+          "name": "feePayer",
+          "isMut": true,
+          "isSigner": true
+        },
         {
           "name": "systemProgram",
           "isMut": false,
@@ -60,9 +95,19 @@ export type PubkeyProfile = {
       "name": "removeAuthority",
       "accounts": [
         {
-          "name": "systemProgram",
-          "isMut": false,
+          "name": "profile",
+          "isMut": true,
           "isSigner": false
+        },
+        {
+          "name": "authority",
+          "isMut": false,
+          "isSigner": true
+        },
+        {
+          "name": "feePayer",
+          "isMut": true,
+          "isSigner": true
         }
       ],
       "args": [
@@ -134,8 +179,16 @@ export type PubkeyProfile = {
             "type": "u8"
           },
           {
+            "name": "username",
+            "type": "string"
+          },
+          {
             "name": "avatarUrl",
             "type": "string"
+          },
+          {
+            "name": "feePayer",
+            "type": "publicKey"
           },
           {
             "name": "authorities",
@@ -174,28 +227,56 @@ export type PubkeyProfile = {
       "name": "AddAuthorityArgs",
       "type": {
         "kind": "struct",
-        "fields": []
+        "fields": [
+          {
+            "name": "newAuthority",
+            "type": "publicKey"
+          }
+        ]
       }
     },
     {
       "name": "CreateProfileArgs",
       "type": {
         "kind": "struct",
-        "fields": []
+        "fields": [
+          {
+            "name": "username",
+            "type": "string"
+          },
+          {
+            "name": "avatarUrl",
+            "type": "string"
+          }
+        ]
       }
     },
     {
       "name": "RemoveAuthorityArgs",
       "type": {
         "kind": "struct",
-        "fields": []
+        "fields": [
+          {
+            "name": "authority",
+            "type": "publicKey"
+          }
+        ]
       }
     },
     {
       "name": "UpdateAvatarUrlArgs",
       "type": {
         "kind": "struct",
-        "fields": []
+        "fields": [
+          {
+            "name": "authority",
+            "type": "publicKey"
+          },
+          {
+            "name": "newAvatarUrl",
+            "type": "string"
+          }
+        ]
       }
     },
     {
@@ -224,6 +305,31 @@ export type PubkeyProfile = {
       "code": 6000,
       "name": "UnAuthorized",
       "msg": "Account unauthorized to perform this action"
+    },
+    {
+      "code": 6001,
+      "name": "InvalidFeePayer",
+      "msg": "Invalid Fee payer"
+    },
+    {
+      "code": 6002,
+      "name": "InvalidUsername",
+      "msg": "Invalid Username"
+    },
+    {
+      "code": 6003,
+      "name": "InvalidAvatarURL",
+      "msg": "Invalid Avatar Url"
+    },
+    {
+      "code": 6004,
+      "name": "InvalidAccountOwner",
+      "msg": "Account not owned by program"
+    },
+    {
+      "code": 6005,
+      "name": "AuthorityAlreadyExists",
+      "msg": "Authority already exists"
     }
   ]
 };
@@ -236,6 +342,21 @@ export const IDL: PubkeyProfile = {
       "name": "createProfile",
       "accounts": [
         {
+          "name": "profile",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "authority",
+          "isMut": false,
+          "isSigner": true
+        },
+        {
+          "name": "feePayer",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
           "name": "systemProgram",
           "isMut": false,
           "isSigner": false
@@ -254,9 +375,14 @@ export const IDL: PubkeyProfile = {
       "name": "updateAvatarUrl",
       "accounts": [
         {
-          "name": "systemProgram",
-          "isMut": false,
+          "name": "profile",
+          "isMut": true,
           "isSigner": false
+        },
+        {
+          "name": "feePayer",
+          "isMut": true,
+          "isSigner": true
         }
       ],
       "args": [
@@ -271,6 +397,21 @@ export const IDL: PubkeyProfile = {
     {
       "name": "addAuthority",
       "accounts": [
+        {
+          "name": "profile",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "authority",
+          "isMut": false,
+          "isSigner": true
+        },
+        {
+          "name": "feePayer",
+          "isMut": true,
+          "isSigner": true
+        },
         {
           "name": "systemProgram",
           "isMut": false,
@@ -290,9 +431,19 @@ export const IDL: PubkeyProfile = {
       "name": "removeAuthority",
       "accounts": [
         {
-          "name": "systemProgram",
-          "isMut": false,
+          "name": "profile",
+          "isMut": true,
           "isSigner": false
+        },
+        {
+          "name": "authority",
+          "isMut": false,
+          "isSigner": true
+        },
+        {
+          "name": "feePayer",
+          "isMut": true,
+          "isSigner": true
         }
       ],
       "args": [
@@ -364,8 +515,16 @@ export const IDL: PubkeyProfile = {
             "type": "u8"
           },
           {
+            "name": "username",
+            "type": "string"
+          },
+          {
             "name": "avatarUrl",
             "type": "string"
+          },
+          {
+            "name": "feePayer",
+            "type": "publicKey"
           },
           {
             "name": "authorities",
@@ -404,28 +563,56 @@ export const IDL: PubkeyProfile = {
       "name": "AddAuthorityArgs",
       "type": {
         "kind": "struct",
-        "fields": []
+        "fields": [
+          {
+            "name": "newAuthority",
+            "type": "publicKey"
+          }
+        ]
       }
     },
     {
       "name": "CreateProfileArgs",
       "type": {
         "kind": "struct",
-        "fields": []
+        "fields": [
+          {
+            "name": "username",
+            "type": "string"
+          },
+          {
+            "name": "avatarUrl",
+            "type": "string"
+          }
+        ]
       }
     },
     {
       "name": "RemoveAuthorityArgs",
       "type": {
         "kind": "struct",
-        "fields": []
+        "fields": [
+          {
+            "name": "authority",
+            "type": "publicKey"
+          }
+        ]
       }
     },
     {
       "name": "UpdateAvatarUrlArgs",
       "type": {
         "kind": "struct",
-        "fields": []
+        "fields": [
+          {
+            "name": "authority",
+            "type": "publicKey"
+          },
+          {
+            "name": "newAvatarUrl",
+            "type": "string"
+          }
+        ]
       }
     },
     {
@@ -454,6 +641,31 @@ export const IDL: PubkeyProfile = {
       "code": 6000,
       "name": "UnAuthorized",
       "msg": "Account unauthorized to perform this action"
+    },
+    {
+      "code": 6001,
+      "name": "InvalidFeePayer",
+      "msg": "Invalid Fee payer"
+    },
+    {
+      "code": 6002,
+      "name": "InvalidUsername",
+      "msg": "Invalid Username"
+    },
+    {
+      "code": 6003,
+      "name": "InvalidAvatarURL",
+      "msg": "Invalid Avatar Url"
+    },
+    {
+      "code": 6004,
+      "name": "InvalidAccountOwner",
+      "msg": "Account not owned by program"
+    },
+    {
+      "code": 6005,
+      "name": "AuthorityAlreadyExists",
+      "msg": "Authority already exists"
     }
   ]
 };

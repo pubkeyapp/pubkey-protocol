@@ -1,3 +1,8 @@
+use crate::id;
+use anchor_lang::{prelude::*, system_program};
+
+use crate::errors::*;
+
 pub fn is_valid_url(url: &str) -> bool {
     let starts_with_http = url.starts_with("http://") || url.starts_with("https://");
 
@@ -26,4 +31,42 @@ pub fn is_valid_url(url: &str) -> bool {
     let valid_domain = has_valid_domain_or_localhost && no_start_or_end_hyphen_in_domain;
 
     valid_scheme && valid_path && valid_domain
+}
+
+pub fn realloc_account<'a>(
+    account: AccountInfo<'a>,
+    new_account_size: usize,
+    rent_payer: AccountInfo<'a>,
+    system_program: AccountInfo<'a>,
+) -> Result<()> {
+    require_keys_eq!(
+        *account.owner,
+        id(),
+        PubkeyProfileError::InvalidAccountOwner
+    );
+
+    let current_account_size = account.data.borrow().len();
+    if current_account_size >= new_account_size {
+        return Ok(());
+    }
+
+    let current_lamports = account.lamports();
+    let rent_exempt_lamports = Rent::get()?.minimum_balance(new_account_size);
+
+    let lmaports_diff = rent_exempt_lamports.saturating_sub(current_lamports);
+    if lmaports_diff.gt(&0) {
+        system_program::transfer(
+            CpiContext::new(
+                system_program,
+                system_program::Transfer {
+                    from: rent_payer,
+                    to: account.clone(),
+                },
+            ),
+            lmaports_diff,
+        )?;
+    }
+
+    AccountInfo::realloc(&account, new_account_size, false)?;
+    Ok(())
 }

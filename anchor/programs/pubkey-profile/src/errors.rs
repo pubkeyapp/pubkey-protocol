@@ -10,4 +10,8 @@ pub enum PubkeyProfileError {
     InvalidUsername,
     #[msg("Invalid Avatar Url")]
     InvalidAvatarURL,
+    #[msg("Account not owned by program")]
+    InvalidAccountOwner,
+    #[msg("Authority already exists")]
+    AuthorityAlreadyExists,
 }
