@@ -25,12 +25,7 @@ pub struct AddIdentity<'info> {
       init,
       space = Pointer::size(),
       payer = fee_payer,
-      seeds = [
-        PREFIX,
-        POINTER,
-        &args.provider_name.as_bytes(),
-        &args.provider_id.as_bytes()
-      ],
+      seeds = [&Pointer::hash_seed(&args.provider, &args.provider_id)],
       bump
     )]
     pub pointer: Account<'info, Pointer>,
@@ -53,14 +48,14 @@ pub fn add(ctx: Context<AddIdentity>, args: AddIdentityArgs) -> Result<()> {
 
     // Initializing pointer account
     pointer.bump = ctx.bumps.pointer;
-    pointer.provider_name = args.provider_name.clone();
+    pointer.provider = args.provider.clone();
     pointer.provider_id = args.provider_id.clone();
     pointer.profile = profile.key();
     pointer.validate()?;
 
     // Adding identity to profile
     let identity = Identity {
-        provider: args.provider_name,
+        provider: args.provider,
         provider_id: args.provider_id.clone(),
         name: args.nickname,
     };
@@ -89,7 +84,7 @@ pub fn add(ctx: Context<AddIdentity>, args: AddIdentityArgs) -> Result<()> {
 
 #[derive(AnchorSerialize, AnchorDeserialize)]
 pub struct AddIdentityArgs {
-    provider_name: String,
+    provider: PubKeyIdentityProvider,
     provider_id: String,
     nickname: String,
 }

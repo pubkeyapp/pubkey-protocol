@@ -3,6 +3,7 @@ import { useMutation, useQuery } from '@tanstack/react-query'
 import { uiToastLink } from '../../account/account-data-access'
 import { useCluster } from '../../cluster/cluster-data-access'
 import { getPointerPda, getProfilePda, usePubkeyProfileProgram } from './use-pubkey-profile-program'
+import { PubKeyIdentityProvider } from './pubkey-profile.types'
 
 export function usePubkeyProfileProgramAccount({ account }: { account: PublicKey }) {
   const { cluster, getExplorerUrl } = useCluster()
@@ -110,23 +111,27 @@ export function usePubkeyProfileProgramAccount({ account }: { account: PublicKey
       feePayer,
       username,
       providerId,
-      providerName,
+      provider,
       nickname,
     }: {
       authority: PublicKey
       feePayer: Keypair
       username: string
       providerId: string
-      providerName: string
+      provider: PubKeyIdentityProvider
       nickname: string
     }) =>
       program.methods
-        .addIdentity({ providerId, providerName, nickname })
+        .addIdentity({
+          nickname,
+          provider: PubKeyIdentityProvider.Discord ? { discord: {} } : { solana: {} },
+          providerId,
+        })
         .accounts({
           authority,
           feePayer: feePayer.publicKey,
           profile: getProfilePda(username, program.programId)[0],
-          pointer: getPointerPda({ programId: program.programId, providerId, providerName })[0],
+          pointer: getPointerPda({ programId: program.programId, providerId, provider })[0],
           systemProgram: SystemProgram.programId,
         })
         .signers([feePayer])
@@ -145,13 +150,13 @@ export function usePubkeyProfileProgramAccount({ account }: { account: PublicKey
       feePayer,
       username,
       providerId,
-      providerName,
+      provider,
     }: {
       authority: PublicKey
       feePayer: Keypair
       username: string
       providerId: string
-      providerName: string
+      provider: PubKeyIdentityProvider
     }) =>
       program.methods
         .removeIdentity({ providerId })
@@ -159,7 +164,7 @@ export function usePubkeyProfileProgramAccount({ account }: { account: PublicKey
           authority,
           feePayer: feePayer.publicKey,
           profile: getProfilePda(username, program.programId)[0],
-          pointer: getPointerPda({ programId: program.programId, providerId, providerName })[0],
+          pointer: getPointerPda({ programId: program.programId, providerId, provider })[0],
           systemProgram: SystemProgram.programId,
         })
         .signers([feePayer])

@@ -1,7 +1,22 @@
-use crate::id;
 use anchor_lang::{prelude::*, system_program};
 
 use crate::errors::*;
+use crate::id;
+
+pub fn is_valid_username(username: &str) -> bool {
+    if username.len() < 3 || username.len() > 20 {
+        return false;
+    }
+
+    if !username
+        .chars()
+        .all(|c| c.is_ascii_lowercase() || c.is_ascii_digit() || c == '_')
+    {
+        return false;
+    }
+
+    true
+}
 
 pub fn is_valid_url(url: &str) -> bool {
     let starts_with_http = url.starts_with("http://") || url.starts_with("https://");

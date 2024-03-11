@@ -22,12 +22,7 @@ pub struct RemoveIdentity<'info> {
 
     #[account(
       mut,
-      seeds = [
-        PREFIX,
-        POINTER,
-        &pointer.provider_name.as_bytes(),
-        &args.provider_id.as_bytes()
-      ],
+      seeds = [&Pointer::hash_seed(&pointer.provider, &args.provider_id)],
       bump = pointer.bump,
       has_one = profile @ PubkeyProfileError::UnAuthorized,
       close = fee_payer

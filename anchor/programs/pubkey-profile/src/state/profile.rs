@@ -38,14 +38,13 @@ impl Profile {
     }
 
     pub fn validate(&self) -> Result<()> {
-        let username_len = self.username.len();
         let avatar_url_len = self.avatar_url.len();
         let identities_len = self.identities.len();
         let authorities_len = self.authorities.len();
 
         // Username
         require!(
-            (3..=MAX_USERNAME_SIZE).contains(&username_len),
+            is_valid_username(&self.username),
             PubkeyProfileError::InvalidUsername
         );
 
@@ -83,9 +82,24 @@ impl Profile {
 }
 
 #[derive(AnchorSerialize, AnchorDeserialize, Clone)]
+pub enum PubKeyIdentityProvider {
+    Discord,
+    Solana,
+}
+
+impl PubKeyIdentityProvider {
+    pub fn value(&self) -> String {
+        match *self {
+            PubKeyIdentityProvider::Discord => String::from("Discord"),
+            PubKeyIdentityProvider::Solana => String::from("Solana"),
+        }
+    }
+}
+
+#[derive(AnchorSerialize, AnchorDeserialize, Clone)]
 pub struct Identity {
     // The provider name
-    pub provider: String,
+    pub provider: PubKeyIdentityProvider,
     // The provider ID (address incase of blockchain)
     pub provider_id: String,
     // Nickname given to the identity
@@ -94,21 +108,14 @@ pub struct Identity {
 
 impl Identity {
     pub fn size() -> usize {
-        MAX_PROVIDER_SIZE + // provider
+        1 + 1 + // provider
         MAX_PROVIDER_ID_SIZE + // provider_id
         MAX_PROVIDER_NAME_SIZE // name
     }
 
     pub fn validate(&self) -> Result<()> {
-        let provider_len = self.provider.len();
         let provider_id_len = self.provider_id.len();
         let provider_name_len = self.name.len();
-
-        // provider
-        require!(
-            provider_len <= MAX_PROVIDER_SIZE,
-            PubkeyProfileError::InvalidProvider
-        );
 
         // provider_id
         require!(

@@ -3,27 +3,40 @@ import { Program } from '@coral-xyz/anchor'
 import { Keypair, LAMPORTS_PER_SOL, PublicKey, SystemProgram } from '@solana/web3.js'
 import { PubkeyProfile } from '../target/types/pubkey_profile'
 
+import { sha256 } from '@noble/hashes/sha256'
+
 const PREFIX = new TextEncoder().encode('pubkey_profile')
 const PROFILE = new TextEncoder().encode('profile')
 const POINTER = new TextEncoder().encode('pointer')
+
+enum PubKeyIdentityProvider {
+  Discord = 'Discord',
+  Solana = 'Solana',
+}
 
 function getProfilePda(username: string, programId: PublicKey) {
   return PublicKey.findProgramAddressSync([PREFIX, PROFILE, Buffer.from(username)], programId)
 }
 
 function getPointerPda({
-  programId,
+  provider,
   providerId,
-  providerName,
+  programId,
 }: {
-  providerName: string
+  provider: PubKeyIdentityProvider
   providerId: string
   programId: PublicKey
 }) {
-  return PublicKey.findProgramAddressSync(
-    [PREFIX, POINTER, Buffer.from(providerName), Buffer.from(providerId)],
-    programId,
+  const hash = sha256(
+    Uint8Array.from([
+      ...PREFIX,
+      ...POINTER,
+      ...new TextEncoder().encode(provider),
+      ...new TextEncoder().encode(providerId),
+    ]),
   )
+
+  return PublicKey.findProgramAddressSync([hash], programId)
 }
 
 describe('pubkey-profile', () => {
@@ -47,6 +60,11 @@ describe('pubkey-profile', () => {
   it('Create PubkeyProfile', async () => {
     const username = 'sunguru98'
     const [profile, bump] = getProfilePda('sunguru98', program.programId)
+    const [pointer, bumpPointer] = getPointerPda({
+      programId: program.programId,
+      provider: PubKeyIdentityProvider.Solana,
+      providerId: authority.publicKey.toString(),
+    })
 
     await program.methods
       .createProfile({
@@ -57,6 +75,7 @@ describe('pubkey-profile', () => {
         authority: authority.publicKey,
         feePayer: feePayer.publicKey,
         profile,
+        pointer,
         systemProgram: SystemProgram.programId,
       })
       .signers([authority])
@@ -71,15 +90,28 @@ describe('pubkey-profile', () => {
       username: receivedUsername,
     } = await program.account.profile.fetch(profile)
 
+    const pointerData = await program.account.pointer.fetch(pointer)
+
     const postBalance = await provider.connection.getBalance(authority.publicKey)
 
     expect(postBalance).toStrictEqual(1 * LAMPORTS_PER_SOL)
     expect(receivedBump).toStrictEqual(bump)
     expect(receivedUsername).toStrictEqual(username)
     expect(avatarUrl).toStrictEqual('https://avatars.githubusercontent.com/u/32637757?v=4')
-    expect(identities).toEqual([])
     expect(authorities).toEqual([authority.publicKey])
     expect(receivedFeePayer).toStrictEqual(feePayer.publicKey)
+
+    expect(identities).toEqual([
+      {
+        provider: { solana: {} },
+        providerId: authority.publicKey.toString(),
+        name: 'Primary Wallet',
+      },
+    ])
+    expect(pointerData.bump).toStrictEqual(bumpPointer)
+    expect(pointerData.providerId).toStrictEqual(authority.publicKey.toString())
+    expect(pointerData.provider).toStrictEqual({ solana: {} })
+    expect(pointerData.profile).toStrictEqual(profile)
   })
 
   it('Update avatarUrl', async () => {
@@ -136,11 +168,11 @@ describe('pubkey-profile', () => {
     const [pointer, bump] = getPointerPda({
       programId: program.programId,
       providerId: 'sundeepcharan',
-      providerName: 'Discord',
+      provider: PubKeyIdentityProvider.Discord,
     })
 
     await program.methods
-      .addIdentity({ providerId: 'sundeepcharan', providerName: 'Discord', nickname: 'Primary account' })
+      .addIdentity({ providerId: 'sundeepcharan', provider: { discord: {} }, nickname: 'Primary account' })
       .accounts({
         profile,
         authority: authority.publicKey,
@@ -159,7 +191,12 @@ describe('pubkey-profile', () => {
     expect(postBalance).toStrictEqual(1 * LAMPORTS_PER_SOL)
     expect(identities).toEqual([
       {
-        provider: 'Discord',
+        provider: { solana: {} },
+        providerId: authority.publicKey.toString(),
+        name: 'Primary Wallet',
+      },
+      {
+        provider: { discord: {} },
         providerId: 'sundeepcharan',
         name: 'Primary account',
       },
@@ -167,7 +204,7 @@ describe('pubkey-profile', () => {
 
     expect(pointerData.bump).toStrictEqual(bump)
     expect(pointerData.providerId).toStrictEqual('sundeepcharan')
-    expect(pointerData.providerName).toStrictEqual('Discord')
+    expect(pointerData.provider).toStrictEqual({ discord: {} })
     expect(pointerData.profile).toStrictEqual(profile)
   })
 
@@ -176,7 +213,7 @@ describe('pubkey-profile', () => {
     const [pointer] = getPointerPda({
       programId: program.programId,
       providerId: 'sundeepcharan',
-      providerName: 'Discord',
+      provider: PubKeyIdentityProvider.Discord,
     })
 
     await program.methods
@@ -194,7 +231,13 @@ describe('pubkey-profile', () => {
     const { identities } = await program.account.profile.fetch(profile)
     const pointerData = await program.account.pointer.fetchNullable(pointer)
 
-    expect(identities).toEqual([])
+    expect(identities).toEqual([
+      {
+        provider: { solana: {} },
+        providerId: authority.publicKey.toString(),
+        name: 'Primary Wallet',
+      },
+    ])
     expect(pointerData).toBeNull()
   })
 })

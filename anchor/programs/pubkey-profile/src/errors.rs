@@ -10,8 +10,6 @@ pub enum PubkeyProfileError {
     InvalidUsername,
     #[msg("Invalid Avatar Url")]
     InvalidAvatarURL,
-    #[msg("Invalid Provider")]
-    InvalidProvider,
     #[msg("Invalid Provider ID")]
     InvalidProviderID,
     #[msg("Invalid Name")]

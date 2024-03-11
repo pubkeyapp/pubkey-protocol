@@ -11,6 +11,11 @@ export type PubkeyProfile = {
           "isSigner": false
         },
         {
+          "name": "pointer",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
           "name": "authority",
           "isMut": false,
           "isSigner": true
@@ -207,8 +212,10 @@ export type PubkeyProfile = {
             "type": "u8"
           },
           {
-            "name": "providerName",
-            "type": "string"
+            "name": "provider",
+            "type": {
+              "defined": "PubKeyIdentityProvider"
+            }
           },
           {
             "name": "providerId",
@@ -267,8 +274,10 @@ export type PubkeyProfile = {
         "kind": "struct",
         "fields": [
           {
-            "name": "providerName",
-            "type": "string"
+            "name": "provider",
+            "type": {
+              "defined": "PubKeyIdentityProvider"
+            }
           },
           {
             "name": "providerId",
@@ -356,7 +365,9 @@ export type PubkeyProfile = {
         "fields": [
           {
             "name": "provider",
-            "type": "string"
+            "type": {
+              "defined": "PubKeyIdentityProvider"
+            }
           },
           {
             "name": "providerId",
@@ -365,6 +376,20 @@ export type PubkeyProfile = {
           {
             "name": "name",
             "type": "string"
+          }
+        ]
+      }
+    },
+    {
+      "name": "PubKeyIdentityProvider",
+      "type": {
+        "kind": "enum",
+        "variants": [
+          {
+            "name": "Discord"
+          },
+          {
+            "name": "Solana"
           }
         ]
       }
@@ -393,51 +418,46 @@ export type PubkeyProfile = {
     },
     {
       "code": 6004,
-      "name": "InvalidProvider",
-      "msg": "Invalid Provider"
-    },
-    {
-      "code": 6005,
       "name": "InvalidProviderID",
       "msg": "Invalid Provider ID"
     },
     {
-      "code": 6006,
+      "code": 6005,
       "name": "InvalidName",
       "msg": "Invalid Name"
     },
     {
-      "code": 6007,
+      "code": 6006,
       "name": "InvalidAccountOwner",
       "msg": "Account not owned by program"
     },
     {
-      "code": 6008,
+      "code": 6007,
       "name": "AuthorityAlreadyExists",
       "msg": "Authority already exists"
     },
     {
-      "code": 6009,
+      "code": 6008,
       "name": "AuthorityNonExistant",
       "msg": "Authority does not exist"
     },
     {
-      "code": 6010,
+      "code": 6009,
       "name": "CannotRemoveSoloAuthority",
       "msg": "Cannot remove last remaining authority"
     },
     {
-      "code": 6011,
+      "code": 6010,
       "name": "MaxSizeReached",
       "msg": "Array reached max size"
     },
     {
-      "code": 6012,
+      "code": 6011,
       "name": "IdentityAlreadyExists",
       "msg": "Identity already exists"
     },
     {
-      "code": 6013,
+      "code": 6012,
       "name": "IdentityNonExistant",
       "msg": "Identity does not exist"
     }
@@ -457,6 +477,11 @@ export const IDL: PubkeyProfile = {
           "isSigner": false
         },
         {
+          "name": "pointer",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
           "name": "authority",
           "isMut": false,
           "isSigner": true
@@ -653,8 +678,10 @@ export const IDL: PubkeyProfile = {
             "type": "u8"
           },
           {
-            "name": "providerName",
-            "type": "string"
+            "name": "provider",
+            "type": {
+              "defined": "PubKeyIdentityProvider"
+            }
           },
           {
             "name": "providerId",
@@ -713,8 +740,10 @@ export const IDL: PubkeyProfile = {
         "kind": "struct",
         "fields": [
           {
-            "name": "providerName",
-            "type": "string"
+            "name": "provider",
+            "type": {
+              "defined": "PubKeyIdentityProvider"
+            }
           },
           {
             "name": "providerId",
@@ -802,7 +831,9 @@ export const IDL: PubkeyProfile = {
         "fields": [
           {
             "name": "provider",
-            "type": "string"
+            "type": {
+              "defined": "PubKeyIdentityProvider"
+            }
           },
           {
             "name": "providerId",
@@ -811,6 +842,20 @@ export const IDL: PubkeyProfile = {
           {
             "name": "name",
             "type": "string"
+          }
+        ]
+      }
+    },
+    {
+      "name": "PubKeyIdentityProvider",
+      "type": {
+        "kind": "enum",
+        "variants": [
+          {
+            "name": "Discord"
+          },
+          {
+            "name": "Solana"
           }
         ]
       }
@@ -839,51 +884,46 @@ export const IDL: PubkeyProfile = {
     },
     {
       "code": 6004,
-      "name": "InvalidProvider",
-      "msg": "Invalid Provider"
-    },
-    {
-      "code": 6005,
       "name": "InvalidProviderID",
       "msg": "Invalid Provider ID"
     },
     {
-      "code": 6006,
+      "code": 6005,
       "name": "InvalidName",
       "msg": "Invalid Name"
     },
     {
-      "code": 6007,
+      "code": 6006,
       "name": "InvalidAccountOwner",
       "msg": "Account not owned by program"
     },
     {
-      "code": 6008,
+      "code": 6007,
       "name": "AuthorityAlreadyExists",
       "msg": "Authority already exists"
     },
     {
-      "code": 6009,
+      "code": 6008,
       "name": "AuthorityNonExistant",
       "msg": "Authority does not exist"
     },
     {
-      "code": 6010,
+      "code": 6009,
       "name": "CannotRemoveSoloAuthority",
       "msg": "Cannot remove last remaining authority"
     },
     {
-      "code": 6011,
+      "code": 6010,
       "name": "MaxSizeReached",
       "msg": "Array reached max size"
     },
     {
-      "code": 6012,
+      "code": 6011,
       "name": "IdentityAlreadyExists",
       "msg": "Identity already exists"
     },
     {
-      "code": 6013,
+      "code": 6012,
       "name": "IdentityNonExistant",
       "msg": "Identity does not exist"
     }

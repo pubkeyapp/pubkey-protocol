@@ -5,9 +5,12 @@ import { useConnection } from '@solana/wallet-adapter-react'
 import { Cluster, Keypair, PublicKey, SystemProgram } from '@solana/web3.js'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { useMemo } from 'react'
+import { sha256 } from '@noble/hashes/sha256'
+
 import { uiToastLink } from '../../account/account-data-access'
 import { useCluster } from '../../cluster/cluster-data-access'
 import { useAnchorProvider } from '../../solana/solana-provider'
+import { PubKeyIdentityProvider } from './pubkey-profile.types'
 
 const PREFIX = new TextEncoder().encode('pubkey_profile')
 const PROFILE = new TextEncoder().encode('profile')
@@ -18,18 +21,24 @@ export function getProfilePda(username: string, programId: PublicKey) {
 }
 
 export function getPointerPda({
-  programId,
+  provider,
   providerId,
-  providerName,
+  programId,
 }: {
-  providerName: string
+  provider: PubKeyIdentityProvider
   providerId: string
   programId: PublicKey
 }) {
-  return PublicKey.findProgramAddressSync(
-    [PREFIX, POINTER, Buffer.from(providerName), Buffer.from(providerId)],
-    programId,
+  const hash = sha256(
+    Uint8Array.from([
+      ...PREFIX,
+      ...POINTER,
+      ...new TextEncoder().encode(provider),
+      ...new TextEncoder().encode(providerId),
+    ]),
   )
+
+  return PublicKey.findProgramAddressSync([hash], programId)
 }
 
 export function usePubkeyProfileProgram() {
@@ -64,6 +73,11 @@ export function usePubkeyProfileProgram() {
           feePayer: feePayer.publicKey,
           authority: provider.wallet.publicKey,
           profile: getProfilePda(username, programId)[0],
+          pointer: getPointerPda({
+            programId,
+            provider: PubKeyIdentityProvider.Solana,
+            providerId: provider.wallet.publicKey.toString(),
+          })[0],
           systemProgram: SystemProgram.programId,
         })
         .signers([feePayer])

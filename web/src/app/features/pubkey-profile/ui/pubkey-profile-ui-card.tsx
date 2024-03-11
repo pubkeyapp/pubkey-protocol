@@ -87,7 +87,7 @@ export function PubkeyProfileUiCard({ account }: { account: PublicKey }) {
                 feePayer: keypair.solana!,
                 nickname: sampleSundeep.identities[0].name,
                 providerId: sampleSundeep.identities[0].providerId,
-                providerName: sampleSundeep.identities[0].provider,
+                provider: sampleSundeep.identities[0].provider,
                 username: sampleSundeep.username,
               })
             }
@@ -103,7 +103,7 @@ export function PubkeyProfileUiCard({ account }: { account: PublicKey }) {
                 authority: currentAuthority,
                 feePayer: keypair.solana!,
                 providerId: sampleSundeep.identities[0].providerId,
-                providerName: sampleSundeep.identities[0].provider,
+                provider: sampleSundeep.identities[0].provider,
                 username: sampleSundeep.username,
               })
             }
