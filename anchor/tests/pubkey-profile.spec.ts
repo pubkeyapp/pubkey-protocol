@@ -1,43 +1,8 @@
 import * as anchor from '@coral-xyz/anchor'
 import { Program } from '@coral-xyz/anchor'
-import { Keypair, LAMPORTS_PER_SOL, PublicKey, SystemProgram } from '@solana/web3.js'
+import { Keypair, LAMPORTS_PER_SOL, SystemProgram } from '@solana/web3.js'
+import { getPubKeyPointerPda, getPubKeyProfilePda, PubKeyIdentityProvider } from '../src'
 import { PubkeyProfile } from '../target/types/pubkey_profile'
-
-import { sha256 } from '@noble/hashes/sha256'
-
-const PREFIX = new TextEncoder().encode('pubkey_profile')
-const PROFILE = new TextEncoder().encode('profile')
-const POINTER = new TextEncoder().encode('pointer')
-
-enum PubKeyIdentityProvider {
-  Discord = 'Discord',
-  Solana = 'Solana',
-}
-
-function getProfilePda(username: string, programId: PublicKey) {
-  return PublicKey.findProgramAddressSync([PREFIX, PROFILE, Buffer.from(username)], programId)
-}
-
-function getPointerPda({
-  provider,
-  providerId,
-  programId,
-}: {
-  provider: PubKeyIdentityProvider
-  providerId: string
-  programId: PublicKey
-}) {
-  const hash = sha256(
-    Uint8Array.from([
-      ...PREFIX,
-      ...POINTER,
-      ...new TextEncoder().encode(provider),
-      ...new TextEncoder().encode(providerId),
-    ]),
-  )
-
-  return PublicKey.findProgramAddressSync([hash], programId)
-}
 
 describe('pubkey-profile', () => {
   // Configure the client to use the local cluster.
@@ -59,8 +24,8 @@ describe('pubkey-profile', () => {
 
   it('Create PubkeyProfile', async () => {
     const username = 'sunguru98'
-    const [profile, bump] = getProfilePda('sunguru98', program.programId)
-    const [pointer, bumpPointer] = getPointerPda({
+    const [profile, bump] = getPubKeyProfilePda({ username: 'sunguru98', programId: program.programId })
+    const [pointer, bumpPointer] = getPubKeyPointerPda({
       programId: program.programId,
       provider: PubKeyIdentityProvider.Solana,
       providerId: authority.publicKey.toString(),
@@ -115,7 +80,7 @@ describe('pubkey-profile', () => {
   })
 
   it('Update avatarUrl', async () => {
-    const [profile] = getProfilePda('sunguru98', program.programId)
+    const [profile] = getPubKeyProfilePda({ username: 'sunguru98', programId: program.programId })
 
     await program.methods
       .updateAvatarUrl({
@@ -133,7 +98,7 @@ describe('pubkey-profile', () => {
   })
 
   it('Add Authority', async () => {
-    const [profile] = getProfilePda('sunguru98', program.programId)
+    const [profile] = getPubKeyProfilePda({ username: 'sunguru98', programId: program.programId })
 
     await program.methods
       .addAuthority({ newAuthority: authority2.publicKey })
@@ -150,7 +115,7 @@ describe('pubkey-profile', () => {
   })
 
   it('Remove Authority', async () => {
-    const [profile] = getProfilePda('sunguru98', program.programId)
+    const [profile] = getPubKeyProfilePda({ username: 'sunguru98', programId: program.programId })
 
     await program.methods
       .removeAuthority({ authorityToRemove: authority2.publicKey })
@@ -164,8 +129,8 @@ describe('pubkey-profile', () => {
   })
 
   it('Add Identity', async () => {
-    const [profile] = getProfilePda('sunguru98', program.programId)
-    const [pointer, bump] = getPointerPda({
+    const [profile] = getPubKeyProfilePda({ username: 'sunguru98', programId: program.programId })
+    const [pointer, bump] = getPubKeyPointerPda({
       programId: program.programId,
       providerId: 'sundeepcharan',
       provider: PubKeyIdentityProvider.Discord,
@@ -209,8 +174,8 @@ describe('pubkey-profile', () => {
   })
 
   it('Remove Identity', async () => {
-    const [profile] = getProfilePda('sunguru98', program.programId)
-    const [pointer] = getPointerPda({
+    const [profile] = getPubKeyProfilePda({ username: 'sunguru98', programId: program.programId })
+    const [pointer] = getPubKeyPointerPda({
       programId: program.programId,
       providerId: 'sundeepcharan',
       provider: PubKeyIdentityProvider.Discord,

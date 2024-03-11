@@ -1,20 +1,4 @@
-export interface PubKeyProfile {
-  username: string
-  avatarUrl: string
-  identities: PubKeyIdentity[]
-  owners: string[]
-}
-
-export interface PubKeyIdentity {
-  provider: PubKeyIdentityProvider
-  providerId: string
-  name: string
-}
-
-export enum PubKeyIdentityProvider {
-  Discord = 'Discord',
-  Solana = 'Solana',
-}
+import { PubKeyIdentityProvider, PubKeyProfile } from '@pubkey-program-library/anchor'
 
 export const sampleBeeman: PubKeyProfile = {
   username: 'beeman',
@@ -31,7 +15,7 @@ export const sampleBeeman: PubKeyProfile = {
       name: '🥵 Wallet',
     },
   ],
-  owners: ['BeEMuaaQCQPodQdaA7W6Rmsu7761vCabN4Tth6jA4VCP'],
+  authorities: ['BeEMuaaQCQPodQdaA7W6Rmsu7761vCabN4Tth6jA4VCP'],
 }
 
 export const sampleSundeep: PubKeyProfile = {
@@ -49,7 +33,7 @@ export const sampleSundeep: PubKeyProfile = {
       name: '🐒 Wallet',
     },
   ],
-  owners: ['81sWMLg1EgYps3nMwyeSW1JfjKgFqkGYPP85vTnkFzRn'],
+  authorities: ['81sWMLg1EgYps3nMwyeSW1JfjKgFqkGYPP85vTnkFzRn'],
 }
 
 export const sampleProfiles: PubKeyProfile[] = [sampleBeeman, sampleSundeep]

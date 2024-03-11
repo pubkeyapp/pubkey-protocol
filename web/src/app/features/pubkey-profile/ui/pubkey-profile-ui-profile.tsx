@@ -1,5 +1,5 @@
 import { Avatar, Group, Stack, Text } from '@mantine/core'
-import { PubKeyProfile } from '../data-access/pubkey-profile.types'
+import { PubKeyProfile } from '@pubkey-program-library/anchor'
 
 import { PubkeyProfileUiIdentity } from './pubkey-profile-ui-identity'
 

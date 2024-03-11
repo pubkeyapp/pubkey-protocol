@@ -1,45 +1,19 @@
 import { Program } from '@coral-xyz/anchor'
-import { getPubkeyProfileProgramId, PubkeyProfileIDL } from '@pubkey-program-library/anchor'
+import {
+  getPubKeyPointerPda,
+  getPubKeyProfilePda,
+  getPubkeyProfileProgramId,
+  PubKeyIdentityProvider,
+  PubkeyProfileIDL,
+} from '@pubkey-program-library/anchor'
 import { toastError } from '@pubkey-ui/core'
 import { useConnection } from '@solana/wallet-adapter-react'
-import { Cluster, Keypair, PublicKey, SystemProgram } from '@solana/web3.js'
+import { Cluster, Keypair, SystemProgram } from '@solana/web3.js'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { useMemo } from 'react'
-import { sha256 } from '@noble/hashes/sha256'
-
 import { uiToastLink } from '../../account/account-data-access'
 import { useCluster } from '../../cluster/cluster-data-access'
 import { useAnchorProvider } from '../../solana/solana-provider'
-import { PubKeyIdentityProvider } from './pubkey-profile.types'
-
-const PREFIX = new TextEncoder().encode('pubkey_profile')
-const PROFILE = new TextEncoder().encode('profile')
-const POINTER = new TextEncoder().encode('pointer')
-
-export function getProfilePda(username: string, programId: PublicKey) {
-  return PublicKey.findProgramAddressSync([PREFIX, PROFILE, Buffer.from(username)], programId)
-}
-
-export function getPointerPda({
-  provider,
-  providerId,
-  programId,
-}: {
-  provider: PubKeyIdentityProvider
-  providerId: string
-  programId: PublicKey
-}) {
-  const hash = sha256(
-    Uint8Array.from([
-      ...PREFIX,
-      ...POINTER,
-      ...new TextEncoder().encode(provider),
-      ...new TextEncoder().encode(providerId),
-    ]),
-  )
-
-  return PublicKey.findProgramAddressSync([hash], programId)
-}
 
 export function usePubkeyProfileProgram() {
   const { connection } = useConnection()
@@ -72,8 +46,8 @@ export function usePubkeyProfileProgram() {
         .accounts({
           feePayer: feePayer.publicKey,
           authority: provider.wallet.publicKey,
-          profile: getProfilePda(username, programId)[0],
-          pointer: getPointerPda({
+          profile: getPubKeyProfilePda({ username, programId })[0],
+          pointer: getPubKeyPointerPda({
             programId,
             provider: PubKeyIdentityProvider.Solana,
             providerId: provider.wallet.publicKey.toString(),
@@ -91,11 +65,11 @@ export function usePubkeyProfileProgram() {
   })
 
   return {
+    createProfile,
+    getProgramAccount,
+    pointerAccounts,
+    profileAccounts,
     program,
     programId,
-    profileAccounts,
-    pointerAccounts,
-    getProgramAccount,
-    createProfile,
   }
 }

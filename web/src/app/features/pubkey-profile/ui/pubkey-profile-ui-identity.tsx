@@ -1,8 +1,7 @@
 import { Group, Stack, Text } from '@mantine/core'
+import { PubKeyIdentity, PubKeyIdentityProvider } from '@pubkey-program-library/anchor'
 import { UiAnchor } from '@pubkey-ui/core'
 import { useCluster } from '../../cluster/cluster-data-access'
-import { PubKeyIdentity, PubKeyIdentityProvider } from '../data-access/pubkey-profile.types'
-
 import { PubkeyProfileUiProvider } from './pubkey-profile-ui-provider'
 
 export function useGetIdentityUrl(identity: PubKeyIdentity) {

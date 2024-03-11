@@ -1,5 +1,5 @@
+import { PubKeyIdentityProvider } from '@pubkey-program-library/anchor'
 import { IconBrandDiscordFilled, IconCurrencySolana } from '@tabler/icons-react'
-import { PubKeyIdentityProvider } from '../data-access/pubkey-profile.types'
 
 export function PubkeyProfileUiProvider({ provider, size = 24 }: { provider: PubKeyIdentityProvider; size?: number }) {
   switch (provider) {

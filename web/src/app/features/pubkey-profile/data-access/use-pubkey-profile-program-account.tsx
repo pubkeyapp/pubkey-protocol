@@ -1,9 +1,9 @@
+import { getPubKeyPointerPda, getPubKeyProfilePda, PubKeyIdentityProvider } from '@pubkey-program-library/anchor'
 import { Keypair, PublicKey, SystemProgram } from '@solana/web3.js'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { uiToastLink } from '../../account/account-data-access'
 import { useCluster } from '../../cluster/cluster-data-access'
-import { getPointerPda, getProfilePda, usePubkeyProfileProgram } from './use-pubkey-profile-program'
-import { PubKeyIdentityProvider } from './pubkey-profile.types'
+import { usePubkeyProfileProgram } from './use-pubkey-profile-program'
 
 export function usePubkeyProfileProgramAccount({ account }: { account: PublicKey }) {
   const { cluster, getExplorerUrl } = useCluster()
@@ -36,7 +36,7 @@ export function usePubkeyProfileProgramAccount({ account }: { account: PublicKey
         .updateAvatarUrl({ newAvatarUrl, authority })
         .accounts({
           feePayer: feePayer.publicKey,
-          profile: getProfilePda(username, program.programId)[0],
+          profile: getPubKeyProfilePda({ username, programId: program.programId })[0],
         })
         .signers([feePayer])
         .rpc()
@@ -65,7 +65,7 @@ export function usePubkeyProfileProgramAccount({ account }: { account: PublicKey
         .accounts({
           authority,
           feePayer: feePayer.publicKey,
-          profile: getProfilePda(username, program.programId)[0],
+          profile: getPubKeyProfilePda({ username, programId: program.programId })[0],
           systemProgram: SystemProgram.programId,
         })
         .signers([feePayer])
@@ -94,7 +94,7 @@ export function usePubkeyProfileProgramAccount({ account }: { account: PublicKey
         .accounts({
           authority,
           feePayer: feePayer.publicKey,
-          profile: getProfilePda(username, program.programId)[0],
+          profile: getPubKeyProfilePda({ username, programId: program.programId })[0],
         })
         .signers([feePayer])
         .rpc(),
@@ -130,8 +130,8 @@ export function usePubkeyProfileProgramAccount({ account }: { account: PublicKey
         .accounts({
           authority,
           feePayer: feePayer.publicKey,
-          profile: getProfilePda(username, program.programId)[0],
-          pointer: getPointerPda({ programId: program.programId, providerId, provider })[0],
+          profile: getPubKeyProfilePda({ username, programId: program.programId })[0],
+          pointer: getPubKeyPointerPda({ programId: program.programId, providerId, provider })[0],
           systemProgram: SystemProgram.programId,
         })
         .signers([feePayer])
@@ -163,8 +163,8 @@ export function usePubkeyProfileProgramAccount({ account }: { account: PublicKey
         .accounts({
           authority,
           feePayer: feePayer.publicKey,
-          profile: getProfilePda(username, program.programId)[0],
-          pointer: getPointerPda({ programId: program.programId, providerId, provider })[0],
+          profile: getPubKeyProfilePda({ username, programId: program.programId })[0],
+          pointer: getPubKeyPointerPda({ programId: program.programId, providerId, provider })[0],
           systemProgram: SystemProgram.programId,
         })
         .signers([feePayer])
