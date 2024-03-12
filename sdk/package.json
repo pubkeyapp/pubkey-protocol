@@ -1,7 +1,12 @@
 {
   "name": "@pubkey-program-library/sdk",
   "version": "0.0.1",
-  "dependencies": {},
+  "dependencies": {
+    "@coral-xyz/anchor": "^0.29.0",
+    "@solana/web3.js": "^1.91.0",
+    "@pubkey-program-library/anchor": "0.0.1",
+    "@solana-developers/helpers": "^2.0.0"
+  },
   "type": "commonjs",
   "main": "./index.cjs",
   "module": "./index.js"
