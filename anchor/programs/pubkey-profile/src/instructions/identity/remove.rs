@@ -49,7 +49,7 @@ pub fn remove(ctx: Context<RemoveIdentity>, args: RemoveIdentityArgs) -> Result<
         Ok(identity_to_remove_index) => {
             profile.identities.remove(identity_to_remove_index);
         }
-        Err(_) => return err!(PubkeyProfileError::IdentityNonExistant),
+        Err(_) => return err!(PubkeyProfileError::IdentityNonExistent),
     }
 
     profile.validate()?;

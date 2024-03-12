@@ -438,7 +438,7 @@ export type PubkeyProfile = {
     },
     {
       code: 6008
-      name: 'AuthorityNonExistant'
+      name: 'AuthorityNonExistent'
       msg: 'Authority does not exist'
     },
     {
@@ -458,7 +458,7 @@ export type PubkeyProfile = {
     },
     {
       code: 6012
-      name: 'IdentityNonExistant'
+      name: 'IdentityNonExistent'
       msg: 'Identity does not exist'
     },
   ]
@@ -904,7 +904,7 @@ export const IDL: PubkeyProfile = {
     },
     {
       code: 6008,
-      name: 'AuthorityNonExistant',
+      name: 'AuthorityNonExistent',
       msg: 'Authority does not exist',
     },
     {
@@ -924,7 +924,7 @@ export const IDL: PubkeyProfile = {
     },
     {
       code: 6012,
-      name: 'IdentityNonExistant',
+      name: 'IdentityNonExistent',
       msg: 'Identity does not exist',
     },
   ],

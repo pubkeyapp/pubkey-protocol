@@ -44,7 +44,7 @@ pub fn remove_authority(ctx: Context<RemoveAuthority>, args: RemoveAuthorityArgs
         Ok(authority_to_remove_index) => {
             profile.authorities.remove(authority_to_remove_index);
         }
-        Err(_) => return err!(PubkeyProfileError::AuthorityNonExistant),
+        Err(_) => return err!(PubkeyProfileError::AuthorityNonExistent),
     }
 
     profile.validate()?;

@@ -19,7 +19,7 @@ pub enum PubkeyProfileError {
     #[msg("Authority already exists")]
     AuthorityAlreadyExists,
     #[msg("Authority does not exist")]
-    AuthorityNonExistant,
+    AuthorityNonExistent,
     #[msg("Cannot remove last remaining authority")]
     CannotRemoveSoloAuthority,
     #[msg("Array reached max size")]
@@ -27,5 +27,5 @@ pub enum PubkeyProfileError {
     #[msg("Identity already exists")]
     IdentityAlreadyExists,
     #[msg("Identity does not exist")]
-    IdentityNonExistant,
+    IdentityNonExistent,
 }
