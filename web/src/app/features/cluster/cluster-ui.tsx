@@ -1,6 +1,6 @@
-import { Anchor, AnchorProps, Button, Group, Menu, Modal, Select, Table, Text, TextInput } from '@mantine/core'
-import { useDisclosure } from '@mantine/hooks'
-import { UiCopy, UiWarning } from '@pubkey-ui/core'
+import { Anchor, AnchorProps, Button, Group, Menu, Select, Table, Text, TextInput } from '@mantine/core'
+import { modals } from '@mantine/modals'
+import { UiCopy, UiStack, UiWarning } from '@pubkey-ui/core'
 import { useConnection } from '@solana/wallet-adapter-react'
 import { IconNetwork, IconNetworkOff, IconTrash } from '@tabler/icons-react'
 import { useQuery } from '@tanstack/react-query'
@@ -91,33 +91,51 @@ export function ClusterChecker({ children }: { children: ReactNode }) {
 
 export function ClusterUiModal() {
   const { addCluster } = useCluster()
-  const [opened, { close, open }] = useDisclosure(false)
   const [name, setName] = useState('')
-  const [network, setNetwork] = useState<ClusterNetwork | undefined>()
+  const [network, setNetwork] = useState<ClusterNetwork | undefined>(ClusterNetwork.Devnet)
   const [endpoint, setEndpoint] = useState('')
 
   return (
-    <>
-      <Button onClick={open}>Add Cluster</Button>
-      <Modal opened={opened} onClose={close} title="Add Cluster">
-        <TextInput type="text" placeholder="Name" value={name} onChange={(e) => setName(e.target.value)} />
-        <TextInput type="text" placeholder="Endpoint" value={endpoint} onChange={(e) => setEndpoint(e.target.value)} />
-        <Select value={network} onChange={(value) => setNetwork(value as ClusterNetwork)}>
-          <option value={undefined}>Select a network</option>
-          <option value={ClusterNetwork.Devnet}>Devnet</option>
-          <option value={ClusterNetwork.Testnet}>Testnet</option>
-          <option value={ClusterNetwork.Mainnet}>Mainnet</option>
-        </Select>
-        <Button
-          onClick={() => {
-            addCluster({ name, network, endpoint })
-            close()
-          }}
-        >
-          Save
-        </Button>
-      </Modal>
-    </>
+    <Button
+      onClick={() => {
+        modals.open({
+          title: 'Add Cluster',
+          children: (
+            <UiStack>
+              <TextInput type="text" placeholder="Name" value={name} onChange={(e) => setName(e.target.value)} />
+              <TextInput
+                type="text"
+                placeholder="Endpoint"
+                value={endpoint}
+                onChange={(e) => setEndpoint(e.target.value)}
+              />
+              <Select
+                value={network}
+                onChange={(value) => setNetwork(value as ClusterNetwork)}
+                data={[
+                  { value: ClusterNetwork.Custom, label: 'Custom' },
+                  { value: ClusterNetwork.Devnet, label: 'Devnet' },
+                  { value: ClusterNetwork.Testnet, label: 'Testnet' },
+                  { value: ClusterNetwork.Mainnet, label: 'Mainnet' },
+                ]}
+              />
+              <Group justify="flex-end">
+                <Button
+                  onClick={() => {
+                    addCluster({ name, network, endpoint })
+                    modals.closeAll()
+                  }}
+                >
+                  Save
+                </Button>
+              </Group>
+            </UiStack>
+          ),
+        })
+      }}
+    >
+      Add Cluster
+    </Button>
   )
 }
 
