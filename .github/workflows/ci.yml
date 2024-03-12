@@ -22,7 +22,24 @@ jobs:
       # The "--stop-agents-after" is optional, but allows idle agents to shut down once the "build" targets have been requested
       # - run: pnpm exec nx-cloud start-ci-run --distribute-on="5 linux-medium-js" --stop-agents-after="build"
 
-      
+      - name: List rustup toolchains
+        run: rustup toolchain list
+      - name: Set default toolchain
+        run: rustup default stable
+      - name: List rustup toolchains
+        run: rustup toolchain list
+      - name: Install AVM
+        run: cargo install --git https://github.com/coral-xyz/anchor avm --locked --force
+      - name: Install Anchor
+        run: avm install latest && avm use latest
+      - name: Install Solana
+        run: sh -c "$(curl -sSfL https://release.solana.com/stable/install)"
+      - name: Generate new keygen
+        run: ~/.local/share/solana/install/active_release/bin/solana-keygen new --no-bip39-passphrase
+      - name: Set solana target cluster to local
+        run: ~/.local/share/solana/install/active_release/bin/solana config set --url http:localhost:8899
+      - name: Check solana config
+        run: ~/.local/share/solana/install/active_release/bin/solana config get
       - uses: pnpm/action-setup@v2
         with:
           version: 8
