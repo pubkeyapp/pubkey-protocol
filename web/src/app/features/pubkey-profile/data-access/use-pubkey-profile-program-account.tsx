@@ -1,46 +1,31 @@
-import { getPubKeyPointerPda, getPubKeyProfilePda, PubKeyIdentityProvider } from '@pubkey-program-library/anchor'
-import { Keypair, PublicKey, SystemProgram } from '@solana/web3.js'
+import {
+  AddAuthorityOptions,
+  AddIdentityOptions,
+  RemoveAuthorityOptions,
+  RemoveIdentityOptions,
+  UpdateAvatarUrlOptions,
+} from '@pubkey-program-library/sdk'
+import { PublicKey } from '@solana/web3.js'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { uiToastLink } from '../../account/account-data-access'
-import { useCluster } from '../../cluster/cluster-data-access'
-import { usePubkeyProfileProgram } from './use-pubkey-profile-program'
+import { usePubkeyProfileSdk } from './use-pubkey-profile-sdk'
 
 export function usePubkeyProfileProgramAccount({ account }: { account: PublicKey }) {
-  const { cluster, getExplorerUrl } = useCluster()
-  const { program } = usePubkeyProfileProgram()
+  const { sdk, cluster, getExplorerUrl } = usePubkeyProfileSdk()
 
   const profileAccountQuery = useQuery({
     queryKey: ['pubkey-profile', 'fetchProfile', { cluster, account }],
-    queryFn: () => program.account.profile.fetch(account),
+    queryFn: () => sdk.getProfile({ account }),
   })
 
   const pointerAccountQuery = useQuery({
     queryKey: ['pubkey-profile', 'fetchPointer', { cluster, account }],
-    queryFn: () => program.account.pointer.fetch(account),
+    queryFn: () => sdk.getPointer({ account }),
   })
 
   const updateAvatarUrl = useMutation({
     mutationKey: ['pubkey-profile', 'updateAvatarUrl', { cluster, account }],
-    mutationFn: ({
-      newAvatarUrl,
-      authority,
-      username,
-      feePayer,
-    }: {
-      newAvatarUrl: string
-      authority: PublicKey
-      username: string
-      feePayer: Keypair
-    }) => {
-      return program.methods
-        .updateAvatarUrl({ newAvatarUrl, authority })
-        .accounts({
-          feePayer: feePayer.publicKey,
-          profile: getPubKeyProfilePda({ username, programId: program.programId })[0],
-        })
-        .signers([feePayer])
-        .rpc()
-    },
+    mutationFn: (options: UpdateAvatarUrlOptions) => sdk.updateAvatarUrl(options),
     onSuccess: (tx) => {
       uiToastLink({ label: 'View transaction', link: getExplorerUrl(`tx/${tx}`) })
       return profileAccountQuery.refetch()
@@ -49,27 +34,7 @@ export function usePubkeyProfileProgramAccount({ account }: { account: PublicKey
 
   const addAuthority = useMutation({
     mutationKey: ['pubkey-profile', 'addAuthority', { cluster, account }],
-    mutationFn: ({
-      newAuthority,
-      authority,
-      feePayer,
-      username,
-    }: {
-      newAuthority: PublicKey
-      authority: PublicKey
-      feePayer: Keypair
-      username: string
-    }) =>
-      program.methods
-        .addAuthority({ newAuthority })
-        .accounts({
-          authority,
-          feePayer: feePayer.publicKey,
-          profile: getPubKeyProfilePda({ username, programId: program.programId })[0],
-          systemProgram: SystemProgram.programId,
-        })
-        .signers([feePayer])
-        .rpc(),
+    mutationFn: (options: AddAuthorityOptions) => sdk.addAuthority(options),
     onSuccess: (tx) => {
       uiToastLink({ label: 'View transaction', link: getExplorerUrl(`tx/${tx}`) })
       return profileAccountQuery.refetch()
@@ -78,26 +43,7 @@ export function usePubkeyProfileProgramAccount({ account }: { account: PublicKey
 
   const removeAuthority = useMutation({
     mutationKey: ['pubkey-profile', 'removeAuthority', { cluster, account }],
-    mutationFn: ({
-      authorityToRemove,
-      authority,
-      feePayer,
-      username,
-    }: {
-      authorityToRemove: PublicKey
-      authority: PublicKey
-      feePayer: Keypair
-      username: string
-    }) =>
-      program.methods
-        .removeAuthority({ authorityToRemove })
-        .accounts({
-          authority,
-          feePayer: feePayer.publicKey,
-          profile: getPubKeyProfilePda({ username, programId: program.programId })[0],
-        })
-        .signers([feePayer])
-        .rpc(),
+    mutationFn: (options: RemoveAuthorityOptions) => sdk.removeAuthority(options),
     onSuccess: (tx) => {
       uiToastLink({ label: 'View transaction', link: getExplorerUrl(`tx/${tx}`) })
       return profileAccountQuery.refetch()
@@ -106,36 +52,7 @@ export function usePubkeyProfileProgramAccount({ account }: { account: PublicKey
 
   const addIdentity = useMutation({
     mutationKey: ['pubkey-profile', 'addIdentity', { cluster, account }],
-    mutationFn: ({
-      authority,
-      feePayer,
-      username,
-      providerId,
-      provider,
-      nickname,
-    }: {
-      authority: PublicKey
-      feePayer: Keypair
-      username: string
-      providerId: string
-      provider: PubKeyIdentityProvider
-      nickname: string
-    }) =>
-      program.methods
-        .addIdentity({
-          nickname,
-          provider: PubKeyIdentityProvider.Discord ? { discord: {} } : { solana: {} },
-          providerId,
-        })
-        .accounts({
-          authority,
-          feePayer: feePayer.publicKey,
-          profile: getPubKeyProfilePda({ username, programId: program.programId })[0],
-          pointer: getPubKeyPointerPda({ programId: program.programId, providerId, provider })[0],
-          systemProgram: SystemProgram.programId,
-        })
-        .signers([feePayer])
-        .rpc(),
+    mutationFn: (options: AddIdentityOptions) => sdk.addIdentity(options),
     onSuccess: async (tx) => {
       uiToastLink({ label: 'View transaction', link: getExplorerUrl(`tx/${tx}`) })
       await pointerAccountQuery.refetch()
@@ -145,30 +62,7 @@ export function usePubkeyProfileProgramAccount({ account }: { account: PublicKey
 
   const removeIdentity = useMutation({
     mutationKey: ['pubkey-profile', 'removeIdentity', { cluster, account }],
-    mutationFn: ({
-      authority,
-      feePayer,
-      username,
-      providerId,
-      provider,
-    }: {
-      authority: PublicKey
-      feePayer: Keypair
-      username: string
-      providerId: string
-      provider: PubKeyIdentityProvider
-    }) =>
-      program.methods
-        .removeIdentity({ providerId })
-        .accounts({
-          authority,
-          feePayer: feePayer.publicKey,
-          profile: getPubKeyProfilePda({ username, programId: program.programId })[0],
-          pointer: getPubKeyPointerPda({ programId: program.programId, providerId, provider })[0],
-          systemProgram: SystemProgram.programId,
-        })
-        .signers([feePayer])
-        .rpc(),
+    mutationFn: (options: RemoveIdentityOptions) => sdk.removeIdentity(options),
     onSuccess: async (tx) => {
       uiToastLink({ label: 'View transaction', link: getExplorerUrl(`tx/${tx}`) })
       await pointerAccountQuery.refetch()

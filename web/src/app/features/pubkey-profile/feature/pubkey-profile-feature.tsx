@@ -5,12 +5,12 @@ import { useWallet } from '@solana/wallet-adapter-react'
 import { ellipsify } from '../../account/ui/ellipsify'
 import { ExplorerLink } from '../../cluster/cluster-ui'
 import { WalletButton } from '../../solana/solana-provider'
-import { usePubkeyProfileProgram } from '../data-access'
+import { usePubkeyProfileSdk } from '../data-access'
 import { PubkeyProfileUiCreate, PubkeyProfileUiDemo, PubkeyProfileUiList } from '../ui'
 
 export default function PubkeyProfileFeature() {
   const { publicKey } = useWallet()
-  const { programId } = usePubkeyProfileProgram()
+  const { sdk } = usePubkeyProfileSdk()
 
   return publicKey ? (
     <UiStack>
@@ -22,7 +22,7 @@ export default function PubkeyProfileFeature() {
       </Text>
 
       <Group justify="flex-end">
-        <ExplorerLink path={`account/${programId}`} label={ellipsify(programId.toString())} />
+        <ExplorerLink path={`account/${sdk.programId}`} label={ellipsify(sdk.programId.toString())} />
         <PubkeyProfileUiCreate />
       </Group>
       <PubkeyProfileUiList />

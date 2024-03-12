@@ -29,7 +29,7 @@ export const PUBKEY_PROFILE_SEED_POINTER = new TextEncoder().encode('pointer')
 // Helper method to get the PubKeyProfile PDA
 export function getPubKeyProfilePda({ programId, username }: { programId: PublicKey; username: string }) {
   return PublicKey.findProgramAddressSync(
-    [PUBKEY_PROFILE_PREFIX, PUBKEY_PROFILE_SEED_PROFILE, new TextEncoder().encode(username)],
+    [PUBKEY_PROFILE_PREFIX, PUBKEY_PROFILE_SEED_PROFILE, stringToUint8Array(username)],
     programId,
   )
 }
@@ -48,8 +48,8 @@ export function getPubKeyPointerPda({
     Uint8Array.from([
       ...PUBKEY_PROFILE_PREFIX,
       ...PUBKEY_PROFILE_SEED_POINTER,
-      ...new TextEncoder().encode(provider),
-      ...new TextEncoder().encode(providerId),
+      ...stringToUint8Array(provider),
+      ...stringToUint8Array(providerId),
     ]),
   )
 
@@ -62,14 +62,18 @@ export enum PubKeyIdentityProvider {
 }
 
 export interface PubKeyProfile {
-  username: string
+  authorities: string[]
   avatarUrl: string
   identities: PubKeyIdentity[]
-  authorities: string[]
+  username: string
 }
 
 export interface PubKeyIdentity {
+  name: string
   provider: PubKeyIdentityProvider
   providerId: string
-  name: string
+}
+
+export function stringToUint8Array(str: string): Uint8Array {
+  return new TextEncoder().encode(str)
 }

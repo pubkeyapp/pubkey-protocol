@@ -5,10 +5,10 @@ import { useMemo } from 'react'
 
 import { ellipsify } from '../../account/ui/ellipsify'
 import { ExplorerLink } from '../../cluster/cluster-ui'
-import { usePubkeyProfileProgramAccount } from '../data-access'
-import { sampleBeeman, sampleSundeep } from '../data-access/pubkey-profile.types'
 import { useKeypair } from '../../keypair/data-access'
 import { useAnchorProvider } from '../../solana/solana-provider'
+import { usePubkeyProfileProgramAccount } from '../data-access'
+import { sampleBeeman, sampleSundeep } from '../data-access/pubkey-profile.types'
 
 export function PubkeyProfileUiCard({ account }: { account: PublicKey }) {
   const { profileAccountQuery, updateAvatarUrl, addAuthority, removeAuthority, addIdentity, removeIdentity } =
@@ -36,7 +36,7 @@ export function PubkeyProfileUiCard({ account }: { account: PublicKey }) {
             variant="outline"
             onClick={() =>
               updateAvatarUrl.mutateAsync({
-                newAvatarUrl: sampleBeeman.avatarUrl,
+                avatarUrl: sampleBeeman.avatarUrl,
                 authority: currentAuthority,
                 feePayer: keypair.solana!,
                 username: sampleSundeep.username,
