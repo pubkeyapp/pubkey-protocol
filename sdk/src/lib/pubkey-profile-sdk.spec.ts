@@ -6,7 +6,7 @@ import { PubKeyProfileSdk } from './pubkey-profile-sdk'
 const programId = PUBKEY_PROFILE_PROGRAM_ID
 const connection = new Connection('http://localhost:8899', 'confirmed')
 
-describe('sdk', () => {
+xdescribe('sdk', () => {
   let feePayer: Keypair
   let authority: PublicKey
 

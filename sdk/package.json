@@ -4,7 +4,7 @@
   "dependencies": {
     "@coral-xyz/anchor": "^0.29.0",
     "@solana/web3.js": "^1.91.0",
-    "@pubkey-program-library/anchor": "0.0.1",
+    "@pubkey-program-library/anchor": "1.0.0",
     "@solana-developers/helpers": "^2.0.0"
   },
   "type": "commonjs",
