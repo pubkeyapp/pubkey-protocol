@@ -35,6 +35,9 @@ dependencies:
   '@pubkeyapp/wallet-adapter-mantine-ui':
     specifier: ^2.3.0
     version: 2.3.0(@mantine/core@7.6.1)(@solana/wallet-adapter-base@0.9.23)(@solana/wallet-adapter-react@0.15.35)(@tabler/icons-react@2.47.0)(react@18.2.0)
+  '@solana-developers/helpers':
+    specifier: ^2.0.0
+    version: 2.0.0
   '@solana/spl-token':
     specifier: ^0.4.1
     version: 0.4.1(@solana/web3.js@1.91.0)(fastestsmallesttextencoderdecoder@1.0.22)
@@ -4030,6 +4033,18 @@ packages:
     dependencies:
       '@sinonjs/commons': 3.0.1
 
+  /@solana-developers/helpers@2.0.0:
+    resolution: {integrity: sha512-SKckbWFtahC54xbjRQvdi786z+N6LrUEK5EILf7E/7PlltM9Lu5njIYhgzhnww7KTm+HX9kSnf63uz1/z5svxw==}
+    dependencies:
+      '@solana/web3.js': 1.91.0
+      bs58: 5.0.0
+      dotenv: 16.3.2
+    transitivePeerDependencies:
+      - bufferutil
+      - encoding
+      - utf-8-validate
+    dev: false
+
   /@solana-developers/preset-anchor@2.2.0(@swc-node/register@1.8.0)(@swc/core@1.3.107)(@types/node@18.16.9)(nx@18.1.0-beta.5)(ts-node@10.9.1)(typescript@5.3.3)(verdaccio@5.29.2):
     resolution: {integrity: sha512-gdBohG3sxqgWiL1sIosuwKP4IejPylq7Qm08+B3XL6qQXiLCXJu96MjbVP8aeC2tLv0/z7amfhWuHnXlniWUgg==}
     dependencies:
@@ -7746,7 +7761,6 @@ packages:
   /dotenv@16.3.2:
     resolution: {integrity: sha512-HTlk5nmhkm8F6JcdXvHIzaorzCoziNQT9mGxLPVXW8wJF1TiGSL60ZGB4gHWabHOaMmWmhvk2/lPHfnBiT78AQ==}
     engines: {node: '>=12'}
-    dev: true
 
   /duplexer@0.1.2:
     resolution: {integrity: sha512-jtD6YG370ZCIi/9GTaJKQxWTZD045+4R4hTk/x1UyoqadyJ9x9CgSi1RlVDQF8U2sxLLSnFkCaMihqljHIWgMg==}

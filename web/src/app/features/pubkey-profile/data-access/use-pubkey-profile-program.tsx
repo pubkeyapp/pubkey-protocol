@@ -9,12 +9,12 @@ export function usePubkeyProfileProgram() {
 
   const profileAccounts = useQuery({
     queryKey: ['pubkey-profile', 'profile', { cluster }],
-    queryFn: () => sdk.getAllProfiles(),
+    queryFn: () => sdk.getProfiles(),
   })
 
   const pointerAccounts = useQuery({
     queryKey: ['pubkey-profile', 'pointer', { cluster }],
-    queryFn: () => sdk.getAllPointers(),
+    queryFn: () => sdk.getPointers(),
   })
 
   const getProgramAccount = useQuery({

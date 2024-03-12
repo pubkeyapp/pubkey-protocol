@@ -1,11 +1,25 @@
 import { PUBKEY_PROFILE_PROGRAM_ID, PubKeyIdentityProvider } from '@pubkey-program-library/anchor'
-import { Connection } from '@solana/web3.js'
+import { airdropIfRequired, getKeypairFromFile } from '@solana-developers/helpers'
+import { Connection, Keypair, LAMPORTS_PER_SOL, PublicKey } from '@solana/web3.js'
 import { PubKeyProfileSdk } from './pubkey-profile-sdk'
 
 const programId = PUBKEY_PROFILE_PROGRAM_ID
-const connection = new Connection('http://localhost:8899')
+const connection = new Connection('http://localhost:8899', 'confirmed')
+
 describe('sdk', () => {
+  let feePayer: Keypair
+  let authority: PublicKey
+
+  const sdk = new PubKeyProfileSdk({ programId, connection })
+
+  beforeEach(async () => {
+    feePayer = await getKeypairFromFile()
+    authority = feePayer.publicKey
+    await airdropIfRequired(connection, feePayer.publicKey, 10 * LAMPORTS_PER_SOL, LAMPORTS_PER_SOL)
+  }, 30000)
+
   it('should work', () => {
+    console.log('FeePayer', feePayer.publicKey.toBase58())
     const sdk = new PubKeyProfileSdk({ programId, connection })
 
     const [profilePDA, profileBump] = sdk.getProfilePda({ username: 'test' })
@@ -22,5 +36,28 @@ describe('sdk', () => {
     expect(pointerBump).toEqual(253)
 
     expect(sdk).toBeTruthy()
+  })
+
+  xit('should create a profile', async () => {
+    // ARRANGE
+    const username = `test-${Date.now()}`
+    const avatarUrl = `https://avatars.dicebear.com/api/avataaars/${username}.svg`
+    // ACT
+    console.log({
+      authority,
+      avatarUrl,
+      feePayer,
+      username,
+    })
+    const created = await sdk.createProfile({
+      authority,
+      avatarUrl,
+      feePayer,
+      username,
+    })
+    console.log('Created', created)
+    const profile = await sdk.getProfileByUsername({ username })
+    console.log('Profile', profile)
+    // ASSERT
   })
 })

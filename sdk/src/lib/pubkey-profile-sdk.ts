@@ -4,7 +4,9 @@ import {
   getPubKeyProfilePda,
   PUBKEY_PROFILE_PROGRAM_ID,
   PubKeyIdentityProvider,
+  PubKeyPointer,
   PubkeyProfile,
+  PubKeyProfile,
   PubkeyProfileIDL,
 } from '@pubkey-program-library/anchor'
 import { Connection, Keypair, PublicKey, SystemProgram } from '@solana/web3.js'
@@ -135,16 +137,50 @@ export class PubKeyProfileSdk {
       .rpc()
   }
 
-  async getAllProfiles() {
-    return this.program.account.profile.all()
+  async getProfiles(): Promise<PubKeyProfile[]> {
+    return this.program.account.profile.all().then((accounts) =>
+      accounts.map(({ account, publicKey }) => ({
+        publicKey,
+        authorities: account.authorities,
+        avatarUrl: account.avatarUrl,
+        bump: account.bump,
+        identities: account.identities.map((identity) => ({
+          ...identity,
+          provider: convertToIdentityProvider(identity.provider as unknown as { [key: string]: object }),
+        })),
+        feePayer: account.feePayer,
+        username: account.username,
+      })),
+    )
   }
 
-  async getAllPointers() {
-    return this.program.account.pointer.all()
+  async getPointers(): Promise<PubKeyPointer[]> {
+    return this.program.account.pointer.all().then((accounts) =>
+      accounts.map(({ account, publicKey }) => ({
+        publicKey,
+        provider: convertToIdentityProvider(account.provider as unknown as { [key: string]: object }),
+        providerId: account.providerId,
+        bump: account.bump,
+        profile: account.profile,
+      })),
+    )
   }
 
-  async getProfile({ account }: { account: PublicKey }) {
-    return this.program.account.profile.fetch(account)
+  async getProfileByUsername({ username }: { username: string }): Promise<PubKeyProfile> {
+    const [account] = this.getProfilePda({ username })
+
+    return this.getProfile({ account })
+  }
+
+  async getProfile({ account }: { account: PublicKey }): Promise<PubKeyProfile> {
+    return this.program.account.profile.fetch(account).then((res) => ({
+      ...res,
+      publicKey: account,
+      identities: res.identities.map((identity) => ({
+        ...identity,
+        provider: convertToIdentityProvider(identity.provider as unknown as { [key: string]: object }),
+      })),
+    }))
   }
 
   async getPointer({ account }: { account: PublicKey }) {
@@ -203,7 +239,7 @@ export class PubKeyProfileSdk {
 export const enumMap = {
   [PubKeyIdentityProvider.Solana]: { solana: {} },
   [PubKeyIdentityProvider.Discord]: { discord: {} },
-}
+} as const
 
 export function convertFromIdentityProvider(provider: PubKeyIdentityProvider) {
   if (!enumMap[provider]) {

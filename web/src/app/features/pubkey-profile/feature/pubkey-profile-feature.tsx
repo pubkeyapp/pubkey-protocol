@@ -22,6 +22,7 @@ export default function PubkeyProfileFeature() {
       </Text>
 
       <Group justify="flex-end">
+        test
         <ExplorerLink path={`account/${sdk.programId}`} label={ellipsify(sdk.programId.toString())} />
         <PubkeyProfileUiCreate />
       </Group>

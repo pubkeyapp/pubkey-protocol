@@ -1,6 +1,6 @@
-import { Button, Title } from '@mantine/core'
-import { UiCard, UiLoader, UiStack } from '@pubkey-ui/core'
-import { PublicKey } from '@solana/web3.js'
+import { Button, Group } from '@mantine/core'
+import { UiAlert, UiCard, UiDebug, UiLoader, UiStack } from '@pubkey-ui/core'
+import { Keypair, PublicKey } from '@solana/web3.js'
 import { useMemo } from 'react'
 
 import { ellipsify } from '../../account/ui/ellipsify'
@@ -8,114 +8,55 @@ import { ExplorerLink } from '../../cluster/cluster-ui'
 import { useKeypair } from '../../keypair/data-access'
 import { useAnchorProvider } from '../../solana/solana-provider'
 import { usePubkeyProfileProgramAccount } from '../data-access'
-import { sampleBeeman, sampleSundeep } from '../data-access/pubkey-profile.types'
+import { PubKeyProfileUiButtonAddIdentity } from './pubkey-profile-ui-button-add-identity'
+import { PubKeyProfileUiButtonRemoveAuthority } from './pubkey-profile-ui-button-remove-authority'
+import { PubKeyProfileUiButtonRemoveIdentity } from './pubkey-profile-ui-button-remove-identity'
+import { PubKeyProfileUiButtonUpdateAuthority } from './pubkey-profile-ui-button-update-authority'
+import { PubKeyProfileUiButtonUpdateAvatarUrlButton } from './pubkey-profile-ui-button-update-avatar-url-button'
+import { PubkeyProfileUiProfile } from './pubkey-profile-ui-profile'
 
 export function PubkeyProfileUiCard({ account }: { account: PublicKey }) {
-  const { profileAccountQuery, updateAvatarUrl, addAuthority, removeAuthority, addIdentity, removeIdentity } =
-    usePubkeyProfileProgramAccount({
-      account,
-    })
+  const { authorities, profileAccountQuery } = usePubkeyProfileProgramAccount({
+    account,
+  })
   const { keypair } = useKeypair()
   const { publicKey } = useAnchorProvider()
-  const username = useMemo(() => profileAccountQuery.data?.username ?? 0, [profileAccountQuery.data?.username])
 
-  const currentAuthority = useMemo(
-    () => profileAccountQuery.data?.authorities.find((a) => a.toString() === publicKey.toString()) ?? PublicKey.default,
-    [profileAccountQuery.data?.authorities, publicKey],
+  const authority = useMemo(
+    () => authorities?.find((a) => a.toString() === publicKey.toString()) ?? PublicKey.default,
+    [authorities, publicKey],
   )
+  const profile = profileAccountQuery.data
+  const feePayer = keypair.solana as Keypair
 
   return profileAccountQuery.isLoading ? (
     <UiLoader />
-  ) : (
+  ) : profile ? (
     <UiCard>
-      <UiStack align="center">
-        <Title onClick={() => profileAccountQuery.refetch()}>{username}</Title>
-        <Button.Group>
-          <Button
-            size="xs"
-            variant="outline"
-            onClick={() =>
-              updateAvatarUrl.mutateAsync({
-                avatarUrl: sampleBeeman.avatarUrl,
-                authority: currentAuthority,
-                feePayer: keypair.solana!,
-                username: sampleSundeep.username,
-              })
-            }
-            disabled={updateAvatarUrl.isPending}
-          >
-            Update Avatar Url
-          </Button>
-          <Button
-            size="xs"
-            variant="outline"
-            onClick={() =>
-              addAuthority.mutateAsync({
-                newAuthority: new PublicKey('6MHnTjLtxQbD2kPd4XSPmUgDXKaAFvFiAbTZY2fEXhm'),
-                authority: currentAuthority,
-                feePayer: keypair.solana!,
-                username: sampleSundeep.username,
-              })
-            }
-            disabled={updateAvatarUrl.isPending}
-          >
-            Add Authority
-          </Button>
-          <Button
-            size="xs"
-            variant="outline"
-            onClick={() =>
-              removeAuthority.mutateAsync({
-                authorityToRemove: new PublicKey('6MHnTjLtxQbD2kPd4XSPmUgDXKaAFvFiAbTZY2fEXhm'),
-                authority: currentAuthority,
-                feePayer: keypair.solana!,
-                username: sampleSundeep.username,
-              })
-            }
-            disabled={updateAvatarUrl.isPending}
-          >
-            Remove Authority
-          </Button>
-        </Button.Group>
-        <Button.Group>
-          <Button
-            size="xs"
-            variant="outline"
-            onClick={() =>
-              addIdentity.mutateAsync({
-                authority: currentAuthority,
-                feePayer: keypair.solana!,
-                nickname: sampleSundeep.identities[0].name,
-                providerId: sampleSundeep.identities[0].providerId,
-                provider: sampleSundeep.identities[0].provider,
-                username: sampleSundeep.username,
-              })
-            }
-            disabled={addIdentity.isPending}
-          >
-            Add identity
-          </Button>
-          <Button
-            size="xs"
-            variant="outline"
-            onClick={() =>
-              removeIdentity.mutateAsync({
-                authority: currentAuthority,
-                feePayer: keypair.solana!,
-                providerId: sampleSundeep.identities[0].providerId,
-                provider: sampleSundeep.identities[0].provider,
-                username: sampleSundeep.username,
-              })
-            }
-            disabled={removeIdentity.isPending}
-          >
-            Remove identity
-          </Button>
-        </Button.Group>
-        <UiStack>
-          <ExplorerLink path={`account/${account}`} label={ellipsify(account.toString())} />
+      <PubkeyProfileUiProfile profile={profile}>
+        <UiStack mt="md">
+          <Group>
+            <ExplorerLink path={`account/${account}`} label={ellipsify(account.toString())} />
+          </Group>
+          <Group>
+            <Button size="xs" variant="outline" onClick={() => profileAccountQuery.refetch()}>
+              Refresh
+            </Button>
+            <PubKeyProfileUiButtonUpdateAvatarUrlButton authority={authority} feePayer={feePayer} profile={profile} />
+          </Group>
+          <Group>
+            <PubKeyProfileUiButtonUpdateAuthority authority={authority} feePayer={feePayer} profile={profile} />
+            <PubKeyProfileUiButtonRemoveAuthority authority={authority} feePayer={feePayer} profile={profile} />
+          </Group>
+          <Group>
+            <PubKeyProfileUiButtonAddIdentity authority={authority} feePayer={feePayer} profile={profile} />
+            <PubKeyProfileUiButtonRemoveIdentity authority={authority} feePayer={feePayer} profile={profile} />
+          </Group>
+          <UiDebug data={{ data: profile }} />
         </UiStack>
-      </UiStack>
+      </PubkeyProfileUiProfile>
     </UiCard>
+  ) : (
+    <UiAlert message={`No profile found for ${ellipsify(account.toString())}`} />
   )
 }

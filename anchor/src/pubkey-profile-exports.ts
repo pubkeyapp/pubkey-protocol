@@ -62,8 +62,11 @@ export enum PubKeyIdentityProvider {
 }
 
 export interface PubKeyProfile {
-  authorities: string[]
+  publicKey: PublicKey
+  authorities: PublicKey[]
   avatarUrl: string
+  feePayer?: PublicKey
+  bump?: number
   identities: PubKeyIdentity[]
   username: string
 }
@@ -72,6 +75,14 @@ export interface PubKeyIdentity {
   name: string
   provider: PubKeyIdentityProvider
   providerId: string
+}
+
+export interface PubKeyPointer {
+  publicKey: PublicKey
+  provider: PubKeyIdentityProvider
+  providerId: string
+  bump?: number
+  profile: PublicKey
 }
 
 export function stringToUint8Array(str: string): Uint8Array {

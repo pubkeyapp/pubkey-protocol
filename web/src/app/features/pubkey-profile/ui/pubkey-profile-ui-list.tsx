@@ -26,9 +26,9 @@ export function PubkeyProfileUiList() {
       {profileAccounts.isLoading ? (
         <UiLoader />
       ) : profileAccounts.data?.length ? (
-        <SimpleGrid cols={{ base: 1, sm: 2, lg: 3 }}>
+        <SimpleGrid cols={{ base: 1, sm: 2 }}>
           {profileAccounts.data?.map((account) => (
-            <PubkeyProfileUiCard key={account.publicKey.toString()} account={account.publicKey} />
+            <PubkeyProfileUiCard key={account.publicKey?.toString()} account={account.publicKey} />
           ))}
         </SimpleGrid>
       ) : (

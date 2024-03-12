@@ -53,21 +53,19 @@ export function usePubkeyProfileProgramAccount({ account }: { account: PublicKey
   const addIdentity = useMutation({
     mutationKey: ['pubkey-profile', 'addIdentity', { cluster, account }],
     mutationFn: (options: AddIdentityOptions) => sdk.addIdentity(options),
-    onSuccess: async (tx) => {
-      uiToastLink({ label: 'View transaction', link: getExplorerUrl(`tx/${tx}`) })
-      await pointerAccountQuery.refetch()
-      return profileAccountQuery.refetch()
-    },
+    onSuccess: (tx) =>
+      Promise.all([pointerAccountQuery.refetch(), profileAccountQuery.refetch()]).then(() =>
+        uiToastLink({ label: 'View transaction', link: getExplorerUrl(`tx/${tx}`) }),
+      ),
   })
 
   const removeIdentity = useMutation({
     mutationKey: ['pubkey-profile', 'removeIdentity', { cluster, account }],
     mutationFn: (options: RemoveIdentityOptions) => sdk.removeIdentity(options),
-    onSuccess: async (tx) => {
-      uiToastLink({ label: 'View transaction', link: getExplorerUrl(`tx/${tx}`) })
-      await pointerAccountQuery.refetch()
-      return profileAccountQuery.refetch()
-    },
+    onSuccess: (tx) =>
+      Promise.all([pointerAccountQuery.refetch(), profileAccountQuery.refetch()]).then(() =>
+        uiToastLink({ label: 'View transaction', link: getExplorerUrl(`tx/${tx}`) }),
+      ),
   })
 
   return {
@@ -78,5 +76,7 @@ export function usePubkeyProfileProgramAccount({ account }: { account: PublicKey
     removeAuthority,
     addIdentity,
     removeIdentity,
+    authorities: profileAccountQuery.data?.authorities,
+    username: profileAccountQuery.data?.username,
   }
 }

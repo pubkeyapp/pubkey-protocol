@@ -1,11 +1,16 @@
 import { Button, Group, Text } from '@mantine/core'
 import { UiWarning } from '@pubkey-ui/core'
 import { PublicKey } from '@solana/web3.js'
-import { IconUserOff } from '@tabler/icons-react'
 import { useCluster } from '../../cluster/cluster-data-access'
 import { useGetBalance, useRequestAirdrop } from '../account-data-access'
 
-export function AccountUiBalanceCheck({ address }: { address: PublicKey }) {
+export function AccountUiBalanceCheck({
+  address,
+  label = 'Account not found',
+}: {
+  address: PublicKey
+  label?: string
+}) {
   const { cluster } = useCluster()
   const query = useGetBalance({ address })
   const requestAirdrop = useRequestAirdrop({ address })
@@ -20,8 +25,8 @@ export function AccountUiBalanceCheck({ address }: { address: PublicKey }) {
           root: { display: 'flex', justifyContent: 'center' },
           title: { justifyContent: 'center' },
         }}
-        title="Account not found"
-        icon={<IconUserOff size={24} />}
+        title={label}
+        icon={undefined}
         message={
           <Group justify="center">
             <Text>

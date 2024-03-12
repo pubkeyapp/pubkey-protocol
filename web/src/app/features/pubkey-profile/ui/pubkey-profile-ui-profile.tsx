@@ -1,9 +1,10 @@
 import { Avatar, Group, Stack, Text } from '@mantine/core'
 import { PubKeyProfile } from '@pubkey-program-library/anchor'
+import { ReactNode } from 'react'
 
 import { PubkeyProfileUiIdentity } from './pubkey-profile-ui-identity'
 
-export function PubkeyProfileUiProfile({ profile }: { profile: PubKeyProfile }) {
+export function PubkeyProfileUiProfile({ children, profile }: { children?: ReactNode; profile: PubKeyProfile }) {
   return (
     <Group align="start">
       <Avatar src={profile.avatarUrl} alt={profile.username} radius={100} size="lg" />
@@ -16,6 +17,7 @@ export function PubkeyProfileUiProfile({ profile }: { profile: PubKeyProfile }) 
             <PubkeyProfileUiIdentity identity={identity} key={identity.providerId} />
           ))}
         </Stack>
+        {children}
       </Stack>
     </Group>
   )
