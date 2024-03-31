@@ -1,3 +1,15 @@
+## 1.0.1 (2024-03-31)
+
+
+### 🩹 Fixes
+
+- add cluster modal ([9122a24](https://github.com/pubkeyapp/pubkey-program-library/commit/9122a24))
+- export anchor keypair wallet ([16444ea](https://github.com/pubkeyapp/pubkey-program-library/commit/16444ea))
+
+### ❤️  Thank You
+
+- Bram Borggreve
+
 # 1.0.0 (2024-03-12)
 
 
