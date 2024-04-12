@@ -1,8 +1,18 @@
-import { Button } from '@mantine/core'
-import { PubKeyProfile } from '@pubkey-program-library/anchor'
+import { Button, Group, Select, TextInput } from '@mantine/core'
+import { useForm } from '@mantine/form'
+import { modals } from '@mantine/modals'
+import { PubKeyIdentityProvider, PubKeyProfile } from '@pubkey-program-library/anchor'
+import { UiStack } from '@pubkey-ui/core'
 import { Keypair, PublicKey } from '@solana/web3.js'
+import { getEnumOptions } from '../../../ui-select-enum'
+import { ellipsify } from '../../account/ui/ellipsify'
 import { usePubkeyProfileProgramAccount } from '../data-access'
-import { sampleSundeep } from '../data-access/pubkey-profile.types'
+
+export interface PubKeyProfileAddIdentityInput {
+  nickname: string
+  providerId: string
+  provider: PubKeyIdentityProvider
+}
 
 export function PubKeyProfileUiButtonAddIdentity({
   authority,
@@ -13,22 +23,68 @@ export function PubKeyProfileUiButtonAddIdentity({
   feePayer: Keypair
   profile: PubKeyProfile
 }) {
-  const { addIdentity } = usePubkeyProfileProgramAccount({ account: profile.publicKey })
+  const { addIdentity } = usePubkeyProfileProgramAccount({ profilePda: profile.publicKey })
 
-  function submit() {
+  async function submit({ provider, providerId, nickname }: PubKeyProfileAddIdentityInput) {
     return addIdentity.mutateAsync({
       authority,
       feePayer,
-      nickname: sampleSundeep.identities[0].name,
-      providerId: sampleSundeep.identities[0].providerId,
-      provider: sampleSundeep.identities[0].provider,
-      username: sampleSundeep.username,
+      nickname: nickname ?? ellipsify(providerId),
+      providerId,
+      provider,
+      username: profile.username,
     })
   }
 
   return (
-    <Button size="xs" variant="outline" onClick={submit} loading={addIdentity.isPending}>
-      Add Identity
+    <Button
+      size="xs"
+      variant="light"
+      loading={addIdentity.isPending}
+      onClick={() =>
+        modals.open({
+          title: 'Add Identity',
+          children: <PubKeyProfileUiAddIdentityForm loading={addIdentity.isPending} submit={submit} />,
+        })
+      }
+    >
+      Add
     </Button>
+  )
+}
+
+function PubKeyProfileUiAddIdentityForm({
+  loading,
+  submit,
+}: {
+  loading: boolean
+  submit: (input: PubKeyProfileAddIdentityInput) => Promise<string>
+}) {
+  const form = useForm<PubKeyProfileAddIdentityInput>({
+    initialValues: {
+      nickname: '',
+      provider: PubKeyIdentityProvider.Solana,
+      providerId: '',
+    },
+  })
+
+  return (
+    <form onSubmit={form.onSubmit((values) => submit(values))}>
+      <UiStack>
+        <Select
+          data={getEnumOptions(PubKeyIdentityProvider)}
+          name="provider"
+          label="Provider"
+          {...form.getInputProps('provider')}
+        />
+        <TextInput name="providerId" label="Provider ID" {...form.getInputProps('providerId')} />
+        <TextInput name="nickname" label="Nickname" {...form.getInputProps('nickname')} />
+        <Group justify="right">
+          <Button loading={loading} type="submit">
+            Save
+          </Button>
+        </Group>
+      </UiStack>
+    </form>
   )
 }

@@ -11,7 +11,7 @@ const [subdeepPda] = getPubKeyProfilePda({ programId: PUBKEY_PROFILE_PROGRAM_ID,
 export const sampleBeeman: PubKeyProfile = {
   publicKey: beemanPda,
   username: 'beeman',
-  avatarUrl: 'https://avatars.githubusercontent.com/u/36491',
+  avatarUrl: '',
   identities: [
     {
       provider: PubKeyIdentityProvider.Discord,
@@ -30,7 +30,7 @@ export const sampleBeeman: PubKeyProfile = {
 export const sampleSundeep: PubKeyProfile = {
   publicKey: subdeepPda,
   username: 'sundeep',
-  avatarUrl: 'https://avatars.githubusercontent.com/u/32637757',
+  avatarUrl: '',
   identities: [
     {
       provider: PubKeyIdentityProvider.Discord,
@@ -45,5 +45,3 @@ export const sampleSundeep: PubKeyProfile = {
   ],
   authorities: [new PublicKey('81sWMLg1EgYps3nMwyeSW1JfjKgFqkGYPP85vTnkFzRn')],
 }
-
-export const sampleProfiles: PubKeyProfile[] = [sampleBeeman, sampleSundeep]

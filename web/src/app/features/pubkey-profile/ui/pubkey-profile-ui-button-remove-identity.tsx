@@ -1,33 +1,37 @@
-import { Button } from '@mantine/core'
-import { PubKeyProfile } from '@pubkey-program-library/anchor'
+import { ActionIcon } from '@mantine/core'
+import { PubKeyIdentityProvider, PubKeyProfile } from '@pubkey-program-library/anchor'
 import { Keypair, PublicKey } from '@solana/web3.js'
+import { IconTrash } from '@tabler/icons-react'
 import { usePubkeyProfileProgramAccount } from '../data-access'
-import { sampleSundeep } from '../data-access/pubkey-profile.types'
 
 export function PubKeyProfileUiButtonRemoveIdentity({
+  provider,
+  providerId,
   authority,
   feePayer,
   profile,
 }: {
+  provider: PubKeyIdentityProvider
+  providerId: string
   authority: PublicKey
   feePayer: Keypair
   profile: PubKeyProfile
 }) {
-  const { removeIdentity } = usePubkeyProfileProgramAccount({ account: profile.publicKey })
+  const { removeIdentity } = usePubkeyProfileProgramAccount({ profilePda: profile.publicKey })
 
   function submit() {
     return removeIdentity.mutateAsync({
       authority,
       feePayer,
-      providerId: sampleSundeep.identities[0].providerId,
-      provider: sampleSundeep.identities[0].provider,
-      username: sampleSundeep.username,
+      providerId,
+      provider,
+      username: profile.username,
     })
   }
 
   return (
-    <Button size="xs" variant="outline" onClick={submit} loading={removeIdentity.isPending}>
-      Remove Identity
-    </Button>
+    <ActionIcon size="sm" variant="light" color="red" onClick={submit} loading={removeIdentity.isPending}>
+      <IconTrash size={16} />
+    </ActionIcon>
   )
 }

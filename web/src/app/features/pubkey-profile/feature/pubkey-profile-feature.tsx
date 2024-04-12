@@ -1,12 +1,12 @@
-import { Group, Text, Title } from '@mantine/core'
-import { UiStack } from '@pubkey-ui/core'
+import { Text, Title } from '@mantine/core'
+import { UiGroup, UiStack } from '@pubkey-ui/core'
 import { useWallet } from '@solana/wallet-adapter-react'
 
 import { ellipsify } from '../../account/ui/ellipsify'
 import { ExplorerLink } from '../../cluster/cluster-ui'
 import { WalletButton } from '../../solana/solana-provider'
 import { usePubkeyProfileSdk } from '../data-access'
-import { PubkeyProfileUiCreate, PubkeyProfileUiDemo, PubkeyProfileUiList } from '../ui'
+import { PubkeyProfileUiCreate, PubkeyProfileUiList, PubkeyProfileUiTools } from '../ui'
 
 export default function PubkeyProfileFeature() {
   const { publicKey } = useWallet()
@@ -21,13 +21,12 @@ export default function PubkeyProfileFeature() {
         removeIdentity).
       </Text>
 
-      <Group justify="flex-end">
-        test
-        <ExplorerLink path={`account/${sdk.programId}`} label={ellipsify(sdk.programId.toString())} />
+      <UiGroup>
+        <ExplorerLink ff="mono" path={`account/${sdk.programId}`} label={ellipsify(sdk.programId.toString())} />
         <PubkeyProfileUiCreate />
-      </Group>
+      </UiGroup>
       <PubkeyProfileUiList />
-      <PubkeyProfileUiDemo />
+      <PubkeyProfileUiTools />
     </UiStack>
   ) : (
     <WalletButton />

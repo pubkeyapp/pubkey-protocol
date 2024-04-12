@@ -56,6 +56,7 @@ const activeKeypairAtom = atom<Keypair>((get) => {
 })
 
 export interface KeypairProviderContext {
+  feePayer: SolanaKeypair
   keypair: Keypair
   keypairs: Keypair[]
   addKeypair: (keypair: Keypair) => void
@@ -96,10 +97,11 @@ export function KeypairProvider({ children }: { children: ReactNode }) {
       solana: kp?.secretKey ? SolanaKeypair.fromSecretKey(new Uint8Array(JSON.parse(kp?.secretKey))) : undefined,
     }
   }
-
+  const solanaKeypair = solanaInstance(keypair)
   const value: KeypairProviderContext = {
-    keypair: solanaInstance(keypair),
+    keypair: solanaKeypair,
     keypairs: keypairs.sort((a, b) => (a.name > b.name ? 1 : -1)).map((item) => solanaInstance(item)),
+    feePayer: solanaKeypair.solana as SolanaKeypair,
     addKeypair: (keypair: Keypair) => {
       setKeypairs([...keypairs, keypair])
     },

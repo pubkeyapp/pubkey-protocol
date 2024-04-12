@@ -1,9 +1,10 @@
-import { Button } from '@mantine/core'
+import { UnstyledButton } from '@mantine/core'
 import { PubKeyProfile } from '@pubkey-program-library/anchor'
 import { Keypair, PublicKey } from '@solana/web3.js'
 import { usePubkeyProfileProgramAccount } from '../data-access'
+import { PubkeyProfileUiAvatar } from './pubkey-profile-ui-avatar'
 
-export function PubKeyProfileUiButtonUpdateAvatarUrlButton({
+export function PubkeyProfileUiAvatarUpdateButton({
   authority,
   feePayer,
   profile,
@@ -12,7 +13,7 @@ export function PubKeyProfileUiButtonUpdateAvatarUrlButton({
   feePayer: Keypair
   profile: PubKeyProfile
 }) {
-  const { updateAvatarUrl } = usePubkeyProfileProgramAccount({ account: profile.publicKey })
+  const { updateAvatarUrl } = usePubkeyProfileProgramAccount({ profilePda: profile.publicKey })
 
   function submit() {
     const avatarUrl = window.prompt('Enter the new avatar URL', profile.avatarUrl)
@@ -29,8 +30,8 @@ export function PubKeyProfileUiButtonUpdateAvatarUrlButton({
   }
 
   return (
-    <Button size="xs" variant="outline" onClick={submit} loading={updateAvatarUrl.isPending}>
-      Update Avatar Url
-    </Button>
+    <UnstyledButton onClick={submit}>
+      <PubkeyProfileUiAvatar profile={profile} />
+    </UnstyledButton>
   )
 }

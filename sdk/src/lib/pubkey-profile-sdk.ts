@@ -27,6 +27,15 @@ export interface GetProfilePdaOptions {
   username: string
 }
 
+export interface GetProfileByProvider {
+  provider: PubKeyIdentityProvider
+  providerId: string
+}
+
+export interface GetProfileByUsername {
+  username: string
+}
+
 export interface AddIdentityOptions {
   authority: PublicKey
   feePayer: Keypair
@@ -166,25 +175,37 @@ export class PubKeyProfileSdk {
     )
   }
 
-  async getProfileByUsername({ username }: { username: string }): Promise<PubKeyProfile> {
-    const [account] = this.getProfilePda({ username })
+  async getProfileByProfile({ provider, providerId }: GetProfileByProvider): Promise<PubKeyProfile> {
+    const [pointerPda] = this.getPointerPda({ provider, providerId })
 
-    return this.getProfile({ account })
+    const { profile } = await this.getPointer({ pointerPda })
+
+    return this.getProfile({ profilePda: profile })
   }
 
-  async getProfile({ account }: { account: PublicKey }): Promise<PubKeyProfile> {
-    return this.program.account.profile.fetch(account).then((res) => ({
-      ...res,
-      publicKey: account,
-      identities: res.identities.map((identity) => ({
+  async getProfileByUsername({ username }: GetProfileByUsername): Promise<PubKeyProfile> {
+    const [profilePda] = this.getProfilePda({ username })
+
+    return this.getProfile({ profilePda })
+  }
+
+  async getProfile({ profilePda }: { profilePda: PublicKey }): Promise<PubKeyProfile> {
+    return this.program.account.profile.fetch(profilePda).then((res) => {
+      const identities = res.identities.map((identity) => ({
         ...identity,
-        provider: convertToIdentityProvider(identity.provider as unknown as { [key: string]: object }),
-      })),
-    }))
+        provider: convertToIdentityProvider(identity.provider as unknown as { [key: string]: never }),
+      }))
+
+      return {
+        ...res,
+        publicKey: profilePda,
+        identities,
+      }
+    })
   }
 
-  async getPointer({ account }: { account: PublicKey }) {
-    return this.program.account.pointer.fetch(account)
+  async getPointer({ pointerPda }: { pointerPda: PublicKey }) {
+    return this.program.account.pointer.fetch(pointerPda)
   }
 
   async getProgramAccount() {

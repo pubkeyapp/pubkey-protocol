@@ -1,5 +1,5 @@
-import { Button, Group } from '@mantine/core'
-import { UiAlert, UiCard, UiDebug, UiLoader, UiStack } from '@pubkey-ui/core'
+import { Button, Group, Stack, Text } from '@mantine/core'
+import { UiAlert, UiCard, UiDebugModal, UiGroup, UiLoader, UiStack } from '@pubkey-ui/core'
 import { Keypair, PublicKey } from '@solana/web3.js'
 import { useMemo } from 'react'
 
@@ -8,55 +8,65 @@ import { ExplorerLink } from '../../cluster/cluster-ui'
 import { useKeypair } from '../../keypair/data-access'
 import { useAnchorProvider } from '../../solana/solana-provider'
 import { usePubkeyProfileProgramAccount } from '../data-access'
-import { PubKeyProfileUiButtonAddIdentity } from './pubkey-profile-ui-button-add-identity'
-import { PubKeyProfileUiButtonRemoveAuthority } from './pubkey-profile-ui-button-remove-authority'
-import { PubKeyProfileUiButtonRemoveIdentity } from './pubkey-profile-ui-button-remove-identity'
-import { PubKeyProfileUiButtonUpdateAuthority } from './pubkey-profile-ui-button-update-authority'
-import { PubKeyProfileUiButtonUpdateAvatarUrlButton } from './pubkey-profile-ui-button-update-avatar-url-button'
-import { PubkeyProfileUiProfile } from './pubkey-profile-ui-profile'
+import { PubkeyProfileUiAvatarUpdateButton } from './pubkey-profile-ui-avatar-update-button'
+import { PubkeyProfileUiCardAuthorities } from './pubkey-profile-ui-card-authorities'
+import { PubkeyProfileUiCardIdentities } from './pubkey-profile-ui-card-identities'
 
-export function PubkeyProfileUiCard({ account }: { account: PublicKey }) {
+export function PubkeyProfileUiCard({ profilePda }: { profilePda: PublicKey }) {
   const { authorities, profileAccountQuery } = usePubkeyProfileProgramAccount({
-    account,
+    profilePda,
   })
   const { keypair } = useKeypair()
   const { publicKey } = useAnchorProvider()
 
-  const authority = useMemo(
+  const signAuthority = useMemo(
     () => authorities?.find((a) => a.toString() === publicKey.toString()) ?? PublicKey.default,
     [authorities, publicKey],
   )
+
   const profile = profileAccountQuery.data
   const feePayer = keypair.solana as Keypair
 
   return profileAccountQuery.isLoading ? (
     <UiLoader />
   ) : profile ? (
-    <UiCard>
-      <PubkeyProfileUiProfile profile={profile}>
-        <UiStack mt="md">
-          <Group>
-            <ExplorerLink path={`account/${account}`} label={ellipsify(account.toString())} />
+    <UiCard
+      title={
+        <UiGroup align="start" pt="xs">
+          <Group align="center" wrap="nowrap" gap="xs">
+            <PubkeyProfileUiAvatarUpdateButton authority={signAuthority} feePayer={feePayer} profile={profile} />
+            <Stack gap={0}>
+              <Text size="xl" fw="bold">
+                {profile.username}
+              </Text>
+              <ExplorerLink
+                size="xs"
+                ff="mono"
+                path={`account/${profilePda}`}
+                label={ellipsify(profilePda.toString())}
+              />
+            </Stack>
           </Group>
-          <Group>
-            <Button size="xs" variant="outline" onClick={() => profileAccountQuery.refetch()}>
+          <Group gap="xs">
+            <UiDebugModal size="lg" data={profile} />
+            <Button
+              loading={profileAccountQuery.isLoading}
+              size="xs"
+              variant="light"
+              onClick={() => profileAccountQuery.refetch()}
+            >
               Refresh
             </Button>
-            <PubKeyProfileUiButtonUpdateAvatarUrlButton authority={authority} feePayer={feePayer} profile={profile} />
           </Group>
-          <Group>
-            <PubKeyProfileUiButtonUpdateAuthority authority={authority} feePayer={feePayer} profile={profile} />
-            <PubKeyProfileUiButtonRemoveAuthority authority={authority} feePayer={feePayer} profile={profile} />
-          </Group>
-          <Group>
-            <PubKeyProfileUiButtonAddIdentity authority={authority} feePayer={feePayer} profile={profile} />
-            <PubKeyProfileUiButtonRemoveIdentity authority={authority} feePayer={feePayer} profile={profile} />
-          </Group>
-          <UiDebug data={{ data: profile }} />
-        </UiStack>
-      </PubkeyProfileUiProfile>
+        </UiGroup>
+      }
+    >
+      <UiStack mt="md">
+        <PubkeyProfileUiCardIdentities profile={profile} signAuthority={signAuthority} />
+        <PubkeyProfileUiCardAuthorities profile={profile} signAuthority={signAuthority} />
+      </UiStack>
     </UiCard>
   ) : (
-    <UiAlert message={`No profile found for ${ellipsify(account.toString())}`} />
+    <UiAlert message={`No profile found for ${ellipsify(profilePda.toString())}`} />
   )
 }

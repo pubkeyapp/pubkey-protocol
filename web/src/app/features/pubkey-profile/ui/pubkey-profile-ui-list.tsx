@@ -1,5 +1,5 @@
 import { SimpleGrid } from '@mantine/core'
-import { UiAlert, UiDebug, UiInfo, UiLoader, UiStack } from '@pubkey-ui/core'
+import { UiAlert, UiDebugModal, UiInfo, UiLoader, UiStack } from '@pubkey-ui/core'
 import { usePubkeyProfileProgram } from '../data-access'
 import { PubkeyProfileUiCard } from './pubkey-profile-ui-card'
 
@@ -26,15 +26,15 @@ export function PubkeyProfileUiList() {
       {profileAccounts.isLoading ? (
         <UiLoader />
       ) : profileAccounts.data?.length ? (
-        <SimpleGrid cols={{ base: 1, sm: 2 }}>
+        <SimpleGrid cols={{ base: 1, md: 2 }}>
           {profileAccounts.data?.map((account) => (
-            <PubkeyProfileUiCard key={account.publicKey?.toString()} account={account.publicKey} />
+            <PubkeyProfileUiCard key={account.publicKey?.toString()} profilePda={account.publicKey} />
           ))}
         </SimpleGrid>
       ) : (
         <UiInfo title="No Profiles" message="No Profiles found. Create one above to get started." />
       )}
-      <UiDebug
+      <UiDebugModal
         data={{
           gpa: getProgramAccount.data,
           profileAccounts: profileAccounts.data,
