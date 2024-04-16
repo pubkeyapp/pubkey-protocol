@@ -1,3 +1,14 @@
+## 1.1.0 (2024-04-16)
+
+
+### 🚀 Features
+
+- clean up pubkey profile ui ([aa2f9af](https://github.com/pubkeyapp/pubkey-program-library/commit/aa2f9af))
+
+### ❤️  Thank You
+
+- Bram Borggreve
+
 ## 1.0.1 (2024-03-31)
 
 
