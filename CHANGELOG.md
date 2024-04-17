@@ -1,3 +1,14 @@
+## 1.3.0 (2024-04-17)
+
+
+### 🩹 Fixes
+
+- sdk mutations should return VersionTransaction ([a7ca455](https://github.com/pubkeyapp/pubkey-program-library/commit/a7ca455))
+
+### ❤️  Thank You
+
+- Bram Borggreve
+
 ## 1.2.0 (2024-04-17)
 
 
