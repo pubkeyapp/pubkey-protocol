@@ -1,4 +1,4 @@
-import { Keypair as SolanaKeypair } from '@solana/web3.js'
+import { Keypair as SolanaKeypair, PublicKey } from '@solana/web3.js'
 import { useQueryClient } from '@tanstack/react-query'
 
 import { atom, useAtomValue, useSetAtom } from 'jotai'
@@ -56,7 +56,7 @@ const activeKeypairAtom = atom<Keypair>((get) => {
 })
 
 export interface KeypairProviderContext {
-  feePayer: SolanaKeypair
+  feePayer: PublicKey
   keypair: Keypair
   keypairs: Keypair[]
   addKeypair: (keypair: Keypair) => void
@@ -101,7 +101,7 @@ export function KeypairProvider({ children }: { children: ReactNode }) {
   const value: KeypairProviderContext = {
     keypair: solanaKeypair,
     keypairs: keypairs.sort((a, b) => (a.name > b.name ? 1 : -1)).map((item) => solanaInstance(item)),
-    feePayer: solanaKeypair.solana as SolanaKeypair,
+    feePayer: solanaKeypair.solana?.publicKey as PublicKey,
     addKeypair: (keypair: Keypair) => {
       setKeypairs([...keypairs, keypair])
     },

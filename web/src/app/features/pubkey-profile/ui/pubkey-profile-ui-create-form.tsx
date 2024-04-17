@@ -3,7 +3,7 @@ import { useForm } from '@mantine/form'
 import { UiStack } from '@pubkey-ui/core'
 import { PubKeyProfileCreateInput } from './pubkey-profile-ui-create'
 
-export function PubKeyProfileUiCreateForm({ submit }: { submit: (input: PubKeyProfileCreateInput) => Promise<void> }) {
+export function PubkeyProfileUiCreateForm({ submit }: { submit: (input: PubKeyProfileCreateInput) => Promise<void> }) {
   const form = useForm<PubKeyProfileCreateInput>({
     initialValues: {
       avatarUrl: '',

@@ -2,10 +2,10 @@ import { Badge, Button } from '@mantine/core'
 import { modals } from '@mantine/modals'
 import { toastError, toastSuccess } from '@pubkey-ui/core'
 import { useWallet } from '@solana/wallet-adapter-react'
-import { Keypair } from '@solana/web3.js'
+import { PublicKey } from '@solana/web3.js'
 import { useKeypair } from '../../keypair/data-access'
 import { usePubkeyProfileProgram } from '../data-access'
-import { PubKeyProfileUiCreateForm } from './pub-key-profile-ui-create-form'
+import { PubkeyProfileUiCreateForm } from './pubkey-profile-ui-create-form'
 
 export interface PubKeyProfileCreateInput {
   avatarUrl: string
@@ -42,12 +42,12 @@ export function PubkeyProfileUiCreate() {
           centered: true,
           title: 'Create Profile',
           children: (
-            <PubKeyProfileUiCreateForm
+            <PubkeyProfileUiCreateForm
               submit={async ({ avatarUrl, username }) => {
                 return createProfile
                   .mutateAsync({
                     authority: publicKey,
-                    feePayer: keypair.solana as Keypair,
+                    feePayer: keypair.solana?.publicKey as PublicKey,
                     avatarUrl,
                     username,
                   })

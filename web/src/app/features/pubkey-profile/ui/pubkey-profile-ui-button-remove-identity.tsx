@@ -1,6 +1,6 @@
 import { ActionIcon } from '@mantine/core'
 import { PubKeyIdentityProvider, PubKeyProfile } from '@pubkey-program-library/anchor'
-import { Keypair, PublicKey } from '@solana/web3.js'
+import { PublicKey } from '@solana/web3.js'
 import { IconTrash } from '@tabler/icons-react'
 import { usePubkeyProfileProgramAccount } from '../data-access'
 
@@ -14,7 +14,7 @@ export function PubKeyProfileUiButtonRemoveIdentity({
   provider: PubKeyIdentityProvider
   providerId: string
   authority: PublicKey
-  feePayer: Keypair
+  feePayer: PublicKey
   profile: PubKeyProfile
 }) {
   const { removeIdentity } = usePubkeyProfileProgramAccount({ profilePda: profile.publicKey })

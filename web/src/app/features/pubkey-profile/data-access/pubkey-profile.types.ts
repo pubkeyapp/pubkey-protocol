@@ -7,7 +7,7 @@ import {
 import { PublicKey } from '@solana/web3.js'
 
 const [beemanPda] = getPubKeyProfilePda({ programId: PUBKEY_PROFILE_PROGRAM_ID, username: 'beeman' })
-const [subdeepPda] = getPubKeyProfilePda({ programId: PUBKEY_PROFILE_PROGRAM_ID, username: 'subdeep' })
+const [sundeepPda] = getPubKeyProfilePda({ programId: PUBKEY_PROFILE_PROGRAM_ID, username: 'subdeep' })
 export const sampleBeeman: PubKeyProfile = {
   publicKey: beemanPda,
   username: 'beeman',
@@ -28,7 +28,7 @@ export const sampleBeeman: PubKeyProfile = {
 }
 
 export const sampleSundeep: PubKeyProfile = {
-  publicKey: subdeepPda,
+  publicKey: sundeepPda,
   username: 'sundeep',
   avatarUrl: '',
   identities: [

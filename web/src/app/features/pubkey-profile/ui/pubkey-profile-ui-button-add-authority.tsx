@@ -1,6 +1,6 @@
 import { Button } from '@mantine/core'
 import { PubKeyProfile } from '@pubkey-program-library/anchor'
-import { Keypair, PublicKey } from '@solana/web3.js'
+import { PublicKey } from '@solana/web3.js'
 import { usePubkeyProfileProgramAccount } from '../data-access'
 
 export function PubKeyProfileUiButtonAddAuthority({
@@ -9,7 +9,7 @@ export function PubKeyProfileUiButtonAddAuthority({
   profile: { publicKey: profilePda, username },
 }: {
   authority: PublicKey
-  feePayer: Keypair
+  feePayer: PublicKey
   profile: PubKeyProfile
 }) {
   const { addAuthority } = usePubkeyProfileProgramAccount({ profilePda })

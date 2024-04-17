@@ -1,6 +1,6 @@
 import { Button, Group, Stack, Text } from '@mantine/core'
 import { UiAlert, UiCard, UiDebugModal, UiGroup, UiLoader, UiStack } from '@pubkey-ui/core'
-import { Keypair, PublicKey } from '@solana/web3.js'
+import { PublicKey } from '@solana/web3.js'
 import { useMemo } from 'react'
 
 import { ellipsify } from '../../account/ui/ellipsify'
@@ -16,7 +16,7 @@ export function PubkeyProfileUiCard({ profilePda }: { profilePda: PublicKey }) {
   const { authorities, profileAccountQuery } = usePubkeyProfileProgramAccount({
     profilePda,
   })
-  const { keypair } = useKeypair()
+  const { feePayer } = useKeypair()
   const { publicKey } = useAnchorProvider()
 
   const signAuthority = useMemo(
@@ -25,7 +25,6 @@ export function PubkeyProfileUiCard({ profilePda }: { profilePda: PublicKey }) {
   )
 
   const profile = profileAccountQuery.data
-  const feePayer = keypair.solana as Keypair
 
   return profileAccountQuery.isLoading ? (
     <UiLoader />

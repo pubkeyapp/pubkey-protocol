@@ -9,13 +9,12 @@ import {
   PubKeyProfile,
   PubkeyProfileIDL,
 } from '@pubkey-program-library/anchor'
-import { Connection, Keypair, PublicKey, SystemProgram } from '@solana/web3.js'
-import { AnchorKeypairWallet } from './anchor-keypair-wallet'
+import { Connection, PublicKey, SystemProgram } from '@solana/web3.js'
 
 export interface PubKeyProfileSdkOptions {
   readonly connection: Connection
   readonly programId?: PublicKey
-  readonly provider?: AnchorProvider
+  readonly provider: AnchorProvider
 }
 
 export interface GetPointerPdaOptions {
@@ -38,7 +37,7 @@ export interface GetProfileByUsername {
 
 export interface AddIdentityOptions {
   authority: PublicKey
-  feePayer: Keypair
+  feePayer: PublicKey
   username: string
   providerId: string
   provider: PubKeyIdentityProvider
@@ -47,7 +46,7 @@ export interface AddIdentityOptions {
 
 export interface RemoveIdentityOptions {
   authority: PublicKey
-  feePayer: Keypair
+  feePayer: PublicKey
   username: string
   providerId: string
   provider: PubKeyIdentityProvider
@@ -56,28 +55,28 @@ export interface RemoveIdentityOptions {
 export interface RemoveAuthorityOptions {
   authorityToRemove: PublicKey
   authority: PublicKey
-  feePayer: Keypair
+  feePayer: PublicKey
   username: string
 }
 
 export interface AddAuthorityOptions {
   newAuthority: PublicKey
   authority: PublicKey
-  feePayer: Keypair
+  feePayer: PublicKey
   username: string
 }
 
 export interface CreateProfileOptions {
   avatarUrl: string
   authority: PublicKey
-  feePayer: Keypair
+  feePayer: PublicKey
   username: string
 }
 
 export interface UpdateAvatarUrlOptions {
   avatarUrl: string
   authority: PublicKey
-  feePayer: Keypair
+  feePayer: PublicKey
   username: string
 }
 
@@ -89,7 +88,7 @@ export class PubKeyProfileSdk {
 
   constructor(options: PubKeyProfileSdkOptions) {
     this.connection = options.connection
-    this.provider = options.provider ?? getAnchorKeypairProvider({ connection: this.connection })
+    this.provider = options.provider
     this.programId = options.programId || PUBKEY_PROFILE_PROGRAM_ID
     this.program = new Program(PubkeyProfileIDL, this.programId, this.provider)
   }
@@ -97,16 +96,12 @@ export class PubKeyProfileSdk {
   async addAuthority({ newAuthority, authority, feePayer, username }: AddAuthorityOptions) {
     const [profile] = this.getProfilePda({ username })
 
-    return this.program.methods
-      .addAuthority({ newAuthority })
-      .accounts({
-        authority,
-        feePayer: feePayer.publicKey,
-        profile,
-        systemProgram: SystemProgram.programId,
-      })
-      .signers([feePayer])
-      .rpc()
+    return this.program.methods.addAuthority({ newAuthority }).accounts({
+      authority,
+      feePayer,
+      profile,
+      systemProgram: SystemProgram.programId,
+    })
   }
 
   async addIdentity({ authority, feePayer, username, providerId, provider, nickname }: AddIdentityOptions) {
@@ -121,29 +116,23 @@ export class PubKeyProfileSdk {
       })
       .accounts({
         authority,
-        feePayer: feePayer.publicKey,
+        feePayer,
         profile,
         pointer,
         systemProgram: SystemProgram.programId,
       })
-      .signers([feePayer])
-      .rpc()
   }
 
   async createProfile({ authority, avatarUrl, feePayer, username }: CreateProfileOptions) {
     const [profile] = this.getProfilePda({ username })
     const [pointer] = this.getPointerPda({ provider: PubKeyIdentityProvider.Solana, providerId: authority.toString() })
-    return this.program.methods
-      .createProfile({ avatarUrl, username })
-      .accounts({
-        authority,
-        feePayer: feePayer.publicKey,
-        pointer,
-        profile,
-        systemProgram: SystemProgram.programId,
-      })
-      .signers([feePayer])
-      .rpc()
+    return this.program.methods.createProfile({ avatarUrl, username }).accounts({
+      authority,
+      feePayer,
+      pointer,
+      profile,
+      systemProgram: SystemProgram.programId,
+    })
   }
 
   async getProfiles(): Promise<PubKeyProfile[]> {
@@ -223,37 +212,25 @@ export class PubKeyProfileSdk {
   async removeAuthority({ authorityToRemove, authority, feePayer, username }: RemoveAuthorityOptions) {
     const [profile] = this.getProfilePda({ username })
 
-    return this.program.methods
-      .removeAuthority({ authorityToRemove })
-      .accounts({ authority, feePayer: feePayer.publicKey, profile })
-      .signers([feePayer])
-      .rpc()
+    return this.program.methods.removeAuthority({ authorityToRemove }).accounts({ authority, feePayer, profile })
   }
 
   async removeIdentity({ authority, feePayer, username, providerId, provider }: RemoveIdentityOptions) {
     const [profile] = this.getProfilePda({ username })
     const [pointer] = this.getPointerPda({ providerId, provider })
-    return this.program.methods
-      .removeIdentity({ providerId })
-      .accounts({
-        authority,
-        feePayer: feePayer.publicKey,
-        pointer,
-        profile,
-        systemProgram: SystemProgram.programId,
-      })
-      .signers([feePayer])
-      .rpc()
+    return this.program.methods.removeIdentity({ providerId }).accounts({
+      authority,
+      feePayer,
+      pointer,
+      profile,
+      systemProgram: SystemProgram.programId,
+    })
   }
 
   async updateAvatarUrl({ avatarUrl, authority, feePayer, username }: UpdateAvatarUrlOptions) {
     const [profile] = this.getProfilePda({ username })
 
-    return this.program.methods
-      .updateAvatarUrl({ newAvatarUrl: avatarUrl, authority })
-      .accounts({ feePayer: feePayer.publicKey, profile })
-      .signers([feePayer])
-      .rpc()
+    return this.program.methods.updateAvatarUrl({ newAvatarUrl: avatarUrl, authority }).accounts({ feePayer, profile })
   }
 }
 
@@ -281,14 +258,4 @@ export function convertToIdentityProvider(provider: { [key: string]: object }): 
   }
 
   return PubKeyIdentityProvider[found as keyof typeof PubKeyIdentityProvider]
-}
-
-export function getAnchorKeypairProvider({
-  connection,
-  keypair = Keypair.generate(),
-}: {
-  connection: Connection
-  keypair?: Keypair
-}) {
-  return new AnchorProvider(connection, new AnchorKeypairWallet(keypair), { commitment: 'confirmed' })
 }

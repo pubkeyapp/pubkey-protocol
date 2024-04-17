@@ -3,7 +3,7 @@ import { useForm } from '@mantine/form'
 import { modals } from '@mantine/modals'
 import { PubKeyIdentityProvider, PubKeyProfile } from '@pubkey-program-library/anchor'
 import { UiStack } from '@pubkey-ui/core'
-import { Keypair, PublicKey } from '@solana/web3.js'
+import { PublicKey } from '@solana/web3.js'
 import { getEnumOptions } from '../../../ui-select-enum'
 import { ellipsify } from '../../account/ui/ellipsify'
 import { usePubkeyProfileProgramAccount } from '../data-access'
@@ -20,7 +20,7 @@ export function PubKeyProfileUiButtonAddIdentity({
   profile,
 }: {
   authority: PublicKey
-  feePayer: Keypair
+  feePayer: PublicKey
   profile: PubKeyProfile
 }) {
   const { addIdentity } = usePubkeyProfileProgramAccount({ profilePda: profile.publicKey })
@@ -44,7 +44,8 @@ export function PubKeyProfileUiButtonAddIdentity({
       onClick={() =>
         modals.open({
           title: 'Add Identity',
-          children: <PubKeyProfileUiAddIdentityForm loading={addIdentity.isPending} submit={submit} />,
+          children: <div>TBD</div>,
+          // children: <PubKeyProfileUiAddIdentityForm loading={addIdentity.isPending} submit={submit} />,
         })
       }
     >

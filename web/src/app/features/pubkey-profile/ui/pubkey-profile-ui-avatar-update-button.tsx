@@ -1,6 +1,6 @@
 import { UnstyledButton } from '@mantine/core'
 import { PubKeyProfile } from '@pubkey-program-library/anchor'
-import { Keypair, PublicKey } from '@solana/web3.js'
+import { PublicKey } from '@solana/web3.js'
 import { usePubkeyProfileProgramAccount } from '../data-access'
 import { PubkeyProfileUiAvatar } from './pubkey-profile-ui-avatar'
 
@@ -10,7 +10,7 @@ export function PubkeyProfileUiAvatarUpdateButton({
   profile,
 }: {
   authority: PublicKey
-  feePayer: Keypair
+  feePayer: PublicKey
   profile: PubKeyProfile
 }) {
   const { updateAvatarUrl } = usePubkeyProfileProgramAccount({ profilePda: profile.publicKey })
