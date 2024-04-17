@@ -8,7 +8,7 @@ import { IDL as PubkeyProfileIDL } from '../target/types/pubkey_profile'
 export { PubkeyProfile, PubkeyProfileIDL }
 
 // After updating your program ID (e.g. after running `anchor keys sync`) update the value below.
-export const PUBKEY_PROFILE_PROGRAM_ID = new PublicKey('PPLxLRPKPFvjKf3Xe48gXxispUXAuGb8GgkzG9aJetB')
+export const PUBKEY_PROFILE_PROGRAM_ID = new PublicKey('PPLxwat1miBwyQHq5afxLzdXyAMG4jPp6981yQA5hyb')
 
 // This is a helper function to get the program ID for the PubkeyProfile program depending on the cluster.
 export function getPubkeyProfileProgramId(cluster: Cluster) {

@@ -5,7 +5,7 @@ seeds = false
 skip-lint = false
 
 [programs.localnet]
-pubkey_profile = "PPLxLRPKPFvjKf3Xe48gXxispUXAuGb8GgkzG9aJetB"
+pubkey_profile = "PPLxwat1miBwyQHq5afxLzdXyAMG4jPp6981yQA5hyb"
 
 [registry]
 url = "https://api.apr.dev"
