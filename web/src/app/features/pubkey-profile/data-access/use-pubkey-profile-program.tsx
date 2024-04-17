@@ -3,9 +3,11 @@ import { toastError } from '@pubkey-ui/core'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { uiToastLink } from '../../account/account-data-access'
 import { usePubkeyProfileSdk } from './use-pubkey-profile-sdk'
+import { usePubkeySignAndConfirm } from './use-pubkey-sign-and-confirm'
 
 export function usePubkeyProfileProgram() {
   const { cluster, getExplorerUrl, sdk } = usePubkeyProfileSdk()
+  const { signAndConfirmTransaction } = usePubkeySignAndConfirm()
 
   const profileAccounts = useQuery({
     queryKey: ['pubkey-profile', 'profile', { cluster }],
@@ -25,7 +27,7 @@ export function usePubkeyProfileProgram() {
 
   const createProfile = useMutation({
     mutationKey: ['pubkey-profile', 'createProfile', { cluster }],
-    mutationFn: (options: CreateProfileOptions) => sdk.createProfile(options),
+    mutationFn: (options: CreateProfileOptions) => sdk.createProfile(options).then(signAndConfirmTransaction),
     onSuccess: (signature) => {
       uiToastLink({ label: 'View transaction', link: getExplorerUrl(`tx/${signature}`) })
       return profileAccounts.refetch()

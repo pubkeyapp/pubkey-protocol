@@ -1,4 +1,5 @@
-import { Keypair as SolanaKeypair, PublicKey } from '@solana/web3.js'
+import { AnchorKeypairWallet } from '@pubkey-program-library/sdk'
+import { Keypair as SolanaKeypair, PublicKey, VersionedTransaction } from '@solana/web3.js'
 import { useQueryClient } from '@tanstack/react-query'
 
 import { atom, useAtomValue, useSetAtom } from 'jotai'
@@ -64,6 +65,7 @@ export interface KeypairProviderContext {
   importKeypair: (secret: string) => void
   setKeypair: (keypair: Keypair) => void
   generateKeypair: () => void
+  feePayerSign: (tx: VersionedTransaction) => Promise<VersionedTransaction>
 }
 
 const Context = createContext<KeypairProviderContext>({} as KeypairProviderContext)
@@ -113,6 +115,11 @@ export function KeypairProvider({ children }: { children: ReactNode }) {
     },
     setKeypair: (keypair: Keypair) => activateKeypair(keypair),
     generateKeypair: () => addNewKeypair(SolanaKeypair.generate()),
+    feePayerSign: async (tx: VersionedTransaction) => {
+      const kp = solanaKeypair.solana as SolanaKeypair
+
+      return new AnchorKeypairWallet(kp).signTransaction(tx)
+    },
   }
   return <Context.Provider value={value}>{children}</Context.Provider>
 }

@@ -34,7 +34,7 @@ function SearchByProvider() {
   async function submit({ provider, providerId }: GetProfileByProvider) {
     setResult(null)
     sdk
-      .getProfileByProfile({ provider, providerId })
+      .getProfileByProvider({ provider, providerId })
       .then((profile) => {
         toastSuccess(`Found ${profile.username}`)
         setResult(profile)

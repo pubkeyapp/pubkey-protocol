@@ -9,7 +9,14 @@ import {
   PubKeyProfile,
   PubkeyProfileIDL,
 } from '@pubkey-program-library/anchor'
-import { Connection, PublicKey, SystemProgram } from '@solana/web3.js'
+import {
+  Connection,
+  PublicKey,
+  SystemProgram,
+  TransactionInstruction,
+  TransactionMessage,
+  VersionedTransaction,
+} from '@solana/web3.js'
 
 export interface PubKeyProfileSdkOptions {
   readonly connection: Connection
@@ -96,19 +103,24 @@ export class PubKeyProfileSdk {
   async addAuthority({ newAuthority, authority, feePayer, username }: AddAuthorityOptions) {
     const [profile] = this.getProfilePda({ username })
 
-    return this.program.methods.addAuthority({ newAuthority }).accounts({
-      authority,
-      feePayer,
-      profile,
-      systemProgram: SystemProgram.programId,
-    })
+    const ix = await this.program.methods
+      .addAuthority({ newAuthority })
+      .accounts({
+        authority,
+        feePayer,
+        profile,
+        systemProgram: SystemProgram.programId,
+      })
+      .instruction()
+
+    return this.createTransaction({ ix, feePayer })
   }
 
   async addIdentity({ authority, feePayer, username, providerId, provider, nickname }: AddIdentityOptions) {
     const [profile] = this.getProfilePda({ username })
     const [pointer] = this.getPointerPda({ providerId, provider })
 
-    return this.program.methods
+    const ix = await this.program.methods
       .addIdentity({
         nickname,
         provider: convertFromIdentityProvider(provider),
@@ -121,18 +133,26 @@ export class PubKeyProfileSdk {
         pointer,
         systemProgram: SystemProgram.programId,
       })
+      .instruction()
+
+    return this.createTransaction({ ix, feePayer })
   }
 
   async createProfile({ authority, avatarUrl, feePayer, username }: CreateProfileOptions) {
     const [profile] = this.getProfilePda({ username })
     const [pointer] = this.getPointerPda({ provider: PubKeyIdentityProvider.Solana, providerId: authority.toString() })
-    return this.program.methods.createProfile({ avatarUrl, username }).accounts({
-      authority,
-      feePayer,
-      pointer,
-      profile,
-      systemProgram: SystemProgram.programId,
-    })
+    const ix = await this.program.methods
+      .createProfile({ avatarUrl, username })
+      .accounts({
+        authority,
+        feePayer,
+        pointer,
+        profile,
+        systemProgram: SystemProgram.programId,
+      })
+      .instruction()
+
+    return this.createTransaction({ ix, feePayer })
   }
 
   async getProfiles(): Promise<PubKeyProfile[]> {
@@ -164,7 +184,7 @@ export class PubKeyProfileSdk {
     )
   }
 
-  async getProfileByProfile({ provider, providerId }: GetProfileByProvider): Promise<PubKeyProfile> {
+  async getProfileByProvider({ provider, providerId }: GetProfileByProvider): Promise<PubKeyProfile> {
     const [pointerPda] = this.getPointerPda({ provider, providerId })
 
     const { profile } = await this.getPointer({ pointerPda })
@@ -197,6 +217,10 @@ export class PubKeyProfileSdk {
     return this.program.account.pointer.fetch(pointerPda)
   }
 
+  async getPointerNullable({ pointerPda }: { pointerPda: PublicKey }) {
+    return this.program.account.pointer.fetchNullable(pointerPda)
+  }
+
   async getProgramAccount() {
     return this.connection.getParsedAccountInfo(this.programId)
   }
@@ -212,25 +236,52 @@ export class PubKeyProfileSdk {
   async removeAuthority({ authorityToRemove, authority, feePayer, username }: RemoveAuthorityOptions) {
     const [profile] = this.getProfilePda({ username })
 
-    return this.program.methods.removeAuthority({ authorityToRemove }).accounts({ authority, feePayer, profile })
+    const ix = await this.program.methods
+      .removeAuthority({ authorityToRemove })
+      .accounts({ authority, feePayer, profile })
+      .instruction()
+
+    return this.createTransaction({ ix, feePayer })
   }
 
   async removeIdentity({ authority, feePayer, username, providerId, provider }: RemoveIdentityOptions) {
     const [profile] = this.getProfilePda({ username })
     const [pointer] = this.getPointerPda({ providerId, provider })
-    return this.program.methods.removeIdentity({ providerId }).accounts({
-      authority,
-      feePayer,
-      pointer,
-      profile,
-      systemProgram: SystemProgram.programId,
-    })
+    const ix = await this.program.methods
+      .removeIdentity({ providerId })
+      .accounts({
+        authority,
+        feePayer,
+        pointer,
+        profile,
+        systemProgram: SystemProgram.programId,
+      })
+      .instruction()
+
+    return this.createTransaction({ ix, feePayer })
   }
 
   async updateAvatarUrl({ avatarUrl, authority, feePayer, username }: UpdateAvatarUrlOptions) {
     const [profile] = this.getProfilePda({ username })
 
-    return this.program.methods.updateAvatarUrl({ newAvatarUrl: avatarUrl, authority }).accounts({ feePayer, profile })
+    const ix = await this.program.methods
+      .updateAvatarUrl({ newAvatarUrl: avatarUrl, authority })
+      .accounts({ feePayer, profile })
+      .instruction()
+
+    return this.createTransaction({ ix, feePayer })
+  }
+
+  private async createTransaction({ ix, feePayer: payerKey }: { ix: TransactionInstruction; feePayer: PublicKey }) {
+    const { blockhash: recentBlockhash } = await this.connection.getLatestBlockhash()
+
+    return new VersionedTransaction(
+      new TransactionMessage({
+        instructions: [ix],
+        payerKey,
+        recentBlockhash,
+      }).compileToV0Message(),
+    )
   }
 }
 
