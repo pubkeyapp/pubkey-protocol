@@ -192,14 +192,46 @@ export class PubKeyProfileSdk {
     return this.getProfile({ profilePda: profile })
   }
 
+  async getProfileByProviderNullable({ provider, providerId }: GetProfileByProvider): Promise<PubKeyProfile | null> {
+    const [pointerPda] = this.getPointerPda({ provider, providerId })
+
+    const { profile } = await this.getPointer({ pointerPda })
+
+    return this.getProfileNullable({ profilePda: profile })
+  }
+
   async getProfileByUsername({ username }: GetProfileByUsername): Promise<PubKeyProfile> {
     const [profilePda] = this.getProfilePda({ username })
 
     return this.getProfile({ profilePda })
   }
 
+  async getProfileByUsernameNullable({ username }: GetProfileByUsername): Promise<PubKeyProfile | null> {
+    const [profilePda] = this.getProfilePda({ username })
+
+    return this.getProfileNullable({ profilePda })
+  }
+
   async getProfile({ profilePda }: { profilePda: PublicKey }): Promise<PubKeyProfile> {
     return this.program.account.profile.fetch(profilePda).then((res) => {
+      const identities = res.identities.map((identity) => ({
+        ...identity,
+        provider: convertToIdentityProvider(identity.provider as unknown as { [key: string]: never }),
+      }))
+
+      return {
+        ...res,
+        publicKey: profilePda,
+        identities,
+      }
+    })
+  }
+
+  async getProfileNullable({ profilePda }: { profilePda: PublicKey }): Promise<PubKeyProfile | null> {
+    return this.program.account.profile.fetchNullable(profilePda).then((res) => {
+      if (!res) {
+        return null
+      }
       const identities = res.identities.map((identity) => ({
         ...identity,
         provider: convertToIdentityProvider(identity.provider as unknown as { [key: string]: never }),
