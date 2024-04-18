@@ -1,3 +1,14 @@
+## 1.5.0 (2024-04-18)
+
+
+### 🚀 Features
+
+- add more nullable methods ([11eec85](https://github.com/pubkeyapp/pubkey-program-library/commit/11eec85))
+
+### ❤️  Thank You
+
+- Bram Borggreve
+
 ## 1.4.0 (2024-04-17)
 
 This was a version bump only, there were no code changes.
