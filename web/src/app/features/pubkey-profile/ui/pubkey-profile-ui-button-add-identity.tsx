@@ -6,7 +6,7 @@ import { UiStack } from '@pubkey-ui/core'
 import { PublicKey } from '@solana/web3.js'
 import { getEnumOptions } from '../../../ui-select-enum'
 import { ellipsify } from '../../account/ui/ellipsify'
-import { usePubkeyProfileProgramAccount } from '../data-access'
+import { useMutationAddIdentity } from '../data-access'
 
 export interface PubKeyProfileAddIdentityInput {
   nickname: string
@@ -23,10 +23,10 @@ export function PubKeyProfileUiButtonAddIdentity({
   feePayer: PublicKey
   profile: PubKeyProfile
 }) {
-  const { addIdentity } = usePubkeyProfileProgramAccount({ profilePda: profile.publicKey })
+  const mutation = useMutationAddIdentity()
 
   async function submit({ provider, providerId, nickname }: PubKeyProfileAddIdentityInput) {
-    return addIdentity.mutateAsync({
+    return mutation.mutateAsync({
       authority,
       feePayer,
       nickname: nickname ?? ellipsify(providerId),
@@ -40,12 +40,11 @@ export function PubKeyProfileUiButtonAddIdentity({
     <Button
       size="xs"
       variant="light"
-      loading={addIdentity.isPending}
+      loading={mutation.isPending}
       onClick={() =>
         modals.open({
           title: 'Add Identity',
-          children: <div>TBD</div>,
-          // children: <PubKeyProfileUiAddIdentityForm loading={addIdentity.isPending} submit={submit} />,
+          children: <PubKeyProfileUiAddIdentityForm loading={mutation.isPending} submit={submit} />,
         })
       }
     >

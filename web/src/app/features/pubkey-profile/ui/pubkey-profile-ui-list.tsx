@@ -1,47 +1,21 @@
 import { SimpleGrid } from '@mantine/core'
-import { UiAlert, UiDebugModal, UiInfo, UiLoader, UiStack } from '@pubkey-ui/core'
-import { usePubkeyProfileProgram } from '../data-access'
-import { PubkeyProfileUiCard } from './pubkey-profile-ui-card'
+import { PubKeyProfile } from '@pubkey-program-library/anchor'
+import { UiInfo, UiStack } from '@pubkey-ui/core'
 
-export function PubkeyProfileUiList() {
-  const { profileAccounts, getProgramAccount, pointerAccounts } = usePubkeyProfileProgram()
+import { PubkeyProfileUiListItem } from './pubkey-profile-ui-list-item'
 
-  if (getProgramAccount.isLoading) {
-    return <UiLoader />
-  }
-  if (!getProgramAccount.data?.value) {
-    return (
-      <UiAlert
-        message={
-          <span>
-            Program account not found. Make sure you have deployed the program and are on the correct cluster.
-          </span>
-        }
-      />
-    )
-  }
-
+export function PubkeyProfileUiList({ profiles, basePath }: { profiles: PubKeyProfile[]; basePath?: string }) {
   return (
     <UiStack>
-      {profileAccounts.isLoading ? (
-        <UiLoader />
-      ) : profileAccounts.data?.length ? (
+      {profiles?.length ? (
         <SimpleGrid cols={{ base: 1, md: 2 }}>
-          {profileAccounts.data?.map((account) => (
-            <PubkeyProfileUiCard key={account.publicKey?.toString()} profilePda={account.publicKey} />
+          {profiles?.map((account) => (
+            <PubkeyProfileUiListItem basePath={basePath} key={account.publicKey?.toString()} profile={account} />
           ))}
         </SimpleGrid>
       ) : (
         <UiInfo title="No Profiles" message="No Profiles found. Create one above to get started." />
       )}
-      <UiDebugModal
-        data={{
-          gpa: getProgramAccount.data,
-          profileAccounts: profileAccounts.data,
-          pointerAccounts: pointerAccounts.data,
-          err: profileAccounts.error,
-        }}
-      />
     </UiStack>
   )
 }

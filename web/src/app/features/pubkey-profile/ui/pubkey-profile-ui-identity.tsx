@@ -1,30 +1,17 @@
 import { Group, Stack, Text } from '@mantine/core'
-import { PubKeyIdentity, PubKeyIdentityProvider } from '@pubkey-program-library/anchor'
+import { PubKeyIdentity } from '@pubkey-program-library/anchor'
 import { UiAnchor } from '@pubkey-ui/core'
-import { useCluster } from '../../cluster/cluster-data-access'
-import { PubkeyProfileUiProvider } from './pubkey-profile-ui-provider'
-
-export function useGetIdentityUrl(identity: PubKeyIdentity) {
-  const { getExplorerUrl } = useCluster()
-
-  switch (identity.provider) {
-    case PubKeyIdentityProvider.Discord:
-      return `https://discord.com/users/${identity.providerId}`
-    case PubKeyIdentityProvider.Solana:
-      return getExplorerUrl(`address/${identity.providerId}`)
-    default:
-      return undefined
-  }
-}
+import { usePubKeyProfile } from '../data-access'
+import { PubkeyProfileUiIdentityProviderIcon } from './pubkey-profile-ui-identity-provider-icon'
 
 export function PubkeyProfileUiIdentity({ identity }: { identity: PubKeyIdentity }) {
-  const to = useGetIdentityUrl(identity)
+  const { getIdentityUrl } = usePubKeyProfile()
 
   return (
     <Group gap="xs">
-      <PubkeyProfileUiProvider provider={identity.provider} />
+      <PubkeyProfileUiIdentityProviderIcon provider={identity.provider} />
       <Stack gap={0}>
-        <UiAnchor to={to}>
+        <UiAnchor to={getIdentityUrl(identity)}>
           <Text fw="bold" size="sm">
             {identity.name}
           </Text>

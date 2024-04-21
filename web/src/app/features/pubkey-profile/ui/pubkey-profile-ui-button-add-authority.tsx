@@ -1,18 +1,18 @@
 import { Button } from '@mantine/core'
 import { PubKeyProfile } from '@pubkey-program-library/anchor'
 import { PublicKey } from '@solana/web3.js'
-import { usePubkeyProfileProgramAccount } from '../data-access'
+import { useMutationAddAuthority } from '../data-access'
 
 export function PubKeyProfileUiButtonAddAuthority({
   authority,
   feePayer,
-  profile: { publicKey: profilePda, username },
+  profile: { username },
 }: {
   authority: PublicKey
   feePayer: PublicKey
   profile: PubKeyProfile
 }) {
-  const { addAuthority } = usePubkeyProfileProgramAccount({ profilePda })
+  const mutation = useMutationAddAuthority()
 
   function submit() {
     const newAuthority = window.prompt('Enter the new authority', authority.toString())
@@ -21,7 +21,7 @@ export function PubKeyProfileUiButtonAddAuthority({
     }
     const newAuthorityPubKey = new PublicKey(newAuthority)
 
-    return addAuthority
+    return mutation
       .mutateAsync({
         newAuthority: newAuthorityPubKey,
         authority,
@@ -34,7 +34,7 @@ export function PubKeyProfileUiButtonAddAuthority({
   }
 
   return (
-    <Button size="xs" variant="light" onClick={submit} loading={addAuthority.isPending}>
+    <Button size="xs" variant="light" onClick={submit} loading={mutation.isPending}>
       Add
     </Button>
   )

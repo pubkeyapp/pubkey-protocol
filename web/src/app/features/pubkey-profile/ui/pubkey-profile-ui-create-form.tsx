@@ -1,15 +1,10 @@
 import { Button, Group, TextInput } from '@mantine/core'
 import { useForm } from '@mantine/form'
 import { UiStack } from '@pubkey-ui/core'
-import { PubKeyProfileCreateInput } from './pubkey-profile-ui-create'
+import { PubKeyProfileCreateInput } from '../data-access'
 
 export function PubkeyProfileUiCreateForm({ submit }: { submit: (input: PubKeyProfileCreateInput) => Promise<void> }) {
-  const form = useForm<PubKeyProfileCreateInput>({
-    initialValues: {
-      avatarUrl: '',
-      username: '',
-    },
-  })
+  const form = useForm<PubKeyProfileCreateInput>({ initialValues: { avatarUrl: '', username: '' } })
 
   return (
     <form onSubmit={form.onSubmit((values) => submit(values))}>

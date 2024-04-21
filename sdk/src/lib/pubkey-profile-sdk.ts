@@ -10,7 +10,9 @@ import {
   PubkeyProfileIDL,
 } from '@pubkey-program-library/anchor'
 import {
+  AccountInfo,
   Connection,
+  ParsedAccountData,
   PublicKey,
   SystemProgram,
   TransactionInstruction,
@@ -253,8 +255,11 @@ export class PubKeyProfileSdk {
     return this.program.account.pointer.fetchNullable(pointerPda)
   }
 
-  async getProgramAccount() {
-    return this.connection.getParsedAccountInfo(this.programId)
+  async getProgramAccount(): Promise<AccountInfo<ParsedAccountData>> {
+    return this.connection.getParsedAccountInfo(this.programId).then((res) => {
+      console.log(`Res`, res)
+      return res.value as AccountInfo<ParsedAccountData>
+    })
   }
 
   getProfilePda({ username }: GetProfilePdaOptions): [PublicKey, number] {

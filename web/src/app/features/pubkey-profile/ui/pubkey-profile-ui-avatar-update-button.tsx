@@ -1,19 +1,20 @@
-import { UnstyledButton } from '@mantine/core'
+import { Box, UnstyledButton } from '@mantine/core'
 import { PubKeyProfile } from '@pubkey-program-library/anchor'
 import { PublicKey } from '@solana/web3.js'
-import { usePubkeyProfileProgramAccount } from '../data-access'
+import { useMutationUpdateAvatarUrl, usePubKeyProfile } from '../data-access'
+import { AppCard } from './app-card'
 import { PubkeyProfileUiAvatar } from './pubkey-profile-ui-avatar'
 
 export function PubkeyProfileUiAvatarUpdateButton({
-  authority,
-  feePayer,
   profile,
+  signAuthority,
 }: {
-  authority: PublicKey
-  feePayer: PublicKey
   profile: PubKeyProfile
+  signAuthority: PublicKey
 }) {
-  const { updateAvatarUrl } = usePubkeyProfileProgramAccount({ profilePda: profile.publicKey })
+  const canSign = signAuthority !== PublicKey.default
+  const { authority, feePayer } = usePubKeyProfile()
+  const mutation = useMutationUpdateAvatarUrl()
 
   function submit() {
     const avatarUrl = window.prompt('Enter the new avatar URL', profile.avatarUrl)
@@ -21,7 +22,7 @@ export function PubkeyProfileUiAvatarUpdateButton({
       return
     }
 
-    return updateAvatarUrl.mutateAsync({
+    return mutation.mutateAsync({
       avatarUrl,
       authority: authority,
       feePayer,
@@ -29,9 +30,13 @@ export function PubkeyProfileUiAvatarUpdateButton({
     })
   }
 
-  return (
-    <UnstyledButton onClick={submit}>
-      <PubkeyProfileUiAvatar profile={profile} />
-    </UnstyledButton>
-  )
+  return canSign ? (
+    <AppCard title="Update Avatar">
+      <Box px="sm">
+        <UnstyledButton onClick={submit}>
+          <PubkeyProfileUiAvatar profile={profile} />
+        </UnstyledButton>
+      </Box>
+    </AppCard>
+  ) : null
 }

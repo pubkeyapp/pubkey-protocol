@@ -2,13 +2,16 @@ import { Button, Group, Select, TextInput } from '@mantine/core'
 import { useForm } from '@mantine/form'
 import { PubKeyIdentityProvider, PubKeyProfile } from '@pubkey-program-library/anchor'
 import { GetProfileByProvider, GetProfileByUsername } from '@pubkey-program-library/sdk'
-import { toastError, toastSuccess, UiCard, UiDebug, UiStack } from '@pubkey-ui/core'
+import { toastError, toastSuccess, UiCard, UiDebug, UiGroup, UiStack } from '@pubkey-ui/core'
 import { useState } from 'react'
 import { getEnumOptions } from '../../../ui-select-enum'
-import { usePubkeyProfileSdk } from '../data-access'
-import { PubkeyProfileUiProfile } from './pubkey-profile-ui-profile'
+import { ellipsify } from '../../account/ui/ellipsify'
+import { ExplorerLink } from '../../cluster/cluster-ui'
+import { usePubKeyProfile } from '../data-access'
+import { PubkeyProfileUiProfile } from '../ui'
 
-export function PubkeyProfileUiTools() {
+export function PubkeyProfileFeatureTools() {
+  const { sdk } = usePubKeyProfile()
   return (
     <UiStack>
       <UiCard title="Search by Username">
@@ -17,13 +20,16 @@ export function PubkeyProfileUiTools() {
       <UiCard title="Search by Provider">
         <SearchByProvider />
       </UiCard>
+      <UiGroup>
+        <ExplorerLink ff="mono" path={`account/${sdk.programId}`} label={ellipsify(sdk.programId.toString())} />
+      </UiGroup>
     </UiStack>
   )
 }
 
 function SearchByProvider() {
   const [result, setResult] = useState<PubKeyProfile | null>(null)
-  const { sdk } = usePubkeyProfileSdk()
+  const { sdk } = usePubKeyProfile()
   const form = useForm<GetProfileByProvider>({
     initialValues: {
       provider: PubKeyIdentityProvider.Solana,
@@ -65,9 +71,10 @@ function SearchByProvider() {
     </form>
   )
 }
+
 function SearchByUsername() {
   const [result, setResult] = useState<PubKeyProfile | null>(null)
-  const { sdk } = usePubkeyProfileSdk()
+  const { sdk } = usePubKeyProfile()
   const form = useForm<GetProfileByUsername>({
     initialValues: {
       username: 'beeman',

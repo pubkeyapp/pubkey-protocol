@@ -2,7 +2,7 @@ import { ActionIcon } from '@mantine/core'
 import { PubKeyProfile } from '@pubkey-program-library/anchor'
 import { PublicKey } from '@solana/web3.js'
 import { IconTrash } from '@tabler/icons-react'
-import { usePubkeyProfileProgramAccount } from '../data-access'
+import { useMutationRemoveAuthority } from '../data-access'
 
 export function PubKeyProfileUiButtonRemoveAuthority({
   authorityToRemove,
@@ -15,19 +15,23 @@ export function PubKeyProfileUiButtonRemoveAuthority({
   feePayer: PublicKey
   profile: PubKeyProfile
 }) {
-  const { removeAuthority } = usePubkeyProfileProgramAccount({ profilePda: profile.publicKey })
-
-  function submit() {
-    return removeAuthority.mutateAsync({
-      authorityToRemove,
-      authority,
-      feePayer,
-      username: profile.username,
-    })
-  }
+  const mutation = useMutationRemoveAuthority()
 
   return (
-    <ActionIcon size="sm" variant="light" color="red" onClick={submit} loading={removeAuthority.isPending}>
+    <ActionIcon
+      size="sm"
+      variant="light"
+      color="red"
+      onClick={() =>
+        mutation.mutateAsync({
+          authorityToRemove,
+          authority,
+          feePayer,
+          username: profile.username,
+        })
+      }
+      loading={mutation.isPending}
+    >
       <IconTrash size={16} />
     </ActionIcon>
   )
