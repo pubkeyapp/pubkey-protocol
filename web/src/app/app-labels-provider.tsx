@@ -3,9 +3,9 @@ import { PUBKEY_PROFILE_PROGRAM_ID } from '@pubkey-program-library/anchor'
 import { UiAnchor, UiCopy } from '@pubkey-ui/core'
 import { TOKEN_2022_PROGRAM_ID, TOKEN_PROGRAM_ID } from '@solana/spl-token'
 import { createContext, ReactNode, useContext, useMemo } from 'react'
-
-import { ellipsify } from './features/account/ui/ellipsify'
 import { useKeypair } from './features/keypair/data-access'
+
+import { ellipsify } from './ui/ellipsify'
 
 export interface Label {
   name: string

@@ -1,4 +1,4 @@
-import { IconBug, IconDashboard, IconTools, IconUserPlus } from '@tabler/icons-react'
+import { IconBug, IconSearch, IconUserPlus, IconUsersGroup } from '@tabler/icons-react'
 import { Navigate, useRoutes } from 'react-router-dom'
 import { KeypairUiGridItem } from '../../keypair/ui'
 import { PubKeyProfileProvider } from '../data-access'
@@ -9,19 +9,19 @@ import { PubkeyProfileFeatureCreate } from './pubkey-profile-feature-create'
 import { PubkeyProfileFeatureDebug } from './pubkey-profile-feature-debug'
 import { PubkeyProfileFeatureDetail } from './pubkey-profile-feature-detail'
 import { PubkeyProfileFeatureList } from './pubkey-profile-feature-list'
-import { PubkeyProfileFeatureTools } from './pubkey-profile-feature-tools'
+import { PubkeyProfileFeatureSearch } from './pubkey-profile-feature-search'
 
 export default function PubkeyProfileRoutes({ basePath }: { basePath: string }) {
   const sidebar: KeypairUiGridItem[] = [
     {
-      label: 'Overview',
-      path: 'overview',
-      leftSection: <IconDashboard size={16} />,
+      label: 'Profiles',
+      path: 'profiles',
+      leftSection: <IconUsersGroup size={16} />,
     },
     {
-      label: 'Tools',
-      path: 'tools',
-      leftSection: <IconTools size={16} />,
+      label: 'Search',
+      path: 'search',
+      leftSection: <IconSearch size={16} />,
     },
     {
       label: 'Create',
@@ -35,12 +35,12 @@ export default function PubkeyProfileRoutes({ basePath }: { basePath: string }) 
     },
   ]
   const routes = useRoutes([
-    { index: true, element: <Navigate to="./overview" replace /> },
-    { path: 'overview', element: <PubkeyProfileFeatureList basePath={basePath} /> },
-    { path: 'tools', element: <PubkeyProfileFeatureTools /> },
+    { index: true, element: <Navigate to="./profiles" replace /> },
+    { path: 'profiles', element: <PubkeyProfileFeatureList basePath={basePath} /> },
+    { path: ':username', element: <PubkeyProfileFeatureDetail /> },
+    { path: 'search', element: <PubkeyProfileFeatureSearch /> },
     { path: 'create', element: <PubkeyProfileFeatureCreate /> },
     { path: 'debug', element: <PubkeyProfileFeatureDebug /> },
-    { path: ':username', element: <PubkeyProfileFeatureDetail /> },
   ])
 
   return (

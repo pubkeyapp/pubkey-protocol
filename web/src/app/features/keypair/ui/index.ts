@@ -1,3 +1,7 @@
 export * from './lib/keypair-ui'
+export * from './lib/keypair-ui-balance-checker'
+export * from './lib/keypair-ui-balance-sol'
 export * from './lib/keypair-ui-grid-sidebar'
 export * from './lib/keypair-ui-table'
+export * from './lib/wallet-ui-balance-check'
+export * from './lib/wallet-ui-balance-checker'

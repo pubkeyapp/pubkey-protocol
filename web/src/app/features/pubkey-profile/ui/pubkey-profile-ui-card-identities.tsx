@@ -18,14 +18,7 @@ export function PubkeyProfileUiCardIdentities({
   const { feePayer } = useKeypair()
 
   return (
-    <AppCard
-      title="Identities"
-      action={
-        canSign ? (
-          <PubKeyProfileUiButtonAddIdentity authority={signAuthority} feePayer={feePayer} profile={profile} />
-        ) : null
-      }
-    >
+    <AppCard title="Identities" action={canSign ? <PubKeyProfileUiButtonAddIdentity profile={profile} /> : null}>
       {profile.identities.map((item) => (
         <UiGroup px="xs" key={item.providerId}>
           <PubkeyProfileUiIdentity identity={item} key={item.providerId} />

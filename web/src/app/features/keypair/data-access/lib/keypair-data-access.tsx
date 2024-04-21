@@ -1,168 +1,98 @@
-import { AnchorKeypairWallet } from '@pubkey-program-library/sdk'
-import { Keypair as SolanaKeypair, PublicKey, VersionedTransaction } from '@solana/web3.js'
-import { useQueryClient } from '@tanstack/react-query'
+import { Anchor } from '@mantine/core'
+import { NotificationData } from '@mantine/notifications'
+import { toastError, toastSuccess } from '@pubkey-ui/core'
+import { useConnection } from '@solana/wallet-adapter-react'
+import { Commitment, Connection, LAMPORTS_PER_SOL, PublicKey, TransactionSignature } from '@solana/web3.js'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 
-import { atom, useAtomValue, useSetAtom } from 'jotai'
-import { atomWithStorage } from 'jotai/utils'
-import { createContext, ReactNode, useContext } from 'react'
-import { useBurnToken, useCloseAccount, useTransferToken } from '../../../account/account-data-access'
-import { getDefaultFeePayer } from './get-default-fee-payer'
+import { useCluster } from '../../../cluster/cluster-data-access'
 
-export function formatAmount(amount: number | string, decimals = 2) {
-  return Intl.NumberFormat('en-US', { maximumFractionDigits: decimals }).format(parseFloat(amount.toString()))
-}
-
-function ellipsify(str = '', len = 4, delimiter = '..') {
-  const strLen = str.length
-  const limit = len * 2 + delimiter.length
-
-  return strLen >= limit ? str.substring(0, len) + delimiter + str.substring(strLen - len, strLen) : str
-}
-
-export interface Keypair {
-  name: string
-  publicKey: string
-  secretKey: string
-  active?: boolean
-  solana?: SolanaKeypair
-}
-
-const feePayer = getDefaultFeePayer()
-export const defaultKeypairs: Keypair[] = [
-  {
-    name: 'Fee Payer',
-    publicKey: feePayer.publicKey.toString(),
-    secretKey: `[${feePayer.secretKey.join(',')}]`,
-    solana: feePayer,
-    active: true,
-  },
-]
-
-const keypairAtom = atomWithStorage<Keypair>('ppl-keypair', defaultKeypairs[0])
-const keypairsAtom = atomWithStorage<Keypair[]>('ppl-keypairs', defaultKeypairs)
-
-const activeKeypairsAtom = atom<Keypair[]>((get) => {
-  const keypairs = get(keypairsAtom)
-  const keypair = get(keypairAtom)
-  return keypairs.map((item) => ({
-    ...item,
-    active: item?.name === keypair?.name,
-  }))
-})
-
-const activeKeypairAtom = atom<Keypair>((get) => {
-  const keypairs = get(activeKeypairsAtom)
-
-  return keypairs.find((item) => item.active) || keypairs[0]
-})
-
-export interface KeypairProviderContext {
-  feePayer: PublicKey
-  keypair: Keypair
-  keypairs: Keypair[]
-  addKeypair: (keypair: Keypair) => void
-  deleteKeypair: (keypair: Keypair) => void
-  importKeypair: (secret: string) => void
-  setKeypair: (keypair: Keypair) => void
-  generateKeypair: () => void
-  feePayerSign: (tx: VersionedTransaction) => Promise<VersionedTransaction>
-}
-
-const Context = createContext<KeypairProviderContext>({} as KeypairProviderContext)
-
-export function KeypairProvider({ children }: { children: ReactNode }) {
-  const keypair = useAtomValue(activeKeypairAtom)
-  const keypairs = useAtomValue(activeKeypairsAtom)
-  const setKeypair = useSetAtom(keypairAtom)
-  const setKeypairs = useSetAtom(keypairsAtom)
-
-  function addNewKeypair(kp: SolanaKeypair) {
-    const keypair: Keypair = {
-      name: ellipsify(kp.publicKey.toString()),
-      publicKey: kp.publicKey.toString(),
-      secretKey: `[${kp.secretKey.join(',')}]`,
-    }
-    setKeypairs([...keypairs, keypair])
-    if (!keypairs.length) {
-      activateKeypair(keypair)
-    }
-  }
-
-  function activateKeypair(keypair: Keypair) {
-    const kp = SolanaKeypair.fromSecretKey(new Uint8Array(JSON.parse(keypair.secretKey)))
-    setKeypair({ ...keypair, solana: kp })
-  }
-
-  function solanaInstance(kp: Keypair): Keypair {
-    return {
-      ...kp,
-      solana: kp?.secretKey ? SolanaKeypair.fromSecretKey(new Uint8Array(JSON.parse(kp?.secretKey))) : undefined,
-    }
-  }
-  const solanaKeypair = solanaInstance(keypair)
-  const value: KeypairProviderContext = {
-    keypair: solanaKeypair,
-    keypairs: keypairs.sort((a, b) => (a.name > b.name ? 1 : -1)).map((item) => solanaInstance(item)),
-    feePayer: solanaKeypair.solana?.publicKey as PublicKey,
-    addKeypair: (keypair: Keypair) => {
-      setKeypairs([...keypairs, keypair])
-    },
-    deleteKeypair: (keypair: Keypair) => {
-      setKeypairs(keypairs.filter((item) => item.name !== keypair.name))
-    },
-    importKeypair(secret: string) {
-      addNewKeypair(SolanaKeypair.fromSecretKey(new Uint8Array(JSON.parse(secret))))
-    },
-    setKeypair: (keypair: Keypair) => activateKeypair(keypair),
-    generateKeypair: () => addNewKeypair(SolanaKeypair.generate()),
-    feePayerSign: async (tx: VersionedTransaction) => {
-      const kp = solanaKeypair.solana as SolanaKeypair
-
-      return new AnchorKeypairWallet(kp).signTransaction(tx)
-    },
-  }
-  return <Context.Provider value={value}>{children}</Context.Provider>
-}
-
-export function useKeypair() {
-  return useContext(Context)
-}
-
-export function useKeypairTokenOperations({ keypair }: { keypair: SolanaKeypair }) {
-  const client = useQueryClient()
-  const tokenBurnMutation = useBurnToken({ address: keypair.publicKey })
-  const tokenCloseMutation = useCloseAccount({ address: keypair.publicKey })
-  const tokenSendMutation = useTransferToken({ address: keypair.publicKey })
-
-  async function refresh() {
-    await Promise.all([
-      client.invalidateQueries({
-        exact: false,
-        queryKey: ['getTokenAccounts'],
-      }),
-      client.invalidateQueries({ exact: false, queryKey: ['getTokenBalance'] }),
-      client.invalidateQueries({
-        exact: false,
-        queryKey: ['useGetAllTokenHolders'],
-      }),
-    ])
-  }
-
-  async function burnTokens(input: { amount: string; source: string; mint: string }) {
-    await tokenBurnMutation.mutateAsync({ ...input, feePayer: keypair }).then(() => refresh())
-  }
-
-  async function closeAccount(input: { source: string; mint: string }) {
-    await tokenCloseMutation.mutateAsync({ ...input, feePayer: keypair }).then(() => refresh())
-  }
-
-  async function sendTokens(input: { amount: string; source: string; destination: string; mint: string }) {
-    await tokenSendMutation.mutateAsync({ ...input, feePayer: keypair }).then(() => refresh())
-  }
+export function useQueries({ address }: { address: PublicKey; commitment?: Commitment }) {
+  const { connection } = useConnection()
 
   return {
-    burnTokens,
-    closeAccount,
-    sendTokens,
+    getBalance: {
+      queryKey: ['getBalance', { endpoint: connection?.rpcEndpoint, address }],
+      queryFn: () => connection.getBalance(address),
+    },
+    getSignatures: {
+      queryKey: ['getSignatures', { endpoint: connection?.rpcEndpoint, address }],
+      queryFn: () => connection.getConfirmedSignaturesForAddress2(address),
+    },
+    requestAirdrop: {
+      mutationKey: ['requestAirdrop', { endpoint: connection?.rpcEndpoint, address }],
+      mutationFn: (amount: string) => requestAndConfirmAirdrop({ address, amount, connection }),
+    },
   }
+}
+
+export function useGetBalance({ address }: { address: PublicKey }) {
+  return useQuery(useQueries({ address }).getBalance)
+}
+export function useGetSignatures({ address }: { address: PublicKey }) {
+  return useQuery(useQueries({ address }).getSignatures)
+}
+
+export function useRequestAirdrop({ address }: { address: PublicKey }) {
+  const {
+    requestAirdrop: { mutationKey, mutationFn },
+  } = useQueries({ address })
+  const onSuccess = useOnTransactionSuccess({ address })
+  return useMutation({
+    mutationKey,
+    mutationFn,
+    onSuccess,
+    onError: (error: unknown) => {
+      toastError(`Requesting airdrop failed! ${error}`)
+    },
+  })
+}
+
+async function requestAndConfirmAirdrop({
+  address,
+  amount,
+  connection,
+}: {
+  connection: Connection
+  address: PublicKey
+  amount: string
+}) {
+  const [latestBlockhash, signature] = await Promise.all([
+    connection.getLatestBlockhash(),
+    connection.requestAirdrop(address, parseFloat(amount) * LAMPORTS_PER_SOL),
+  ])
+
+  await connection.confirmTransaction({ signature, ...latestBlockhash }, 'confirmed')
+  return signature
+}
+
+export function useOnTransactionSuccess({ address }: { address: PublicKey }) {
+  const { getExplorerUrl } = useCluster()
+  const client = useQueryClient()
+  const { getBalance, getSignatures } = useQueries({ address })
+
+  return (signature?: TransactionSignature) => {
+    if (signature) {
+      uiToastLink({ link: getExplorerUrl(`tx/${signature}`), label: 'View Transaction' })
+    }
+    return Promise.all([
+      client.invalidateQueries({ queryKey: getBalance.queryKey }),
+      client.invalidateQueries({ queryKey: getSignatures.queryKey }),
+    ])
+  }
+}
+
+export function uiToastLink({
+  label,
+  link,
+  ...props
+}: Omit<NotificationData, 'message'> & { link: string; label: string }) {
+  return toastSuccess({
+    ...props,
+    message: (
+      <Anchor c="brand" href={link} target="_blank" rel="noopener noreferrer">
+        {label}
+      </Anchor>
+    ),
+  })
 }

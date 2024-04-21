@@ -3,12 +3,11 @@ import { UiError, UiInfo, UiStack, UiTime } from '@pubkey-ui/core'
 import { PublicKey } from '@solana/web3.js'
 import { IconRefresh } from '@tabler/icons-react'
 import { useMemo, useState } from 'react'
-import { ExplorerLink } from '../../cluster/cluster-ui'
-import { useGetSignatures } from '../account-data-access'
+import { ellipsify } from '../../../../ui'
+import { ExplorerLink } from '../../../cluster/cluster-ui'
+import { useGetSignatures } from '../../data-access'
 
-import { ellipsify } from './ellipsify'
-
-export function AccountUiTransactions({ address }: { address: PublicKey }) {
+export function KeypairFeatureTransactions({ address }: { address: PublicKey }) {
   const query = useGetSignatures({ address })
   const [showAll, setShowAll] = useState(false)
 

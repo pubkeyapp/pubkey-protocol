@@ -6,7 +6,7 @@ import { PubkeyProfileUiProfile } from './pubkey-profile-ui-profile'
 
 export function PubkeyProfileUiProfileGrid({ profiles, basePath }: { profiles: PubKeyProfile[]; basePath?: string }) {
   return (
-    <SimpleGrid cols={{ base: 1, sm: 2 }}>
+    <SimpleGrid cols={{ base: 1, md: 2 }}>
       {profiles.map((profile) => (
         <UiCard key={profile.username}>
           <PubkeyProfileUiProfile profile={profile} basePath={basePath} />

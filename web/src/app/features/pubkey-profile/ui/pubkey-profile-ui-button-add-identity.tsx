@@ -3,9 +3,7 @@ import { useForm } from '@mantine/form'
 import { modals } from '@mantine/modals'
 import { PubKeyIdentityProvider, PubKeyProfile } from '@pubkey-program-library/anchor'
 import { UiStack } from '@pubkey-ui/core'
-import { PublicKey } from '@solana/web3.js'
-import { getEnumOptions } from '../../../ui-select-enum'
-import { ellipsify } from '../../account/ui/ellipsify'
+import { ellipsify, getEnumOptions } from '../../../ui'
 import { useMutationAddIdentity } from '../data-access'
 
 export interface PubKeyProfileAddIdentityInput {
@@ -14,21 +12,11 @@ export interface PubKeyProfileAddIdentityInput {
   provider: PubKeyIdentityProvider
 }
 
-export function PubKeyProfileUiButtonAddIdentity({
-  authority,
-  feePayer,
-  profile,
-}: {
-  authority: PublicKey
-  feePayer: PublicKey
-  profile: PubKeyProfile
-}) {
+export function PubKeyProfileUiButtonAddIdentity({ profile }: { profile: PubKeyProfile }) {
   const mutation = useMutationAddIdentity()
 
   async function submit({ provider, providerId, nickname }: PubKeyProfileAddIdentityInput) {
     return mutation.mutateAsync({
-      authority,
-      feePayer,
       nickname: nickname ?? ellipsify(providerId),
       providerId,
       provider,

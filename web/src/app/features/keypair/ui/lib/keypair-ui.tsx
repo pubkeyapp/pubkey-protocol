@@ -1,16 +1,12 @@
 import { Button, Group, Menu, Modal, Text, TextInput } from '@mantine/core'
 import { useDisclosure } from '@mantine/hooks'
 import { UiStack, UiWarning } from '@pubkey-ui/core'
-
 import { LAMPORTS_PER_SOL, PublicKey } from '@solana/web3.js'
 import { IconUserOff, IconWallet, IconWalletOff } from '@tabler/icons-react'
-
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
-import { useGetBalance, useRequestAirdrop } from '../../../account/account-data-access'
 import { useCluster } from '../../../cluster/cluster-data-access'
-
-import { formatAmount, useKeypair } from '../../data-access'
+import { formatAmount, useGetBalance, useKeypair, useRequestAirdrop } from '../../data-access'
 
 export function KeypairChecker() {
   const { keypair } = useKeypair()
@@ -116,7 +112,7 @@ export function KeypairUiBalance() {
   const { keypair } = useKeypair()
 
   return keypair.publicKey ? (
-    <Button variant="light" component={Link} to={`/account/${keypair.publicKey}`}>
+    <Button variant="light" component={Link} to={`/keypairs/${keypair.publicKey}`}>
       <KeypairSelectLabel address={keypair.publicKey} />
     </Button>
   ) : null

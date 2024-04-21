@@ -1,15 +1,13 @@
 import { Text } from '@mantine/core'
 import { UiError, UiStack } from '@pubkey-ui/core'
-
 import { IconDashboard, IconWallet } from '@tabler/icons-react'
-
 import { Navigate, useParams, useRoutes } from 'react-router-dom'
 import { useKeypair } from '../../data-access'
 import { KeypairUiGridItem, KeypairUiGridSidebar } from '../../ui'
-import { KeypairDetailScreen } from './keypair-detail-feature'
+import { KeypairDetailScreen } from './keypair-feature-detail'
 import { KeypairListFeature } from './keypair-list-feature'
 
-export default function KeypairFeature() {
+export default function KeypairRoutes() {
   const { keypairs, keypair } = useKeypair()
 
   const sidebar: KeypairUiGridItem[] = [

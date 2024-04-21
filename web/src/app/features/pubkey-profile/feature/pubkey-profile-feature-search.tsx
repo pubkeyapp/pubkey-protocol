@@ -1,29 +1,27 @@
-import { Button, Group, Select, TextInput } from '@mantine/core'
+import { ActionIcon, Select, TextInput } from '@mantine/core'
 import { useForm } from '@mantine/form'
 import { PubKeyIdentityProvider, PubKeyProfile } from '@pubkey-program-library/anchor'
 import { GetProfileByProvider, GetProfileByUsername } from '@pubkey-program-library/sdk'
-import { toastError, toastSuccess, UiCard, UiDebug, UiGroup, UiStack } from '@pubkey-ui/core'
+import { toastError, toastInfo, toastSuccess, UiCard, UiPage, UiStack } from '@pubkey-ui/core'
+import { IconSearch } from '@tabler/icons-react'
 import { useState } from 'react'
-import { getEnumOptions } from '../../../ui-select-enum'
-import { ellipsify } from '../../account/ui/ellipsify'
-import { ExplorerLink } from '../../cluster/cluster-ui'
+import { getEnumOptions } from '../../../ui'
 import { usePubKeyProfile } from '../data-access'
 import { PubkeyProfileUiProfile } from '../ui'
 
-export function PubkeyProfileFeatureTools() {
-  const { sdk } = usePubKeyProfile()
+export function PubkeyProfileFeatureSearch() {
+  const { sdk, program } = usePubKeyProfile()
   return (
-    <UiStack>
-      <UiCard title="Search by Username">
-        <SearchByUsername />
-      </UiCard>
-      <UiCard title="Search by Provider">
-        <SearchByProvider />
-      </UiCard>
-      <UiGroup>
-        <ExplorerLink ff="mono" path={`account/${sdk.programId}`} label={ellipsify(sdk.programId.toString())} />
-      </UiGroup>
-    </UiStack>
+    <UiPage leftAction={<IconSearch />} title="Search">
+      <UiStack>
+        <UiCard title="Search by Username">
+          <SearchByUsername />
+        </UiCard>
+        <UiCard title="Search by Provider">
+          <SearchByProvider />
+        </UiCard>
+      </UiStack>
+    </UiPage>
   )
 }
 
@@ -61,12 +59,22 @@ function SearchByProvider() {
           {...form.getInputProps('provider')}
         />
 
-        <TextInput name="providerId" label="Provider ID" {...form.getInputProps('providerId')} />
-        <Group justify="right">
-          <Button type="submit">Check</Button>
-        </Group>
-        {result ? <PubkeyProfileUiProfile profile={result} /> : 'No Result'}
-        <UiDebug data={result ?? 'No Result'} open />
+        <TextInput
+          name="providerId"
+          label="Provider ID"
+          {...form.getInputProps('providerId')}
+          rightSection={
+            <ActionIcon variant="light" type="submit">
+              <IconSearch size="16" />
+            </ActionIcon>
+          }
+        />
+
+        {result ? (
+          <UiCard>
+            <PubkeyProfileUiProfile profile={result} />{' '}
+          </UiCard>
+        ) : null}
       </UiStack>
     </form>
   )
@@ -75,19 +83,19 @@ function SearchByProvider() {
 function SearchByUsername() {
   const [result, setResult] = useState<PubKeyProfile | null>(null)
   const { sdk } = usePubKeyProfile()
-  const form = useForm<GetProfileByUsername>({
-    initialValues: {
-      username: 'beeman',
-    },
-  })
+  const form = useForm<GetProfileByUsername>({ initialValues: { username: '' } })
 
   async function submit({ username }: GetProfileByUsername) {
     setResult(null)
     sdk
-      .getProfileByUsername({ username })
+      .getProfileByUsernameNullable({ username })
       .then((profile) => {
-        toastSuccess(`Found ${profile.username}`)
-        setResult(profile)
+        if (profile) {
+          toastSuccess(`Found ${profile.username}`)
+          setResult(profile)
+        } else {
+          toastInfo(`Profile not found`)
+        }
       })
       .catch((err) => {
         toastError(`User ${username} not found`)
@@ -98,12 +106,21 @@ function SearchByUsername() {
   return (
     <form onSubmit={form.onSubmit((values) => submit(values))}>
       <UiStack>
-        <TextInput name="username" label="Username" {...form.getInputProps('username')} />
-        <Group justify="right">
-          <Button type="submit">Check</Button>
-        </Group>
-        {result ? <PubkeyProfileUiProfile profile={result} /> : 'No Result'}
-        <UiDebug data={result ?? 'No Result'} open />
+        <TextInput
+          name="username"
+          label="Username"
+          {...form.getInputProps('username')}
+          rightSection={
+            <ActionIcon variant="light" type="submit">
+              <IconSearch size="16" />
+            </ActionIcon>
+          }
+        />
+        {result ? (
+          <UiCard>
+            <PubkeyProfileUiProfile profile={result} />{' '}
+          </UiCard>
+        ) : null}
       </UiStack>
     </form>
   )
