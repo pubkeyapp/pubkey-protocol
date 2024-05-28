@@ -85,13 +85,19 @@ impl Profile {
 pub enum PubKeyIdentityProvider {
     Discord,
     Solana,
+    Github,
+    Google,
+    Twitter,
 }
 
 impl PubKeyIdentityProvider {
     pub fn value(&self) -> String {
         match *self {
             PubKeyIdentityProvider::Discord => String::from("Discord"),
+            PubKeyIdentityProvider::Github => String::from("Github"),
+            PubKeyIdentityProvider::Google => String::from("Google"),
             PubKeyIdentityProvider::Solana => String::from("Solana"),
+            PubKeyIdentityProvider::Twitter => String::from("Twitter"),
         }
     }
 }

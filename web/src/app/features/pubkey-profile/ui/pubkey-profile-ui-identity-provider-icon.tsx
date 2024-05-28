@@ -1,5 +1,11 @@
 import { PubKeyIdentityProvider } from '@pubkey-program-library/anchor'
-import { IconBrandDiscordFilled, IconCurrencySolana } from '@tabler/icons-react'
+import {
+  IconBrandDiscordFilled,
+  IconBrandGithubFilled,
+  IconBrandGoogleFilled,
+  IconBrandTwitterFilled,
+  IconCurrencySolana,
+} from '@tabler/icons-react'
 
 export function PubkeyProfileUiIdentityProviderIcon({
   provider,
@@ -11,8 +17,14 @@ export function PubkeyProfileUiIdentityProviderIcon({
   switch (provider) {
     case PubKeyIdentityProvider.Discord:
       return <IconBrandDiscordFilled size={size} />
+    case PubKeyIdentityProvider.Github:
+      return <IconBrandGithubFilled size={size} />
+    case PubKeyIdentityProvider.Google:
+      return <IconBrandGoogleFilled size={size} />
     case PubKeyIdentityProvider.Solana:
       return <IconCurrencySolana size={size} />
+    case PubKeyIdentityProvider.Twitter:
+      return <IconBrandTwitterFilled size={size} />
     default:
       return null
   }

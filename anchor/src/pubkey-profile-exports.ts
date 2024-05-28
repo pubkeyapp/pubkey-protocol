@@ -58,7 +58,10 @@ export function getPubKeyPointerPda({
 
 export enum PubKeyIdentityProvider {
   Discord = 'Discord',
+  Github = 'Github',
+  Google = 'Google',
   Solana = 'Solana',
+  Twitter = 'Twitter',
 }
 
 export interface PubKeyProfile {

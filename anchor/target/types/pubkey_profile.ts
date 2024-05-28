@@ -390,6 +390,15 @@ export type PubkeyProfile = {
           },
           {
             "name": "Solana"
+          },
+          {
+            "name": "Github"
+          },
+          {
+            "name": "Google"
+          },
+          {
+            "name": "Twitter"
           }
         ]
       }
@@ -856,6 +865,15 @@ export const IDL: PubkeyProfile = {
           },
           {
             "name": "Solana"
+          },
+          {
+            "name": "Github"
+          },
+          {
+            "name": "Google"
+          },
+          {
+            "name": "Twitter"
           }
         ]
       }

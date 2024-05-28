@@ -67,8 +67,12 @@ export function PubKeyProfileProvider({ children }: { children: ReactNode }) {
     switch (identity.provider) {
       case PubKeyIdentityProvider.Discord:
         return `https://discord.com/users/${identity.providerId}`
+      case PubKeyIdentityProvider.Github:
+        return `https://github.com/${identity.name}`
       case PubKeyIdentityProvider.Solana:
         return getExplorerUrl(`address/${identity.providerId}`)
+      case PubKeyIdentityProvider.Twitter:
+        return `https://twitter.com/${identity.name}`
       default:
         return undefined
     }

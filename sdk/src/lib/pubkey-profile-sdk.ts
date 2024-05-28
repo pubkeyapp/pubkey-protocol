@@ -256,10 +256,9 @@ export class PubKeyProfileSdk {
   }
 
   async getProgramAccount(): Promise<AccountInfo<ParsedAccountData>> {
-    return this.connection.getParsedAccountInfo(this.programId).then((res) => {
-      console.log(`Res`, res)
-      return res.value as AccountInfo<ParsedAccountData>
-    })
+    return this.connection
+      .getParsedAccountInfo(this.programId)
+      .then((res) => res.value as AccountInfo<ParsedAccountData>)
   }
 
   getProfilePda({ username }: GetProfilePdaOptions): [PublicKey, number] {
@@ -323,8 +322,11 @@ export class PubKeyProfileSdk {
 }
 
 export const enumMap = {
-  [PubKeyIdentityProvider.Solana]: { solana: {} },
   [PubKeyIdentityProvider.Discord]: { discord: {} },
+  [PubKeyIdentityProvider.Github]: { github: {} },
+  [PubKeyIdentityProvider.Google]: { google: {} },
+  [PubKeyIdentityProvider.Solana]: { solana: {} },
+  [PubKeyIdentityProvider.Twitter]: { twitter: {} },
 } as const
 
 export function convertFromIdentityProvider(provider: PubKeyIdentityProvider) {
