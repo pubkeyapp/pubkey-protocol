@@ -11,6 +11,7 @@
         "outputPath": "dist/sdk",
         "main": "sdk/src/index.ts",
         "tsConfig": "sdk/tsconfig.lib.json",
+        "external": "all",
         "assets": [],
         "project": "sdk/package.json",
         "compiler": "swc",

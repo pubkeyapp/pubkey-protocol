@@ -12,6 +12,7 @@
         "main": "anchor/src/index.ts",
         "tsConfig": "anchor/tsconfig.lib.json",
         "assets": [],
+        "external": "all",
         "project": "anchor/package.json",
         "compiler": "swc",
         "format": ["cjs", "esm"]
