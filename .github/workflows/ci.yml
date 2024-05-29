@@ -29,7 +29,7 @@ jobs:
         with:
           node-version: 20
           cache: 'pnpm'
-      - run: pnpm install --frozen-lockfile
+      - run: pnpm install --no-frozen-lockfile
       - name: List rustup toolchains
         run: rustup toolchain list
       - name: Set default toolchain
