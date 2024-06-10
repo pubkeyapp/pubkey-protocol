@@ -33,6 +33,7 @@ testem.log
 .DS_Store
 Thumbs.db
 .nx/cache
+.nx/workspace-data
 .anchor
 anchor/target/deploy
 anchor/target/debug
