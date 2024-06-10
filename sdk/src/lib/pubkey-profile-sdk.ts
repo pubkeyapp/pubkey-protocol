@@ -2,12 +2,12 @@ import { AnchorProvider, Program } from '@coral-xyz/anchor'
 import {
   getPubKeyPointerPda,
   getPubKeyProfilePda,
+  getPubkeyProfileProgram,
   PUBKEY_PROFILE_PROGRAM_ID,
   PubKeyIdentityProvider,
   PubKeyPointer,
   PubkeyProfile,
   PubKeyProfile,
-  PubkeyProfileIDL,
 } from '@pubkey-program-library/anchor'
 import {
   AccountInfo,
@@ -99,7 +99,7 @@ export class PubKeyProfileSdk {
     this.connection = options.connection
     this.provider = options.provider
     this.programId = options.programId || PUBKEY_PROFILE_PROGRAM_ID
-    this.program = new Program(PubkeyProfileIDL, this.programId, this.provider)
+    this.program = getPubkeyProfileProgram(this.provider)
   }
 
   async addAuthority({ newAuthority, authority, feePayer, username }: AddAuthorityOptions) {
@@ -107,7 +107,7 @@ export class PubKeyProfileSdk {
 
     const ix = await this.program.methods
       .addAuthority({ newAuthority })
-      .accounts({
+      .accountsStrict({
         authority,
         feePayer,
         profile,
@@ -128,7 +128,7 @@ export class PubKeyProfileSdk {
         provider: convertFromIdentityProvider(provider),
         providerId,
       })
-      .accounts({
+      .accountsStrict({
         authority,
         feePayer,
         profile,
@@ -145,7 +145,7 @@ export class PubKeyProfileSdk {
     const [pointer] = this.getPointerPda({ provider: PubKeyIdentityProvider.Solana, providerId: authority.toString() })
     const ix = await this.program.methods
       .createProfile({ avatarUrl, username })
-      .accounts({
+      .accountsStrict({
         authority,
         feePayer,
         pointer,
@@ -274,7 +274,7 @@ export class PubKeyProfileSdk {
 
     const ix = await this.program.methods
       .removeAuthority({ authorityToRemove })
-      .accounts({ authority, feePayer, profile })
+      .accountsStrict({ authority, feePayer, profile })
       .instruction()
 
     return this.createTransaction({ ix, feePayer })
@@ -285,7 +285,7 @@ export class PubKeyProfileSdk {
     const [pointer] = this.getPointerPda({ providerId, provider })
     const ix = await this.program.methods
       .removeIdentity({ providerId })
-      .accounts({
+      .accountsStrict({
         authority,
         feePayer,
         pointer,

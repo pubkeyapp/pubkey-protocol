@@ -1,201 +1,517 @@
 {
-  "version": "0.1.0",
-  "name": "pubkey_profile",
+  "address": "PPLxwat1miBwyQHq5afxLzdXyAMG4jPp6981yQA5hyb",
+  "metadata": {
+    "name": "pubkey_profile",
+    "version": "0.1.0",
+    "spec": "0.1.0",
+    "description": "Created with Anchor"
+  },
   "instructions": [
     {
-      "name": "createProfile",
+      "name": "add_authority",
+      "discriminator": [
+        229,
+        9,
+        106,
+        73,
+        91,
+        213,
+        109,
+        183
+      ],
       "accounts": [
         {
           "name": "profile",
-          "isMut": true,
-          "isSigner": false
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  112,
+                  117,
+                  98,
+                  107,
+                  101,
+                  121,
+                  95,
+                  112,
+                  114,
+                  111,
+                  102,
+                  105,
+                  108,
+                  101
+                ]
+              },
+              {
+                "kind": "const",
+                "value": [
+                  112,
+                  114,
+                  111,
+                  102,
+                  105,
+                  108,
+                  101
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "profile.username",
+                "account": "Profile"
+              }
+            ]
+          }
+        },
+        {
+          "name": "authority",
+          "signer": true
+        },
+        {
+          "name": "fee_payer",
+          "writable": true,
+          "signer": true,
+          "relations": [
+            "profile"
+          ]
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "args",
+          "type": {
+            "defined": {
+              "name": "AddAuthorityArgs"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "add_identity",
+      "discriminator": [
+        212,
+        100,
+        104,
+        34,
+        15,
+        136,
+        248,
+        225
+      ],
+      "accounts": [
+        {
+          "name": "profile",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  112,
+                  117,
+                  98,
+                  107,
+                  101,
+                  121,
+                  95,
+                  112,
+                  114,
+                  111,
+                  102,
+                  105,
+                  108,
+                  101
+                ]
+              },
+              {
+                "kind": "const",
+                "value": [
+                  112,
+                  114,
+                  111,
+                  102,
+                  105,
+                  108,
+                  101
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "profile.username",
+                "account": "Profile"
+              }
+            ]
+          }
         },
         {
           "name": "pointer",
-          "isMut": true,
-          "isSigner": false
+          "writable": true
         },
         {
           "name": "authority",
-          "isMut": false,
-          "isSigner": true
+          "signer": true
         },
         {
-          "name": "feePayer",
-          "isMut": true,
-          "isSigner": true
+          "name": "fee_payer",
+          "writable": true,
+          "signer": true,
+          "relations": [
+            "profile"
+          ]
         },
         {
-          "name": "systemProgram",
-          "isMut": false,
-          "isSigner": false
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
         }
       ],
       "args": [
         {
           "name": "args",
           "type": {
-            "defined": "CreateProfileArgs"
+            "defined": {
+              "name": "AddIdentityArgs"
+            }
           }
         }
       ]
     },
     {
-      "name": "updateAvatarUrl",
-      "accounts": [
-        {
-          "name": "profile",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "feePayer",
-          "isMut": true,
-          "isSigner": true
-        }
+      "name": "create_profile",
+      "discriminator": [
+        225,
+        205,
+        234,
+        143,
+        17,
+        186,
+        50,
+        220
       ],
-      "args": [
-        {
-          "name": "args",
-          "type": {
-            "defined": "UpdateAvatarUrlArgs"
-          }
-        }
-      ]
-    },
-    {
-      "name": "addAuthority",
       "accounts": [
         {
           "name": "profile",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "authority",
-          "isMut": false,
-          "isSigner": true
-        },
-        {
-          "name": "feePayer",
-          "isMut": true,
-          "isSigner": true
-        },
-        {
-          "name": "systemProgram",
-          "isMut": false,
-          "isSigner": false
-        }
-      ],
-      "args": [
-        {
-          "name": "args",
-          "type": {
-            "defined": "AddAuthorityArgs"
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  112,
+                  117,
+                  98,
+                  107,
+                  101,
+                  121,
+                  95,
+                  112,
+                  114,
+                  111,
+                  102,
+                  105,
+                  108,
+                  101
+                ]
+              },
+              {
+                "kind": "const",
+                "value": [
+                  112,
+                  114,
+                  111,
+                  102,
+                  105,
+                  108,
+                  101
+                ]
+              },
+              {
+                "kind": "arg",
+                "path": "args.username"
+              }
+            ]
           }
-        }
-      ]
-    },
-    {
-      "name": "removeAuthority",
-      "accounts": [
-        {
-          "name": "profile",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "authority",
-          "isMut": false,
-          "isSigner": true
-        },
-        {
-          "name": "feePayer",
-          "isMut": true,
-          "isSigner": true
-        }
-      ],
-      "args": [
-        {
-          "name": "args",
-          "type": {
-            "defined": "RemoveAuthorityArgs"
-          }
-        }
-      ]
-    },
-    {
-      "name": "addIdentity",
-      "accounts": [
-        {
-          "name": "profile",
-          "isMut": true,
-          "isSigner": false
         },
         {
           "name": "pointer",
-          "isMut": true,
-          "isSigner": false
+          "writable": true
         },
         {
           "name": "authority",
-          "isMut": false,
-          "isSigner": true
+          "signer": true
         },
         {
-          "name": "feePayer",
-          "isMut": true,
-          "isSigner": true
+          "name": "fee_payer",
+          "writable": true,
+          "signer": true
         },
         {
-          "name": "systemProgram",
-          "isMut": false,
-          "isSigner": false
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
         }
       ],
       "args": [
         {
           "name": "args",
           "type": {
-            "defined": "AddIdentityArgs"
+            "defined": {
+              "name": "CreateProfileArgs"
+            }
           }
         }
       ]
     },
     {
-      "name": "removeIdentity",
+      "name": "remove_authority",
+      "discriminator": [
+        242,
+        104,
+        208,
+        132,
+        190,
+        250,
+        74,
+        216
+      ],
       "accounts": [
         {
           "name": "profile",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "pointer",
-          "isMut": true,
-          "isSigner": false
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  112,
+                  117,
+                  98,
+                  107,
+                  101,
+                  121,
+                  95,
+                  112,
+                  114,
+                  111,
+                  102,
+                  105,
+                  108,
+                  101
+                ]
+              },
+              {
+                "kind": "const",
+                "value": [
+                  112,
+                  114,
+                  111,
+                  102,
+                  105,
+                  108,
+                  101
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "profile.username",
+                "account": "Profile"
+              }
+            ]
+          }
         },
         {
           "name": "authority",
-          "isMut": false,
-          "isSigner": true
+          "signer": true
         },
         {
-          "name": "feePayer",
-          "isMut": true,
-          "isSigner": true
-        },
-        {
-          "name": "systemProgram",
-          "isMut": false,
-          "isSigner": false
+          "name": "fee_payer",
+          "writable": true,
+          "signer": true,
+          "relations": [
+            "profile"
+          ]
         }
       ],
       "args": [
         {
           "name": "args",
           "type": {
-            "defined": "RemoveIdentityArgs"
+            "defined": {
+              "name": "RemoveAuthorityArgs"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "remove_identity",
+      "discriminator": [
+        146,
+        93,
+        160,
+        7,
+        61,
+        138,
+        181,
+        113
+      ],
+      "accounts": [
+        {
+          "name": "profile",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  112,
+                  117,
+                  98,
+                  107,
+                  101,
+                  121,
+                  95,
+                  112,
+                  114,
+                  111,
+                  102,
+                  105,
+                  108,
+                  101
+                ]
+              },
+              {
+                "kind": "const",
+                "value": [
+                  112,
+                  114,
+                  111,
+                  102,
+                  105,
+                  108,
+                  101
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "profile.username",
+                "account": "Profile"
+              }
+            ]
+          },
+          "relations": [
+            "pointer"
+          ]
+        },
+        {
+          "name": "pointer",
+          "writable": true
+        },
+        {
+          "name": "authority",
+          "signer": true
+        },
+        {
+          "name": "fee_payer",
+          "writable": true,
+          "signer": true,
+          "relations": [
+            "profile"
+          ]
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "args",
+          "type": {
+            "defined": {
+              "name": "RemoveIdentityArgs"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "update_avatar_url",
+      "discriminator": [
+        38,
+        181,
+        69,
+        190,
+        47,
+        43,
+        175,
+        13
+      ],
+      "accounts": [
+        {
+          "name": "profile",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  112,
+                  117,
+                  98,
+                  107,
+                  101,
+                  121,
+                  95,
+                  112,
+                  114,
+                  111,
+                  102,
+                  105,
+                  108,
+                  101
+                ]
+              },
+              {
+                "kind": "const",
+                "value": [
+                  112,
+                  114,
+                  111,
+                  102,
+                  105,
+                  108,
+                  101
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "profile.username",
+                "account": "Profile"
+              }
+            ]
+          }
+        },
+        {
+          "name": "fee_payer",
+          "writable": true,
+          "signer": true,
+          "relations": [
+            "profile"
+          ]
+        }
+      ],
+      "args": [
+        {
+          "name": "args",
+          "type": {
+            "defined": {
+              "name": "UpdateAvatarUrlArgs"
+            }
           }
         }
       ]
@@ -204,204 +520,29 @@
   "accounts": [
     {
       "name": "Pointer",
-      "type": {
-        "kind": "struct",
-        "fields": [
-          {
-            "name": "bump",
-            "type": "u8"
-          },
-          {
-            "name": "provider",
-            "type": {
-              "defined": "PubKeyIdentityProvider"
-            }
-          },
-          {
-            "name": "providerId",
-            "type": "string"
-          },
-          {
-            "name": "profile",
-            "type": "publicKey"
-          }
-        ]
-      }
+      "discriminator": [
+        31,
+        144,
+        159,
+        52,
+        95,
+        134,
+        207,
+        237
+      ]
     },
     {
       "name": "Profile",
-      "type": {
-        "kind": "struct",
-        "fields": [
-          {
-            "name": "bump",
-            "type": "u8"
-          },
-          {
-            "name": "username",
-            "type": "string"
-          },
-          {
-            "name": "avatarUrl",
-            "type": "string"
-          },
-          {
-            "name": "feePayer",
-            "type": "publicKey"
-          },
-          {
-            "name": "authorities",
-            "type": {
-              "vec": "publicKey"
-            }
-          },
-          {
-            "name": "identities",
-            "type": {
-              "vec": {
-                "defined": "Identity"
-              }
-            }
-          }
-        ]
-      }
-    }
-  ],
-  "types": [
-    {
-      "name": "AddIdentityArgs",
-      "type": {
-        "kind": "struct",
-        "fields": [
-          {
-            "name": "provider",
-            "type": {
-              "defined": "PubKeyIdentityProvider"
-            }
-          },
-          {
-            "name": "providerId",
-            "type": "string"
-          },
-          {
-            "name": "nickname",
-            "type": "string"
-          }
-        ]
-      }
-    },
-    {
-      "name": "RemoveIdentityArgs",
-      "type": {
-        "kind": "struct",
-        "fields": [
-          {
-            "name": "providerId",
-            "type": "string"
-          }
-        ]
-      }
-    },
-    {
-      "name": "AddAuthorityArgs",
-      "type": {
-        "kind": "struct",
-        "fields": [
-          {
-            "name": "newAuthority",
-            "type": "publicKey"
-          }
-        ]
-      }
-    },
-    {
-      "name": "CreateProfileArgs",
-      "type": {
-        "kind": "struct",
-        "fields": [
-          {
-            "name": "username",
-            "type": "string"
-          },
-          {
-            "name": "avatarUrl",
-            "type": "string"
-          }
-        ]
-      }
-    },
-    {
-      "name": "RemoveAuthorityArgs",
-      "type": {
-        "kind": "struct",
-        "fields": [
-          {
-            "name": "authorityToRemove",
-            "type": "publicKey"
-          }
-        ]
-      }
-    },
-    {
-      "name": "UpdateAvatarUrlArgs",
-      "type": {
-        "kind": "struct",
-        "fields": [
-          {
-            "name": "authority",
-            "type": "publicKey"
-          },
-          {
-            "name": "newAvatarUrl",
-            "type": "string"
-          }
-        ]
-      }
-    },
-    {
-      "name": "Identity",
-      "type": {
-        "kind": "struct",
-        "fields": [
-          {
-            "name": "provider",
-            "type": {
-              "defined": "PubKeyIdentityProvider"
-            }
-          },
-          {
-            "name": "providerId",
-            "type": "string"
-          },
-          {
-            "name": "name",
-            "type": "string"
-          }
-        ]
-      }
-    },
-    {
-      "name": "PubKeyIdentityProvider",
-      "type": {
-        "kind": "enum",
-        "variants": [
-          {
-            "name": "Discord"
-          },
-          {
-            "name": "Solana"
-          },
-          {
-            "name": "Github"
-          },
-          {
-            "name": "Google"
-          },
-          {
-            "name": "Twitter"
-          }
-        ]
-      }
+      "discriminator": [
+        184,
+        101,
+        165,
+        188,
+        95,
+        63,
+        127,
+        188
+      ]
     }
   ],
   "errors": [
@@ -471,7 +612,213 @@
       "msg": "Identity does not exist"
     }
   ],
-  "metadata": {
-    "address": "PPLxwat1miBwyQHq5afxLzdXyAMG4jPp6981yQA5hyb"
-  }
+  "types": [
+    {
+      "name": "AddAuthorityArgs",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "new_authority",
+            "type": "pubkey"
+          }
+        ]
+      }
+    },
+    {
+      "name": "AddIdentityArgs",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "provider",
+            "type": {
+              "defined": {
+                "name": "PubKeyIdentityProvider"
+              }
+            }
+          },
+          {
+            "name": "provider_id",
+            "type": "string"
+          },
+          {
+            "name": "nickname",
+            "type": "string"
+          }
+        ]
+      }
+    },
+    {
+      "name": "CreateProfileArgs",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "username",
+            "type": "string"
+          },
+          {
+            "name": "avatar_url",
+            "type": "string"
+          }
+        ]
+      }
+    },
+    {
+      "name": "Identity",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "provider",
+            "type": {
+              "defined": {
+                "name": "PubKeyIdentityProvider"
+              }
+            }
+          },
+          {
+            "name": "provider_id",
+            "type": "string"
+          },
+          {
+            "name": "name",
+            "type": "string"
+          }
+        ]
+      }
+    },
+    {
+      "name": "Pointer",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "bump",
+            "type": "u8"
+          },
+          {
+            "name": "provider",
+            "type": {
+              "defined": {
+                "name": "PubKeyIdentityProvider"
+              }
+            }
+          },
+          {
+            "name": "provider_id",
+            "type": "string"
+          },
+          {
+            "name": "profile",
+            "type": "pubkey"
+          }
+        ]
+      }
+    },
+    {
+      "name": "Profile",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "bump",
+            "type": "u8"
+          },
+          {
+            "name": "username",
+            "type": "string"
+          },
+          {
+            "name": "avatar_url",
+            "type": "string"
+          },
+          {
+            "name": "fee_payer",
+            "type": "pubkey"
+          },
+          {
+            "name": "authorities",
+            "type": {
+              "vec": "pubkey"
+            }
+          },
+          {
+            "name": "identities",
+            "type": {
+              "vec": {
+                "defined": {
+                  "name": "Identity"
+                }
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "PubKeyIdentityProvider",
+      "type": {
+        "kind": "enum",
+        "variants": [
+          {
+            "name": "Discord"
+          },
+          {
+            "name": "Solana"
+          },
+          {
+            "name": "Github"
+          },
+          {
+            "name": "Google"
+          },
+          {
+            "name": "Twitter"
+          }
+        ]
+      }
+    },
+    {
+      "name": "RemoveAuthorityArgs",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "authority_to_remove",
+            "type": "pubkey"
+          }
+        ]
+      }
+    },
+    {
+      "name": "RemoveIdentityArgs",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "provider_id",
+            "type": "string"
+          }
+        ]
+      }
+    },
+    {
+      "name": "UpdateAvatarUrlArgs",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "authority",
+            "type": "pubkey"
+          },
+          {
+            "name": "new_avatar_url",
+            "type": "string"
+          }
+        ]
+      }
+    }
+  ]
 }
