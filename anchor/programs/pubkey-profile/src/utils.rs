@@ -18,6 +18,16 @@ pub fn is_valid_username(username: &str) -> bool {
     true
 }
 
+pub fn is_valid_name(name: &str) -> bool {
+    if name.len() < 3 || name.len() > 50 {
+        return false;
+    }
+
+    // TODO - may want to consider limiting against certain characters
+
+    true
+}
+
 pub fn is_valid_url(url: &str) -> bool {
     let starts_with_http = url.starts_with("http://") || url.starts_with("https://");
 
@@ -46,6 +56,18 @@ pub fn is_valid_url(url: &str) -> bool {
     let valid_domain = has_valid_domain_or_localhost && no_start_or_end_hyphen_in_domain;
 
     valid_scheme && valid_path && valid_domain
+}
+
+pub fn is_valid_discord(link: &str) -> bool {
+    link.starts_with("https://discord.com/invite/") || link.starts_with("https://discord.gg/")
+}
+
+pub fn is_valid_github(link: &str) -> bool {
+    link.starts_with("https://github.com/")
+}
+
+pub fn is_valid_x(link: &str) -> bool {
+    link.starts_with("https://twitter.com/") || link.starts_with("https://x.com/")
 }
 
 pub fn realloc_account<'a>(

@@ -61,6 +61,7 @@ pub fn create(ctx: Context<CreateProfile>, args: CreateProfileArgs) -> Result<()
     // Creating profile account
     let CreateProfileArgs {
         username,
+        name,
         avatar_url,
     } = args;
 
@@ -73,13 +74,12 @@ pub fn create(ctx: Context<CreateProfile>, args: CreateProfileArgs) -> Result<()
     profile.set_inner(Profile {
         bump: ctx.bumps.profile,
         username,
+        name,
         avatar_url,
         fee_payer,
         authorities: vec![authority],
         identities: vec![identity],
     });
-
-    // TODO: Mint a Token 22 NFT
 
     profile.validate()?;
 
@@ -89,5 +89,6 @@ pub fn create(ctx: Context<CreateProfile>, args: CreateProfileArgs) -> Result<()
 #[derive(AnchorSerialize, AnchorDeserialize)]
 pub struct CreateProfileArgs {
     pub username: String,
+    pub name: String,
     pub avatar_url: String,
 }

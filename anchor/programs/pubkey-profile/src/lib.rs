@@ -15,18 +15,19 @@ declare_id!("PPLxwat1miBwyQHq5afxLzdXyAMG4jPp6981yQA5hyb");
 pub mod pubkey_profile {
     use super::*;
 
+    // Profile Actions
     pub fn create_profile(ctx: Context<CreateProfile>, args: CreateProfileArgs) -> Result<()> {
         profile::create(ctx, args)
     }
 
-    pub fn update_avatar_url(
-        ctx: Context<UpdateAvatarUrl>,
-        args: UpdateAvatarUrlArgs,
+    pub fn update_profile_details(
+        ctx: Context<UpdateProfileDetails>,
+        args: UpdateProfileDetailsArgs,
     ) -> Result<()> {
-        profile::update_avatar_url(ctx, args)
+        profile::update_profile_details(ctx, args)
     }
 
-    pub fn add_authority(ctx: Context<AddAuthority>, args: AddAuthorityArgs) -> Result<()> {
+    pub fn add_profile_authority(ctx: Context<AddAuthority>, args: AddAuthorityArgs) -> Result<()> {
         profile::add_authority(ctx, args)
     }
 
@@ -37,11 +38,51 @@ pub mod pubkey_profile {
         profile::remove_authority(ctx, args)
     }
 
+    // Identity Actions
     pub fn add_identity(ctx: Context<AddIdentity>, args: AddIdentityArgs) -> Result<()> {
         identity::add(ctx, args)
     }
 
     pub fn remove_identity(ctx: Context<RemoveIdentity>, args: RemoveIdentityArgs) -> Result<()> {
         identity::remove(ctx, args)
+    }
+
+    // Community Actions
+    pub fn create_community(
+        ctx: Context<CreateCommunity>,
+        args: CreateCommunityArgs,
+    ) -> Result<()> {
+        community::create_community(ctx, args)
+    }
+
+    pub fn update_community_details(
+        ctx: Context<UpdateCommunityDetails>,
+        args: UpdateCommunityDetailsArgs,
+    ) -> Result<()> {
+        community::update_community_details(ctx, args)
+    }
+
+    pub fn update_community_feepayers(
+        ctx: Context<UpdateFeePayers>,
+        args: UpdateFeePayersArgs,
+    ) -> Result<()> {
+        community::update_community_feepayers(ctx, args)
+    }
+
+    pub fn initiate_update_community_authority(
+        ctx: Context<InitiateUpdateAuthority>,
+        args: InitiateUpdateAuthorityArgs,
+    ) -> Result<()> {
+        community::initiate_update_authority(ctx, args)
+    }
+
+    pub fn finalize_update_community_authority(
+        ctx: Context<FinalizeUpdateAuthority>,
+    ) -> Result<()> {
+        community::finalize_update_authority(ctx)
+    }
+
+    pub fn cancel_update_community_authority(ctx: Context<CancelUpdateAuthority>) -> Result<()> {
+        community::cancel_update_authority(ctx)
     }
 }
