@@ -1,5 +1,6 @@
 use crate::constants::*;
 use crate::errors::*;
+use crate::state::*;
 use crate::utils::*;
 
 use anchor_lang::prelude::*;
@@ -10,6 +11,8 @@ pub struct Profile {
     pub bump: u8,
     // Username
     pub username: String,
+    // Name
+    pub name: String,
     // Avatar URL
     pub avatar_url: String,
     // Remote fee payer
@@ -30,8 +33,9 @@ impl Profile {
 
         8 + // Anchor discriminator
         1 + // bump
-        MAX_USERNAME_SIZE + // username
-        MAX_AVATAR_URL_SIZE + // avatar_url
+        4 + MAX_USERNAME_SIZE + // username
+        4 + MAX_NAME_SIZE + // name
+        4 + MAX_URL_SIZE + // avatar_url
         32 + // fee_payer
         authorities_size + // authorities
         identities_size // identities
@@ -48,13 +52,16 @@ impl Profile {
             PubkeyProfileError::InvalidUsername
         );
 
+        // Name
+        require!(is_valid_name(&self.name), PubkeyProfileError::InvalidName);
+
         // Avatar URL
         require!(
             is_valid_url(&self.avatar_url),
             PubkeyProfileError::InvalidAvatarURL
         );
         require!(
-            avatar_url_len > 0 && avatar_url_len <= MAX_AVATAR_URL_SIZE,
+            avatar_url_len > 0 && avatar_url_len <= MAX_URL_SIZE,
             PubkeyProfileError::InvalidAvatarURL
         );
 
@@ -78,63 +85,5 @@ impl Profile {
 
     pub fn check_for_authority(&self, authority: &Pubkey) -> bool {
         self.authorities.binary_search(authority).is_ok()
-    }
-}
-
-#[derive(AnchorSerialize, AnchorDeserialize, Clone)]
-pub enum PubKeyIdentityProvider {
-    Discord,
-    Solana,
-    Github,
-    Google,
-    Twitter,
-}
-
-impl PubKeyIdentityProvider {
-    pub fn value(&self) -> String {
-        match *self {
-            PubKeyIdentityProvider::Discord => String::from("Discord"),
-            PubKeyIdentityProvider::Github => String::from("Github"),
-            PubKeyIdentityProvider::Google => String::from("Google"),
-            PubKeyIdentityProvider::Solana => String::from("Solana"),
-            PubKeyIdentityProvider::Twitter => String::from("Twitter"),
-        }
-    }
-}
-
-#[derive(AnchorSerialize, AnchorDeserialize, Clone)]
-pub struct Identity {
-    // The provider name
-    pub provider: PubKeyIdentityProvider,
-    // The provider ID (address incase of blockchain)
-    pub provider_id: String,
-    // Nickname given to the identity
-    pub name: String,
-}
-
-impl Identity {
-    pub fn size() -> usize {
-        1 + 1 + // provider
-        MAX_PROVIDER_ID_SIZE + // provider_id
-        MAX_PROVIDER_NAME_SIZE // name
-    }
-
-    pub fn validate(&self) -> Result<()> {
-        let provider_id_len = self.provider_id.len();
-        let provider_name_len = self.name.len();
-
-        // provider_id
-        require!(
-            provider_id_len <= MAX_PROVIDER_ID_SIZE,
-            PubkeyProfileError::InvalidProviderID
-        );
-
-        // name
-        require!(
-            provider_name_len <= MAX_PROVIDER_NAME_SIZE,
-            PubkeyProfileError::InvalidName
-        );
-
-        Ok(())
     }
 }
