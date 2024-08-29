@@ -3,10 +3,11 @@ use anchor_lang::prelude::*;
 use crate::constants::*;
 use crate::errors::*;
 use crate::state::*;
+use crate::utils::*;
 
 #[derive(Accounts)]
-#[instruction(args: UpdateAvatarUrlArgs)]
-pub struct UpdateAvatarUrl<'info> {
+#[instruction(args: UpdateProfileDetailsArgs)]
+pub struct UpdateProfileDetails<'info> {
     #[account(
       mut,
       seeds = [
@@ -27,18 +28,33 @@ pub struct UpdateAvatarUrl<'info> {
     pub fee_payer: Signer<'info>,
 }
 
-pub fn update_avatar_url(ctx: Context<UpdateAvatarUrl>, args: UpdateAvatarUrlArgs) -> Result<()> {
+pub fn update_profile_details(
+    ctx: Context<UpdateProfileDetails>,
+    args: UpdateProfileDetailsArgs,
+) -> Result<()> {
     let profile = &mut ctx.accounts.profile;
-    let new_avatar_url = args.new_avatar_url;
 
-    profile.avatar_url = new_avatar_url;
+    if let Some(new_name) = args.new_name {
+        require!(is_valid_name(&new_name), PubkeyProfileError::InvalidName);
+        profile.name = new_name;
+    }
+
+    if let Some(new_avatar_url) = args.new_avatar_url {
+        require!(
+            is_valid_url(&new_avatar_url),
+            PubkeyProfileError::InvalidAvatarURL
+        );
+        profile.avatar_url = new_avatar_url;
+    }
+
     profile.validate()?;
 
     Ok(())
 }
 
 #[derive(AnchorSerialize, AnchorDeserialize)]
-pub struct UpdateAvatarUrlArgs {
+pub struct UpdateProfileDetailsArgs {
     pub authority: Pubkey,
-    pub new_avatar_url: String,
+    pub new_name: Option<String>,
+    pub new_avatar_url: Option<String>,
 }
