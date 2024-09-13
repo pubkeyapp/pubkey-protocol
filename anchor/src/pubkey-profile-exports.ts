@@ -8,7 +8,7 @@ import type { PubkeyProfile } from '../target/types/pubkey_profile'
 // Re-export the generated IDL and type
 export { PubkeyProfile, PubkeyProfileIDL }
 
-// This is a helper function to get the Counter Anchor program.
+// This is a helper function to get the PubkeyProfile Anchor program.
 export function getPubkeyProfileProgram(provider: AnchorProvider) {
   return new Program(PubkeyProfileIDL as PubkeyProfile, provider)
 }
@@ -31,6 +31,7 @@ export function getPubkeyProfileProgramId(cluster: Cluster) {
 export const PUBKEY_PROFILE_PREFIX = new TextEncoder().encode('pubkey_profile')
 export const PUBKEY_PROFILE_SEED_PROFILE = new TextEncoder().encode('profile')
 export const PUBKEY_PROFILE_SEED_POINTER = new TextEncoder().encode('pointer')
+export const PUBKEY_PROFILE_SEED_COMMUNITY = new TextEncoder().encode('community')
 
 // Helper method to get the PubKeyProfile PDA
 export function getPubKeyProfilePda({ programId, username }: { programId: PublicKey; username: string }) {
@@ -62,12 +63,21 @@ export function getPubKeyPointerPda({
   return PublicKey.findProgramAddressSync([hash], programId)
 }
 
+// Helper method to get the Community PDA
+export function getCommunityPda({ programId, slug }: { programId: PublicKey; slug: string }) {
+  const hash = sha256(
+    Uint8Array.from([...PUBKEY_PROFILE_PREFIX, ...PUBKEY_PROFILE_SEED_COMMUNITY, ...stringToUint8Array(slug)]),
+  )
+
+  return PublicKey.findProgramAddressSync([hash], programId)
+}
+
 export enum PubKeyIdentityProvider {
   Discord = 'Discord',
   Github = 'Github',
   Google = 'Google',
   Solana = 'Solana',
-  Twitter = 'Twitter',
+  X = 'X',
 }
 
 export interface PubKeyProfile {
@@ -92,6 +102,22 @@ export interface PubKeyPointer {
   providerId: string
   bump?: number
   profile: PublicKey
+}
+
+export interface Community {
+  publicKey: PublicKey
+  bump: number
+  slug: string
+  name: string
+  avatarUrl: string
+  feePayers: PublicKey[]
+  authority: PublicKey
+  pendingAuthority: PublicKey | null
+  providers: PubKeyIdentity[]
+  x?: string
+  discord?: string
+  github?: string
+  website?: string
 }
 
 export function stringToUint8Array(str: string): Uint8Array {
