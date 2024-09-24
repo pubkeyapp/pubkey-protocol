@@ -6,7 +6,7 @@ export function useMutationAddAuthority() {
   const { sdk, signAndConfirmTransaction, onError, onSuccess } = usePubKeyProfile()
 
   return useMutation({
-    mutationFn: (options: AddAuthorityOptions) => sdk.addAuthority(options).then(signAndConfirmTransaction),
+    mutationFn: (options: AddAuthorityOptions) => sdk.addProfileAuthority(options).then(signAndConfirmTransaction),
     onError,
     onSuccess,
   })

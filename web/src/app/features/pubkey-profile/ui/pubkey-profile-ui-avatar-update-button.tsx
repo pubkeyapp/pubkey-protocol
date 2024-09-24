@@ -26,6 +26,7 @@ export function PubkeyProfileUiAvatarUpdateButton({
       avatarUrl,
       authority: authority,
       feePayer,
+      name: profile.name,
       username: profile.username,
     })
   }

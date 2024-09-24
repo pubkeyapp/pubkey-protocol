@@ -6,7 +6,7 @@ export function useMutationUpdateAvatarUrl() {
   const { sdk, signAndConfirmTransaction, onError, onSuccess } = usePubKeyProfile()
 
   return useMutation({
-    mutationFn: (options: UpdateAvatarUrlOptions) => sdk.updateAvatarUrl(options).then(signAndConfirmTransaction),
+    mutationFn: (options: UpdateAvatarUrlOptions) => sdk.updateProfileDetails(options).then(signAndConfirmTransaction),
     onError,
     onSuccess,
   })
