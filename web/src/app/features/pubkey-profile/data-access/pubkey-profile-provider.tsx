@@ -71,8 +71,8 @@ export function PubKeyProfileProvider({ children }: { children: ReactNode }) {
         return `https://github.com/${identity.name}`
       case PubKeyIdentityProvider.Solana:
         return getExplorerUrl(`address/${identity.providerId}`)
-      case PubKeyIdentityProvider.Twitter:
-        return `https://twitter.com/${identity.name}`
+      case PubKeyIdentityProvider.X:
+        return `https://x.com/${identity.name}`
       default:
         return undefined
     }

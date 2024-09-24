@@ -87,6 +87,7 @@ export interface PubKeyProfile {
   feePayer?: PublicKey
   bump?: number
   identities: PubKeyIdentity[]
+  name: string
   username: string
 }
 

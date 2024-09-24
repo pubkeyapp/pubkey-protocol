@@ -5,826 +5,1090 @@
  * IDL can be found at `target/idl/pubkey_profile.json`.
  */
 export type PubkeyProfile = {
-  "address": "PPLxwat1miBwyQHq5afxLzdXyAMG4jPp6981yQA5hyb",
-  "metadata": {
-    "name": "pubkeyProfile",
-    "version": "0.1.0",
-    "spec": "0.1.0",
-    "description": "Created with Anchor"
-  },
-  "instructions": [
+  address: 'PPLxwat1miBwyQHq5afxLzdXyAMG4jPp6981yQA5hyb'
+  metadata: {
+    name: 'pubkeyProfile'
+    version: '0.1.0'
+    spec: '0.1.0'
+    description: 'Created with Anchor'
+  }
+  instructions: [
     {
-      "name": "addAuthority",
-      "discriminator": [
-        229,
-        9,
-        106,
-        73,
-        91,
-        213,
-        109,
-        183
-      ],
-      "accounts": [
+      name: 'addIdentity'
+      discriminator: [212, 100, 104, 34, 15, 136, 248, 225]
+      accounts: [
         {
-          "name": "profile",
-          "writable": true,
-          "pda": {
-            "seeds": [
+          name: 'profile'
+          writable: true
+          pda: {
+            seeds: [
               {
-                "kind": "const",
-                "value": [
-                  112,
-                  117,
-                  98,
-                  107,
-                  101,
-                  121,
-                  95,
-                  112,
-                  114,
-                  111,
-                  102,
-                  105,
-                  108,
-                  101
-                ]
+                kind: 'const'
+                value: [112, 117, 98, 107, 101, 121, 95, 112, 114, 111, 102, 105, 108, 101]
               },
               {
-                "kind": "const",
-                "value": [
-                  112,
-                  114,
-                  111,
-                  102,
-                  105,
-                  108,
-                  101
-                ]
+                kind: 'const'
+                value: [112, 114, 111, 102, 105, 108, 101]
               },
               {
-                "kind": "account",
-                "path": "profile.username",
-                "account": "profile"
-              }
+                kind: 'account'
+                path: 'profile.username'
+                account: 'profile'
+              },
             ]
           }
         },
         {
-          "name": "authority",
-          "signer": true
+          name: 'pointer'
+          writable: true
         },
         {
-          "name": "feePayer",
-          "writable": true,
-          "signer": true,
-          "relations": [
-            "profile"
-          ]
+          name: 'authority'
+          signer: true
         },
         {
-          "name": "systemProgram",
-          "address": "11111111111111111111111111111111"
-        }
-      ],
-      "args": [
+          name: 'feePayer'
+          writable: true
+          signer: true
+          relations: ['profile']
+        },
         {
-          "name": "args",
-          "type": {
-            "defined": {
-              "name": "addAuthorityArgs"
+          name: 'systemProgram'
+          address: '11111111111111111111111111111111'
+        },
+      ]
+      args: [
+        {
+          name: 'args'
+          type: {
+            defined: {
+              name: 'addIdentityArgs'
             }
           }
-        }
+        },
       ]
     },
     {
-      "name": "addIdentity",
-      "discriminator": [
-        212,
-        100,
-        104,
-        34,
-        15,
-        136,
-        248,
-        225
-      ],
-      "accounts": [
+      name: 'addProfileAuthority'
+      discriminator: [193, 106, 183, 12, 216, 250, 151, 31]
+      accounts: [
         {
-          "name": "profile",
-          "writable": true,
-          "pda": {
-            "seeds": [
+          name: 'profile'
+          writable: true
+          pda: {
+            seeds: [
               {
-                "kind": "const",
-                "value": [
-                  112,
-                  117,
-                  98,
-                  107,
-                  101,
-                  121,
-                  95,
-                  112,
-                  114,
-                  111,
-                  102,
-                  105,
-                  108,
-                  101
-                ]
+                kind: 'const'
+                value: [112, 117, 98, 107, 101, 121, 95, 112, 114, 111, 102, 105, 108, 101]
               },
               {
-                "kind": "const",
-                "value": [
-                  112,
-                  114,
-                  111,
-                  102,
-                  105,
-                  108,
-                  101
-                ]
+                kind: 'const'
+                value: [112, 114, 111, 102, 105, 108, 101]
               },
               {
-                "kind": "account",
-                "path": "profile.username",
-                "account": "profile"
-              }
+                kind: 'account'
+                path: 'profile.username'
+                account: 'profile'
+              },
             ]
           }
         },
         {
-          "name": "pointer",
-          "writable": true
+          name: 'authority'
+          signer: true
         },
         {
-          "name": "authority",
-          "signer": true
+          name: 'feePayer'
+          writable: true
+          signer: true
+          relations: ['profile']
         },
         {
-          "name": "feePayer",
-          "writable": true,
-          "signer": true,
-          "relations": [
-            "profile"
-          ]
+          name: 'systemProgram'
+          address: '11111111111111111111111111111111'
         },
+      ]
+      args: [
         {
-          "name": "systemProgram",
-          "address": "11111111111111111111111111111111"
-        }
-      ],
-      "args": [
-        {
-          "name": "args",
-          "type": {
-            "defined": {
-              "name": "addIdentityArgs"
+          name: 'args'
+          type: {
+            defined: {
+              name: 'addAuthorityArgs'
             }
           }
-        }
+        },
       ]
     },
     {
-      "name": "createProfile",
-      "discriminator": [
-        225,
-        205,
-        234,
-        143,
-        17,
-        186,
-        50,
-        220
-      ],
-      "accounts": [
+      name: 'cancelUpdateCommunityAuthority'
+      discriminator: [35, 173, 125, 89, 189, 117, 252, 233]
+      accounts: [
         {
-          "name": "profile",
-          "writable": true,
-          "pda": {
-            "seeds": [
+          name: 'community'
+          writable: true
+          pda: {
+            seeds: [
               {
-                "kind": "const",
-                "value": [
-                  112,
-                  117,
-                  98,
-                  107,
-                  101,
-                  121,
-                  95,
-                  112,
-                  114,
-                  111,
-                  102,
-                  105,
-                  108,
-                  101
-                ]
+                kind: 'const'
+                value: [112, 117, 98, 107, 101, 121, 95, 112, 114, 111, 102, 105, 108, 101]
               },
               {
-                "kind": "const",
-                "value": [
-                  112,
-                  114,
-                  111,
-                  102,
-                  105,
-                  108,
-                  101
-                ]
+                kind: 'const'
+                value: [99, 111, 109, 109, 117, 110, 105, 116, 121]
               },
               {
-                "kind": "arg",
-                "path": "args.username"
-              }
+                kind: 'account'
+                path: 'community.slug'
+                account: 'community'
+              },
             ]
           }
         },
         {
-          "name": "pointer",
-          "writable": true
+          name: 'authority'
+          signer: true
         },
-        {
-          "name": "authority",
-          "signer": true
-        },
-        {
-          "name": "feePayer",
-          "writable": true,
-          "signer": true
-        },
-        {
-          "name": "systemProgram",
-          "address": "11111111111111111111111111111111"
-        }
-      ],
-      "args": [
-        {
-          "name": "args",
-          "type": {
-            "defined": {
-              "name": "createProfileArgs"
-            }
-          }
-        }
       ]
+      args: []
     },
     {
-      "name": "removeAuthority",
-      "discriminator": [
-        242,
-        104,
-        208,
-        132,
-        190,
-        250,
-        74,
-        216
-      ],
-      "accounts": [
+      name: 'createCommunity'
+      discriminator: [203, 214, 176, 194, 13, 207, 22, 60]
+      accounts: [
         {
-          "name": "profile",
-          "writable": true,
-          "pda": {
-            "seeds": [
+          name: 'community'
+          writable: true
+          pda: {
+            seeds: [
               {
-                "kind": "const",
-                "value": [
-                  112,
-                  117,
-                  98,
-                  107,
-                  101,
-                  121,
-                  95,
-                  112,
-                  114,
-                  111,
-                  102,
-                  105,
-                  108,
-                  101
-                ]
+                kind: 'const'
+                value: [112, 117, 98, 107, 101, 121, 95, 112, 114, 111, 102, 105, 108, 101]
               },
               {
-                "kind": "const",
-                "value": [
-                  112,
-                  114,
-                  111,
-                  102,
-                  105,
-                  108,
-                  101
-                ]
+                kind: 'const'
+                value: [99, 111, 109, 109, 117, 110, 105, 116, 121]
               },
               {
-                "kind": "account",
-                "path": "profile.username",
-                "account": "profile"
-              }
+                kind: 'arg'
+                path: 'args.slug'
+              },
             ]
           }
         },
         {
-          "name": "authority",
-          "signer": true
+          name: 'pointer'
+          writable: true
         },
         {
-          "name": "feePayer",
-          "writable": true,
-          "signer": true,
-          "relations": [
-            "profile"
-          ]
-        }
-      ],
-      "args": [
+          name: 'authority'
+          signer: true
+        },
         {
-          "name": "args",
-          "type": {
-            "defined": {
-              "name": "removeAuthorityArgs"
+          name: 'feePayer'
+          writable: true
+          signer: true
+        },
+        {
+          name: 'systemProgram'
+          address: '11111111111111111111111111111111'
+        },
+      ]
+      args: [
+        {
+          name: 'args'
+          type: {
+            defined: {
+              name: 'createCommunityArgs'
             }
           }
-        }
+        },
       ]
     },
     {
-      "name": "removeIdentity",
-      "discriminator": [
-        146,
-        93,
-        160,
-        7,
-        61,
-        138,
-        181,
-        113
-      ],
-      "accounts": [
+      name: 'createProfile'
+      discriminator: [225, 205, 234, 143, 17, 186, 50, 220]
+      accounts: [
         {
-          "name": "profile",
-          "writable": true,
-          "pda": {
-            "seeds": [
+          name: 'profile'
+          writable: true
+          pda: {
+            seeds: [
               {
-                "kind": "const",
-                "value": [
-                  112,
-                  117,
-                  98,
-                  107,
-                  101,
-                  121,
-                  95,
-                  112,
-                  114,
-                  111,
-                  102,
-                  105,
-                  108,
-                  101
-                ]
+                kind: 'const'
+                value: [112, 117, 98, 107, 101, 121, 95, 112, 114, 111, 102, 105, 108, 101]
               },
               {
-                "kind": "const",
-                "value": [
-                  112,
-                  114,
-                  111,
-                  102,
-                  105,
-                  108,
-                  101
-                ]
+                kind: 'const'
+                value: [112, 114, 111, 102, 105, 108, 101]
               },
               {
-                "kind": "account",
-                "path": "profile.username",
-                "account": "profile"
-              }
-            ]
-          },
-          "relations": [
-            "pointer"
-          ]
-        },
-        {
-          "name": "pointer",
-          "writable": true
-        },
-        {
-          "name": "authority",
-          "signer": true
-        },
-        {
-          "name": "feePayer",
-          "writable": true,
-          "signer": true,
-          "relations": [
-            "profile"
-          ]
-        },
-        {
-          "name": "systemProgram",
-          "address": "11111111111111111111111111111111"
-        }
-      ],
-      "args": [
-        {
-          "name": "args",
-          "type": {
-            "defined": {
-              "name": "removeIdentityArgs"
-            }
-          }
-        }
-      ]
-    },
-    {
-      "name": "updateAvatarUrl",
-      "discriminator": [
-        38,
-        181,
-        69,
-        190,
-        47,
-        43,
-        175,
-        13
-      ],
-      "accounts": [
-        {
-          "name": "profile",
-          "writable": true,
-          "pda": {
-            "seeds": [
-              {
-                "kind": "const",
-                "value": [
-                  112,
-                  117,
-                  98,
-                  107,
-                  101,
-                  121,
-                  95,
-                  112,
-                  114,
-                  111,
-                  102,
-                  105,
-                  108,
-                  101
-                ]
+                kind: 'arg'
+                path: 'args.username'
               },
-              {
-                "kind": "const",
-                "value": [
-                  112,
-                  114,
-                  111,
-                  102,
-                  105,
-                  108,
-                  101
-                ]
-              },
-              {
-                "kind": "account",
-                "path": "profile.username",
-                "account": "profile"
-              }
             ]
           }
         },
         {
-          "name": "feePayer",
-          "writable": true,
-          "signer": true,
-          "relations": [
-            "profile"
-          ]
-        }
-      ],
-      "args": [
+          name: 'pointer'
+          writable: true
+        },
         {
-          "name": "args",
-          "type": {
-            "defined": {
-              "name": "updateAvatarUrlArgs"
+          name: 'authority'
+          signer: true
+        },
+        {
+          name: 'feePayer'
+          writable: true
+          signer: true
+        },
+        {
+          name: 'systemProgram'
+          address: '11111111111111111111111111111111'
+        },
+      ]
+      args: [
+        {
+          name: 'args'
+          type: {
+            defined: {
+              name: 'createProfileArgs'
             }
           }
-        }
-      ]
-    }
-  ],
-  "accounts": [
-    {
-      "name": "pointer",
-      "discriminator": [
-        31,
-        144,
-        159,
-        52,
-        95,
-        134,
-        207,
-        237
+        },
       ]
     },
     {
-      "name": "profile",
-      "discriminator": [
-        184,
-        101,
-        165,
-        188,
-        95,
-        63,
-        127,
-        188
+      name: 'finalizeUpdateCommunityAuthority'
+      discriminator: [124, 226, 211, 212, 102, 247, 120, 101]
+      accounts: [
+        {
+          name: 'community'
+          writable: true
+          pda: {
+            seeds: [
+              {
+                kind: 'const'
+                value: [112, 117, 98, 107, 101, 121, 95, 112, 114, 111, 102, 105, 108, 101]
+              },
+              {
+                kind: 'const'
+                value: [99, 111, 109, 109, 117, 110, 105, 116, 121]
+              },
+              {
+                kind: 'account'
+                path: 'community.slug'
+                account: 'community'
+              },
+            ]
+          }
+        },
+        {
+          name: 'newAuthority'
+          signer: true
+        },
       ]
-    }
-  ],
-  "errors": [
-    {
-      "code": 6000,
-      "name": "unAuthorized",
-      "msg": "Account unauthorized to perform this action"
+      args: []
     },
     {
-      "code": 6001,
-      "name": "invalidFeePayer",
-      "msg": "Invalid Fee payer"
+      name: 'initiateUpdateCommunityAuthority'
+      discriminator: [30, 152, 215, 7, 192, 28, 143, 39]
+      accounts: [
+        {
+          name: 'community'
+          writable: true
+          pda: {
+            seeds: [
+              {
+                kind: 'const'
+                value: [112, 117, 98, 107, 101, 121, 95, 112, 114, 111, 102, 105, 108, 101]
+              },
+              {
+                kind: 'const'
+                value: [99, 111, 109, 109, 117, 110, 105, 116, 121]
+              },
+              {
+                kind: 'account'
+                path: 'community.slug'
+                account: 'community'
+              },
+            ]
+          }
+        },
+        {
+          name: 'authority'
+          signer: true
+        },
+      ]
+      args: [
+        {
+          name: 'args'
+          type: {
+            defined: {
+              name: 'initiateUpdateAuthorityArgs'
+            }
+          }
+        },
+      ]
     },
     {
-      "code": 6002,
-      "name": "invalidUsername",
-      "msg": "Invalid Username"
+      name: 'removeAuthority'
+      discriminator: [242, 104, 208, 132, 190, 250, 74, 216]
+      accounts: [
+        {
+          name: 'profile'
+          writable: true
+          pda: {
+            seeds: [
+              {
+                kind: 'const'
+                value: [112, 117, 98, 107, 101, 121, 95, 112, 114, 111, 102, 105, 108, 101]
+              },
+              {
+                kind: 'const'
+                value: [112, 114, 111, 102, 105, 108, 101]
+              },
+              {
+                kind: 'account'
+                path: 'profile.username'
+                account: 'profile'
+              },
+            ]
+          }
+        },
+        {
+          name: 'authority'
+          signer: true
+        },
+        {
+          name: 'feePayer'
+          writable: true
+          signer: true
+          relations: ['profile']
+        },
+      ]
+      args: [
+        {
+          name: 'args'
+          type: {
+            defined: {
+              name: 'removeAuthorityArgs'
+            }
+          }
+        },
+      ]
     },
     {
-      "code": 6003,
-      "name": "invalidAvatarUrl",
-      "msg": "Invalid Avatar Url"
+      name: 'removeIdentity'
+      discriminator: [146, 93, 160, 7, 61, 138, 181, 113]
+      accounts: [
+        {
+          name: 'profile'
+          writable: true
+          pda: {
+            seeds: [
+              {
+                kind: 'const'
+                value: [112, 117, 98, 107, 101, 121, 95, 112, 114, 111, 102, 105, 108, 101]
+              },
+              {
+                kind: 'const'
+                value: [112, 114, 111, 102, 105, 108, 101]
+              },
+              {
+                kind: 'account'
+                path: 'profile.username'
+                account: 'profile'
+              },
+            ]
+          }
+          relations: ['pointer']
+        },
+        {
+          name: 'pointer'
+          writable: true
+        },
+        {
+          name: 'authority'
+          signer: true
+        },
+        {
+          name: 'feePayer'
+          writable: true
+          signer: true
+          relations: ['profile']
+        },
+        {
+          name: 'systemProgram'
+          address: '11111111111111111111111111111111'
+        },
+      ]
+      args: [
+        {
+          name: 'args'
+          type: {
+            defined: {
+              name: 'removeIdentityArgs'
+            }
+          }
+        },
+      ]
     },
     {
-      "code": 6004,
-      "name": "invalidProviderId",
-      "msg": "Invalid Provider ID"
+      name: 'updateCommunityDetails'
+      discriminator: [147, 202, 232, 110, 107, 125, 130, 125]
+      accounts: [
+        {
+          name: 'community'
+          writable: true
+          pda: {
+            seeds: [
+              {
+                kind: 'const'
+                value: [112, 117, 98, 107, 101, 121, 95, 112, 114, 111, 102, 105, 108, 101]
+              },
+              {
+                kind: 'const'
+                value: [99, 111, 109, 109, 117, 110, 105, 116, 121]
+              },
+              {
+                kind: 'account'
+                path: 'community.slug'
+                account: 'community'
+              },
+            ]
+          }
+        },
+        {
+          name: 'authority'
+          writable: true
+          signer: true
+          relations: ['community']
+        },
+      ]
+      args: [
+        {
+          name: 'args'
+          type: {
+            defined: {
+              name: 'updateCommunityDetailsArgs'
+            }
+          }
+        },
+      ]
     },
     {
-      "code": 6005,
-      "name": "invalidName",
-      "msg": "Invalid Name"
+      name: 'updateCommunityFeepayers'
+      discriminator: [252, 235, 116, 149, 213, 20, 3, 12]
+      accounts: [
+        {
+          name: 'community'
+          writable: true
+          pda: {
+            seeds: [
+              {
+                kind: 'const'
+                value: [112, 117, 98, 107, 101, 121, 95, 112, 114, 111, 102, 105, 108, 101]
+              },
+              {
+                kind: 'const'
+                value: [99, 111, 109, 109, 117, 110, 105, 116, 121]
+              },
+              {
+                kind: 'account'
+                path: 'community.slug'
+                account: 'community'
+              },
+            ]
+          }
+        },
+        {
+          name: 'authority'
+          writable: true
+          signer: true
+          relations: ['community']
+        },
+        {
+          name: 'systemProgram'
+          address: '11111111111111111111111111111111'
+        },
+      ]
+      args: [
+        {
+          name: 'args'
+          type: {
+            defined: {
+              name: 'updateFeePayersArgs'
+            }
+          }
+        },
+      ]
     },
     {
-      "code": 6006,
-      "name": "invalidAccountOwner",
-      "msg": "Account not owned by program"
+      name: 'updateProfileDetails'
+      discriminator: [218, 18, 64, 5, 242, 160, 11, 38]
+      accounts: [
+        {
+          name: 'profile'
+          writable: true
+          pda: {
+            seeds: [
+              {
+                kind: 'const'
+                value: [112, 117, 98, 107, 101, 121, 95, 112, 114, 111, 102, 105, 108, 101]
+              },
+              {
+                kind: 'const'
+                value: [112, 114, 111, 102, 105, 108, 101]
+              },
+              {
+                kind: 'account'
+                path: 'profile.username'
+                account: 'profile'
+              },
+            ]
+          }
+        },
+        {
+          name: 'feePayer'
+          writable: true
+          signer: true
+          relations: ['profile']
+        },
+      ]
+      args: [
+        {
+          name: 'args'
+          type: {
+            defined: {
+              name: 'updateProfileDetailsArgs'
+            }
+          }
+        },
+      ]
+    },
+  ]
+  accounts: [
+    {
+      name: 'community'
+      discriminator: [192, 73, 211, 158, 178, 81, 19, 112]
     },
     {
-      "code": 6007,
-      "name": "authorityAlreadyExists",
-      "msg": "Authority already exists"
+      name: 'pointer'
+      discriminator: [31, 144, 159, 52, 95, 134, 207, 237]
     },
     {
-      "code": 6008,
-      "name": "authorityNonExistent",
-      "msg": "Authority does not exist"
+      name: 'profile'
+      discriminator: [184, 101, 165, 188, 95, 63, 127, 188]
+    },
+  ]
+  errors: [
+    {
+      code: 6000
+      name: 'unAuthorized'
+      msg: 'Account unauthorized to perform this action'
     },
     {
-      "code": 6009,
-      "name": "cannotRemoveSoloAuthority",
-      "msg": "Cannot remove last remaining authority"
+      code: 6001
+      name: 'invalidFeePayer'
+      msg: 'Invalid Fee payer'
     },
     {
-      "code": 6010,
-      "name": "maxSizeReached",
-      "msg": "Array reached max size"
+      code: 6002
+      name: 'invalidUsername'
+      msg: 'Invalid Username'
     },
     {
-      "code": 6011,
-      "name": "identityAlreadyExists",
-      "msg": "Identity already exists"
+      code: 6003
+      name: 'invalidName'
+      msg: 'Invalid Name'
     },
     {
-      "code": 6012,
-      "name": "identityNonExistent",
-      "msg": "Identity does not exist"
-    }
-  ],
-  "types": [
+      code: 6004
+      name: 'invalidSlug'
+      msg: 'Invalid Slug'
+    },
     {
-      "name": "addAuthorityArgs",
-      "type": {
-        "kind": "struct",
-        "fields": [
+      code: 6005
+      name: 'invalidAvatarUrl'
+      msg: 'Invalid Avatar Url'
+    },
+    {
+      code: 6006
+      name: 'invalidXurl'
+      msg: 'Invalid X (Twitter) URL'
+    },
+    {
+      code: 6007
+      name: 'invalidDiscordUrl'
+      msg: 'Invalid Discord URL'
+    },
+    {
+      code: 6008
+      name: 'invalidGitHubUrl'
+      msg: 'Invalid GitHub URL'
+    },
+    {
+      code: 6009
+      name: 'invalidWebsiteUrl'
+      msg: 'Invalid Website URL'
+    },
+    {
+      code: 6010
+      name: 'invalidProviderId'
+      msg: 'Invalid Provider ID'
+    },
+    {
+      code: 6011
+      name: 'invalidProviderName'
+      msg: 'Invalid Provider Name'
+    },
+    {
+      code: 6012
+      name: 'invalidAccountOwner'
+      msg: 'Account not owned by program'
+    },
+    {
+      code: 6013
+      name: 'authorityAlreadyExists'
+      msg: 'Authority already exists'
+    },
+    {
+      code: 6014
+      name: 'authorityNonExistent'
+      msg: 'Authority does not exist'
+    },
+    {
+      code: 6015
+      name: 'cannotRemoveSoloAuthority'
+      msg: 'Cannot remove last remaining authority'
+    },
+    {
+      code: 6016
+      name: 'maxSizeReached'
+      msg: 'Array reached max size'
+    },
+    {
+      code: 6017
+      name: 'identityAlreadyExists'
+      msg: 'Identity already exists'
+    },
+    {
+      code: 6018
+      name: 'identityNonExistent'
+      msg: 'Identity does not exist'
+    },
+  ]
+  types: [
+    {
+      name: 'addAuthorityArgs'
+      type: {
+        kind: 'struct'
+        fields: [
           {
-            "name": "newAuthority",
-            "type": "pubkey"
-          }
+            name: 'newAuthority'
+            type: 'pubkey'
+          },
         ]
       }
     },
     {
-      "name": "addIdentityArgs",
-      "type": {
-        "kind": "struct",
-        "fields": [
+      name: 'addIdentityArgs'
+      type: {
+        kind: 'struct'
+        fields: [
           {
-            "name": "provider",
-            "type": {
-              "defined": {
-                "name": "pubKeyIdentityProvider"
+            name: 'provider'
+            type: {
+              defined: {
+                name: 'pubKeyIdentityProvider'
               }
             }
           },
           {
-            "name": "providerId",
-            "type": "string"
+            name: 'providerId'
+            type: 'string'
           },
           {
-            "name": "nickname",
-            "type": "string"
-          }
+            name: 'nickname'
+            type: 'string'
+          },
         ]
       }
     },
     {
-      "name": "createProfileArgs",
-      "type": {
-        "kind": "struct",
-        "fields": [
+      name: 'community'
+      type: {
+        kind: 'struct'
+        fields: [
           {
-            "name": "username",
-            "type": "string"
+            name: 'bump'
+            type: 'u8'
           },
           {
-            "name": "avatarUrl",
-            "type": "string"
-          }
-        ]
-      }
-    },
-    {
-      "name": "identity",
-      "type": {
-        "kind": "struct",
-        "fields": [
+            name: 'slug'
+            type: 'string'
+          },
           {
-            "name": "provider",
-            "type": {
-              "defined": {
-                "name": "pubKeyIdentityProvider"
-              }
+            name: 'name'
+            type: 'string'
+          },
+          {
+            name: 'avatarUrl'
+            type: 'string'
+          },
+          {
+            name: 'feePayers'
+            type: {
+              vec: 'pubkey'
             }
           },
           {
-            "name": "providerId",
-            "type": "string"
+            name: 'authority'
+            type: 'pubkey'
           },
           {
-            "name": "name",
-            "type": "string"
-          }
-        ]
-      }
-    },
-    {
-      "name": "pointer",
-      "type": {
-        "kind": "struct",
-        "fields": [
-          {
-            "name": "bump",
-            "type": "u8"
-          },
-          {
-            "name": "provider",
-            "type": {
-              "defined": {
-                "name": "pubKeyIdentityProvider"
-              }
+            name: 'pendingAuthority'
+            type: {
+              option: 'pubkey'
             }
           },
           {
-            "name": "providerId",
-            "type": "string"
-          },
-          {
-            "name": "profile",
-            "type": "pubkey"
-          }
-        ]
-      }
-    },
-    {
-      "name": "profile",
-      "type": {
-        "kind": "struct",
-        "fields": [
-          {
-            "name": "bump",
-            "type": "u8"
-          },
-          {
-            "name": "username",
-            "type": "string"
-          },
-          {
-            "name": "avatarUrl",
-            "type": "string"
-          },
-          {
-            "name": "feePayer",
-            "type": "pubkey"
-          },
-          {
-            "name": "authorities",
-            "type": {
-              "vec": "pubkey"
-            }
-          },
-          {
-            "name": "identities",
-            "type": {
-              "vec": {
-                "defined": {
-                  "name": "identity"
+            name: 'providers'
+            type: {
+              vec: {
+                defined: {
+                  name: 'identity'
                 }
               }
             }
-          }
+          },
+          {
+            name: 'x'
+            type: {
+              option: 'string'
+            }
+          },
+          {
+            name: 'discord'
+            type: {
+              option: 'string'
+            }
+          },
+          {
+            name: 'github'
+            type: {
+              option: 'string'
+            }
+          },
+          {
+            name: 'website'
+            type: {
+              option: 'string'
+            }
+          },
         ]
       }
     },
     {
-      "name": "pubKeyIdentityProvider",
-      "type": {
-        "kind": "enum",
-        "variants": [
+      name: 'createCommunityArgs'
+      type: {
+        kind: 'struct'
+        fields: [
           {
-            "name": "discord"
+            name: 'slug'
+            type: 'string'
           },
           {
-            "name": "solana"
+            name: 'name'
+            type: 'string'
           },
           {
-            "name": "github"
+            name: 'avatarUrl'
+            type: 'string'
           },
           {
-            "name": "google"
+            name: 'x'
+            type: {
+              option: 'string'
+            }
           },
           {
-            "name": "twitter"
-          }
+            name: 'discord'
+            type: {
+              option: 'string'
+            }
+          },
+          {
+            name: 'github'
+            type: {
+              option: 'string'
+            }
+          },
+          {
+            name: 'website'
+            type: {
+              option: 'string'
+            }
+          },
         ]
       }
     },
     {
-      "name": "removeAuthorityArgs",
-      "type": {
-        "kind": "struct",
-        "fields": [
+      name: 'createProfileArgs'
+      type: {
+        kind: 'struct'
+        fields: [
           {
-            "name": "authorityToRemove",
-            "type": "pubkey"
-          }
-        ]
-      }
-    },
-    {
-      "name": "removeIdentityArgs",
-      "type": {
-        "kind": "struct",
-        "fields": [
-          {
-            "name": "providerId",
-            "type": "string"
-          }
-        ]
-      }
-    },
-    {
-      "name": "updateAvatarUrlArgs",
-      "type": {
-        "kind": "struct",
-        "fields": [
-          {
-            "name": "authority",
-            "type": "pubkey"
+            name: 'username'
+            type: 'string'
           },
           {
-            "name": "newAvatarUrl",
-            "type": "string"
-          }
+            name: 'name'
+            type: 'string'
+          },
+          {
+            name: 'avatarUrl'
+            type: 'string'
+          },
         ]
       }
-    }
+    },
+    {
+      name: 'identity'
+      type: {
+        kind: 'struct'
+        fields: [
+          {
+            name: 'provider'
+            type: {
+              defined: {
+                name: 'pubKeyIdentityProvider'
+              }
+            }
+          },
+          {
+            name: 'providerId'
+            type: 'string'
+          },
+          {
+            name: 'name'
+            type: 'string'
+          },
+        ]
+      }
+    },
+    {
+      name: 'initiateUpdateAuthorityArgs'
+      type: {
+        kind: 'struct'
+        fields: [
+          {
+            name: 'newAuthority'
+            type: 'pubkey'
+          },
+        ]
+      }
+    },
+    {
+      name: 'pointer'
+      type: {
+        kind: 'struct'
+        fields: [
+          {
+            name: 'bump'
+            type: 'u8'
+          },
+          {
+            name: 'provider'
+            type: {
+              defined: {
+                name: 'pubKeyIdentityProvider'
+              }
+            }
+          },
+          {
+            name: 'providerId'
+            type: 'string'
+          },
+          {
+            name: 'profile'
+            type: 'pubkey'
+          },
+        ]
+      }
+    },
+    {
+      name: 'profile'
+      type: {
+        kind: 'struct'
+        fields: [
+          {
+            name: 'bump'
+            type: 'u8'
+          },
+          {
+            name: 'username'
+            type: 'string'
+          },
+          {
+            name: 'name'
+            type: 'string'
+          },
+          {
+            name: 'avatarUrl'
+            type: 'string'
+          },
+          {
+            name: 'feePayer'
+            type: 'pubkey'
+          },
+          {
+            name: 'authorities'
+            type: {
+              vec: 'pubkey'
+            }
+          },
+          {
+            name: 'identities'
+            type: {
+              vec: {
+                defined: {
+                  name: 'identity'
+                }
+              }
+            }
+          },
+        ]
+      }
+    },
+    {
+      name: 'pubKeyIdentityProvider'
+      type: {
+        kind: 'enum'
+        variants: [
+          {
+            name: 'discord'
+          },
+          {
+            name: 'solana'
+          },
+          {
+            name: 'github'
+          },
+          {
+            name: 'google'
+          },
+          {
+            name: 'x'
+          },
+        ]
+      }
+    },
+    {
+      name: 'removeAuthorityArgs'
+      type: {
+        kind: 'struct'
+        fields: [
+          {
+            name: 'authorityToRemove'
+            type: 'pubkey'
+          },
+        ]
+      }
+    },
+    {
+      name: 'removeIdentityArgs'
+      type: {
+        kind: 'struct'
+        fields: [
+          {
+            name: 'providerId'
+            type: 'string'
+          },
+        ]
+      }
+    },
+    {
+      name: 'updateCommunityDetailsArgs'
+      type: {
+        kind: 'struct'
+        fields: [
+          {
+            name: 'name'
+            type: {
+              option: 'string'
+            }
+          },
+          {
+            name: 'avatarUrl'
+            type: {
+              option: 'string'
+            }
+          },
+          {
+            name: 'x'
+            type: {
+              option: 'string'
+            }
+          },
+          {
+            name: 'discord'
+            type: {
+              option: 'string'
+            }
+          },
+          {
+            name: 'github'
+            type: {
+              option: 'string'
+            }
+          },
+          {
+            name: 'website'
+            type: {
+              option: 'string'
+            }
+          },
+        ]
+      }
+    },
+    {
+      name: 'updateFeePayersArgs'
+      type: {
+        kind: 'struct'
+        fields: [
+          {
+            name: 'newFeePayers'
+            type: {
+              vec: 'pubkey'
+            }
+          },
+        ]
+      }
+    },
+    {
+      name: 'updateProfileDetailsArgs'
+      type: {
+        kind: 'struct'
+        fields: [
+          {
+            name: 'authority'
+            type: 'pubkey'
+          },
+          {
+            name: 'newName'
+            type: {
+              option: 'string'
+            }
+          },
+          {
+            name: 'newAvatarUrl'
+            type: {
+              option: 'string'
+            }
+          },
+        ]
+      }
+    },
   ]
-};
+}

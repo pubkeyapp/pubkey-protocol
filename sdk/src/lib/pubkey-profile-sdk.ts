@@ -79,6 +79,7 @@ export interface CreateProfileOptions {
   avatarUrl: string
   authority: PublicKey
   feePayer: PublicKey
+  name: string
   username: string
 }
 
@@ -86,6 +87,7 @@ export interface UpdateAvatarUrlOptions {
   avatarUrl: string
   authority: PublicKey
   feePayer: PublicKey
+  name: string
   username: string
 }
 
@@ -102,11 +104,11 @@ export class PubKeyProfileSdk {
     this.program = getPubkeyProfileProgram(this.provider)
   }
 
-  async addAuthority({ newAuthority, authority, feePayer, username }: AddAuthorityOptions) {
+  async addProfileAuthority({ newAuthority, authority, feePayer, username }: AddAuthorityOptions) {
     const [profile] = this.getProfilePda({ username })
 
     const ix = await this.program.methods
-      .addAuthority({ newAuthority })
+      .addProfileAuthority({ newAuthority })
       .accountsStrict({
         authority,
         feePayer,
@@ -140,11 +142,11 @@ export class PubKeyProfileSdk {
     return this.createTransaction({ ix, feePayer })
   }
 
-  async createProfile({ authority, avatarUrl, feePayer, username }: CreateProfileOptions) {
+  async createProfile({ authority, avatarUrl, feePayer, name, username }: CreateProfileOptions) {
     const [profile] = this.getProfilePda({ username })
     const [pointer] = this.getPointerPda({ provider: PubKeyIdentityProvider.Solana, providerId: authority.toString() })
     const ix = await this.program.methods
-      .createProfile({ avatarUrl, username })
+      .createProfile({ avatarUrl, name, username })
       .accountsStrict({
         authority,
         feePayer,
@@ -169,6 +171,7 @@ export class PubKeyProfileSdk {
           provider: convertToIdentityProvider(identity.provider as unknown as { [key: string]: object }),
         })),
         feePayer: account.feePayer,
+        name: account.name,
         username: account.username,
       })),
     )
@@ -297,11 +300,11 @@ export class PubKeyProfileSdk {
     return this.createTransaction({ ix, feePayer })
   }
 
-  async updateAvatarUrl({ avatarUrl, authority, feePayer, username }: UpdateAvatarUrlOptions) {
+  async updateProfileDetails({ avatarUrl, authority, feePayer, name: newName, username }: UpdateAvatarUrlOptions) {
     const [profile] = this.getProfilePda({ username })
 
     const ix = await this.program.methods
-      .updateAvatarUrl({ newAvatarUrl: avatarUrl, authority })
+      .updateProfileDetails({ newAvatarUrl: avatarUrl, newName, authority })
       .accounts({ feePayer, profile })
       .instruction()
 
@@ -326,7 +329,7 @@ export const enumMap = {
   [PubKeyIdentityProvider.Github]: { github: {} },
   [PubKeyIdentityProvider.Google]: { google: {} },
   [PubKeyIdentityProvider.Solana]: { solana: {} },
-  [PubKeyIdentityProvider.Twitter]: { twitter: {} },
+  [PubKeyIdentityProvider.X]: { x: {} },
 } as const
 
 export function convertFromIdentityProvider(provider: PubKeyIdentityProvider) {
