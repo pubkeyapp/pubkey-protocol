@@ -12,23 +12,23 @@ importers:
         specifier: ^0.30.0
         version: 0.30.0(bufferutil@4.0.8)(utf-8-validate@5.0.10)
       '@mantine/core':
-        specifier: ^7.6.1
-        version: 7.6.1(@mantine/hooks@7.6.1(react@18.3.1))(@types/react@18.3.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+        specifier: ^7.12.2
+        version: 7.12.2(@mantine/hooks@7.12.2(react@18.3.1))(@types/react@18.3.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@mantine/dates':
-        specifier: ^7.6.1
-        version: 7.6.1(@mantine/core@7.6.1(@mantine/hooks@7.6.1(react@18.3.1))(@types/react@18.3.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(@mantine/hooks@7.6.1(react@18.3.1))(dayjs@1.11.10)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+        specifier: ^7.12.2
+        version: 7.12.2(@mantine/core@7.12.2(@mantine/hooks@7.12.2(react@18.3.1))(@types/react@18.3.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(@mantine/hooks@7.12.2(react@18.3.1))(dayjs@1.11.10)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@mantine/form':
-        specifier: ^7.6.1
-        version: 7.6.1(react@18.3.1)
+        specifier: ^7.12.2
+        version: 7.12.2(react@18.3.1)
       '@mantine/hooks':
-        specifier: ^7.6.1
-        version: 7.6.1(react@18.3.1)
+        specifier: ^7.12.2
+        version: 7.12.2(react@18.3.1)
       '@mantine/modals':
-        specifier: ^7.6.1
-        version: 7.6.1(@mantine/core@7.6.1(@mantine/hooks@7.6.1(react@18.3.1))(@types/react@18.3.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(@mantine/hooks@7.6.1(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+        specifier: ^7.12.2
+        version: 7.12.2(@mantine/core@7.12.2(@mantine/hooks@7.12.2(react@18.3.1))(@types/react@18.3.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(@mantine/hooks@7.12.2(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@mantine/notifications':
-        specifier: ^7.6.1
-        version: 7.6.1(@mantine/core@7.6.1(@mantine/hooks@7.6.1(react@18.3.1))(@types/react@18.3.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(@mantine/hooks@7.6.1(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+        specifier: ^7.12.2
+        version: 7.12.2(@mantine/core@7.12.2(@mantine/hooks@7.12.2(react@18.3.1))(@types/react@18.3.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(@mantine/hooks@7.12.2(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@noble/hashes':
         specifier: ^1.3.3
         version: 1.3.3
@@ -37,7 +37,7 @@ importers:
         version: 1.5.0(@types/react@18.3.1)(dayjs@1.11.10)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@pubkeyapp/wallet-adapter-mantine-ui':
         specifier: ^2.3.0
-        version: 2.3.0(@mantine/core@7.6.1(@mantine/hooks@7.6.1(react@18.3.1))(@types/react@18.3.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(@solana/wallet-adapter-base@0.9.23(@solana/web3.js@1.91.0(bufferutil@4.0.8)(utf-8-validate@5.0.10)))(@solana/wallet-adapter-react@0.15.35(@solana/web3.js@1.91.0(bufferutil@4.0.8)(utf-8-validate@5.0.10))(bs58@5.0.0)(react-native@0.73.5(@babel/core@7.24.0)(@babel/preset-env@7.24.0(@babel/core@7.24.0))(bufferutil@4.0.8)(react@18.3.1)(utf-8-validate@5.0.10))(react@18.3.1))(@tabler/icons-react@2.47.0(react@18.3.1))(react@18.3.1)
+        version: 2.3.0(@mantine/core@7.12.2(@mantine/hooks@7.12.2(react@18.3.1))(@types/react@18.3.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(@solana/wallet-adapter-base@0.9.23(@solana/web3.js@1.91.0(bufferutil@4.0.8)(utf-8-validate@5.0.10)))(@solana/wallet-adapter-react@0.15.35(@solana/web3.js@1.91.0(bufferutil@4.0.8)(utf-8-validate@5.0.10))(bs58@5.0.0)(react-native@0.73.5(@babel/core@7.24.0)(@babel/preset-env@7.24.0(@babel/core@7.24.0))(bufferutil@4.0.8)(react@18.3.1)(utf-8-validate@5.0.10))(react@18.3.1))(@tabler/icons-react@2.47.0(react@18.3.1))(react@18.3.1)
       '@solana-developers/helpers':
         specifier: ^2.0.0
         version: 2.0.0(bufferutil@4.0.8)(utf-8-validate@5.0.10)
@@ -119,7 +119,7 @@ importers:
         version: 19.2.3(@swc-node/register@1.9.1(@swc/core@1.5.7(@swc/helpers@0.5.11))(@swc/types@0.1.7)(typescript@5.4.5))(@swc/core@1.5.7(@swc/helpers@0.5.11))
       '@pmmmwh/react-refresh-webpack-plugin':
         specifier: ^0.5.7
-        version: 0.5.11(react-refresh@0.10.0)(type-fest@3.13.1)(webpack-dev-server@4.15.1(bufferutil@4.0.8)(utf-8-validate@5.0.10)(webpack-cli@5.1.4)(webpack@5.90.3))(webpack@5.90.3(@swc/core@1.5.7(@swc/helpers@0.5.11))(webpack-cli@5.1.4))
+        version: 0.5.11(react-refresh@0.10.0)(type-fest@4.26.1)(webpack-dev-server@4.15.1(bufferutil@4.0.8)(utf-8-validate@5.0.10)(webpack-cli@5.1.4)(webpack@5.90.3))(webpack@5.90.3(@swc/core@1.5.7(@swc/helpers@0.5.11))(webpack-cli@5.1.4))
       '@solana-developers/preset-anchor':
         specifier: ^2.2.0
         version: 2.2.0(@babel/traverse@7.24.0)(@swc-node/register@1.9.1(@swc/core@1.5.7(@swc/helpers@0.5.11))(@swc/types@0.1.7)(typescript@5.4.5))(@swc/core@1.5.7(@swc/helpers@0.5.11))(@types/node@18.16.9)(bufferutil@4.0.8)(nx@19.2.3(@swc-node/register@1.9.1(@swc/core@1.5.7(@swc/helpers@0.5.11))(@swc/types@0.1.7)(typescript@5.4.5))(@swc/core@1.5.7(@swc/helpers@0.5.11)))(ts-node@10.9.1(@swc/core@1.5.7(@swc/helpers@0.5.11))(@types/node@18.16.9)(typescript@5.4.5))(typescript@5.4.5)(utf-8-validate@5.0.10)(verdaccio@5.29.2(typanion@3.14.0))
@@ -202,8 +202,8 @@ importers:
         specifier: 8.4.38
         version: 8.4.38
       postcss-preset-mantine:
-        specifier: ^1.13.0
-        version: 1.13.0(postcss@8.4.38)
+        specifier: ^1.17.0
+        version: 1.17.0(postcss@8.4.38)
       postcss-simple-vars:
         specifier: ^7.0.1
         version: 7.0.1(postcss@8.4.38)
@@ -1189,50 +1189,50 @@ packages:
   '@leichtgewicht/ip-codec@2.0.4':
     resolution: {integrity: sha512-Hcv+nVC0kZnQ3tD9GVu5xSMR4VVYOteQIr/hwFPVEvPdlXqgGEuRjiheChHgdM+JyqdgNcmzZOX/tnl0JOiI7A==}
 
-  '@mantine/core@7.6.1':
-    resolution: {integrity: sha512-52BgYXAMD+E6vDiGIGOJlLBc0pdT2+gzrB0g+v7c7xeiNXqHEG5cEplLErfNBHh9kMQHiDHCiCb5Su9jqoUlXw==}
+  '@mantine/core@7.12.2':
+    resolution: {integrity: sha512-FrMHOKq4s3CiPIxqZ9xnVX7H4PEGNmbtHMvWO/0YlfPgoV0Er/N/DNJOFW1ys4WSnidPTayYeB41riyxxGOpRQ==}
     peerDependencies:
-      '@mantine/hooks': 7.6.1
+      '@mantine/hooks': 7.12.2
       react: ^18.2.0
       react-dom: ^18.2.0
 
-  '@mantine/dates@7.6.1':
-    resolution: {integrity: sha512-xHe5sINtFuqptmZCXfp0aeurC8wjiycBzHvk87CqfhLIGWBTSAkrCKk3KzdUeEKfVsLY1l21cFb7Sv7mr4lfTw==}
+  '@mantine/dates@7.12.2':
+    resolution: {integrity: sha512-qsDDl9qF80QLG1n6JiysyELAhbNLbV3qmXRAIU3GJLLxtZfyD9ntOUg0B64EpNl3Py4btXNo4yniFdu1JSUgwg==}
     peerDependencies:
-      '@mantine/core': 7.6.1
-      '@mantine/hooks': 7.6.1
+      '@mantine/core': 7.12.2
+      '@mantine/hooks': 7.12.2
       dayjs: '>=1.0.0'
       react: ^18.2.0
       react-dom: ^18.2.0
 
-  '@mantine/form@7.6.1':
-    resolution: {integrity: sha512-S0pdvFohRX3ahzhrCGM+d2sBaSHH88UkQhbzyOAGJ7xqNjPJ11Bh/xb4Mc+NXXxaq9MjPrRVe6fgpKJtXszBpQ==}
+  '@mantine/form@7.12.2':
+    resolution: {integrity: sha512-MknzDN5F7u/V24wVrL5VIXNvE7/6NMt40K6w3p7wbKFZiLhdh/tDWdMcRN7PkkWF1j2+eoVCBAOCL74U3BzNag==}
     peerDependencies:
       react: ^18.2.0
 
-  '@mantine/hooks@7.6.1':
-    resolution: {integrity: sha512-zsOGzFRcQZuER2rzAjfrAqp98W7WCFA43nF1QZUKV7AHTq8q1mtr3DOhFfO3/CA+t1lai68gp1guVcIhP4lrwQ==}
+  '@mantine/hooks@7.12.2':
+    resolution: {integrity: sha512-dVMw8jpM0hAzc8e7/GNvzkk9N0RN/m+PKycETB3H6lJGuXJJSRR4wzzgQKpEhHwPccktDpvb4rkukKDq2jA8Fg==}
     peerDependencies:
       react: ^18.2.0
 
-  '@mantine/modals@7.6.1':
-    resolution: {integrity: sha512-bXCViyQpXEbPGaq/UjCqe/jExku6I6i93okayN54diKZEKbjKAQjQVCowP7axUzMQNhhVRCVtSZPYbkiiEh3Ug==}
+  '@mantine/modals@7.12.2':
+    resolution: {integrity: sha512-ffnu9MtUHceoaLlhrwq+J+eojidEPkq3m2Rrt5HfcZv3vAP8RtqPnTfgk99WOB3vyCtdu8r4I9P3ckuYtPRtAg==}
     peerDependencies:
-      '@mantine/core': 7.6.1
-      '@mantine/hooks': 7.6.1
-      react: ^18.2.0
-      react-dom: ^18.2.0
-
-  '@mantine/notifications@7.6.1':
-    resolution: {integrity: sha512-Aiui/faUBVQVgDPW9poCe8WdRZkXmIe9aFTnmf+WTopMWK/zfLBp02IjLY1f59zs5NeF/vfXaMxiuQq+KH2hTQ==}
-    peerDependencies:
-      '@mantine/core': 7.6.1
-      '@mantine/hooks': 7.6.1
+      '@mantine/core': 7.12.2
+      '@mantine/hooks': 7.12.2
       react: ^18.2.0
       react-dom: ^18.2.0
 
-  '@mantine/store@7.6.1':
-    resolution: {integrity: sha512-UqSsJLlAL53OSSUNK/aTXpkss9DX0TppTbtBKXPyflYfq0B9vKwQKumxEsg3UGVC4cjiQq2VD4mjGT94r+deug==}
+  '@mantine/notifications@7.12.2':
+    resolution: {integrity: sha512-gTvLHkoAZ42v5bZxibP9A50djp5ndEwumVhHSa7mxQ8oSS23tt3It/6hOqH7M+9kHY0a8s+viMiflUzTByA9qg==}
+    peerDependencies:
+      '@mantine/core': 7.12.2
+      '@mantine/hooks': 7.12.2
+      react: ^18.2.0
+      react-dom: ^18.2.0
+
+  '@mantine/store@7.12.2':
+    resolution: {integrity: sha512-NqL31sO/KcAETEWP/CiXrQOQNoE4168vZsxyXacQHGBueVMJa64WIDQtKLHrCnFRMws3vsXF02/OO4bH4XGcMQ==}
     peerDependencies:
       react: ^18.2.0
 
@@ -3234,6 +3234,10 @@ packages:
 
   clsx@2.1.0:
     resolution: {integrity: sha512-m3iNNWpd9rl3jvvcBnu70ylMdrXt8Vlq4HYadnU5fwcOtvkSQWPmj7amUcDT2qYI7risszBjI5AUIUox9D16pg==}
+    engines: {node: '>=6'}
+
+  clsx@2.1.1:
+    resolution: {integrity: sha512-eYm0QWBtUrBWZWG0d386OGAw16Z995PiOVo2B7bjWSbHedGl5e0ZWaq65kOGgUSNesEIDkB9ISbTg/JK9dhCZA==}
     engines: {node: '>=6'}
 
   co@4.6.0:
@@ -6344,8 +6348,8 @@ packages:
     peerDependencies:
       postcss: ^8.4.31
 
-  postcss-preset-mantine@1.13.0:
-    resolution: {integrity: sha512-1bv/mQz2K+/FixIMxYd83BYH7PusDZaI7LpUtKbb1l/5N5w6t1p/V9ONHfRJeeAZyfa6Xc+AtR+95VKdFXRH1g==}
+  postcss-preset-mantine@1.17.0:
+    resolution: {integrity: sha512-ji1PMDBUf2Vsx/HE5faMSs1+ff6qE6YRulTr4Ja+6HD3gop8rSMTCYdpN7KrdsEg079kfBKkO/PaKhG9uR0zwQ==}
     peerDependencies:
       postcss: '>=8.0.0'
 
@@ -6576,6 +6580,7 @@ packages:
   react-remove-scroll-bar@2.3.5:
     resolution: {integrity: sha512-3cqjOqg6s0XbOjWvmasmqHch+RLxIEk2r/70rzGXuz3iIGQsQheEQyqYCBb5EECoD01Vo2SIbDqW4paLeLTASw==}
     engines: {node: '>=10'}
+    deprecated: please update to the following version as this contains a bug (https://github.com/theKashey/react-remove-scroll-bar/issues/57)
     peerDependencies:
       '@types/react': ^16.8.0 || ^17.0.0 || ^18.0.0
       react: ^16.8.0 || ^17.0.0 || ^18.0.0
@@ -7483,9 +7488,9 @@ packages:
     resolution: {integrity: sha512-Ne2YiiGN8bmrmJJEuTWTLJR32nh/JdL1+PSicowtNb0WFpn59GK8/lfD61bVtzguz7b3PBt74nxpv/Pw5po5Rg==}
     engines: {node: '>=8'}
 
-  type-fest@3.13.1:
-    resolution: {integrity: sha512-tLq3bSNx+xSpwvAJnzrK0Ep5CLNWjvFTOp71URMaAEWBfRb9nnJiBoUe0tF8bI4ZFO3omgBR6NvnbzVUT3Ly4g==}
-    engines: {node: '>=14.16'}
+  type-fest@4.26.1:
+    resolution: {integrity: sha512-yOGpmOAL7CkKe/91I5O3gPICmJNLJ1G4zFYVAsRHg7M64biSnPtRj0WNQt++bRkjYOqjWXrhnUw1utzmVErAdg==}
+    engines: {node: '>=16'}
 
   type-is@1.6.18:
     resolution: {integrity: sha512-TkRKr9sUTxEH8MdfuCSP7VizJyzRNMjj2J2do2Jr3Kym598JVdEksuzPQCnlFPW4ky9Q+iA+ma9BGm06XQBy8g==}
@@ -9195,56 +9200,56 @@ snapshots:
 
   '@leichtgewicht/ip-codec@2.0.4': {}
 
-  '@mantine/core@7.6.1(@mantine/hooks@7.6.1(react@18.3.1))(@types/react@18.3.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)':
+  '@mantine/core@7.12.2(@mantine/hooks@7.12.2(react@18.3.1))(@types/react@18.3.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)':
     dependencies:
       '@floating-ui/react': 0.26.9(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
-      '@mantine/hooks': 7.6.1(react@18.3.1)
-      clsx: 2.1.0
+      '@mantine/hooks': 7.12.2(react@18.3.1)
+      clsx: 2.1.1
       react: 18.3.1
       react-dom: 18.3.1(react@18.3.1)
       react-number-format: 5.3.3(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       react-remove-scroll: 2.5.7(@types/react@18.3.1)(react@18.3.1)
       react-textarea-autosize: 8.5.3(@types/react@18.3.1)(react@18.3.1)
-      type-fest: 3.13.1
+      type-fest: 4.26.1
     transitivePeerDependencies:
       - '@types/react'
 
-  '@mantine/dates@7.6.1(@mantine/core@7.6.1(@mantine/hooks@7.6.1(react@18.3.1))(@types/react@18.3.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(@mantine/hooks@7.6.1(react@18.3.1))(dayjs@1.11.10)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)':
+  '@mantine/dates@7.12.2(@mantine/core@7.12.2(@mantine/hooks@7.12.2(react@18.3.1))(@types/react@18.3.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(@mantine/hooks@7.12.2(react@18.3.1))(dayjs@1.11.10)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)':
     dependencies:
-      '@mantine/core': 7.6.1(@mantine/hooks@7.6.1(react@18.3.1))(@types/react@18.3.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
-      '@mantine/hooks': 7.6.1(react@18.3.1)
-      clsx: 2.1.0
+      '@mantine/core': 7.12.2(@mantine/hooks@7.12.2(react@18.3.1))(@types/react@18.3.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@mantine/hooks': 7.12.2(react@18.3.1)
+      clsx: 2.1.1
       dayjs: 1.11.10
       react: 18.3.1
       react-dom: 18.3.1(react@18.3.1)
 
-  '@mantine/form@7.6.1(react@18.3.1)':
+  '@mantine/form@7.12.2(react@18.3.1)':
     dependencies:
       fast-deep-equal: 3.1.3
       klona: 2.0.6
       react: 18.3.1
 
-  '@mantine/hooks@7.6.1(react@18.3.1)':
+  '@mantine/hooks@7.12.2(react@18.3.1)':
     dependencies:
       react: 18.3.1
 
-  '@mantine/modals@7.6.1(@mantine/core@7.6.1(@mantine/hooks@7.6.1(react@18.3.1))(@types/react@18.3.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(@mantine/hooks@7.6.1(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)':
+  '@mantine/modals@7.12.2(@mantine/core@7.12.2(@mantine/hooks@7.12.2(react@18.3.1))(@types/react@18.3.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(@mantine/hooks@7.12.2(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)':
     dependencies:
-      '@mantine/core': 7.6.1(@mantine/hooks@7.6.1(react@18.3.1))(@types/react@18.3.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
-      '@mantine/hooks': 7.6.1(react@18.3.1)
+      '@mantine/core': 7.12.2(@mantine/hooks@7.12.2(react@18.3.1))(@types/react@18.3.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@mantine/hooks': 7.12.2(react@18.3.1)
       react: 18.3.1
       react-dom: 18.3.1(react@18.3.1)
 
-  '@mantine/notifications@7.6.1(@mantine/core@7.6.1(@mantine/hooks@7.6.1(react@18.3.1))(@types/react@18.3.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(@mantine/hooks@7.6.1(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)':
+  '@mantine/notifications@7.12.2(@mantine/core@7.12.2(@mantine/hooks@7.12.2(react@18.3.1))(@types/react@18.3.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(@mantine/hooks@7.12.2(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)':
     dependencies:
-      '@mantine/core': 7.6.1(@mantine/hooks@7.6.1(react@18.3.1))(@types/react@18.3.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
-      '@mantine/hooks': 7.6.1(react@18.3.1)
-      '@mantine/store': 7.6.1(react@18.3.1)
+      '@mantine/core': 7.12.2(@mantine/hooks@7.12.2(react@18.3.1))(@types/react@18.3.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@mantine/hooks': 7.12.2(react@18.3.1)
+      '@mantine/store': 7.12.2(react@18.3.1)
       react: 18.3.1
       react-dom: 18.3.1(react@18.3.1)
       react-transition-group: 4.4.5(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
 
-  '@mantine/store@7.6.1(react@18.3.1)':
+  '@mantine/store@7.12.2(react@18.3.1)':
     dependencies:
       react: 18.3.1
 
@@ -9276,6 +9281,12 @@ snapshots:
     dependencies:
       '@nodelib/fs.scandir': 2.1.5
       fastq: 1.17.1
+
+  '@nrwl/devkit@17.2.7(nx@17.2.7(@swc-node/register@1.9.1(@swc/core@1.5.7(@swc/helpers@0.5.11))(@swc/types@0.1.7)(typescript@5.4.5))(@swc/core@1.5.7(@swc/helpers@0.5.11)))':
+    dependencies:
+      '@nx/devkit': 17.2.7(nx@17.2.7(@swc-node/register@1.9.1(@swc/core@1.5.7(@swc/helpers@0.5.11))(@swc/types@0.1.7)(typescript@5.4.5))(@swc/core@1.5.7(@swc/helpers@0.5.11)))
+    transitivePeerDependencies:
+      - nx
 
   '@nrwl/devkit@17.2.7(nx@19.2.3(@swc-node/register@1.9.1(@swc/core@1.5.7(@swc/helpers@0.5.11))(@swc/types@0.1.7)(typescript@5.4.5))(@swc/core@1.5.7(@swc/helpers@0.5.11)))':
     dependencies:
@@ -9570,7 +9581,7 @@ snapshots:
 
   '@nx/devkit@17.2.7(nx@17.2.7(@swc-node/register@1.9.1(@swc/core@1.5.7(@swc/helpers@0.5.11))(@swc/types@0.1.7)(typescript@5.4.5))(@swc/core@1.5.7(@swc/helpers@0.5.11)))':
     dependencies:
-      '@nrwl/devkit': 17.2.7(nx@19.2.3(@swc-node/register@1.9.1(@swc/core@1.5.7(@swc/helpers@0.5.11))(@swc/types@0.1.7)(typescript@5.4.5))(@swc/core@1.5.7(@swc/helpers@0.5.11)))
+      '@nrwl/devkit': 17.2.7(nx@17.2.7(@swc-node/register@1.9.1(@swc/core@1.5.7(@swc/helpers@0.5.11))(@swc/types@0.1.7)(typescript@5.4.5))(@swc/core@1.5.7(@swc/helpers@0.5.11)))
       ejs: 3.1.9
       enquirer: 2.3.6
       ignore: 5.3.1
@@ -10265,7 +10276,7 @@ snapshots:
       esquery: 1.5.0
       typescript: 5.4.5
 
-  '@pmmmwh/react-refresh-webpack-plugin@0.5.11(react-refresh@0.10.0)(type-fest@3.13.1)(webpack-dev-server@4.15.1(bufferutil@4.0.8)(utf-8-validate@5.0.10)(webpack-cli@5.1.4)(webpack@5.90.3))(webpack@5.90.3(@swc/core@1.5.7(@swc/helpers@0.5.11))(webpack-cli@5.1.4))':
+  '@pmmmwh/react-refresh-webpack-plugin@0.5.11(react-refresh@0.10.0)(type-fest@4.26.1)(webpack-dev-server@4.15.1(bufferutil@4.0.8)(utf-8-validate@5.0.10)(webpack-cli@5.1.4)(webpack@5.90.3))(webpack@5.90.3(@swc/core@1.5.7(@swc/helpers@0.5.11))(webpack-cli@5.1.4))':
     dependencies:
       ansi-html-community: 0.0.8
       common-path-prefix: 3.0.0
@@ -10279,17 +10290,17 @@ snapshots:
       source-map: 0.7.4
       webpack: 5.90.3(@swc/core@1.5.7(@swc/helpers@0.5.11))(webpack-cli@5.1.4)
     optionalDependencies:
-      type-fest: 3.13.1
+      type-fest: 4.26.1
       webpack-dev-server: 4.15.1(bufferutil@4.0.8)(utf-8-validate@5.0.10)(webpack-cli@5.1.4)(webpack@5.90.3)
 
   '@pubkey-ui/core@1.5.0(@types/react@18.3.1)(dayjs@1.11.10)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)':
     dependencies:
-      '@mantine/core': 7.6.1(@mantine/hooks@7.6.1(react@18.3.1))(@types/react@18.3.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
-      '@mantine/dates': 7.6.1(@mantine/core@7.6.1(@mantine/hooks@7.6.1(react@18.3.1))(@types/react@18.3.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(@mantine/hooks@7.6.1(react@18.3.1))(dayjs@1.11.10)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
-      '@mantine/form': 7.6.1(react@18.3.1)
-      '@mantine/hooks': 7.6.1(react@18.3.1)
-      '@mantine/modals': 7.6.1(@mantine/core@7.6.1(@mantine/hooks@7.6.1(react@18.3.1))(@types/react@18.3.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(@mantine/hooks@7.6.1(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
-      '@mantine/notifications': 7.6.1(@mantine/core@7.6.1(@mantine/hooks@7.6.1(react@18.3.1))(@types/react@18.3.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(@mantine/hooks@7.6.1(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@mantine/core': 7.12.2(@mantine/hooks@7.12.2(react@18.3.1))(@types/react@18.3.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@mantine/dates': 7.12.2(@mantine/core@7.12.2(@mantine/hooks@7.12.2(react@18.3.1))(@types/react@18.3.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(@mantine/hooks@7.12.2(react@18.3.1))(dayjs@1.11.10)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@mantine/form': 7.12.2(react@18.3.1)
+      '@mantine/hooks': 7.12.2(react@18.3.1)
+      '@mantine/modals': 7.12.2(@mantine/core@7.12.2(@mantine/hooks@7.12.2(react@18.3.1))(@types/react@18.3.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(@mantine/hooks@7.12.2(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@mantine/notifications': 7.12.2(@mantine/core@7.12.2(@mantine/hooks@7.12.2(react@18.3.1))(@types/react@18.3.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(@mantine/hooks@7.12.2(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       timeago-react: 3.0.6(react@18.3.1)
     transitivePeerDependencies:
       - '@types/react'
@@ -10297,9 +10308,9 @@ snapshots:
       - react
       - react-dom
 
-  '@pubkeyapp/wallet-adapter-mantine-ui@2.3.0(@mantine/core@7.6.1(@mantine/hooks@7.6.1(react@18.3.1))(@types/react@18.3.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(@solana/wallet-adapter-base@0.9.23(@solana/web3.js@1.91.0(bufferutil@4.0.8)(utf-8-validate@5.0.10)))(@solana/wallet-adapter-react@0.15.35(@solana/web3.js@1.91.0(bufferutil@4.0.8)(utf-8-validate@5.0.10))(bs58@5.0.0)(react-native@0.73.5(@babel/core@7.24.0)(@babel/preset-env@7.24.0(@babel/core@7.24.0))(bufferutil@4.0.8)(react@18.3.1)(utf-8-validate@5.0.10))(react@18.3.1))(@tabler/icons-react@2.47.0(react@18.3.1))(react@18.3.1)':
+  '@pubkeyapp/wallet-adapter-mantine-ui@2.3.0(@mantine/core@7.12.2(@mantine/hooks@7.12.2(react@18.3.1))(@types/react@18.3.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(@solana/wallet-adapter-base@0.9.23(@solana/web3.js@1.91.0(bufferutil@4.0.8)(utf-8-validate@5.0.10)))(@solana/wallet-adapter-react@0.15.35(@solana/web3.js@1.91.0(bufferutil@4.0.8)(utf-8-validate@5.0.10))(bs58@5.0.0)(react-native@0.73.5(@babel/core@7.24.0)(@babel/preset-env@7.24.0(@babel/core@7.24.0))(bufferutil@4.0.8)(react@18.3.1)(utf-8-validate@5.0.10))(react@18.3.1))(@tabler/icons-react@2.47.0(react@18.3.1))(react@18.3.1)':
     dependencies:
-      '@mantine/core': 7.6.1(@mantine/hooks@7.6.1(react@18.3.1))(@types/react@18.3.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@mantine/core': 7.12.2(@mantine/hooks@7.12.2(react@18.3.1))(@types/react@18.3.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@solana/wallet-adapter-base': 0.9.23(@solana/web3.js@1.91.0(bufferutil@4.0.8)(utf-8-validate@5.0.10))
       '@solana/wallet-adapter-react': 0.15.35(@solana/web3.js@1.91.0(bufferutil@4.0.8)(utf-8-validate@5.0.10))(bs58@5.0.0)(react-native@0.73.5(@babel/core@7.24.0)(@babel/preset-env@7.24.0(@babel/core@7.24.0))(bufferutil@4.0.8)(react@18.3.1)(utf-8-validate@5.0.10))(react@18.3.1)
       '@tabler/icons-react': 2.47.0(react@18.3.1)
@@ -12535,6 +12546,8 @@ snapshots:
   clone@1.0.4: {}
 
   clsx@2.1.0: {}
+
+  clsx@2.1.1: {}
 
   co@4.6.0: {}
 
@@ -16197,7 +16210,7 @@ snapshots:
       postcss: 8.4.38
       postcss-value-parser: 4.2.0
 
-  postcss-preset-mantine@1.13.0(postcss@8.4.38):
+  postcss-preset-mantine@1.17.0(postcss@8.4.38):
     dependencies:
       postcss: 8.4.38
       postcss-mixins: 9.0.4(postcss@8.4.38)
@@ -17475,7 +17488,7 @@ snapshots:
 
   type-fest@0.7.1: {}
 
-  type-fest@3.13.1: {}
+  type-fest@4.26.1: {}
 
   type-is@1.6.18:
     dependencies:
