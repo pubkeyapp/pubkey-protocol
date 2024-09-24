@@ -1,12 +1,13 @@
 import { Anchor, AnchorProps, Button, Group, Menu, Select, Table, Text, TextInput } from '@mantine/core'
+import { useForm } from '@mantine/form'
 import { modals } from '@mantine/modals'
 import { UiCopy, UiStack, UiWarning } from '@pubkey-ui/core'
 import { useConnection } from '@solana/wallet-adapter-react'
 import { IconNetwork, IconNetworkOff, IconTrash } from '@tabler/icons-react'
 import { useQuery } from '@tanstack/react-query'
-import { ReactNode, useState } from 'react'
+import { ReactNode } from 'react'
 import { Link } from 'react-router-dom'
-import { ClusterNetwork, useCluster } from './cluster-data-access'
+import { Cluster, ClusterNetwork, useCluster } from './cluster-data-access'
 
 export function ExplorerLink({
   copy,
@@ -91,9 +92,6 @@ export function ClusterChecker({ children }: { children: ReactNode }) {
 
 export function ClusterUiModal() {
   const { addCluster } = useCluster()
-  const [name, setName] = useState('')
-  const [network, setNetwork] = useState<ClusterNetwork | undefined>(ClusterNetwork.Devnet)
-  const [endpoint, setEndpoint] = useState('')
 
   return (
     <Button
@@ -101,41 +99,67 @@ export function ClusterUiModal() {
         modals.open({
           title: 'Add Cluster',
           children: (
-            <UiStack>
-              <TextInput type="text" placeholder="Name" value={name} onChange={(e) => setName(e.target.value)} />
-              <TextInput
-                type="text"
-                placeholder="Endpoint"
-                value={endpoint}
-                onChange={(e) => setEndpoint(e.target.value)}
-              />
-              <Select
-                value={network}
-                onChange={(value) => setNetwork(value as ClusterNetwork)}
-                data={[
-                  { value: ClusterNetwork.Custom, label: 'Custom' },
-                  { value: ClusterNetwork.Devnet, label: 'Devnet' },
-                  { value: ClusterNetwork.Testnet, label: 'Testnet' },
-                  { value: ClusterNetwork.Mainnet, label: 'Mainnet' },
-                ]}
-              />
-              <Group justify="flex-end">
-                <Button
-                  onClick={() => {
-                    addCluster({ name, network, endpoint })
-                    modals.closeAll()
-                  }}
-                >
-                  Save
-                </Button>
-              </Group>
-            </UiStack>
+            <ClusterUiForm
+              addCluster={(input) => {
+                addCluster(input)
+                modals.closeAll()
+              }}
+            />
           ),
         })
       }}
     >
       Add Cluster
     </Button>
+  )
+}
+
+export function ClusterUiForm({ addCluster }: { addCluster: (input: Cluster) => void }) {
+  const form = useForm<Cluster>({
+    initialValues: {
+      endpoint: '',
+      name: '',
+      network: ClusterNetwork.Devnet,
+    },
+    // Validate that the endpoint is a valid URL
+    validate: (values) => {
+      try {
+        new URL(values.endpoint)
+        return {}
+      } catch (error) {
+        return { endpoint: 'Invalid URL' }
+      }
+    },
+  })
+
+  return (
+    <form onSubmit={form.onSubmit((values) => addCluster(values))}>
+      <UiStack>
+        <TextInput type="text" placeholder="Name" withAsterisk key={form.key('name')} {...form.getInputProps('name')} />
+        <TextInput
+          type="url"
+          placeholder="Endpoint"
+          withAsterisk
+          key={form.key('endpoint')}
+          {...form.getInputProps('endpoint')}
+        />
+        <Select
+          allowDeselect={false}
+          withAsterisk
+          key={form.key('network')}
+          data={[
+            { value: ClusterNetwork.Custom, label: 'Custom' },
+            { value: ClusterNetwork.Devnet, label: 'Devnet' },
+            { value: ClusterNetwork.Testnet, label: 'Testnet' },
+            { value: ClusterNetwork.Mainnet, label: 'Mainnet' },
+          ]}
+          {...form.getInputProps('network')}
+        />
+        <Group justify="flex-end">
+          <Button type="submit">Save</Button>
+        </Group>
+      </UiStack>
+    </form>
   )
 }
 
