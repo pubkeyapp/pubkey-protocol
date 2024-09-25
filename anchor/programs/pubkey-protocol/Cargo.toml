@@ -1,0 +1,20 @@
+[package]
+name = "pubkey-protocol"
+version = "0.1.0"
+description = "Created with Anchor"
+edition = "2021"
+
+[lib]
+crate-type = ["cdylib", "lib"]
+name = "pubkey_protocol"
+
+[features]
+idl-build = ["anchor-lang/idl-build"]
+no-entrypoint = []
+no-idl = []
+no-log-ix-name = []
+cpi = ["no-entrypoint"]
+default = []
+
+[dependencies]
+anchor-lang = "0.30.1"

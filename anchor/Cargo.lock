@@ -1197,7 +1197,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "pubkey-profile"
+name = "pubkey-protocol"
 version = "0.1.0"
 dependencies = [
  "anchor-lang",

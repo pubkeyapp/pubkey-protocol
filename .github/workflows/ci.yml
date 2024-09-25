@@ -40,4 +40,5 @@ jobs:
         run: cargo --list
       - uses: nrwl/nx-set-shas@v4
       # TODO: Make sure the anchor build runs prettier after the build
+      - run: pnpm anchor keys sync
       - run: pnpm exec nx affected -t lint test build --exclude sdk

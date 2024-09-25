@@ -1,1 +1,1 @@
-export * from './pubkey-profile-exports'
+export * from './pubkey-protocol-exports'

@@ -10,17 +10,17 @@ import { WalletIcon } from './features/solana/solana-provider'
 
 const ClusterFeature = lazy(() => import('./features/cluster/cluster-feature'))
 
-const PubkeyProfileFeature = lazy(() => import('./features/pubkey-profile/feature/pubkey-profile.routes'))
-const links: UiHeaderLink[] = [{ label: 'PubKey Profile', link: '/pubkey-profile' }]
+const PubkeyProfileFeature = lazy(() => import('./features/pubkey-protocol/feature/pubkey-protocol.routes'))
+const links: UiHeaderLink[] = [{ label: 'PubKey Protocol', link: '/pubkey-protocol' }]
 const routes: RouteObject[] = [
   { path: '/clusters', element: <ClusterFeature /> },
   { path: '/keypairs/*', element: <KeypairFeature /> },
-  { path: '/pubkey-profile/*', element: <PubkeyProfileFeature basePath="/pubkey-profile" /> },
+  { path: '/pubkey-protocol/*', element: <PubkeyProfileFeature basePath="/pubkey-protocol" /> },
 ]
 
 export function AppRoutes() {
   const router = useRoutes([
-    { path: '/', element: <Navigate to="/pubkey-profile" replace /> },
+    { path: '/', element: <Navigate to="/pubkey-protocol" replace /> },
     ...routes,
 
     { path: '*', element: <UiNotFound /> },
