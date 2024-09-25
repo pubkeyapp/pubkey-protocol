@@ -16,7 +16,6 @@ wallet = "~/.config/solana/id.json"
 
 [scripts]
 test = "../node_modules/.bin/nx run anchor:jest"
-test-watch = "../node_modules/.bin/nx run anchor:jest --watch"
 
 [test]
 startup_wait = 5000
