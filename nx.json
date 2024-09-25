@@ -1,17 +1,39 @@
 {
   "$schema": "./node_modules/nx/schemas/nx-schema.json",
-  "namedInputs": { "default": ["{projectRoot}/**/*", "sharedGlobals"], "production": ["default"], "sharedGlobals": [] },
+  "namedInputs": {
+    "default": ["{projectRoot}/**/*", "sharedGlobals"],
+    "production": ["default"],
+    "sharedGlobals": []
+  },
   "useInferencePlugins": false,
-  "nxCloudAccessToken": "YWYyMDUxMDctZTYwYS00ZWM1LWFjMGEtODQxNGU5MTQzYThmfHJlYWQtd3JpdGU=",
+  "nxCloudAccessToken": "NTRjMWVmOWUtZTgyZi00ZmI3LThhY2MtNDEwYzVjYjY0OGJhfHJlYWQ=",
   "generators": {
     "@nx/react": {
-      "application": { "babel": true, "style": "css", "linter": "eslint", "bundler": "webpack" },
-      "component": { "style": "css" },
-      "library": { "style": "css", "linter": "eslint" }
+      "application": {
+        "babel": true,
+        "style": "css",
+        "linter": "eslint",
+        "bundler": "webpack"
+      },
+      "component": {
+        "style": "css"
+      },
+      "library": {
+        "style": "css",
+        "linter": "eslint"
+      }
     }
   },
   "targetDefaults": {
-    "@nx/rollup:rollup": { "cache": true, "dependsOn": ["^build"], "inputs": ["production", "^production"] }
+    "@nx/rollup:rollup": {
+      "cache": true,
+      "dependsOn": ["^build"],
+      "inputs": ["production", "^production"]
+    }
   },
-  "release": { "version": { "preVersionCommand": "pnpm dlx nx run-many -t build" } }
+  "release": {
+    "version": {
+      "preVersionCommand": "pnpm dlx nx run-many -t build"
+    }
+  }
 }
