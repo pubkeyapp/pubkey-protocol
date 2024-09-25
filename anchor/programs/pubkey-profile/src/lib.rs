@@ -9,7 +9,7 @@ pub mod instructions;
 pub mod state;
 pub mod utils;
 
-declare_id!("PPLxwat1miBwyQHq5afxLzdXyAMG4jPp6981yQA5hyb");
+declare_id!("PUBKEYsiC4c87gFa5qGcH7t6VobVu3A4QqPUA2wzvam");
 
 #[program]
 pub mod pubkey_profile {

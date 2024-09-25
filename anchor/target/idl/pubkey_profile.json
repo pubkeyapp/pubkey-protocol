@@ -1,5 +1,5 @@
 {
-  "address": "PPLxwat1miBwyQHq5afxLzdXyAMG4jPp6981yQA5hyb",
+  "address": "PUBKEYsiC4c87gFa5qGcH7t6VobVu3A4QqPUA2wzvam",
   "metadata": {
     "name": "pubkey_profile",
     "version": "0.1.0",
@@ -9,7 +9,16 @@
   "instructions": [
     {
       "name": "add_identity",
-      "discriminator": [212, 100, 104, 34, 15, 136, 248, 225],
+      "discriminator": [
+        212,
+        100,
+        104,
+        34,
+        15,
+        136,
+        248,
+        225
+      ],
       "accounts": [
         {
           "name": "profile",
@@ -18,11 +27,34 @@
             "seeds": [
               {
                 "kind": "const",
-                "value": [112, 117, 98, 107, 101, 121, 95, 112, 114, 111, 102, 105, 108, 101]
+                "value": [
+                  112,
+                  117,
+                  98,
+                  107,
+                  101,
+                  121,
+                  95,
+                  112,
+                  114,
+                  111,
+                  102,
+                  105,
+                  108,
+                  101
+                ]
               },
               {
                 "kind": "const",
-                "value": [112, 114, 111, 102, 105, 108, 101]
+                "value": [
+                  112,
+                  114,
+                  111,
+                  102,
+                  105,
+                  108,
+                  101
+                ]
               },
               {
                 "kind": "account",
@@ -44,7 +76,9 @@
           "name": "fee_payer",
           "writable": true,
           "signer": true,
-          "relations": ["profile"]
+          "relations": [
+            "profile"
+          ]
         },
         {
           "name": "system_program",
@@ -64,7 +98,16 @@
     },
     {
       "name": "add_profile_authority",
-      "discriminator": [193, 106, 183, 12, 216, 250, 151, 31],
+      "discriminator": [
+        193,
+        106,
+        183,
+        12,
+        216,
+        250,
+        151,
+        31
+      ],
       "accounts": [
         {
           "name": "profile",
@@ -73,11 +116,34 @@
             "seeds": [
               {
                 "kind": "const",
-                "value": [112, 117, 98, 107, 101, 121, 95, 112, 114, 111, 102, 105, 108, 101]
+                "value": [
+                  112,
+                  117,
+                  98,
+                  107,
+                  101,
+                  121,
+                  95,
+                  112,
+                  114,
+                  111,
+                  102,
+                  105,
+                  108,
+                  101
+                ]
               },
               {
                 "kind": "const",
-                "value": [112, 114, 111, 102, 105, 108, 101]
+                "value": [
+                  112,
+                  114,
+                  111,
+                  102,
+                  105,
+                  108,
+                  101
+                ]
               },
               {
                 "kind": "account",
@@ -95,7 +161,9 @@
           "name": "fee_payer",
           "writable": true,
           "signer": true,
-          "relations": ["profile"]
+          "relations": [
+            "profile"
+          ]
         },
         {
           "name": "system_program",
@@ -115,7 +183,16 @@
     },
     {
       "name": "cancel_update_community_authority",
-      "discriminator": [35, 173, 125, 89, 189, 117, 252, 233],
+      "discriminator": [
+        35,
+        173,
+        125,
+        89,
+        189,
+        117,
+        252,
+        233
+      ],
       "accounts": [
         {
           "name": "community",
@@ -124,11 +201,36 @@
             "seeds": [
               {
                 "kind": "const",
-                "value": [112, 117, 98, 107, 101, 121, 95, 112, 114, 111, 102, 105, 108, 101]
+                "value": [
+                  112,
+                  117,
+                  98,
+                  107,
+                  101,
+                  121,
+                  95,
+                  112,
+                  114,
+                  111,
+                  102,
+                  105,
+                  108,
+                  101
+                ]
               },
               {
                 "kind": "const",
-                "value": [99, 111, 109, 109, 117, 110, 105, 116, 121]
+                "value": [
+                  99,
+                  111,
+                  109,
+                  109,
+                  117,
+                  110,
+                  105,
+                  116,
+                  121
+                ]
               },
               {
                 "kind": "account",
@@ -147,7 +249,16 @@
     },
     {
       "name": "create_community",
-      "discriminator": [203, 214, 176, 194, 13, 207, 22, 60],
+      "discriminator": [
+        203,
+        214,
+        176,
+        194,
+        13,
+        207,
+        22,
+        60
+      ],
       "accounts": [
         {
           "name": "community",
@@ -156,11 +267,36 @@
             "seeds": [
               {
                 "kind": "const",
-                "value": [112, 117, 98, 107, 101, 121, 95, 112, 114, 111, 102, 105, 108, 101]
+                "value": [
+                  112,
+                  117,
+                  98,
+                  107,
+                  101,
+                  121,
+                  95,
+                  112,
+                  114,
+                  111,
+                  102,
+                  105,
+                  108,
+                  101
+                ]
               },
               {
                 "kind": "const",
-                "value": [99, 111, 109, 109, 117, 110, 105, 116, 121]
+                "value": [
+                  99,
+                  111,
+                  109,
+                  109,
+                  117,
+                  110,
+                  105,
+                  116,
+                  121
+                ]
               },
               {
                 "kind": "arg",
@@ -200,7 +336,16 @@
     },
     {
       "name": "create_profile",
-      "discriminator": [225, 205, 234, 143, 17, 186, 50, 220],
+      "discriminator": [
+        225,
+        205,
+        234,
+        143,
+        17,
+        186,
+        50,
+        220
+      ],
       "accounts": [
         {
           "name": "profile",
@@ -209,11 +354,34 @@
             "seeds": [
               {
                 "kind": "const",
-                "value": [112, 117, 98, 107, 101, 121, 95, 112, 114, 111, 102, 105, 108, 101]
+                "value": [
+                  112,
+                  117,
+                  98,
+                  107,
+                  101,
+                  121,
+                  95,
+                  112,
+                  114,
+                  111,
+                  102,
+                  105,
+                  108,
+                  101
+                ]
               },
               {
                 "kind": "const",
-                "value": [112, 114, 111, 102, 105, 108, 101]
+                "value": [
+                  112,
+                  114,
+                  111,
+                  102,
+                  105,
+                  108,
+                  101
+                ]
               },
               {
                 "kind": "arg",
@@ -253,7 +421,16 @@
     },
     {
       "name": "finalize_update_community_authority",
-      "discriminator": [124, 226, 211, 212, 102, 247, 120, 101],
+      "discriminator": [
+        124,
+        226,
+        211,
+        212,
+        102,
+        247,
+        120,
+        101
+      ],
       "accounts": [
         {
           "name": "community",
@@ -262,11 +439,36 @@
             "seeds": [
               {
                 "kind": "const",
-                "value": [112, 117, 98, 107, 101, 121, 95, 112, 114, 111, 102, 105, 108, 101]
+                "value": [
+                  112,
+                  117,
+                  98,
+                  107,
+                  101,
+                  121,
+                  95,
+                  112,
+                  114,
+                  111,
+                  102,
+                  105,
+                  108,
+                  101
+                ]
               },
               {
                 "kind": "const",
-                "value": [99, 111, 109, 109, 117, 110, 105, 116, 121]
+                "value": [
+                  99,
+                  111,
+                  109,
+                  109,
+                  117,
+                  110,
+                  105,
+                  116,
+                  121
+                ]
               },
               {
                 "kind": "account",
@@ -285,7 +487,16 @@
     },
     {
       "name": "initiate_update_community_authority",
-      "discriminator": [30, 152, 215, 7, 192, 28, 143, 39],
+      "discriminator": [
+        30,
+        152,
+        215,
+        7,
+        192,
+        28,
+        143,
+        39
+      ],
       "accounts": [
         {
           "name": "community",
@@ -294,11 +505,36 @@
             "seeds": [
               {
                 "kind": "const",
-                "value": [112, 117, 98, 107, 101, 121, 95, 112, 114, 111, 102, 105, 108, 101]
+                "value": [
+                  112,
+                  117,
+                  98,
+                  107,
+                  101,
+                  121,
+                  95,
+                  112,
+                  114,
+                  111,
+                  102,
+                  105,
+                  108,
+                  101
+                ]
               },
               {
                 "kind": "const",
-                "value": [99, 111, 109, 109, 117, 110, 105, 116, 121]
+                "value": [
+                  99,
+                  111,
+                  109,
+                  109,
+                  117,
+                  110,
+                  105,
+                  116,
+                  121
+                ]
               },
               {
                 "kind": "account",
@@ -326,7 +562,16 @@
     },
     {
       "name": "remove_authority",
-      "discriminator": [242, 104, 208, 132, 190, 250, 74, 216],
+      "discriminator": [
+        242,
+        104,
+        208,
+        132,
+        190,
+        250,
+        74,
+        216
+      ],
       "accounts": [
         {
           "name": "profile",
@@ -335,11 +580,34 @@
             "seeds": [
               {
                 "kind": "const",
-                "value": [112, 117, 98, 107, 101, 121, 95, 112, 114, 111, 102, 105, 108, 101]
+                "value": [
+                  112,
+                  117,
+                  98,
+                  107,
+                  101,
+                  121,
+                  95,
+                  112,
+                  114,
+                  111,
+                  102,
+                  105,
+                  108,
+                  101
+                ]
               },
               {
                 "kind": "const",
-                "value": [112, 114, 111, 102, 105, 108, 101]
+                "value": [
+                  112,
+                  114,
+                  111,
+                  102,
+                  105,
+                  108,
+                  101
+                ]
               },
               {
                 "kind": "account",
@@ -357,7 +625,9 @@
           "name": "fee_payer",
           "writable": true,
           "signer": true,
-          "relations": ["profile"]
+          "relations": [
+            "profile"
+          ]
         }
       ],
       "args": [
@@ -373,7 +643,16 @@
     },
     {
       "name": "remove_identity",
-      "discriminator": [146, 93, 160, 7, 61, 138, 181, 113],
+      "discriminator": [
+        146,
+        93,
+        160,
+        7,
+        61,
+        138,
+        181,
+        113
+      ],
       "accounts": [
         {
           "name": "profile",
@@ -382,11 +661,34 @@
             "seeds": [
               {
                 "kind": "const",
-                "value": [112, 117, 98, 107, 101, 121, 95, 112, 114, 111, 102, 105, 108, 101]
+                "value": [
+                  112,
+                  117,
+                  98,
+                  107,
+                  101,
+                  121,
+                  95,
+                  112,
+                  114,
+                  111,
+                  102,
+                  105,
+                  108,
+                  101
+                ]
               },
               {
                 "kind": "const",
-                "value": [112, 114, 111, 102, 105, 108, 101]
+                "value": [
+                  112,
+                  114,
+                  111,
+                  102,
+                  105,
+                  108,
+                  101
+                ]
               },
               {
                 "kind": "account",
@@ -395,7 +697,9 @@
               }
             ]
           },
-          "relations": ["pointer"]
+          "relations": [
+            "pointer"
+          ]
         },
         {
           "name": "pointer",
@@ -409,7 +713,9 @@
           "name": "fee_payer",
           "writable": true,
           "signer": true,
-          "relations": ["profile"]
+          "relations": [
+            "profile"
+          ]
         },
         {
           "name": "system_program",
@@ -429,7 +735,16 @@
     },
     {
       "name": "update_community_details",
-      "discriminator": [147, 202, 232, 110, 107, 125, 130, 125],
+      "discriminator": [
+        147,
+        202,
+        232,
+        110,
+        107,
+        125,
+        130,
+        125
+      ],
       "accounts": [
         {
           "name": "community",
@@ -438,11 +753,36 @@
             "seeds": [
               {
                 "kind": "const",
-                "value": [112, 117, 98, 107, 101, 121, 95, 112, 114, 111, 102, 105, 108, 101]
+                "value": [
+                  112,
+                  117,
+                  98,
+                  107,
+                  101,
+                  121,
+                  95,
+                  112,
+                  114,
+                  111,
+                  102,
+                  105,
+                  108,
+                  101
+                ]
               },
               {
                 "kind": "const",
-                "value": [99, 111, 109, 109, 117, 110, 105, 116, 121]
+                "value": [
+                  99,
+                  111,
+                  109,
+                  109,
+                  117,
+                  110,
+                  105,
+                  116,
+                  121
+                ]
               },
               {
                 "kind": "account",
@@ -456,7 +796,9 @@
           "name": "authority",
           "writable": true,
           "signer": true,
-          "relations": ["community"]
+          "relations": [
+            "community"
+          ]
         }
       ],
       "args": [
@@ -472,7 +814,16 @@
     },
     {
       "name": "update_community_feepayers",
-      "discriminator": [252, 235, 116, 149, 213, 20, 3, 12],
+      "discriminator": [
+        252,
+        235,
+        116,
+        149,
+        213,
+        20,
+        3,
+        12
+      ],
       "accounts": [
         {
           "name": "community",
@@ -481,11 +832,36 @@
             "seeds": [
               {
                 "kind": "const",
-                "value": [112, 117, 98, 107, 101, 121, 95, 112, 114, 111, 102, 105, 108, 101]
+                "value": [
+                  112,
+                  117,
+                  98,
+                  107,
+                  101,
+                  121,
+                  95,
+                  112,
+                  114,
+                  111,
+                  102,
+                  105,
+                  108,
+                  101
+                ]
               },
               {
                 "kind": "const",
-                "value": [99, 111, 109, 109, 117, 110, 105, 116, 121]
+                "value": [
+                  99,
+                  111,
+                  109,
+                  109,
+                  117,
+                  110,
+                  105,
+                  116,
+                  121
+                ]
               },
               {
                 "kind": "account",
@@ -499,7 +875,9 @@
           "name": "authority",
           "writable": true,
           "signer": true,
-          "relations": ["community"]
+          "relations": [
+            "community"
+          ]
         },
         {
           "name": "system_program",
@@ -519,7 +897,16 @@
     },
     {
       "name": "update_profile_details",
-      "discriminator": [218, 18, 64, 5, 242, 160, 11, 38],
+      "discriminator": [
+        218,
+        18,
+        64,
+        5,
+        242,
+        160,
+        11,
+        38
+      ],
       "accounts": [
         {
           "name": "profile",
@@ -528,11 +915,34 @@
             "seeds": [
               {
                 "kind": "const",
-                "value": [112, 117, 98, 107, 101, 121, 95, 112, 114, 111, 102, 105, 108, 101]
+                "value": [
+                  112,
+                  117,
+                  98,
+                  107,
+                  101,
+                  121,
+                  95,
+                  112,
+                  114,
+                  111,
+                  102,
+                  105,
+                  108,
+                  101
+                ]
               },
               {
                 "kind": "const",
-                "value": [112, 114, 111, 102, 105, 108, 101]
+                "value": [
+                  112,
+                  114,
+                  111,
+                  102,
+                  105,
+                  108,
+                  101
+                ]
               },
               {
                 "kind": "account",
@@ -546,7 +956,9 @@
           "name": "fee_payer",
           "writable": true,
           "signer": true,
-          "relations": ["profile"]
+          "relations": [
+            "profile"
+          ]
         }
       ],
       "args": [
@@ -564,15 +976,42 @@
   "accounts": [
     {
       "name": "Community",
-      "discriminator": [192, 73, 211, 158, 178, 81, 19, 112]
+      "discriminator": [
+        192,
+        73,
+        211,
+        158,
+        178,
+        81,
+        19,
+        112
+      ]
     },
     {
       "name": "Pointer",
-      "discriminator": [31, 144, 159, 52, 95, 134, 207, 237]
+      "discriminator": [
+        31,
+        144,
+        159,
+        52,
+        95,
+        134,
+        207,
+        237
+      ]
     },
     {
       "name": "Profile",
-      "discriminator": [184, 101, 165, 188, 95, 63, 127, 188]
+      "discriminator": [
+        184,
+        101,
+        165,
+        188,
+        95,
+        63,
+        127,
+        188
+      ]
     }
   ],
   "errors": [
