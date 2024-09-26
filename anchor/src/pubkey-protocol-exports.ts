@@ -31,7 +31,16 @@ export function getPubkeyProtocolProgramId(cluster: Cluster) {
 export const PUBKEY_PROTOCOL_PREFIX = new TextEncoder().encode('pubkey_protocol')
 export const PUBKEY_PROTOCOL_SEED_PROFILE = new TextEncoder().encode('profile')
 export const PUBKEY_PROTOCOL_SEED_POINTER = new TextEncoder().encode('pointer')
-export const PUBKEY_PROTOCOl_SEED_COMMUNITY = new TextEncoder().encode('community')
+export const PUBKEY_PROTOCOL_SEED_COMMUNITY = new TextEncoder().encode('community')
+
+// Helper method to get the Community PDA
+export function getPubKeyCommunityPda({ programId, slug }: { programId: PublicKey; slug: string }) {
+  const hash = sha256(
+    Uint8Array.from([...PUBKEY_PROTOCOL_PREFIX, ...PUBKEY_PROTOCOL_SEED_COMMUNITY, ...stringToUint8Array(slug)]),
+  )
+
+  return PublicKey.findProgramAddressSync([hash], programId)
+}
 
 // Helper method to get the PubKeyProfile PDA
 export function getPubKeyProfilePda({ programId, username }: { programId: PublicKey; username: string }) {
@@ -58,15 +67,6 @@ export function getPubKeyPointerPda({
       ...stringToUint8Array(provider),
       ...stringToUint8Array(providerId),
     ]),
-  )
-
-  return PublicKey.findProgramAddressSync([hash], programId)
-}
-
-// Helper method to get the Community PDA
-export function getPubKeyCommunityPda({ programId, slug }: { programId: PublicKey; slug: string }) {
-  const hash = sha256(
-    Uint8Array.from([...PUBKEY_PROTOCOL_PREFIX, ...PUBKEY_PROTOCOl_SEED_COMMUNITY, ...stringToUint8Array(slug)]),
   )
 
   return PublicKey.findProgramAddressSync([hash], programId)

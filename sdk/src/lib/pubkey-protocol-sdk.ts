@@ -1,9 +1,11 @@
 import { AnchorProvider, Program } from '@coral-xyz/anchor'
 import {
+  getPubKeyCommunityPda,
   getPubKeyPointerPda,
   getPubKeyProfilePda,
   getPubkeyProtocolProgram,
   PUBKEY_PROTOCOL_PROGRAM_ID,
+  PubKeyCommunity,
   PubKeyIdentityProvider,
   PubKeyPointer,
   PubKeyProfile,
@@ -26,6 +28,12 @@ export interface PubKeyProfileSdkOptions {
   readonly provider: AnchorProvider
 }
 
+export interface GetCommunityBySlug {
+  slug: string
+}
+export interface GetCommunityPdaOptions {
+  slug: string
+}
 export interface GetPointerPdaOptions {
   provider: PubKeyIdentityProvider
   providerId: string
@@ -73,6 +81,14 @@ export interface AddAuthorityOptions {
   authority: PublicKey
   feePayer: PublicKey
   username: string
+}
+
+export interface CreateCommunityOptions {
+  avatarUrl: string
+  authority: PublicKey
+  feePayer: PublicKey
+  name: string
+  slug: string
 }
 
 export interface CreateProfileOptions {
@@ -142,6 +158,23 @@ export class PubkeyProtocolSdk {
     return this.createTransaction({ ix, feePayer })
   }
 
+  async createCommunity({ authority, avatarUrl, feePayer, name, slug }: CreateCommunityOptions) {
+    const [community] = this.getCommunityPda({ slug })
+
+    const ix = await this.program.methods
+      .createCommunity({ avatarUrl, name, slug, discord: '', github: '', website: '', x: '' })
+      .accountsStrict({
+        authority,
+        feePayer,
+        community,
+        pointer: PublicKey.default,
+        systemProgram: SystemProgram.programId,
+      })
+      .instruction()
+
+    return this.createTransaction({ ix, feePayer })
+  }
+
   async createProfile({ authority, avatarUrl, feePayer, name, username }: CreateProfileOptions) {
     const [profile] = this.getProfilePda({ username })
     const [pointer] = this.getPointerPda({ provider: PubKeyIdentityProvider.Solana, providerId: authority.toString() })
@@ -157,6 +190,42 @@ export class PubkeyProtocolSdk {
       .instruction()
 
     return this.createTransaction({ ix, feePayer })
+  }
+
+  async getCommunity({ communityPda }: { communityPda: PublicKey }): Promise<PubKeyCommunity> {
+    return this.program.account.community.fetch(communityPda).then((res) => {
+      // FIXME: Properly clean up the PubKey Community Data.
+      return {
+        ...res,
+        publicKey: communityPda,
+        providers: [],
+      } as PubKeyCommunity
+    })
+  }
+
+  async getCommunities(): Promise<PubKeyCommunity[]> {
+    return this.program.account.community.all().then((accounts) =>
+      accounts.map(({ account, publicKey }) => {
+        // FIXME: Properly clean up the PubKey Community Data.
+        return {
+          publicKey,
+          avatarUrl: account.avatarUrl,
+          bump: account.bump,
+          name: account.name,
+          slug: account.slug,
+        } as PubKeyCommunity
+      }),
+    )
+  }
+
+  async getCommunityBySlug({ slug }: GetCommunityBySlug): Promise<PubKeyCommunity> {
+    const [communityPda] = this.getCommunityPda({ slug })
+
+    return this.getCommunity({ communityPda })
+  }
+
+  getCommunityPda({ slug }: GetCommunityPdaOptions): [PublicKey, number] {
+    return getPubKeyCommunityPda({ programId: this.programId, slug })
   }
 
   async getProfiles(): Promise<PubKeyProfile[]> {

@@ -6,7 +6,7 @@ import { AppLabelsProvider } from './app-labels-provider'
 import { AppRoutes, ThemeLink } from './app-routes'
 import { ClusterProvider } from './features/cluster/cluster-data-access'
 import { KeypairProvider } from './features/keypair/data-access'
-import { SolanaProvider } from './features/solana/solana-provider'
+import { SolanaProvider } from './features/solana'
 
 const client = new QueryClient()
 

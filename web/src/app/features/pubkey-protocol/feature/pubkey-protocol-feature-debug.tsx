@@ -1,13 +1,16 @@
 import { UiDebug, UiPage } from '@pubkey-ui/core'
 import { IconBug } from '@tabler/icons-react'
-import { ellipsify } from '../../../ui/ellipsify'
+import { ellipsify } from '../../../ui'
 import { ExplorerLink } from '../../cluster/cluster-ui'
-import { usePubKeyProfile, useQueryGetPointers, useQueryGetProfiles } from '../data-access'
+import { usePubKeyProtocol } from '../data-access'
+import { useQueryGetCommunities } from '../../pubkey-community/data-access'
+import { useQueryGetPointers, useQueryGetProfiles } from '../../pubkey-profile/data-access'
 
 export function PubkeyProtocolFeatureDebug() {
+  const communityAccounts = useQueryGetCommunities()
   const profileAccounts = useQueryGetProfiles()
   const pointerAccounts = useQueryGetPointers()
-  const { program, sdk } = usePubKeyProfile()
+  const { program, sdk } = usePubKeyProtocol()
 
   return (
     <UiPage
@@ -20,6 +23,8 @@ export function PubkeyProtocolFeatureDebug() {
       <UiDebug
         data={{
           program,
+          communityAccounts: communityAccounts.data,
+          communityAccountsError: communityAccounts.error,
           profileAccounts: profileAccounts.data,
           profileAccountsError: profileAccounts.error,
           pointerAccounts: pointerAccounts.data,

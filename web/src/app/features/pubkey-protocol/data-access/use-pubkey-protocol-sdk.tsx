@@ -1,25 +1,23 @@
 import { getPubkeyProtocolProgramId } from '@pubkey-protocol/anchor'
 import { PubkeyProtocolSdk } from '@pubkey-protocol/sdk'
-import { useConnection } from '@solana/wallet-adapter-react'
-import { Cluster as SolanaCluster } from '@solana/web3.js'
+import { AnchorWallet, Wallet } from '@solana/wallet-adapter-react'
+import { Cluster as SolanaCluster, Connection } from '@solana/web3.js'
 import { useMemo } from 'react'
-import { useCluster } from '../../cluster/cluster-data-access'
-import { useAnchorProvider } from '../../solana/solana-provider'
+import { AnchorProvider } from '@coral-xyz/anchor'
 
-export function usePubkeyProtocolSdk() {
-  const provider = useAnchorProvider()
-  const { cluster, getExplorerUrl } = useCluster()
-  const { connection } = useConnection()
-
-  const sdk = useMemo(() => {
-    const programId = getPubkeyProtocolProgramId(cluster.network as SolanaCluster)
+export function usePubkeyProtocolSdk({
+  connection,
+  network,
+  wallet,
+}: {
+  connection: Connection
+  wallet: Wallet
+  network: SolanaCluster
+}) {
+  return useMemo(() => {
+    const provider = new AnchorProvider(connection, wallet as unknown as AnchorWallet, { commitment: 'confirmed' })
+    const programId = getPubkeyProtocolProgramId(network as SolanaCluster)
 
     return new PubkeyProtocolSdk({ connection, programId, provider })
-  }, [connection, cluster, provider])
-
-  return {
-    cluster,
-    getExplorerUrl,
-    sdk,
-  }
+  }, [connection, network, wallet])
 }

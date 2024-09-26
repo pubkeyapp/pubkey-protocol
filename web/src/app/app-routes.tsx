@@ -10,12 +10,22 @@ import { WalletIcon } from './features/solana/solana-provider'
 
 const ClusterFeature = lazy(() => import('./features/cluster/cluster-feature'))
 
-const PubkeyProfileFeature = lazy(() => import('./features/pubkey-protocol/feature/pubkey-protocol.routes'))
-const links: UiHeaderLink[] = [{ label: 'PubKey Protocol', link: '/pubkey-protocol' }]
+const PubkeyCommunityFeature = lazy(() => import('./features/pubkey-community/feature/pubkey-community.routes'))
+const PubkeyProfileFeature = lazy(() => import('./features/pubkey-profile/feature/pubkey-profile.routes'))
+const PubkeyProtocolFeature = lazy(() => import('./features/pubkey-protocol/feature/pubkey-protocol.routes'))
+
+const links: UiHeaderLink[] = [
+  { label: 'Communities', link: '/communities' },
+  { label: 'Profiles', link: '/profiles' },
+  { label: 'Debug', link: '/debug' },
+]
+
 const routes: RouteObject[] = [
   { path: '/clusters', element: <ClusterFeature /> },
   { path: '/keypairs/*', element: <KeypairFeature /> },
-  { path: '/pubkey-protocol/*', element: <PubkeyProfileFeature basePath="/pubkey-protocol" /> },
+  { path: '/communities/*', element: <PubkeyCommunityFeature basePath="/communities" /> },
+  { path: '/profiles/*', element: <PubkeyProfileFeature basePath="/profiles" /> },
+  { path: '/debug/*', element: <PubkeyProtocolFeature /> },
 ]
 
 export function AppRoutes() {

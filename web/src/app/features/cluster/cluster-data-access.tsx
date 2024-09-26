@@ -76,7 +76,7 @@ export function ClusterProvider({ children }: { children: ReactNode }) {
       setClusters(clusters.filter((item) => item.name !== cluster.name))
     },
     setCluster: (cluster: Cluster) => setCluster(cluster),
-    getExplorerUrl: (path: string) => `https://solana.fm/${path}${getClusterUrlParam(cluster)}`,
+    getExplorerUrl: (path: string) => `https://explorer.solana.com/${path}${getClusterUrlParam(cluster)}`,
   }
   return <Context.Provider value={value}>{children}</Context.Provider>
 }
@@ -89,16 +89,16 @@ function getClusterUrlParam(cluster: Cluster): string {
   let suffix = ''
   switch (cluster.network) {
     case ClusterNetwork.Devnet:
-      suffix = 'devnet-solana'
+      suffix = 'devnet'
       break
     case ClusterNetwork.Mainnet:
-      suffix = 'mainnet-solana'
+      suffix = 'mainnet'
       break
     case ClusterNetwork.Testnet:
-      suffix = 'testnet-solana'
+      suffix = 'testnet'
       break
     default:
-      suffix = `localnet-solana&customUrl=${encodeURIComponent(cluster.endpoint)}`
+      suffix = `custom&customUrl=${encodeURIComponent(cluster.endpoint)}`
       break
   }
 

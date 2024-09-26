@@ -1,14 +1,18 @@
 import { PubKeyIdentity, PubKeyIdentityProvider } from '@pubkey-protocol/anchor'
 import { PubkeyProtocolSdk } from '@pubkey-protocol/sdk'
 import { toastError, UiAlert, UiInfo, UiLoader, UiStack } from '@pubkey-ui/core'
-import { useConnection, useWallet } from '@solana/wallet-adapter-react'
-import { AccountInfo, ParsedAccountData, PublicKey, VersionedTransaction } from '@solana/web3.js'
+import {
+  AccountInfo,
+  Cluster as SolanaCluster,
+  ParsedAccountData,
+  PublicKey,
+  VersionedTransaction,
+} from '@solana/web3.js'
 import { useQueryClient } from '@tanstack/react-query'
 import { createContext, ReactNode, useContext } from 'react'
-import { Cluster } from '../../cluster/cluster-data-access'
-import { useKeypair } from '../../keypair/data-access'
-import { uiToastLink } from '../../keypair/data-access/lib/keypair-data-access'
-import { WalletButton } from '../../solana/solana-provider'
+import { Cluster, useCluster } from '../../cluster/cluster-data-access'
+import { uiToastLink, useKeypair } from '../../keypair/data-access'
+import { SolanaConnectionRenderProps, WalletButton } from '../../solana'
 import { usePubkeyProtocolSdk } from './use-pubkey-protocol-sdk'
 import { useQueryGetProgramAccount } from './use-query-get-program-account'
 
@@ -27,13 +31,24 @@ export interface PubKeyProfileProviderContext {
 
 const Context = createContext<PubKeyProfileProviderContext>({} as PubKeyProfileProviderContext)
 
-export function PubkeyProtocolProvider({ children }: { children: ReactNode }) {
+export function PubkeyProtocolProvider({
+  children,
+  connection,
+  publicKey,
+  signTransaction,
+  wallet,
+}: {
+  children: ReactNode
+} & SolanaConnectionRenderProps) {
   const client = useQueryClient()
-  const { cluster, getExplorerUrl, sdk } = usePubkeyProtocolSdk()
-  const { connection } = useConnection()
-  const programAccountQuery = useQueryGetProgramAccount({ cluster, sdk })
+  const { cluster, getExplorerUrl } = useCluster()
   const { feePayer, feePayerSign } = useKeypair()
-  const { publicKey, signTransaction } = useWallet()
+  const sdk = usePubkeyProtocolSdk({
+    connection,
+    network: cluster.network as SolanaCluster,
+    wallet,
+  })
+  const programAccountQuery = useQueryGetProgramAccount({ cluster, sdk })
 
   async function onSuccess(tx: string) {
     await Promise.all([
@@ -113,6 +128,6 @@ export function PubkeyProtocolProvider({ children }: { children: ReactNode }) {
   )
 }
 
-export function usePubKeyProfile() {
+export function usePubKeyProtocol() {
   return useContext(Context)
 }
