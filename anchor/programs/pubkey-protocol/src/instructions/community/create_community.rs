@@ -10,7 +10,7 @@ pub struct CreateCommunity<'info> {
     #[account(
       init,
       payer = fee_payer,
-      space = Community::size(&[authority.key()], &[Identity { provider: PubKeyIdentityProvider::Solana, provider_id: authority.key().to_string(), name: "Primary Wallet".to_owned() }]),
+      space = Community::size(&[authority.key()], &[Identity { provider: PubKeyIdentityProvider::Solana, provider_id: authority.key().to_string(), name: "Creator Wallet".to_owned() }]),
       seeds = [
         PREFIX,
         COMMUNITY,
@@ -19,18 +19,6 @@ pub struct CreateCommunity<'info> {
       bump
     )]
     pub community: Account<'info, Community>,
-
-    #[account(
-      init,
-      space = Pointer::size(),
-      payer = fee_payer,
-      seeds = [
-        &Pointer::hash_seed(&PubKeyIdentityProvider::Solana, &authority.key().to_string())
-      ],
-      bump
-    )]
-    pub pointer: Account<'info, Pointer>,
-
     pub authority: Signer<'info>,
 
     #[account(
