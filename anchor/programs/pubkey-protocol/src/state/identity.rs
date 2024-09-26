@@ -41,21 +41,19 @@ pub struct Identity {
 impl Identity {
     pub fn size() -> usize {
         1 + 1 + // provider
-        MAX_PROVIDER_ID_SIZE + // provider_id
-        MAX_PROVIDER_NAME_SIZE // name
+        MAX_PROVIDER_ID_SIZE +
+        MAX_PROVIDER_NAME_SIZE
     }
 
     pub fn validate(&self) -> Result<()> {
         let provider_id_len = self.provider_id.len();
         let provider_name_len = self.name.len();
 
-        // provider_id
         require!(
             provider_id_len <= MAX_PROVIDER_ID_SIZE,
             PubkeyProfileError::InvalidProviderID
         );
 
-        // name
         require!(
             provider_name_len <= MAX_PROVIDER_NAME_SIZE,
             PubkeyProfileError::InvalidProviderName

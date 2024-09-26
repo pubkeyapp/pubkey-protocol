@@ -20,7 +20,7 @@ impl Pointer {
     pub fn size() -> usize {
         8 + // Anchor Disciminator
         1 + 1 + // provider
-        MAX_PROVIDER_ID_SIZE + // provider_id
+        MAX_PROVIDER_ID_SIZE +
         32 // profile
     }
 
