@@ -33,25 +33,19 @@ pub struct Community {
 
 impl Community {
     pub fn size(fee_payers: &[Pubkey], providers: &[Identity]) -> usize {
-        let fee_payers_size = 4 + // Vector discriminator
-        (fee_payers.len() * 32); // Total fee payers pubkey length
-
-        let providers_size = 4 + // Vector discriminator
-            (providers.len() * Identity::size()); // Total providers length
+        let fee_payers_size = 4 + (fee_payers.len() * 32);
+        let providers_size = 4 + (providers.len() * Identity::size());
 
         8 + // Anchor discriminator
         1 + // bump
-        4 + MAX_SLUG_SIZE + // slug
-        4 + MAX_NAME_SIZE + // name
-        4 + MAX_URL_SIZE + // avatar_url
+        4 + MAX_SLUG_SIZE +
+        4 + MAX_NAME_SIZE +
+        4 + MAX_URL_SIZE +
         32 + // authority
-        1 + 32 + // pending_authority (Option<PubKey>)
-        fee_payers_size + // fee_payers
-        providers_size + // identities
-        1 + 4 + MAX_URL_SIZE + // x (Option<String>)
-        1 + 4 + MAX_URL_SIZE + // discord (Option<String>)
-        1 + 4 + MAX_URL_SIZE + // github (Option<String>)
-        1 + 4 + MAX_URL_SIZE // website (Option<String>)
+        1 + 32 + // pending_authority (Option<Pubkey>)
+        fee_payers_size +
+        providers_size +
+        (1 + 4 + MAX_URL_SIZE) * 6 // 6 Social Option<String> fields
     }
 
     pub fn validate(&self) -> Result<()> {
@@ -59,32 +53,28 @@ impl Community {
         let providers_len = self.providers.len();
         let fee_payers_len = self.fee_payers.len();
 
-        // Username
         require!(
             is_valid_username(&self.slug),
             PubkeyProfileError::InvalidSlug
         );
 
-        // Name
         require!(is_valid_name(&self.name), PubkeyProfileError::InvalidName);
 
-        // Avatar URL
         require!(
             is_valid_url(&self.avatar_url),
             PubkeyProfileError::InvalidAvatarURL
         );
+
         require!(
             avatar_url_len > 0 && avatar_url_len <= MAX_URL_SIZE,
             PubkeyProfileError::InvalidAvatarURL
         );
 
-        // Fee Payers
         require!(
             fee_payers_len <= MAX_VECTOR_SIZE.into(),
             PubkeyProfileError::MaxSizeReached
         );
 
-        // Providers
         require!(
             providers_len <= MAX_VECTOR_SIZE.into(),
             PubkeyProfileError::MaxSizeReached
@@ -93,30 +83,44 @@ impl Community {
             identity.validate()?;
         }
 
-        // TODO - Should restructure into a Link struct for all links with holisitic validation
-        // X (Twitter) URL (Optional)
-        if let Some(x) = &self.x {
-            require!(is_valid_x(x), PubkeyProfileError::InvalidXURL);
+        // Create a Link struct and validate method
+        let social_links = vec![
+            Link::new("x", self.x.as_deref()),
+            Link::new("discord", self.discord.as_deref()),
+            Link::new("github", self.github.as_deref()),
+            Link::new("website", self.website.as_deref()),
+            Link::new("farcaster", self.farcaster.as_deref()),
+            Link::new("telegram", self.telegram.as_deref()),
+        ];
+
+        for link in social_links {
+            link.validate()?;
         }
 
-        if let Some(discord) = &self.discord {
-            require!(
-                is_valid_discord(discord),
-                PubkeyProfileError::InvalidDiscordURL
-            );
+        pub struct Link<'a> {
+            link_type: &'a str,
+            url: Option<&'a str>,
         }
-
-        // GitHub URL (Optional)
-        if let Some(github) = &self.github {
-            require!(
-                is_valid_github(github),
-                PubkeyProfileError::InvalidGitHubURL
-            );
-        }
-
-        // Website URL (Optional)
-        if let Some(website) = &self.website {
-            require!(is_valid_url(website), PubkeyProfileError::InvalidWebsiteURL);
+        
+        impl<'a> Link<'a> {
+            pub fn new(link_type: &'a str, url: Option<&'a str>) -> Self {
+                Self { link_type, url }
+            }
+        
+            pub fn validate(&self) -> Result<()> {
+                if let Some(url) = self.url {
+                    match self.link_type {
+                        "x" => require!(is_valid_x(url), PubkeyProfileError::InvalidXURL),
+                        "discord" => require!(is_valid_discord(url), PubkeyProfileError::InvalidDiscordURL),
+                        "github" => require!(is_valid_github(url), PubkeyProfileError::InvalidGitHubURL),
+                        "website" => require!(is_valid_url(url), PubkeyProfileError::InvalidWebsiteURL),
+                        "farcaster" => require!(is_valid_farcaster(url), PubkeyProfileError::InvalidFarcasterURL),
+                        "telegram" => require!(is_valid_telegram(url), PubkeyProfileError::InvalidTelegramURL),
+                        _ => return Err(PubkeyProfileError::InvalidProviderID.into()),
+                    }
+                }
+                Ok(())
+            }
         }
 
         Ok(())
