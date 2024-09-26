@@ -1,11 +1,11 @@
 import { Group, Stack } from '@mantine/core'
-import { PubKeyProfile } from '@pubkey-program-library/anchor'
+import { PubKeyProfile } from '@pubkey-protocol/anchor'
 import { UiCard, UiDebugModal, UiGroup } from '@pubkey-ui/core'
 import { ReactNode } from 'react'
 import { ellipsify } from '../../../ui'
 import { ExplorerLink } from '../../cluster/cluster-ui'
-import { PubkeyProtocolUiAvatar } from './pubkey-protocol-ui-avatar'
 import { PubkeyProtocolUiAnchor } from './pubkey-protocol-ui-anchor'
+import { PubkeyProtocolUiAvatar } from './pubkey-protocol-ui-avatar'
 
 export function PubkeyProtocolUiListItem({
   children,

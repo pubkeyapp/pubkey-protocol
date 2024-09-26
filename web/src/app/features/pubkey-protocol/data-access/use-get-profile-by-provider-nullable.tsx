@@ -1,4 +1,4 @@
-import { PubKeyIdentityProvider } from '@pubkey-program-library/anchor'
+import { PubKeyIdentityProvider } from '@pubkey-protocol/anchor'
 import { useQuery } from '@tanstack/react-query'
 import { usePubKeyProfile } from './pubkey-protocol-provider'
 

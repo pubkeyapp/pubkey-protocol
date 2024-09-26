@@ -1,7 +1,7 @@
 import { Button, Group, Select, TextInput } from '@mantine/core'
 import { useForm } from '@mantine/form'
 import { modals } from '@mantine/modals'
-import { PubKeyIdentityProvider, PubKeyProfile } from '@pubkey-program-library/anchor'
+import { PubKeyIdentityProvider, PubKeyProfile } from '@pubkey-protocol/anchor'
 import { UiStack } from '@pubkey-ui/core'
 import { ellipsify, getEnumOptions } from '../../../ui'
 import { useMutationAddIdentity } from '../data-access'

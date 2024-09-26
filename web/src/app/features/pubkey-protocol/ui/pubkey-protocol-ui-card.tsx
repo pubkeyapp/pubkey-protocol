@@ -1,4 +1,4 @@
-import { PubKeyProfile } from '@pubkey-program-library/anchor'
+import { PubKeyProfile } from '@pubkey-protocol/anchor'
 import { UiStack } from '@pubkey-ui/core'
 import { PublicKey } from '@solana/web3.js'
 import { useMemo } from 'react'

@@ -1,5 +1,5 @@
 import { Group, Text, TextProps } from '@mantine/core'
-import { PUBKEY_PROTOCOL_PROGRAM_ID } from '@pubkey-program-library/anchor'
+import { PUBKEY_PROTOCOL_PROGRAM_ID } from '@pubkey-protocol/anchor'
 import { UiAnchor, UiCopy } from '@pubkey-ui/core'
 import { TOKEN_2022_PROGRAM_ID, TOKEN_PROGRAM_ID } from '@solana/spl-token'
 import { createContext, ReactNode, useContext, useMemo } from 'react'

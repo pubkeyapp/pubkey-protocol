@@ -1,4 +1,4 @@
-import { PubkeyProtocolSdk } from '@pubkey-program-library/sdk'
+import { PubkeyProtocolSdk } from '@pubkey-protocol/sdk'
 import { useQuery } from '@tanstack/react-query'
 import { Cluster } from '../../cluster/cluster-data-access'
 

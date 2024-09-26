@@ -1,5 +1,5 @@
-import { getPubkeyProtocolProgramId } from '@pubkey-program-library/anchor'
-import { PubkeyProtocolSdk } from '@pubkey-program-library/sdk'
+import { getPubkeyProtocolProgramId } from '@pubkey-protocol/anchor'
+import { PubkeyProtocolSdk } from '@pubkey-protocol/sdk'
 import { useConnection } from '@solana/wallet-adapter-react'
 import { Cluster as SolanaCluster } from '@solana/web3.js'
 import { useMemo } from 'react'

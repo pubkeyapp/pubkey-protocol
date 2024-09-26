@@ -1,4 +1,4 @@
-import { AddAuthorityOptions } from '@pubkey-program-library/sdk'
+import { AddAuthorityOptions } from '@pubkey-protocol/sdk'
 import { useMutation } from '@tanstack/react-query'
 import { usePubKeyProfile } from './pubkey-protocol-provider'
 

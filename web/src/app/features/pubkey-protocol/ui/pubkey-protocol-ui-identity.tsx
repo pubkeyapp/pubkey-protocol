@@ -1,5 +1,5 @@
 import { Group, Stack, Text } from '@mantine/core'
-import { PubKeyIdentity } from '@pubkey-program-library/anchor'
+import { PubKeyIdentity } from '@pubkey-protocol/anchor'
 import { UiAnchor } from '@pubkey-ui/core'
 import { ellipsify } from '../../../ui/ellipsify'
 import { usePubKeyProfile } from '../data-access'

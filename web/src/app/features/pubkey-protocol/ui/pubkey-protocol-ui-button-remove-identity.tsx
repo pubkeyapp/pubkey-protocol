@@ -1,5 +1,5 @@
 import { ActionIcon } from '@mantine/core'
-import { PubKeyIdentityProvider, PubKeyProfile } from '@pubkey-program-library/anchor'
+import { PubKeyIdentityProvider, PubKeyProfile } from '@pubkey-protocol/anchor'
 import { PublicKey } from '@solana/web3.js'
 import { IconTrash } from '@tabler/icons-react'
 import { useMutationRemoveIdentity } from '../data-access'

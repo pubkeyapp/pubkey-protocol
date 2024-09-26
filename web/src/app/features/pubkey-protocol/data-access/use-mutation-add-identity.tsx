@@ -1,4 +1,4 @@
-import { AddIdentityOptions } from '@pubkey-program-library/sdk'
+import { AddIdentityOptions } from '@pubkey-protocol/sdk'
 import { useMutation } from '@tanstack/react-query'
 import { usePubKeyProfile } from './pubkey-protocol-provider'
 

@@ -1,5 +1,5 @@
-import { PubKeyIdentity, PubKeyIdentityProvider } from '@pubkey-program-library/anchor'
-import { PubkeyProtocolSdk } from '@pubkey-program-library/sdk'
+import { PubKeyIdentity, PubKeyIdentityProvider } from '@pubkey-protocol/anchor'
+import { PubkeyProtocolSdk } from '@pubkey-protocol/sdk'
 import { toastError, UiAlert, UiInfo, UiLoader, UiStack } from '@pubkey-ui/core'
 import { useConnection, useWallet } from '@solana/wallet-adapter-react'
 import { AccountInfo, ParsedAccountData, PublicKey, VersionedTransaction } from '@solana/web3.js'

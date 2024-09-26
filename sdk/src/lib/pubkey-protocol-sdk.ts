@@ -8,7 +8,7 @@ import {
   PubKeyPointer,
   PubKeyProfile,
   PubkeyProtocol,
-} from '@pubkey-program-library/anchor'
+} from '@pubkey-protocol/anchor'
 import {
   AccountInfo,
   Connection,

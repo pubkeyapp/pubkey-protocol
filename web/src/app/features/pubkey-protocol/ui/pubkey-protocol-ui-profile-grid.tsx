@@ -1,5 +1,5 @@
 import { SimpleGrid } from '@mantine/core'
-import { PubKeyProfile } from '@pubkey-program-library/anchor'
+import { PubKeyProfile } from '@pubkey-protocol/anchor'
 import { UiCard } from '@pubkey-ui/core'
 
 import { PubkeyProtocolUiProfile } from './pubkey-protocol-ui-profile'

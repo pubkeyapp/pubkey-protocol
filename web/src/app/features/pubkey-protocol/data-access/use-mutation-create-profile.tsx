@@ -1,4 +1,4 @@
-import { CreateProfileOptions } from '@pubkey-program-library/sdk'
+import { CreateProfileOptions } from '@pubkey-protocol/sdk'
 import { useMutation } from '@tanstack/react-query'
 import { usePubKeyProfile } from './pubkey-protocol-provider'
 

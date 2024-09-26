@@ -1,4 +1,4 @@
-# PubKey Program Library (PPL)
+# PubKey Protocol (PPL)
 
 This is a work in progress.
 
@@ -17,7 +17,7 @@ This is a work in progress.
 >
 > ```sh
 > corepack enable
-> corepack prepare pnpm@8 --activate
+> corepack prepare pnpm@latest --activate
 > ```
 
 ### Installation
@@ -25,8 +25,8 @@ This is a work in progress.
 1. Clone the repository:
 
 ```sh
-git clone https://github.com/pubkeyapp/pubkey-program-library
-cd pubkey-program-library
+git clone https://github.com/pubkeyapp/pubkey-protocol
+cd pubkey-protocol
 pnpm install
 ```
 

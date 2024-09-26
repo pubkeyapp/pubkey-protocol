@@ -1,4 +1,4 @@
-import { PubKeyProfile } from '@pubkey-program-library/anchor'
+import { PubKeyProfile } from '@pubkey-protocol/anchor'
 import { UiGroup } from '@pubkey-ui/core'
 import { PublicKey } from '@solana/web3.js'
 import { useKeypair } from '../../keypair/data-access'

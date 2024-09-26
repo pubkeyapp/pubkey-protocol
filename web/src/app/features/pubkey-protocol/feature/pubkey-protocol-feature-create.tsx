@@ -1,4 +1,4 @@
-import { PubKeyIdentityProvider } from '@pubkey-program-library/anchor'
+import { PubKeyIdentityProvider } from '@pubkey-protocol/anchor'
 import { toastError, toastSuccess, UiCard, UiInfo, UiLoader, UiPage } from '@pubkey-ui/core'
 import { IconUserPlus } from '@tabler/icons-react'
 import { ellipsify } from '../../../ui'

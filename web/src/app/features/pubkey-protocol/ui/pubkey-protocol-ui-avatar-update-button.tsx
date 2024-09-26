@@ -1,5 +1,5 @@
 import { Box, UnstyledButton } from '@mantine/core'
-import { PubKeyProfile } from '@pubkey-program-library/anchor'
+import { PubKeyProfile } from '@pubkey-protocol/anchor'
 import { PublicKey } from '@solana/web3.js'
 import { useMutationUpdateAvatarUrl, usePubKeyProfile } from '../data-access'
 import { AppCard } from './app-card'

@@ -1,5 +1,5 @@
 import { AnchorProvider } from '@coral-xyz/anchor'
-import { PUBKEY_PROTOCOL_PROGRAM_ID, PubKeyIdentityProvider } from '@pubkey-program-library/anchor'
+import { PUBKEY_PROTOCOL_PROGRAM_ID, PubKeyIdentityProvider } from '@pubkey-protocol/anchor'
 import { airdropIfRequired, getKeypairFromFile } from '@solana-developers/helpers'
 import { Connection, Keypair, LAMPORTS_PER_SOL, PublicKey } from '@solana/web3.js'
 import { AnchorKeypairWallet } from './anchor-keypair-wallet'

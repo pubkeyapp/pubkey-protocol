@@ -1,5 +1,5 @@
 {
-  "name": "@pubkey-program-library/anchor",
+  "name": "@pubkey-protocol/anchor",
   "version": "1.7.1",
   "dependencies": {
     "@coral-xyz/anchor": "^0.30.1",
