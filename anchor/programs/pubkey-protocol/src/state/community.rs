@@ -25,10 +25,10 @@ pub struct Community {
     pub providers: Vec<Identity>,
     pub discord: Option<String>,
     pub farcaster: Option<String>,
-    pub github: Option<String>,  
-    pub telegram: Option<String>, 
-    pub website: Option<String>, 
-    pub x: Option<String>,   
+    pub github: Option<String>,
+    pub telegram: Option<String>,
+    pub website: Option<String>,
+    pub x: Option<String>,
 }
 
 impl Community {
@@ -101,12 +101,12 @@ impl Community {
             link_type: &'a str,
             url: Option<&'a str>,
         }
-        
+
         impl<'a> Link<'a> {
             pub fn new(link_type: &'a str, url: Option<&'a str>) -> Self {
                 Self { link_type, url }
             }
-        
+
             pub fn validate(&self) -> Result<()> {
                 if let Some(url) = self.url {
                     match self.link_type {

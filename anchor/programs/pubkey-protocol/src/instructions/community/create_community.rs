@@ -57,7 +57,7 @@ pub fn create_community(ctx: Context<CreateCommunity>, args: CreateCommunityArgs
         github,
         telegram,
         website,
-        x,      
+        x,
     } = args;
 
     let identity = Identity {
@@ -77,10 +77,10 @@ pub fn create_community(ctx: Context<CreateCommunity>, args: CreateCommunityArgs
         providers: vec![identity],
         discord,
         farcaster,
-        github, 
+        github,
         telegram,
         website,
-        x,      
+        x,
     });
 
     community.validate()?;
