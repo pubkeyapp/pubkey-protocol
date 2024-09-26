@@ -316,10 +316,6 @@ export type PubkeyProtocol = {
           }
         },
         {
-          "name": "pointer",
-          "writable": true
-        },
-        {
           "name": "authority",
           "signer": true
         },
@@ -1075,56 +1071,66 @@ export type PubkeyProtocol = {
     },
     {
       "code": 6008,
+      "name": "invalidFarcasterUrl",
+      "msg": "Invalid Farcaster URL"
+    },
+    {
+      "code": 6009,
+      "name": "invalidTelegramUrl",
+      "msg": "Invalid Telegram URL"
+    },
+    {
+      "code": 6010,
       "name": "invalidGitHubUrl",
       "msg": "Invalid GitHub URL"
     },
     {
-      "code": 6009,
+      "code": 6011,
       "name": "invalidWebsiteUrl",
       "msg": "Invalid Website URL"
     },
     {
-      "code": 6010,
+      "code": 6012,
       "name": "invalidProviderId",
       "msg": "Invalid Provider ID"
     },
     {
-      "code": 6011,
+      "code": 6013,
       "name": "invalidProviderName",
       "msg": "Invalid Provider Name"
     },
     {
-      "code": 6012,
+      "code": 6014,
       "name": "invalidAccountOwner",
       "msg": "Account not owned by program"
     },
     {
-      "code": 6013,
+      "code": 6015,
       "name": "authorityAlreadyExists",
       "msg": "Authority already exists"
     },
     {
-      "code": 6014,
+      "code": 6016,
       "name": "authorityNonExistent",
       "msg": "Authority does not exist"
     },
     {
-      "code": 6015,
+      "code": 6017,
       "name": "cannotRemoveSoloAuthority",
       "msg": "Cannot remove last remaining authority"
     },
     {
-      "code": 6016,
+      "code": 6018,
       "name": "maxSizeReached",
       "msg": "Array reached max size"
     },
     {
-      "code": 6017,
+      "code": 6019,
       "name": "identityAlreadyExists",
       "msg": "Identity already exists"
     },
     {
-      "code": 6018,
+      "code": 6020,
       "name": "identityNonExistent",
       "msg": "Identity does not exist"
     }
@@ -1214,13 +1220,13 @@ export type PubkeyProtocol = {
             }
           },
           {
-            "name": "x",
+            "name": "discord",
             "type": {
               "option": "string"
             }
           },
           {
-            "name": "discord",
+            "name": "farcaster",
             "type": {
               "option": "string"
             }
@@ -1232,7 +1238,19 @@ export type PubkeyProtocol = {
             }
           },
           {
+            "name": "telegram",
+            "type": {
+              "option": "string"
+            }
+          },
+          {
             "name": "website",
+            "type": {
+              "option": "string"
+            }
+          },
+          {
+            "name": "x",
             "type": {
               "option": "string"
             }
@@ -1246,25 +1264,17 @@ export type PubkeyProtocol = {
         "kind": "struct",
         "fields": [
           {
-            "name": "slug",
-            "type": "string"
-          },
-          {
-            "name": "name",
-            "type": "string"
-          },
-          {
             "name": "avatarUrl",
             "type": "string"
           },
           {
-            "name": "x",
+            "name": "discord",
             "type": {
               "option": "string"
             }
           },
           {
-            "name": "discord",
+            "name": "farcaster",
             "type": {
               "option": "string"
             }
@@ -1276,7 +1286,27 @@ export type PubkeyProtocol = {
             }
           },
           {
+            "name": "name",
+            "type": "string"
+          },
+          {
+            "name": "slug",
+            "type": "string"
+          },
+          {
+            "name": "telegram",
+            "type": {
+              "option": "string"
+            }
+          },
+          {
             "name": "website",
+            "type": {
+              "option": "string"
+            }
+          },
+          {
+            "name": "x",
             "type": {
               "option": "string"
             }
@@ -1421,13 +1451,19 @@ export type PubkeyProtocol = {
             "name": "discord"
           },
           {
-            "name": "solana"
+            "name": "farcaster"
           },
           {
             "name": "github"
           },
           {
             "name": "google"
+          },
+          {
+            "name": "solana"
+          },
+          {
+            "name": "telegram"
           },
           {
             "name": "x"
@@ -1465,19 +1501,7 @@ export type PubkeyProtocol = {
         "kind": "struct",
         "fields": [
           {
-            "name": "name",
-            "type": {
-              "option": "string"
-            }
-          },
-          {
             "name": "avatarUrl",
-            "type": {
-              "option": "string"
-            }
-          },
-          {
-            "name": "x",
             "type": {
               "option": "string"
             }
@@ -1489,13 +1513,37 @@ export type PubkeyProtocol = {
             }
           },
           {
+            "name": "farcaster",
+            "type": {
+              "option": "string"
+            }
+          },
+          {
             "name": "github",
             "type": {
               "option": "string"
             }
           },
           {
+            "name": "name",
+            "type": {
+              "option": "string"
+            }
+          },
+          {
+            "name": "telegram",
+            "type": {
+              "option": "string"
+            }
+          },
+          {
             "name": "website",
+            "type": {
+              "option": "string"
+            }
+          },
+          {
+            "name": "x",
             "type": {
               "option": "string"
             }
