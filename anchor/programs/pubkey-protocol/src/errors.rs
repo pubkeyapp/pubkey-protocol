@@ -18,6 +18,10 @@ pub enum PubkeyProfileError {
     InvalidXURL,
     #[msg("Invalid Discord URL")]
     InvalidDiscordURL,
+    #[msg("Invalid Farcaster URL")]
+    InvalidFarcasterURL,
+    #[msg("Invalid Telegram URL")]
+    InvalidTelegramURL,
     #[msg("Invalid GitHub URL")]
     InvalidGitHubURL,
     #[msg("Invalid Website URL")]

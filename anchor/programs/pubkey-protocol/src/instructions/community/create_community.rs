@@ -43,31 +43,21 @@ pub struct CreateCommunity<'info> {
 
 pub fn create_community(ctx: Context<CreateCommunity>, args: CreateCommunityArgs) -> Result<()> {
     let community = &mut ctx.accounts.community;
-    let pointer = &mut ctx.accounts.pointer;
 
     let authority = ctx.accounts.authority.key();
     let fee_payer = ctx.accounts.fee_payer.key();
-
-    // FIXME: We don't need pointers for communities
-    // Creating pointer account
-    pointer.set_inner(Pointer {
-        bump: ctx.bumps.pointer,
-        profile: community.key(),
-        provider: PubKeyIdentityProvider::Solana,
-        provider_id: authority.to_string(),
-    });
-
-    pointer.validate()?;
 
     // Creating community account
     let CreateCommunityArgs {
         slug,
         name,
         avatar_url,
-        x,       // optional
-        discord, // optional
-        github,  // optional
-        website, // optional
+        discord,
+        farcaster,
+        github,
+        telegram,
+        website,
+        x,      
     } = args;
 
     let identity = Identity {
@@ -85,10 +75,12 @@ pub fn create_community(ctx: Context<CreateCommunity>, args: CreateCommunityArgs
         authority,
         pending_authority: None,
         providers: vec![identity],
-        x,       // optional
-        discord, // optional
-        github,  // optional
-        website, // optional
+        discord,
+        farcaster,
+        github, 
+        telegram,
+        website,
+        x,      
     });
 
     community.validate()?;
@@ -98,11 +90,13 @@ pub fn create_community(ctx: Context<CreateCommunity>, args: CreateCommunityArgs
 
 #[derive(AnchorSerialize, AnchorDeserialize)]
 pub struct CreateCommunityArgs {
-    pub slug: String,
-    pub name: String,
     pub avatar_url: String,
-    pub x: Option<String>,
     pub discord: Option<String>,
+    pub farcaster: Option<String>,
     pub github: Option<String>,
+    pub name: String,
+    pub slug: String,
+    pub telegram: Option<String>,
     pub website: Option<String>,
+    pub x: Option<String>,
 }

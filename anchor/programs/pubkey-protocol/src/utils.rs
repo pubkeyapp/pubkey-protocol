@@ -70,6 +70,14 @@ pub fn is_valid_x(link: &str) -> bool {
     link.starts_with("https://twitter.com/") || link.starts_with("https://x.com/")
 }
 
+pub fn is_valid_farcaster(link: &str) -> bool {
+    link.starts_with("https://warpcast.com/")
+}
+
+pub fn is_valid_telegram(link: &str) -> bool {
+    link.starts_with("https://t.me/") || link.starts_with("https://telegram.me/")
+}
+
 pub fn realloc_account<'a>(
     account: AccountInfo<'a>,
     new_account_size: usize,

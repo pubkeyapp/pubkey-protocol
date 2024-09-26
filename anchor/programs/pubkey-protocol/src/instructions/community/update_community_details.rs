@@ -33,12 +33,14 @@ pub fn update_community_details(
 
     // Creating community account
     let UpdateCommunityDetailsArgs {
-        name,       // optional
-        avatar_url, // optional
-        x,          // optional
-        discord,    // optional
-        github,     // optional
-        website,    // optional
+        name,
+        avatar_url,
+        x,
+        discord,
+        github,
+        website,
+        telegram,
+        farcaster,
     } = args;
 
     // Update fields if they are provided
@@ -84,15 +86,33 @@ pub fn update_community_details(
         community.website = Some(website);
     }
 
+    if let Some(telegram) = telegram {
+        require!(
+            is_valid_telegram(&telegram),
+            PubkeyProfileError::InvalidTelegramURL
+        );
+        community.telegram = Some(telegram);
+    }
+
+    if let Some(farcaster) = farcaster {
+        require!(
+            is_valid_farcaster(&farcaster),
+            PubkeyProfileError::InvalidFarcasterURL
+        );
+        community.farcaster = Some(farcaster);
+    }
+
     Ok(())
 }
 
 #[derive(AnchorDeserialize, AnchorSerialize)]
 pub struct UpdateCommunityDetailsArgs {
-    pub name: Option<String>,       // Optional name
-    pub avatar_url: Option<String>, // Optional avatar URL
-    pub x: Option<String>,          // Optional X (Twitter) URL
-    pub discord: Option<String>,    // Optional Discord URL
-    pub github: Option<String>,     // Optional GitHub URL
-    pub website: Option<String>,    // Optional Website URL
+    pub avatar_url: Option<String>,
+    pub discord: Option<String>,
+    pub farcaster: Option<String>,
+    pub github: Option<String>,
+    pub name: Option<String>,
+    pub telegram: Option<String>,
+    pub website: Option<String>,
+    pub x: Option<String>,
 }

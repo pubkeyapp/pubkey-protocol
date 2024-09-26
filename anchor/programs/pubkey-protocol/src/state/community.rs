@@ -23,10 +23,12 @@ pub struct Community {
     pub pending_authority: Option<Pubkey>,
     // Providers (identities) user have added onto
     pub providers: Vec<Identity>,
-    pub x: Option<String>,       // Optional field for X (Twitter) url
-    pub discord: Option<String>, // Optional field for Discord invite url
-    pub github: Option<String>,  // Optional field for GitHub url
-    pub website: Option<String>, // Optional field for Website url
+    pub discord: Option<String>,
+    pub farcaster: Option<String>,
+    pub github: Option<String>,  
+    pub telegram: Option<String>, 
+    pub website: Option<String>, 
+    pub x: Option<String>,   
 }
 
 impl Community {
@@ -97,7 +99,6 @@ impl Community {
             require!(is_valid_x(x), PubkeyProfileError::InvalidXURL);
         }
 
-        // Discord URL (Optional)
         if let Some(discord) = &self.discord {
             require!(
                 is_valid_discord(discord),
