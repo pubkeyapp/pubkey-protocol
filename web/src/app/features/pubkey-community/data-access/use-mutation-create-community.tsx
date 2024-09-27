@@ -12,7 +12,6 @@ export function useMutationCreateCommunity() {
       sdk
         .createCommunity({
           ...options,
-          avatarUrl: options.avatarUrl || `https://api.dicebear.com/9.x/bottts-neutral/svg?seed=${options.slug}`,
           authority,
           feePayer,
         })

@@ -163,15 +163,15 @@ export class PubkeyProtocolSdk {
 
     const ix = await this.program.methods
       .createCommunity({
-        avatarUrl,
-        discord: '',
-        farcaster: '',
-        github: '',
+        avatarUrl: avatarUrl || `https://api.dicebear.com/9.x/glass/svg?seed=${slug}`,
+        discord: null,
+        farcaster: null,
+        github: null,
         name,
         slug,
-        telegram: '',
-        website: '',
-        x: '',
+        telegram: null,
+        website: null,
+        x: null,
       })
       .accountsStrict({
         authority,
@@ -188,7 +188,11 @@ export class PubkeyProtocolSdk {
     const [profile] = this.getProfilePda({ username })
     const [pointer] = this.getPointerPda({ provider: PubKeyIdentityProvider.Solana, providerId: authority.toString() })
     const ix = await this.program.methods
-      .createProfile({ avatarUrl, name, username })
+      .createProfile({
+        avatarUrl: avatarUrl || `https://api.dicebear.com/9.x/bottts-neutral/svg?seed=${username}`,
+        name,
+        username,
+      })
       .accountsStrict({
         authority,
         feePayer,
