@@ -17,10 +17,10 @@ export function PubkeyProtocolUiCommunity({
   return (
     <Group align="start" wrap="nowrap" justify="space-between" w="100%">
       <Group align="start" wrap="nowrap">
-        <UiAvatar url={community.avatarUrl ? community.avatarUrl : null} name={community.slug} radius={100} size="lg" />
+        <UiAvatar url={community.avatarUrl ? community.avatarUrl : null} name={community.slug} radius="md" size="lg" />
         <Stack gap={0}>
           <PubkeyProtocolUiCommunityAnchor slug={community.slug} basePath={basePath} />
-          {children}
+          {children ?? community.name}
         </Stack>
       </Group>
       <UiDebugModal data={community} />

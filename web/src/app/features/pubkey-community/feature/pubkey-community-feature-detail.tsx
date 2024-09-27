@@ -16,7 +16,7 @@ export function PubkeyCommunityFeatureDetail() {
       ) : query.data ? (
         <PubkeyProtocolUiCommunityCard community={query.data} />
       ) : (
-        <UiWarning message="User not found" />
+        <UiWarning message="Community not found" />
       )}
     </UiPage>
   )

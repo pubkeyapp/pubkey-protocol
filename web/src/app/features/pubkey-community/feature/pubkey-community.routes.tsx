@@ -23,9 +23,9 @@ export default function PubkeyCommunityRoutes({ basePath }: { basePath: string }
   ]
   const routes = useRoutes([
     { index: true, element: <Navigate to="list" replace /> },
-    { path: 'list', element: <PubkeyCommunityFeatureList basePath={`${basePath}/profiles`} /> },
+    { path: 'list', element: <PubkeyCommunityFeatureList basePath={basePath} /> },
     { path: 'create', element: <PubkeyCommunityFeatureCreate /> },
-    { path: ':username', element: <PubkeyCommunityFeatureDetail /> },
+    { path: ':slug', element: <PubkeyCommunityFeatureDetail /> },
   ])
 
   return (

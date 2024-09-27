@@ -16,7 +16,7 @@ export function PubkeyProfileFeatureDetail() {
       ) : query.data ? (
         <PubkeyProtocolUiProfileCard profile={query.data} />
       ) : (
-        <UiWarning message="User not found" />
+        <UiWarning message="Profile not found" />
       )}
     </UiPage>
   )
