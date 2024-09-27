@@ -69,6 +69,20 @@ Test all projects
 pnpm test
 ```
 
+To iterate on the `anchor` program using a local validator, this is the recommended workflow:
+
+Open this in one terminal:
+
+```shell
+pnpm anchor localnet
+```
+
+And this in another:
+
+```shell
+pnpm anchor test --skip-deploy --skip-local-validator
+```
+
 ## License
 
 MIT

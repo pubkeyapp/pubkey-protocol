@@ -4,7 +4,13 @@ import { Keypair, LAMPORTS_PER_SOL, SystemProgram } from '@solana/web3.js'
 import { getPubKeyPointerPda, getPubKeyProfilePda, PubKeyIdentityProvider } from '../src'
 import { PubkeyProtocol } from '../target/types/pubkey_protocol'
 
+// Take a string str and return it with some unique digits appended
+function unique(str: string) {
+  return `${str}_${Math.random().toString(36).substring(2, 15)}`
+}
+
 describe('pubkey-protocol', () => {
+  const username = unique('alice')
   // Configure the client to use the local cluster.
   const provider = anchor.AnchorProvider.env()
   anchor.setProvider(provider)
@@ -24,8 +30,7 @@ describe('pubkey-protocol', () => {
 
   describe('Profile', () => {
     it('Create PubkeyProfile', async () => {
-      const username = 'alice'
-      const [profile, bump] = getPubKeyProfilePda({ username: 'alice', programId: program.programId })
+      const [profile, bump] = getPubKeyProfilePda({ username, programId: program.programId })
       const [pointer, bumpPointer] = getPubKeyPointerPda({
         programId: program.programId,
         provider: PubKeyIdentityProvider.Solana,
@@ -82,7 +87,7 @@ describe('pubkey-protocol', () => {
     })
 
     it('Update profile details', async () => {
-      const [profile] = getPubKeyProfilePda({ username: 'alice', programId: program.programId })
+      const [profile] = getPubKeyProfilePda({ username, programId: program.programId })
       const input = {
         authority: authority.publicKey,
         newName: 'Test Profile',
@@ -102,7 +107,7 @@ describe('pubkey-protocol', () => {
     })
 
     it('Add Authority', async () => {
-      const [profile] = getPubKeyProfilePda({ username: 'alice', programId: program.programId })
+      const [profile] = getPubKeyProfilePda({ username, programId: program.programId })
 
       await program.methods
         .addProfileAuthority({ newAuthority: authority2.publicKey })
@@ -124,7 +129,7 @@ describe('pubkey-protocol', () => {
     })
 
     it('Remove Authority', async () => {
-      const [profile] = getPubKeyProfilePda({ username: 'alice', programId: program.programId })
+      const [profile] = getPubKeyProfilePda({ username, programId: program.programId })
 
       await program.methods
         .removeAuthority({ authorityToRemove: authority2.publicKey })
@@ -138,16 +143,16 @@ describe('pubkey-protocol', () => {
     })
 
     it('Add Identity', async () => {
-      const [profile] = getPubKeyProfilePda({ username: 'alice', programId: program.programId })
+      const [profile] = getPubKeyProfilePda({ username, programId: program.programId })
       const [pointer, bump] = getPubKeyPointerPda({
         programId: program.programId,
-        providerId: 'alice-discord-id-123',
+        providerId: `${username}-discord-id-123`,
         provider: PubKeyIdentityProvider.Discord,
       })
       const input = {
-        providerId: 'alice-discord-id-123',
+        providerId: `${username}-discord-id-123`,
         provider: { discord: {} },
-        nickname: 'alice_discord',
+        nickname: `${username}_discord`,
       }
       await program.methods
         .addIdentity(input)
@@ -187,15 +192,15 @@ describe('pubkey-protocol', () => {
     })
 
     it('Remove Identity', async () => {
-      const [profile] = getPubKeyProfilePda({ username: 'alice', programId: program.programId })
+      const [profile] = getPubKeyProfilePda({ username, programId: program.programId })
       const [pointer] = getPubKeyPointerPda({
         programId: program.programId,
-        providerId: 'alice-discord-id-123',
+        providerId: `${username}-discord-id-123`,
         provider: PubKeyIdentityProvider.Discord,
       })
 
       await program.methods
-        .removeIdentity({ providerId: 'alice-discord-id-123' })
+        .removeIdentity({ providerId: `${username}-discord-id-123` })
         .accountsStrict({
           authority: authority.publicKey,
           feePayer: feePayer.publicKey,
