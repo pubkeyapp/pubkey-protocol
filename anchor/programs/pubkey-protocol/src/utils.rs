@@ -10,7 +10,7 @@ pub fn is_valid_username(username: &str) -> bool {
 
     if !username
         .chars()
-        .all(|c| c.is_ascii_lowercase() || c.is_ascii_digit() || c == '_' || c == '-')
+        .all(|c| c.is_ascii_lowercase() || c.is_ascii_digit() || c == '_')
     {
         return false;
     }
