@@ -35,7 +35,7 @@ impl Community {
     pub fn size(fee_payers: &[Pubkey], providers: &[Identity]) -> usize {
         let fee_payers_size = 4 + (fee_payers.len() * 32);
         let providers_size = 4 + (providers.len() * Identity::size());
-
+    
         8 + // Anchor discriminator
         1 + // bump
         4 + MAX_SLUG_SIZE +
