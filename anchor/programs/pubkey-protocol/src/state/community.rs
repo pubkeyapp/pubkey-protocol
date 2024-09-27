@@ -85,12 +85,12 @@ impl Community {
 
         // Create a Link struct and validate method
         let social_links = vec![
-            Link::new("x", self.x.as_deref()),
             Link::new("discord", self.discord.as_deref()),
-            Link::new("github", self.github.as_deref()),
-            Link::new("website", self.website.as_deref()),
             Link::new("farcaster", self.farcaster.as_deref()),
+            Link::new("github", self.github.as_deref()),
             Link::new("telegram", self.telegram.as_deref()),
+            Link::new("website", self.website.as_deref()),
+            Link::new("x", self.x.as_deref()),
         ];
 
         for link in social_links {
@@ -110,12 +110,12 @@ impl Community {
             pub fn validate(&self) -> Result<()> {
                 if let Some(url) = self.url {
                     match self.link_type {
-                        "x" => require!(is_valid_x(url), PubkeyProfileError::InvalidXURL),
                         "discord" => require!(is_valid_discord(url), PubkeyProfileError::InvalidDiscordURL),
-                        "github" => require!(is_valid_github(url), PubkeyProfileError::InvalidGitHubURL),
-                        "website" => require!(is_valid_url(url), PubkeyProfileError::InvalidWebsiteURL),
                         "farcaster" => require!(is_valid_farcaster(url), PubkeyProfileError::InvalidFarcasterURL),
+                        "github" => require!(is_valid_github(url), PubkeyProfileError::InvalidGitHubURL),
                         "telegram" => require!(is_valid_telegram(url), PubkeyProfileError::InvalidTelegramURL),
+                        "website" => require!(is_valid_url(url), PubkeyProfileError::InvalidWebsiteURL),
+                        "x" => require!(is_valid_x(url), PubkeyProfileError::InvalidXURL),
                         _ => return Err(PubkeyProfileError::InvalidProviderID.into()),
                     }
                 }

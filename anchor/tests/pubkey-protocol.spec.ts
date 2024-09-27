@@ -5,10 +5,7 @@ import { getPubKeyPointerPda, getPubKeyProfilePda, PubKeyIdentityProvider } from
 import { PubkeyProtocol } from '../target/types/pubkey_protocol'
 
 function unique(str: string) {
-  return `${str}_${Math.random()
-    .toString(36)
-    .replace(/[^a-z]+/g, '')
-    .substring(0, 13)}`
+  return `${str}_${Math.random().toString(36).substring(2, 15)}`
 }
 
 function getAvatarUrl(username: string) {
@@ -253,8 +250,7 @@ describe('pubkey-protocol', () => {
 
   describe('Community', () => {
     let testCommunity: anchor.web3.PublicKey
-    const slug = unique('test-community')
-    console.log('***SLUG***', slug)
+    const slug = unique('acme')
 
     async function createTestCommunity(slug: string) {
       const PREFIX = 'pubkey_protocol'
@@ -265,7 +261,7 @@ describe('pubkey-protocol', () => {
         program.programId,
       )
 
-      const createCommunityArgs = {
+      const createCommunityInput = {
         slug,
         name: 'Test Community',
         avatarUrl: getAvatarUrl(slug),
@@ -278,7 +274,7 @@ describe('pubkey-protocol', () => {
       }
 
       await program.methods
-        .createCommunity(createCommunityArgs)
+        .createCommunity(createCommunityInput)
         .accountsStrict({
           community,
           authority: communityAuthority.publicKey,
@@ -297,7 +293,7 @@ describe('pubkey-protocol', () => {
 
     it('Create Community', async () => {
       const communityAccount = await program.account.community.fetch(testCommunity)
-      console.log('communityAccount', communityAccount)
+
       expect(communityAccount.slug).toEqual(slug)
       expect(communityAccount.name).toEqual('Test Community')
       expect(communityAccount.avatarUrl).toEqual(getAvatarUrl(slug))
