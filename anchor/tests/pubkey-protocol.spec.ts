@@ -259,13 +259,13 @@ describe('pubkey-protocol', () => {
       )
 
       const createCommunityInput = {
-        slug,
-        name: 'Test Community',
         avatarUrl: getCommunityAvatarUrl(slug),
         discord: 'https://discord.gg/testcommunity',
         farcaster: 'https://warpcast.com/testcommunity',
-        github: 'https://github.com/testcommunity',
-        telegram: 'https://t.me/testcommunity',
+        github: null,
+        name: 'Test Community',
+        slug,
+        telegram: null,
         website: 'https://testcommunity.com',
         x: 'https://x.com/testcommunity',
       }
@@ -291,14 +291,16 @@ describe('pubkey-protocol', () => {
     it('Create Community', async () => {
       const communityAccount = await program.account.community.fetch(testCommunity)
 
-      expect(communityAccount.slug).toEqual(slug)
-      expect(communityAccount.name).toEqual('Test Community')
-      expect(communityAccount.avatarUrl).toEqual(getCommunityAvatarUrl(slug))
-      expect(communityAccount.x).toEqual('https://x.com/testcommunity')
-      expect(communityAccount.discord).toEqual('https://discord.gg/testcommunity')
-      expect(communityAccount.github).toEqual('https://github.com/testcommunity')
-      expect(communityAccount.website).toEqual('https://testcommunity.com')
       expect(communityAccount.authority).toEqual(communityAuthority.publicKey)
+      expect(communityAccount.avatarUrl).toEqual(getCommunityAvatarUrl(slug))
+      expect(communityAccount.discord).toEqual('https://discord.gg/testcommunity')
+      expect(communityAccount.farcaster).toEqual('https://warpcast.com/testcommunity')
+      expect(communityAccount.github).toEqual(null)
+      expect(communityAccount.name).toEqual('Test Community')
+      expect(communityAccount.slug).toEqual(slug)
+      expect(communityAccount.telegram).toEqual(null)
+      expect(communityAccount.website).toEqual('https://testcommunity.com')
+      expect(communityAccount.x).toEqual('https://x.com/testcommunity')
     })
 
     it('Update Community Details', async () => {
