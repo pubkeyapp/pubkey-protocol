@@ -162,12 +162,21 @@ export class PubkeyProtocolSdk {
     const [community] = this.getCommunityPda({ slug })
 
     const ix = await this.program.methods
-      .createCommunity({ avatarUrl, name, slug, discord: '', github: '', website: '', x: '' })
+      .createCommunity({
+        avatarUrl,
+        discord: '',
+        farcaster: '',
+        github: '',
+        name,
+        slug,
+        telegram: '',
+        website: '',
+        x: '',
+      })
       .accountsStrict({
         authority,
         feePayer,
         community,
-        pointer: PublicKey.default,
         systemProgram: SystemProgram.programId,
       })
       .instruction()
