@@ -985,6 +985,106 @@ export type PubkeyProtocol = {
           }
         }
       ]
+    },
+    {
+      "name": "verifyProfileForCommunity",
+      "discriminator": [
+        155,
+        142,
+        189,
+        98,
+        130,
+        121,
+        248,
+        118
+      ],
+      "accounts": [
+        {
+          "name": "community",
+          "writable": true
+        },
+        {
+          "name": "profile",
+          "writable": true
+        },
+        {
+          "name": "communityVerification",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  112,
+                  117,
+                  98,
+                  107,
+                  101,
+                  121,
+                  95,
+                  112,
+                  114,
+                  111,
+                  116,
+                  111,
+                  99,
+                  111,
+                  108
+                ]
+              },
+              {
+                "kind": "const",
+                "value": [
+                  99,
+                  111,
+                  109,
+                  109,
+                  117,
+                  110,
+                  105,
+                  116,
+                  121,
+                  95,
+                  118,
+                  101,
+                  114,
+                  105,
+                  102,
+                  105,
+                  99,
+                  97,
+                  116,
+                  105,
+                  111,
+                  110
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "community"
+              },
+              {
+                "kind": "account",
+                "path": "profile"
+              }
+            ]
+          }
+        },
+        {
+          "name": "authority",
+          "signer": true
+        },
+        {
+          "name": "feePayer",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "systemProgram",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": []
     }
   ],
   "accounts": [
@@ -999,6 +1099,19 @@ export type PubkeyProtocol = {
         81,
         19,
         112
+      ]
+    },
+    {
+      "name": "communityVerification",
+      "discriminator": [
+        227,
+        67,
+        137,
+        56,
+        126,
+        76,
+        234,
+        37
       ]
     },
     {
@@ -1133,6 +1246,21 @@ export type PubkeyProtocol = {
       "code": 6020,
       "name": "identityNonExistent",
       "msg": "Identity does not exist"
+    },
+    {
+      "code": 6021,
+      "name": "unauthorizedCommunityAction",
+      "msg": "Unauthorized community action"
+    },
+    {
+      "code": 6022,
+      "name": "communityVerificationAlreadyExists",
+      "msg": "Community verification already exists"
+    },
+    {
+      "code": 6023,
+      "name": "communityVerificationNonExistent",
+      "msg": "Community verification does not exist"
     }
   ],
   "types": [
@@ -1254,6 +1382,34 @@ export type PubkeyProtocol = {
             "type": {
               "option": "string"
             }
+          }
+        ]
+      }
+    },
+    {
+      "name": "communityVerification",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "bump",
+            "type": "u8"
+          },
+          {
+            "name": "profile",
+            "type": "pubkey"
+          },
+          {
+            "name": "community",
+            "type": "pubkey"
+          },
+          {
+            "name": "verifiedAt",
+            "type": "i64"
+          },
+          {
+            "name": "verifiedBy",
+            "type": "pubkey"
           }
         ]
       }
@@ -1437,6 +1593,12 @@ export type PubkeyProtocol = {
                   "name": "identity"
                 }
               }
+            }
+          },
+          {
+            "name": "communityVerifications",
+            "type": {
+              "vec": "pubkey"
             }
           }
         ]
