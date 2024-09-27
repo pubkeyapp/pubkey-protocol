@@ -79,6 +79,7 @@ pub fn create(ctx: Context<CreateProfile>, args: CreateProfileArgs) -> Result<()
         fee_payer,
         authorities: vec![authority],
         identities: vec![identity],
+        community_verifications: vec![],
     });
 
     profile.validate()?;

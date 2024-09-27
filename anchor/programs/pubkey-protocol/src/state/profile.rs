@@ -21,6 +21,8 @@ pub struct Profile {
     pub authorities: Vec<Pubkey>,
     // Identities user have added onto
     pub identities: Vec<Identity>,
+    // Community verifications
+    pub community_verifications: Vec<Pubkey>,
 }
 
 impl Profile {
@@ -85,5 +87,11 @@ impl Profile {
 
     pub fn check_for_authority(&self, authority: &Pubkey) -> bool {
         self.authorities.binary_search(authority).is_ok()
+    }
+
+    pub fn add_community_verification(&mut self, verification: Pubkey) -> Result<()> {
+        require!(!self.community_verifications.contains(&verification), PubkeyProfileError::CommunityVerificationAlreadyExists);
+        self.community_verifications.push(verification);
+        Ok(())
     }
 }
