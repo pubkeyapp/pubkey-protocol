@@ -8,8 +8,12 @@ function unique(str: string) {
   return `${str}_${Math.random().toString(36).substring(2, 15)}`
 }
 
-function getAvatarUrl(username: string) {
+function getProfileAvatarUrl(username: string) {
   return `https://api.dicebear.com/9.x/bottts-neutral/svg?seed=${username}`
+}
+
+function getCommunityAvatarUrl(slug: string) {
+  return `https://api.dicebear.com/9.x/glass/svg?seed=${slug}`
 }
 
 describe('pubkey-protocol', () => {
@@ -26,29 +30,22 @@ describe('pubkey-protocol', () => {
   const communityMember2 = Keypair.generate()
 
   beforeAll(async () => {
-    console.log('Airdropping communityAuthority 1 SOL:', communityAuthority.publicKey.toString())
-    await provider.connection.confirmTransaction({
-      ...(await provider.connection.getLatestBlockhash('confirmed')),
-      signature: await provider.connection.requestAirdrop(communityAuthority.publicKey, LAMPORTS_PER_SOL),
-    })
-
-    console.log('Airdropping communityAuthority2 1 SOL:', communityAuthority2.publicKey.toString())
-    await provider.connection.confirmTransaction({
-      ...(await provider.connection.getLatestBlockhash('confirmed')),
-      signature: await provider.connection.requestAirdrop(communityAuthority2.publicKey, LAMPORTS_PER_SOL),
-    })
-
-    console.log('Airdropping communityMember1 1 SOL:', communityMember1.publicKey.toString())
-    await provider.connection.confirmTransaction({
-      ...(await provider.connection.getLatestBlockhash('confirmed')),
-      signature: await provider.connection.requestAirdrop(communityMember1.publicKey, LAMPORTS_PER_SOL),
-    })
-
-    console.log('Airdropping communityMember2 1 SOL:', communityMember2.publicKey.toString())
-    await provider.connection.confirmTransaction({
-      ...(await provider.connection.getLatestBlockhash('confirmed')),
-      signature: await provider.connection.requestAirdrop(communityMember2.publicKey, LAMPORTS_PER_SOL),
-    })
+    const accounts = await Promise.all(
+      [
+        { label: 'communityAuthority', publicKey: communityAuthority.publicKey },
+        { label: 'communityAuthority2', publicKey: communityAuthority2.publicKey },
+        { label: 'communityMember1', publicKey: communityMember1.publicKey },
+        { label: 'communityMember2', publicKey: communityMember2.publicKey },
+      ].map(async ({ label, publicKey }) =>
+        provider.connection
+          .confirmTransaction({
+            ...(await provider.connection.getLatestBlockhash('confirmed')),
+            signature: await provider.connection.requestAirdrop(publicKey, LAMPORTS_PER_SOL),
+          })
+          .then(() => label),
+      ),
+    )
+    console.log(`Airdropped 1 SOL to: ${accounts.join(', ')}`)
   })
 
   describe('Profile', () => {
@@ -62,7 +59,7 @@ describe('pubkey-protocol', () => {
 
       await program.methods
         .createProfile({
-          avatarUrl: getAvatarUrl(username),
+          avatarUrl: getProfileAvatarUrl(username),
           name: 'Test Profile',
           username,
         })
@@ -92,7 +89,7 @@ describe('pubkey-protocol', () => {
       expect(postBalance).toStrictEqual(LAMPORTS_PER_SOL)
       expect(receivedBump).toStrictEqual(bump)
       expect(receivedUsername).toStrictEqual(username)
-      expect(avatarUrl).toStrictEqual(getAvatarUrl(username))
+      expect(avatarUrl).toStrictEqual(getProfileAvatarUrl(username))
       expect(authorities).toEqual([communityMember1.publicKey])
       expect(receivedFeePayer).toStrictEqual(feePayer.publicKey)
 
@@ -114,7 +111,7 @@ describe('pubkey-protocol', () => {
       const input = {
         authority: communityMember1.publicKey,
         newName: 'Test Profile',
-        newAvatarUrl: getAvatarUrl(`${username}_new`),
+        newAvatarUrl: getProfileAvatarUrl(`${username}_new`),
       }
       await program.methods
         .updateProfileDetails(input)
@@ -264,7 +261,7 @@ describe('pubkey-protocol', () => {
       const createCommunityInput = {
         slug,
         name: 'Test Community',
-        avatarUrl: getAvatarUrl(slug),
+        avatarUrl: getCommunityAvatarUrl(slug),
         discord: 'https://discord.gg/testcommunity',
         farcaster: 'https://warpcast.com/testcommunity',
         github: 'https://github.com/testcommunity',
@@ -296,7 +293,7 @@ describe('pubkey-protocol', () => {
 
       expect(communityAccount.slug).toEqual(slug)
       expect(communityAccount.name).toEqual('Test Community')
-      expect(communityAccount.avatarUrl).toEqual(getAvatarUrl(slug))
+      expect(communityAccount.avatarUrl).toEqual(getCommunityAvatarUrl(slug))
       expect(communityAccount.x).toEqual('https://x.com/testcommunity')
       expect(communityAccount.discord).toEqual('https://discord.gg/testcommunity')
       expect(communityAccount.github).toEqual('https://github.com/testcommunity')
@@ -305,17 +302,18 @@ describe('pubkey-protocol', () => {
     })
 
     it('Update Community Details', async () => {
+      const input = {
+        name: 'Updated Test Community',
+        avatarUrl: getCommunityAvatarUrl(`${slug}_new`),
+        discord: 'https://discord.gg/updatedtestcommunity',
+        farcaster: 'https://warpcast.com/updatedtestcommunity',
+        github: 'https://github.com/updatedtestcommunity',
+        telegram: 'https://t.me/updatedtestcommunity',
+        website: 'https://updatedtestcommunity.com',
+        x: 'https://x.com/updatedtestcommunity',
+      }
       await program.methods
-        .updateCommunityDetails({
-          name: 'Updated Test Community',
-          avatarUrl: 'https://example.com/new-avatar.png',
-          discord: 'https://discord.gg/updatedtestcommunity',
-          farcaster: 'https://warpcast.com/updatedtestcommunity',
-          github: 'https://github.com/updatedtestcommunity',
-          telegram: 'https://t.me/updatedtestcommunity',
-          website: 'https://updatedtestcommunity.com',
-          x: 'https://x.com/updatedtestcommunity',
-        })
+        .updateCommunityDetails(input)
         .accounts({
           community: testCommunity,
           authority: communityAuthority.publicKey,
@@ -324,12 +322,12 @@ describe('pubkey-protocol', () => {
         .rpc()
 
       const updatedCommunity = await program.account.community.fetch(testCommunity)
-      expect(updatedCommunity.name).toEqual('Updated Test Community')
-      expect(updatedCommunity.avatarUrl).toEqual('https://example.com/new-avatar.png')
-      expect(updatedCommunity.x).toEqual('https://x.com/updatedtestcommunity')
-      expect(updatedCommunity.discord).toEqual('https://discord.gg/updatedtestcommunity')
-      expect(updatedCommunity.github).toEqual('https://github.com/updatedtestcommunity')
-      expect(updatedCommunity.website).toEqual('https://updatedtestcommunity.com')
+      expect(updatedCommunity.name).toEqual(input.name)
+      expect(updatedCommunity.avatarUrl).toEqual(input.avatarUrl)
+      expect(updatedCommunity.x).toEqual(input.x)
+      expect(updatedCommunity.discord).toEqual(input.discord)
+      expect(updatedCommunity.github).toEqual(input.github)
+      expect(updatedCommunity.website).toEqual(input.website)
     })
 
     it('Update Community Fee Payers', async () => {
