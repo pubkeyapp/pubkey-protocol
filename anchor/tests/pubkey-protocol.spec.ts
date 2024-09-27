@@ -5,7 +5,7 @@ import { getPubKeyPointerPda, getPubKeyProfilePda, PubKeyIdentityProvider } from
 import { PubkeyProtocol } from '../target/types/pubkey_protocol'
 
 function unique(str: string) {
-  return `${str}_${Math.random().toString(36).substring(2, 15)}`
+  return `${str}_${Math.random().toString(36).replace(/[^a-z]+/g, '').substring(0, 13)}`
 }
 
 function getAvatarUrl(username: string) {
@@ -250,7 +250,9 @@ describe('pubkey-protocol', () => {
 
   describe('Community', () => {
     let testCommunity: anchor.web3.PublicKey
-    const slug = 'test-community'
+    const slug = unique('test-community')
+    console.log("***SLUG***", slug)
+    
 
     async function createTestCommunity(slug: string) {
       const PREFIX = 'pubkey_protocol'

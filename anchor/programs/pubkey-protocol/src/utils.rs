@@ -4,7 +4,7 @@ use crate::errors::*;
 use crate::id;
 
 pub fn is_valid_username(username: &str) -> bool {
-    if username.len() < 3 || username.len() > 20 {
+    if username.len() < 3 || username.len() > 30 {
         return false;
     }
 
