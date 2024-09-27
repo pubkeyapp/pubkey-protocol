@@ -51,7 +51,7 @@ pub fn create_community(ctx: Context<CreateCommunity>, args: CreateCommunityArgs
     let identity = Identity {
         provider: PubKeyIdentityProvider::Solana,
         provider_id: authority.key().to_string(),
-        name: "Creator Wallet".to_owned(),
+        name: "Community Creator Wallet".to_owned(),
     };
 
     community.set_inner(Community {
