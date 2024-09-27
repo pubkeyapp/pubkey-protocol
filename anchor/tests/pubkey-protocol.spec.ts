@@ -4,9 +4,12 @@ import { Keypair, LAMPORTS_PER_SOL, SystemProgram } from '@solana/web3.js'
 import { getPubKeyPointerPda, getPubKeyProfilePda, PubKeyIdentityProvider } from '../src'
 import { PubkeyProtocol } from '../target/types/pubkey_protocol'
 
-// Take a string str and return it with some unique digits appended
 function unique(str: string) {
   return `${str}_${Math.random().toString(36).substring(2, 15)}`
+}
+
+function getAvatarUrl(username: string) {
+  return `https://api.dicebear.com/9.x/bottts-neutral/svg?seed=${username}`
 }
 
 describe('pubkey-protocol', () => {
@@ -39,7 +42,7 @@ describe('pubkey-protocol', () => {
 
       await program.methods
         .createProfile({
-          avatarUrl: 'https://avatars.githubusercontent.com/u/32637757?v=4',
+          avatarUrl: getAvatarUrl(username),
           name: 'Test Profile',
           username,
         })
@@ -69,7 +72,7 @@ describe('pubkey-protocol', () => {
       expect(postBalance).toStrictEqual(LAMPORTS_PER_SOL)
       expect(receivedBump).toStrictEqual(bump)
       expect(receivedUsername).toStrictEqual(username)
-      expect(avatarUrl).toStrictEqual('https://avatars.githubusercontent.com/u/32637757?v=4')
+      expect(avatarUrl).toStrictEqual(getAvatarUrl(username))
       expect(authorities).toEqual([authority.publicKey])
       expect(receivedFeePayer).toStrictEqual(feePayer.publicKey)
 
@@ -91,7 +94,7 @@ describe('pubkey-protocol', () => {
       const input = {
         authority: authority.publicKey,
         newName: 'Test Profile',
-        newAvatarUrl: 'https://avatars.githubusercontent.com/u/36491?v=4',
+        newAvatarUrl: getAvatarUrl(`${username}_new`),
       }
       await program.methods
         .updateProfileDetails(input)
@@ -242,7 +245,7 @@ describe('pubkey-protocol', () => {
         .createCommunity({
           slug,
           name: 'Test Community',
-          avatarUrl: 'https://example.com/avatar.png',
+          avatarUrl: getAvatarUrl(slug),
           discord: 'https://discord.gg/testcommunity',
           github: 'https://github.com/testcommunity',
           website: 'https://testcommunity.com',
@@ -262,7 +265,7 @@ describe('pubkey-protocol', () => {
       console.log('communityAccount', communityAccount)
       expect(communityAccount.slug).toEqual(slug)
       expect(communityAccount.name).toEqual('Test Community')
-      expect(communityAccount.avatarUrl).toEqual('https://example.com/avatar.png')
+      expect(communityAccount.avatarUrl).toEqual(getAvatarUrl(slug))
       expect(communityAccount.x).toEqual('https://x.com/testcommunity')
       expect(communityAccount.discord).toEqual('https://discord.gg/testcommunity')
       expect(communityAccount.github).toEqual('https://github.com/testcommunity')
