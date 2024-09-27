@@ -2,6 +2,7 @@ import * as anchor from '@coral-xyz/anchor'
 import { Program } from '@coral-xyz/anchor'
 import { Keypair, LAMPORTS_PER_SOL, SystemProgram } from '@solana/web3.js'
 import { PubkeyProtocol } from '../target/types/pubkey_protocol'
+import { getPubKeyPointerPda, getPubKeyProfilePda, PubKeyIdentityProvider } from '../src'
 
 function unique(str: string) {
   return `${str}_${Math.random().toString(36).substring(2, 15)}`
@@ -207,6 +208,135 @@ describe('pubkey-protocol-community', () => {
       const updatedCommunity = await program.account.community.fetch(testCommunity)
       expect(updatedCommunity.authority).toEqual(communityAuthority.publicKey)
       expect(updatedCommunity.pendingAuthority).toBeNull()
+    })
+
+    describe('Community Profile Verification', () => {
+      let testProfile: anchor.web3.PublicKey
+      let testPointer: anchor.web3.PublicKey
+      const profileUsername = unique('user')
+      const profileOwner = Keypair.generate()
+      const PREFIX = 'pubkey_protocol'
+      const COMMUNITY_VERIFICATION = 'community_verification'
+
+      beforeAll(async () => {
+        await provider.connection.requestAirdrop(profileOwner.publicKey, LAMPORTS_PER_SOL)
+
+        const [profile] = getPubKeyProfilePda({ username: profileUsername, programId: program.programId })
+        const [pointer] = getPubKeyPointerPda({
+          programId: program.programId,
+          provider: PubKeyIdentityProvider.Solana,
+          providerId: profileOwner.publicKey.toString(),
+        })
+
+        await program.methods
+          .createProfile({
+            avatarUrl: `https://example.com/avatar/${profileUsername}`,
+            name: 'Test Verified User',
+            username: profileUsername,
+          })
+          .accountsStrict({
+            authority: profileOwner.publicKey,
+            feePayer: feePayer.publicKey,
+            profile,
+            pointer,
+            systemProgram: SystemProgram.programId,
+          })
+          .signers([profileOwner])
+          .rpc()
+
+        testProfile = profile
+        testPointer = pointer
+      })
+
+      it('Verify Profile for Community', async () => {
+        const [communityVerification] = await anchor.web3.PublicKey.findProgramAddress(
+          [Buffer.from(PREFIX), Buffer.from(COMMUNITY_VERIFICATION), testCommunity.toBuffer(), testProfile.toBuffer()],
+          program.programId,
+        )
+
+        await program.methods
+          .verifyProfileForCommunity()
+          .accountsStrict({
+            community: testCommunity,
+            profile: testProfile,
+            communityVerification,
+            authority: communityAuthority.publicKey,
+            feePayer: feePayer.publicKey,
+            systemProgram: SystemProgram.programId,
+          })
+          .signers([communityAuthority])
+          .rpc()
+
+        // Fetch and check the CommunityVerification account
+        const verificationAccount = await program.account.communityVerification.fetch(communityVerification)
+        expect(verificationAccount.community).toEqual(testCommunity)
+        expect(verificationAccount.profile).toEqual(testProfile)
+        expect(verificationAccount.verifiedBy).toEqual(communityAuthority.publicKey)
+
+        // Optionally, check if the profile has been updated with the verification
+        const profileAccount = await program.account.profile.fetch(testProfile)
+        expect(profileAccount.communityVerifications).toContainEqual(communityVerification)
+      })
+
+      it('Fails to Verify Profile for Community with Unauthorized Authority', async () => {
+        const unauthorizedAuthority = Keypair.generate()
+        const [communityVerification] = await anchor.web3.PublicKey.findProgramAddress(
+          [Buffer.from(PREFIX), Buffer.from(COMMUNITY_VERIFICATION), testCommunity.toBuffer(), testProfile.toBuffer()],
+          program.programId,
+        )
+
+        await expect(
+          program.methods
+            .verifyProfileForCommunity()
+            .accountsStrict({
+              community: testCommunity,
+              profile: testProfile,
+              communityVerification,
+              authority: unauthorizedAuthority.publicKey,
+              feePayer: feePayer.publicKey,
+              systemProgram: SystemProgram.programId,
+            })
+            .signers([unauthorizedAuthority])
+            .rpc(),
+        ).rejects.toThrow(/Unauthorized/) // Changed from "Unauthorized community action" to just "Unauthorized"
+      })
+
+      it('Fails to Verify Already Verified Profile', async () => {
+        const [communityVerification] = await anchor.web3.PublicKey.findProgramAddress(
+          [Buffer.from(PREFIX), Buffer.from(COMMUNITY_VERIFICATION), testCommunity.toBuffer(), testProfile.toBuffer()],
+          program.programId,
+        )
+
+        // First verification (should succeed)
+        await program.methods
+          .verifyProfileForCommunity()
+          .accountsStrict({
+            community: testCommunity,
+            profile: testProfile,
+            communityVerification,
+            authority: communityAuthority.publicKey,
+            feePayer: feePayer.publicKey,
+            systemProgram: SystemProgram.programId,
+          })
+          .signers([communityAuthority])
+          .rpc()
+
+        // Second verification (should fail)
+        await expect(
+          program.methods
+            .verifyProfileForCommunity()
+            .accountsStrict({
+              community: testCommunity,
+              profile: testProfile,
+              communityVerification,
+              authority: communityAuthority.publicKey,
+              feePayer: feePayer.publicKey,
+              systemProgram: SystemProgram.programId,
+            })
+            .signers([communityAuthority])
+            .rpc(),
+        ).rejects.toThrow(/already verified/) // Changed from "Account already in use" to "already verified"
+      })
     })
   })
 })
