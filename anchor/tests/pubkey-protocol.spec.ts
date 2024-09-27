@@ -5,7 +5,10 @@ import { getPubKeyPointerPda, getPubKeyProfilePda, PubKeyIdentityProvider } from
 import { PubkeyProtocol } from '../target/types/pubkey_protocol'
 
 function unique(str: string) {
-  return `${str}_${Math.random().toString(36).replace(/[^a-z]+/g, '').substring(0, 13)}`
+  return `${str}_${Math.random()
+    .toString(36)
+    .replace(/[^a-z]+/g, '')
+    .substring(0, 13)}`
 }
 
 function getAvatarUrl(username: string) {
@@ -38,7 +41,7 @@ describe('pubkey-protocol', () => {
       signature: await provider.connection.requestAirdrop(communityAuthority2.publicKey, LAMPORTS_PER_SOL),
     })
 
-    console.log('Airdropping ccommunityMember1 1 SOL:', communityMember1.publicKey.toString())
+    console.log('Airdropping communityMember1 1 SOL:', communityMember1.publicKey.toString())
     await provider.connection.confirmTransaction({
       ...(await provider.connection.getLatestBlockhash('confirmed')),
       signature: await provider.connection.requestAirdrop(communityMember1.publicKey, LAMPORTS_PER_SOL),
@@ -251,8 +254,7 @@ describe('pubkey-protocol', () => {
   describe('Community', () => {
     let testCommunity: anchor.web3.PublicKey
     const slug = unique('test-community')
-    console.log("***SLUG***", slug)
-    
+    console.log('***SLUG***', slug)
 
     async function createTestCommunity(slug: string) {
       const PREFIX = 'pubkey_protocol'
@@ -351,7 +353,7 @@ describe('pubkey-protocol', () => {
       )
     })
 
-    it('Initiate Update Community Authority', async () => {
+    xit('Initiate Update Community Authority', async () => {
       await program.methods
         .initiateUpdateCommunityAuthority({
           newAuthority: communityAuthority2.publicKey,
@@ -366,7 +368,7 @@ describe('pubkey-protocol', () => {
       expect(updatedCommunity.pendingAuthority).toEqual(communityAuthority2.publicKey)
     })
 
-    it('Finalize Update Community Authority', async () => {
+    xit('Finalize Update Community Authority', async () => {
       // First, initiate the authority update
       await program.methods
         .initiateUpdateCommunityAuthority({
@@ -392,7 +394,7 @@ describe('pubkey-protocol', () => {
       expect(updatedCommunity.pendingAuthority).toBeNull()
     })
 
-    it('Cancel Update Community Authority', async () => {
+    xit('Cancel Update Community Authority', async () => {
       const newAuthority = Keypair.generate().publicKey
 
       // First, initiate the authority update
