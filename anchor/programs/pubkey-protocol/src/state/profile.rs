@@ -22,7 +22,14 @@ pub struct Profile {
     // Identities user have added onto
     pub identities: Vec<Identity>,
     // Community verifications
-    pub community_verifications: Vec<Pubkey>,
+    pub community_verifications: Vec<CommunityVerification>,
+}
+
+#[derive(AnchorSerialize, AnchorDeserialize, Clone, Copy, Debug)]
+pub struct CommunityVerification {
+    pub community: Pubkey,
+    pub verified_at: i64,
+    pub verified_by: Pubkey,
 }
 
 impl Profile {
@@ -33,14 +40,17 @@ impl Profile {
         let identities_size = 4 + // Vector discriminator
             (identities.len() * Identity::size()); // Total identities length
 
+        let community_verifications_size = 4 + (0 * std::mem::size_of::<CommunityVerification>());
+
         8 + // Anchor discriminator
         1 + // bump
-        4 + MAX_USERNAME_SIZE + // username
-        4 + MAX_NAME_SIZE + // name
-        4 + MAX_URL_SIZE + // avatar_url
+        4 + MAX_USERNAME_SIZE +
+        4 + MAX_NAME_SIZE +
+        4 + MAX_URL_SIZE +
         32 + // fee_payer
-        authorities_size + // authorities
-        identities_size // identities
+        authorities_size +
+        identities_size +
+        community_verifications_size
     }
 
     pub fn validate(&self) -> Result<()> {
@@ -89,8 +99,17 @@ impl Profile {
         self.authorities.binary_search(authority).is_ok()
     }
 
-    pub fn add_community_verification(&mut self, verification: Pubkey) -> Result<()> {
-        require!(!self.community_verifications.contains(&verification), PubkeyProfileError::CommunityVerificationAlreadyExists);
+    pub fn add_community_verification(&mut self, community: Pubkey, verified_by: Pubkey) -> Result<()> {
+        let verification = CommunityVerification {
+            community,
+            verified_at: Clock::get()?.unix_timestamp,
+            verified_by,
+        };
+    
+        if self.community_verifications.iter().any(|v| v.community == community) {
+            return Err(PubkeyProfileError::CommunityVerificationAlreadyExists.into());
+        }
+    
         self.community_verifications.push(verification);
         Ok(())
     }

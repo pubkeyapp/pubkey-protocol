@@ -69,6 +69,7 @@ pub fn create_community(ctx: Context<CreateCommunity>, args: CreateCommunityArgs
         telegram,
         website,
         x,
+        verified_profiles: Vec::new(),
     });
 
     community.validate()?;

@@ -29,6 +29,14 @@ pub struct Community {
     pub telegram: Option<String>,
     pub website: Option<String>,
     pub x: Option<String>,
+    pub verified_profiles: Vec<ProfileVerification>,
+}
+
+#[derive(AnchorSerialize, AnchorDeserialize, Clone, Copy, Debug)]
+pub struct ProfileVerification {
+    pub profile: Pubkey,
+    pub verified_at: i64,
+    pub verified_by: Pubkey,
 }
 
 impl Community {
@@ -45,6 +53,7 @@ impl Community {
         1 + 32 + // pending_authority (Option<Pubkey>)
         fee_payers_size +
         providers_size +
+        4 + // Start with empty vector for Verfied Profiles
         (1 + 4 + MAX_URL_SIZE) * 6 // 6 Social Option<String> fields
     }
 
@@ -128,5 +137,21 @@ impl Community {
 
     pub fn check_for_authority(&self, authority: &Pubkey) -> bool {
         &self.authority == authority
+    }
+
+    pub fn add_profile_verification(&mut self, profile: Pubkey, verified_by: Pubkey) -> Result<()> {
+        let verification = ProfileVerification {
+            profile,
+            verified_at: Clock::get()?.unix_timestamp,
+            verified_by,
+        };
+
+        if let Some(existing) = self.verified_profiles.iter_mut().find(|v| v.profile == profile) {
+            *existing = verification;
+        } else {
+            self.verified_profiles.push(verification);
+        }
+
+        Ok(())
     }
 }

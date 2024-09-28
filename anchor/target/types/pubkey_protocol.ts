@@ -1008,69 +1008,6 @@ export type PubkeyProtocol = {
           "writable": true
         },
         {
-          "name": "communityVerification",
-          "writable": true,
-          "pda": {
-            "seeds": [
-              {
-                "kind": "const",
-                "value": [
-                  112,
-                  117,
-                  98,
-                  107,
-                  101,
-                  121,
-                  95,
-                  112,
-                  114,
-                  111,
-                  116,
-                  111,
-                  99,
-                  111,
-                  108
-                ]
-              },
-              {
-                "kind": "const",
-                "value": [
-                  99,
-                  111,
-                  109,
-                  109,
-                  117,
-                  110,
-                  105,
-                  116,
-                  121,
-                  95,
-                  118,
-                  101,
-                  114,
-                  105,
-                  102,
-                  105,
-                  99,
-                  97,
-                  116,
-                  105,
-                  111,
-                  110
-                ]
-              },
-              {
-                "kind": "account",
-                "path": "community"
-              },
-              {
-                "kind": "account",
-                "path": "profile"
-              }
-            ]
-          }
-        },
-        {
           "name": "authority",
           "signer": true
         },
@@ -1099,19 +1036,6 @@ export type PubkeyProtocol = {
         81,
         19,
         112
-      ]
-    },
-    {
-      "name": "communityVerification",
-      "discriminator": [
-        227,
-        67,
-        137,
-        56,
-        126,
-        76,
-        234,
-        37
       ]
     },
     {
@@ -1382,6 +1306,16 @@ export type PubkeyProtocol = {
             "type": {
               "option": "string"
             }
+          },
+          {
+            "name": "verifiedProfiles",
+            "type": {
+              "vec": {
+                "defined": {
+                  "name": "profileVerification"
+                }
+              }
+            }
           }
         ]
       }
@@ -1391,14 +1325,6 @@ export type PubkeyProtocol = {
       "type": {
         "kind": "struct",
         "fields": [
-          {
-            "name": "bump",
-            "type": "u8"
-          },
-          {
-            "name": "profile",
-            "type": "pubkey"
-          },
           {
             "name": "community",
             "type": "pubkey"
@@ -1598,8 +1524,32 @@ export type PubkeyProtocol = {
           {
             "name": "communityVerifications",
             "type": {
-              "vec": "pubkey"
+              "vec": {
+                "defined": {
+                  "name": "communityVerification"
+                }
+              }
             }
+          }
+        ]
+      }
+    },
+    {
+      "name": "profileVerification",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "profile",
+            "type": "pubkey"
+          },
+          {
+            "name": "verifiedAt",
+            "type": "i64"
+          },
+          {
+            "name": "verifiedBy",
+            "type": "pubkey"
           }
         ]
       }
