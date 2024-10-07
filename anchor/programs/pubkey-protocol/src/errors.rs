@@ -48,6 +48,4 @@ pub enum PubkeyProfileError {
     UnauthorizedCommunityAction,
     #[msg("Community verification already exists")]
     CommunityVerificationAlreadyExists,
-    #[msg("Community verification does not exist")]
-    CommunityVerificationNonExistent,
 }

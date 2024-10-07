@@ -3,7 +3,6 @@ pub const PREFIX: &[u8] = b"pubkey_protocol";
 pub const COMMUNITY: &[u8] = b"community";
 pub const PROFILE: &[u8] = b"profile";
 pub const POINTER: &[u8] = b"pointer";
-pub const COMMUNITY_VERIFICATION: &[u8] = b"community_verification";
 
 pub const MAX_USERNAME_SIZE: usize = 20;
 pub const MAX_SLUG_SIZE: usize = MAX_USERNAME_SIZE;

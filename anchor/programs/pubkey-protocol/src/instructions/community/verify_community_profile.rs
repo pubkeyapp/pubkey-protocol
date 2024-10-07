@@ -21,10 +21,8 @@ pub fn verify_community_profile(ctx: Context<VerifyProfileForCommunity>) -> Resu
     let profile = &mut ctx.accounts.profile;
     let authority = &ctx.accounts.authority;
 
-    // Add the profile verification to the community
     community.add_profile_verification(profile.key(), authority.key())?;
 
-    // Add the community verification to the profile
     profile.add_community_verification(community.key(), authority.key())?;
 
     Ok(())
