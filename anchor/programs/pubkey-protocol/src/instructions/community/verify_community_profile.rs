@@ -16,7 +16,7 @@ pub struct VerifyProfileForCommunity<'info> {
     pub system_program: Program<'info, System>,
 }
 
-pub fn verify_profile(ctx: Context<VerifyProfileForCommunity>) -> Result<()> {
+pub fn verify_community_profile(ctx: Context<VerifyProfileForCommunity>) -> Result<()> {
     let community = &mut ctx.accounts.community;
     let profile = &mut ctx.accounts.profile;
     let authority = &ctx.accounts.authority;
