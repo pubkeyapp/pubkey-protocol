@@ -1183,8 +1183,8 @@ export type PubkeyProtocol = {
     },
     {
       "code": 6023,
-      "name": "communityVerificationNonExistent",
-      "msg": "Community verification does not exist"
+      "name": "accountTooLarge",
+      "msg": "Account too large"
     }
   ],
   "types": [

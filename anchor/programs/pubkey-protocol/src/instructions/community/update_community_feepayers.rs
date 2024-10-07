@@ -39,7 +39,7 @@ pub fn update_community_feepayers(
     community.fee_payers = new_fee_payers;
 
     // Calculate the new account size
-    let new_account_size = Community::size(&community.fee_payers, &community.providers);
+    let new_account_size = Community::size(&community.fee_payers, &community.providers, &community.verified_profiles);
 
     // Reallocate the account if necessary
     realloc_account(

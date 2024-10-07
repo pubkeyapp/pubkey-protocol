@@ -259,17 +259,19 @@ describe('pubkey-protocol-community', () => {
 
         // Fetch and check the Community account
         const communityAccount = await program.account.community.fetch(testCommunity)
-        expect(communityAccount.verifiedProfiles).toContainEqual({
-          profile: testProfile,
-          verifiedBy: communityAuthority.publicKey
-        })
+        const profileVerification = communityAccount.verifiedProfiles.find((v) => v.profile.equals(testProfile))
+        expect(profileVerification).toBeDefined()
+        expect(profileVerification.verifiedAt).not.toBeNull()
+        expect(profileVerification.verifiedBy).toEqual(communityAuthority.publicKey)
 
         // Fetch and check the Profile account
         const profileAccount = await program.account.profile.fetch(testProfile)
-        expect(profileAccount.communityVerifications).toContainEqual({
-          community: testCommunity,
-          verifiedBy: communityAuthority.publicKey
-        })
+        const communityVerification = profileAccount.communityVerifications.find((v) =>
+          v.community.equals(testCommunity),
+        )
+        expect(communityVerification).toBeDefined()
+        expect(communityVerification.verifiedAt).not.toBeNull()
+        expect(communityVerification.verifiedBy).toEqual(communityAuthority.publicKey)
       })
 
       it('Fails to Verify Profile for Community with Unauthorized Authority', async () => {
@@ -291,20 +293,7 @@ describe('pubkey-protocol-community', () => {
       })
 
       it('Fails to Verify Already Verified Profile', async () => {
-        // First verification (should succeed)
-        await program.methods
-          .verifyProfileForCommunity()
-          .accountsStrict({
-            community: testCommunity,
-            profile: testProfile,
-            authority: communityAuthority.publicKey,
-            feePayer: feePayer.publicKey,
-            systemProgram: SystemProgram.programId,
-          })
-          .signers([communityAuthority])
-          .rpc()
-
-        // Second verification (should fail)
+        // Second verification after test above instatiated profile (should fail)
         await expect(
           program.methods
             .verifyProfileForCommunity()
@@ -317,7 +306,7 @@ describe('pubkey-protocol-community', () => {
             })
             .signers([communityAuthority])
             .rpc(),
-        ).rejects.toThrow(/already verified/)
+        ).rejects.toThrow(/CommunityVerificationAlreadyExists/)
       })
     })
   })

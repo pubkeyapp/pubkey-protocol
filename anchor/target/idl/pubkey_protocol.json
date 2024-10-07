@@ -1177,8 +1177,8 @@
     },
     {
       "code": 6023,
-      "name": "CommunityVerificationNonExistent",
-      "msg": "Community verification does not exist"
+      "name": "AccountTooLarge",
+      "msg": "Account too large"
     }
   ],
   "types": [

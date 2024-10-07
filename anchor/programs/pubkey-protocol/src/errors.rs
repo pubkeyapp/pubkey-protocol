@@ -48,4 +48,6 @@ pub enum PubkeyProfileError {
     UnauthorizedCommunityAction,
     #[msg("Community verification already exists")]
     CommunityVerificationAlreadyExists,
+    #[msg("Account too large")]
+    AccountTooLarge,
 }

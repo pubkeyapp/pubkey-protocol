@@ -40,9 +40,11 @@ pub struct ProfileVerification {
 }
 
 impl Community {
-    pub const MAX_VERIFIED_PROFILES: usize = 1000;
-
-    pub fn size(fee_payers: &[Pubkey], providers: &[Identity]) -> usize {
+    pub fn size(
+        fee_payers: &[Pubkey],
+        providers: &[Identity],
+        verified_profiles: &[ProfileVerification],
+    ) -> usize {
         let fee_payers_size = 4 + (fee_payers.len() * 32);
         let providers_size = 4 + (providers.len() * Identity::size());
 
@@ -56,7 +58,8 @@ impl Community {
         fee_payers_size +
         providers_size +
         (1 + 4 + MAX_URL_SIZE) * 6 + // 6 Social Option<String> fields
-        4 + (Self::MAX_VERIFIED_PROFILES * (32 + 8 + 32)) // Verified Profiles vector (length + data)
+        4 + verified_profiles.len() * std::mem::size_of::<ProfileVerification>()
+        // Verified Profiles vector (length + data)
     }
 
     pub fn validate(&self) -> Result<()> {
@@ -92,7 +95,7 @@ impl Community {
         );
 
         require!(
-            self.verified_profiles.len() <= Self::MAX_VERIFIED_PROFILES,
+            self.verified_profiles.len() <= MAX_COMMUNITY_PROFILES,
             PubkeyProfileError::MaxSizeReached
         );
 
@@ -165,6 +168,14 @@ impl Community {
             verified_at: Clock::get()?.unix_timestamp,
             verified_by,
         };
+
+        let new_size = Self::size(&self.fee_payers, &self.providers, &self.verified_profiles)
+            + std::mem::size_of::<ProfileVerification>();
+
+        require!(
+            new_size <= MAX_COMMUNITY_PROFILES,
+            PubkeyProfileError::AccountTooLarge
+        );
 
         if let Some(existing) = self
             .verified_profiles
