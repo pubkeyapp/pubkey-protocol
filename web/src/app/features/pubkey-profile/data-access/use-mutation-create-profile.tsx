@@ -12,7 +12,6 @@ export function useMutationCreateProfile() {
       sdk
         .createProfile({
           ...options,
-          avatarUrl: options.avatarUrl || `https://api.dicebear.com/9.x/bottts-neutral/svg?seed=${options.username}`,
           authority,
           feePayer,
         })
