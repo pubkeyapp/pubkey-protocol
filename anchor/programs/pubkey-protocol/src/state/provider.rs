@@ -9,7 +9,7 @@ pub enum PubKeyIdentityProvider {
     Solana,
     Telegram,
     X,
-    Website(String),
+    Website,
 }
 
 impl PubKeyIdentityProvider {
@@ -22,13 +22,7 @@ impl PubKeyIdentityProvider {
             PubKeyIdentityProvider::Solana => String::from("Solana"),
             PubKeyIdentityProvider::Telegram => String::from("Telegram"),
             PubKeyIdentityProvider::X => String::from("X"),
-            PubKeyIdentityProvider::Website(url) => url.clone(),
+            PubKeyIdentityProvider::Website => String::from("Website"),
         }
-    }
-}
-
-impl From<String> for PubKeyIdentityProvider {
-    fn from(url: String) -> Self {
-        PubKeyIdentityProvider::Website(url)
     }
 }

@@ -10,7 +10,7 @@ pub struct CreateProfile<'info> {
     #[account(
       init,
       payer = fee_payer,
-      space = Profile::size(&[authority.key()], &[Identity { provider: PubKeyIdentityProvider::Solana, provider_id: authority.key().to_string(), name: "Primary Wallet".to_owned(), communities: vec![] }]),
+      space = Profile::size(&[authority.key()], &[]),
       seeds = [
         PREFIX,
         PROFILE,
@@ -19,20 +19,7 @@ pub struct CreateProfile<'info> {
       bump
     )]
     pub profile: Account<'info, Profile>,
-
-    #[account(
-      init,
-      space = Pointer::size(),
-      payer = fee_payer,
-      seeds = [
-        &Pointer::hash_seed(&PubKeyIdentityProvider::Solana, &authority.key().to_string())
-      ],
-      bump
-    )]
-    pub pointer: Account<'info, Pointer>,
-
     pub authority: Signer<'info>,
-
     #[account(
       mut,
       constraint = fee_payer.key().ne(&authority.key()) @ PubkeyProfileError::InvalidFeePayer
@@ -43,20 +30,8 @@ pub struct CreateProfile<'info> {
 
 pub fn create(ctx: Context<CreateProfile>, args: CreateProfileArgs) -> Result<()> {
     let profile = &mut ctx.accounts.profile;
-    let pointer = &mut ctx.accounts.pointer;
-
     let authority = ctx.accounts.authority.key();
     let fee_payer = ctx.accounts.fee_payer.key();
-
-    // Creating pointer account
-    pointer.set_inner(Pointer {
-        bump: ctx.bumps.pointer,
-        profile: profile.key(),
-        provider: PubKeyIdentityProvider::Solana,
-        provider_id: authority.to_string(),
-    });
-
-    pointer.validate()?;
 
     // Creating profile account
     let CreateProfileArgs {
@@ -65,13 +40,6 @@ pub fn create(ctx: Context<CreateProfile>, args: CreateProfileArgs) -> Result<()
         avatar_url,
     } = args;
 
-    let identity = Identity {
-        provider: PubKeyIdentityProvider::Solana,
-        provider_id: authority.key().to_string(),
-        name: "Primary Wallet".to_owned(),
-        communities: vec![],
-    };
-
     profile.set_inner(Profile {
         bump: ctx.bumps.profile,
         username,
@@ -79,7 +47,7 @@ pub fn create(ctx: Context<CreateProfile>, args: CreateProfileArgs) -> Result<()
         avatar_url,
         fee_payer,
         authorities: vec![authority],
-        identities: vec![identity],
+        identities: vec![],
     });
 
     profile.validate()?;

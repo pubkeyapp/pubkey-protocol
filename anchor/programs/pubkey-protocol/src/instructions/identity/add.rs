@@ -53,20 +53,23 @@ pub fn add(ctx: Context<AddIdentity>, args: AddIdentityArgs) -> Result<()> {
     pointer.profile = profile.key();
     pointer.validate()?;
 
+    let provider = args.provider.clone();
+
     // Adding identity to profile
     let identity = Identity {
         provider: args.provider,
         provider_id: args.provider_id.clone(),
-        name: args.nickname,
+        name: args.name,
         communities: vec![],
     };
-
+    
     match profile
         .identities
-        .binary_search_by_key(&args.provider_id, |identity| identity.provider_id.clone())
+        .iter()
+        .position(|identity| identity.provider == provider)
     {
-        Ok(_) => return err!(PubkeyProfileError::IdentityAlreadyExists),
-        Err(new_identity_index) => profile.identities.insert(new_identity_index, identity),
+        Some(_) => return err!(PubkeyProfileError::IdentityAlreadyExists),
+        None => profile.identities.push(identity),
     }
 
     let new_profile_size = Profile::size(&profile.authorities, &profile.identities);
@@ -87,5 +90,5 @@ pub fn add(ctx: Context<AddIdentity>, args: AddIdentityArgs) -> Result<()> {
 pub struct AddIdentityArgs {
     provider: PubKeyIdentityProvider,
     provider_id: String,
-    nickname: String,
+    name: String,
 }
