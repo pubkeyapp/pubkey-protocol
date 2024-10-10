@@ -1,32 +1,8 @@
 use crate::constants::*;
 use crate::errors::*;
+use crate::state::*;
 
 use anchor_lang::prelude::*;
-
-#[derive(AnchorSerialize, AnchorDeserialize, Clone)]
-pub enum PubKeyIdentityProvider {
-    Discord,
-    Farcaster,
-    Github,
-    Google,
-    Solana,
-    Telegram,
-    X,
-}
-
-impl PubKeyIdentityProvider {
-    pub fn value(&self) -> String {
-        match *self {
-            PubKeyIdentityProvider::Discord => String::from("Discord"),
-            PubKeyIdentityProvider::Farcaster => String::from("Farcaster"),
-            PubKeyIdentityProvider::Github => String::from("Github"),
-            PubKeyIdentityProvider::Google => String::from("Google"),
-            PubKeyIdentityProvider::Solana => String::from("Solana"),
-            PubKeyIdentityProvider::Telegram => String::from("Telegram"),
-            PubKeyIdentityProvider::X => String::from("X"),
-        }
-    }
-}
 
 #[derive(AnchorSerialize, AnchorDeserialize, Clone)]
 pub struct Identity {
@@ -36,13 +12,16 @@ pub struct Identity {
     pub provider_id: String,
     // Nickname given to the identity
     pub name: String,
+    // Communities that have verified this identity
+    pub communities: Vec<Pubkey>,
 }
 
 impl Identity {
-    pub fn size() -> usize {
+    pub fn size(&self) -> usize {
         1 + 1 + // provider
         MAX_PROVIDER_ID_SIZE +
-        MAX_PROVIDER_NAME_SIZE
+        MAX_PROVIDER_NAME_SIZE +
+        4 + (self.communities.len() * 32)
     }
 
     pub fn validate(&self) -> Result<()> {

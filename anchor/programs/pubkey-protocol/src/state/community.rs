@@ -22,7 +22,7 @@ pub struct Community {
     // Pending authority that must sign to complete
     pub pending_authority: Option<Pubkey>,
     // Providers (identities) user have added onto
-    pub providers: Vec<Identity>,
+    pub providers: Vec<PubKeyIdentityProvider>,
     pub discord: Option<String>,
     pub farcaster: Option<String>,
     pub github: Option<String>,
@@ -34,10 +34,10 @@ pub struct Community {
 impl Community {
     pub fn size(
         fee_payers: &[Pubkey],
-        providers: &[Identity],
+        providers: &[PubKeyIdentityProvider],
     ) -> usize {
         let fee_payers_size = 4 + (fee_payers.len() * 32);
-        let providers_size = 4 + (providers.len() * Identity::size());
+        let providers_size = 4 + (providers.len() * std::mem::size_of::<PubKeyIdentityProvider>());
 
         8 + // Anchor discriminator
         1 + // bump
@@ -82,10 +82,6 @@ impl Community {
             providers_len <= MAX_VECTOR_SIZE.into(),
             PubkeyProfileError::MaxSizeReached
         );
-
-        for identity in self.providers.clone() {
-            identity.validate()?;
-        }
 
         // Create a Link struct and validate method
         let social_links = vec![

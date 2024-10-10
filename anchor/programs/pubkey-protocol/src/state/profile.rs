@@ -21,14 +21,11 @@ pub struct Profile {
     pub authorities: Vec<Pubkey>,
     // Identities user have added onto
     pub identities: Vec<Identity>,
-    // Community verifications
-    pub community_verifications: Vec<CommunityVerification>,
 }
 
 #[derive(AnchorSerialize, AnchorDeserialize, Clone, Copy, Debug)]
 pub struct CommunityVerification {
     pub community: Pubkey,
-    pub verified_at: i64,
     pub verified_by: Pubkey,
 }
 
@@ -38,9 +35,9 @@ impl Profile {
         (authorities.len() * 32); // Total authorities pubkey length
 
         let identities_size = 4 + // Vector discriminator
-            (identities.len() * Identity::size()); // Total identities length
+        identities.iter().map(|identity| Identity::size(identity)).sum::<usize>();
 
-        let community_verifications_size = 4 + (0 * std::mem::size_of::<CommunityVerification>());
+        let communities_size = 4 + (0 * std::mem::size_of::<CommunityVerification>());
 
         8 + // Anchor discriminator
         1 + // bump
@@ -50,7 +47,7 @@ impl Profile {
         32 + // fee_payer
         authorities_size +
         identities_size +
-        community_verifications_size
+        communities_size
     }
 
     pub fn validate(&self) -> Result<()> {
@@ -97,20 +94,5 @@ impl Profile {
 
     pub fn check_for_authority(&self, authority: &Pubkey) -> bool {
         self.authorities.binary_search(authority).is_ok()
-    }
-
-    pub fn add_community_verification(&mut self, community: Pubkey, verified_by: Pubkey) -> Result<()> {
-        let verification = CommunityVerification {
-            community,
-            verified_at: Clock::get()?.unix_timestamp,
-            verified_by,
-        };
-    
-        if self.community_verifications.iter().any(|v| v.community == community) {
-            return Err(PubkeyProfileError::CommunityVerificationAlreadyExists.into());
-        }
-    
-        self.community_verifications.push(verification);
-        Ok(())
     }
 }

@@ -20,9 +20,7 @@ pub struct UpdateFeePayers<'info> {
     )]
     pub community: Account<'info, Community>,
 
-    #[account(
-        mut,
-        constraint = community.check_for_authority(&authority.key()) @ PubkeyProfileError::UnAuthorized)]
+    #[account( mut, constraint = community.check_for_authority(&authority.key()) @ PubkeyProfileError::UnAuthorized)]
     pub authority: Signer<'info>,
 
     pub system_program: Program<'info, System>,

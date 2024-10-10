@@ -10,7 +10,7 @@ pub struct CreateProfile<'info> {
     #[account(
       init,
       payer = fee_payer,
-      space = Profile::size(&[authority.key()], &[Identity { provider: PubKeyIdentityProvider::Solana, provider_id: authority.key().to_string(), name: "Primary Wallet".to_owned() }]),
+      space = Profile::size(&[authority.key()], &[Identity { provider: PubKeyIdentityProvider::Solana, provider_id: authority.key().to_string(), name: "Primary Wallet".to_owned(), communities: vec![] }]),
       seeds = [
         PREFIX,
         PROFILE,
@@ -69,6 +69,7 @@ pub fn create(ctx: Context<CreateProfile>, args: CreateProfileArgs) -> Result<()
         provider: PubKeyIdentityProvider::Solana,
         provider_id: authority.key().to_string(),
         name: "Primary Wallet".to_owned(),
+        communities: vec![],
     };
 
     profile.set_inner(Profile {
@@ -79,7 +80,6 @@ pub fn create(ctx: Context<CreateProfile>, args: CreateProfileArgs) -> Result<()
         fee_payer,
         authorities: vec![authority],
         identities: vec![identity],
-        community_verifications: vec![],
     });
 
     profile.validate()?;

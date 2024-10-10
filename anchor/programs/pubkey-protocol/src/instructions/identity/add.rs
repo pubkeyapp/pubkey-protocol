@@ -58,6 +58,7 @@ pub fn add(ctx: Context<AddIdentity>, args: AddIdentityArgs) -> Result<()> {
         provider: args.provider,
         provider_id: args.provider_id.clone(),
         name: args.nickname,
+        communities: vec![],
     };
 
     match profile
