@@ -30,12 +30,12 @@ pub fn verify_community_profile(
     );
 
     // Check if the community has a valid PubKeyIdentityProvider
-    if community.providers.iter().any(|p| *p == args.provider_id) {
+    if community.providers.iter().any(|p| *p == args.provider) {
         // Find the corresponding identity in the profile
         if let Some(identity) = profile
             .identities
             .iter_mut()
-            .find(|i| i.provider == args.provider_id)
+            .find(|i| i.provider == args.provider)
         {
             // Add the community to the identity's communities list if it's not already there
             if !identity.communities.contains(&community.key()) {
@@ -53,5 +53,5 @@ pub fn verify_community_profile(
 
 #[derive(AnchorSerialize, AnchorDeserialize)]
 pub struct VerifyProfileForCommunityArgs {
-    pub provider_id: PubKeyIdentityProvider,
+    pub provider: PubKeyIdentityProvider,
 }
