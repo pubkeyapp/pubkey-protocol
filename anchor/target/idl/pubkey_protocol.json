@@ -1182,16 +1182,21 @@
     },
     {
       "code": 6023,
+      "name": "IdentityProfileInvalid",
+      "msg": "Invalid Identity Profile Authority"
+    },
+    {
+      "code": 6024,
       "name": "UnauthorizedCommunityAction",
       "msg": "Unauthorized community action"
     },
     {
-      "code": 6024,
+      "code": 6025,
       "name": "CommunityVerificationAlreadyExists",
       "msg": "Community verification already exists"
     },
     {
-      "code": 6025,
+      "code": 6026,
       "name": "AccountTooLarge",
       "msg": "Account too large"
     }
@@ -1224,7 +1229,11 @@
           },
           {
             "name": "provider_id",
-            "type": "string"
+            "type": {
+              "defined": {
+                "name": "ProviderID"
+              }
+            }
           },
           {
             "name": "name",
@@ -1338,7 +1347,11 @@
           },
           {
             "name": "provider_id",
-            "type": "string"
+            "type": {
+              "defined": {
+                "name": "ProviderID"
+              }
+            }
           },
           {
             "name": "name",
@@ -1384,7 +1397,11 @@
           },
           {
             "name": "provider_id",
-            "type": "string"
+            "type": {
+              "defined": {
+                "name": "ProviderID"
+              }
+            }
           },
           {
             "name": "profile",
@@ -1433,6 +1450,26 @@
                 }
               }
             }
+          }
+        ]
+      }
+    },
+    {
+      "name": "ProviderID",
+      "type": {
+        "kind": "enum",
+        "variants": [
+          {
+            "name": "String",
+            "fields": [
+              "string"
+            ]
+          },
+          {
+            "name": "PubKey",
+            "fields": [
+              "pubkey"
+            ]
           }
         ]
       }
@@ -1496,7 +1533,11 @@
           },
           {
             "name": "provider_id",
-            "type": "string"
+            "type": {
+              "defined": {
+                "name": "ProviderID"
+              }
+            }
           }
         ]
       }
@@ -1565,7 +1606,7 @@
         "kind": "struct",
         "fields": [
           {
-            "name": "provider_id",
+            "name": "provider",
             "type": {
               "defined": {
                 "name": "PubKeyIdentityProvider"

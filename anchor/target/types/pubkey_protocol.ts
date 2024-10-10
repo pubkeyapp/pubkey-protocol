@@ -1188,16 +1188,21 @@ export type PubkeyProtocol = {
     },
     {
       "code": 6023,
+      "name": "identityProfileInvalid",
+      "msg": "Invalid Identity Profile Authority"
+    },
+    {
+      "code": 6024,
       "name": "unauthorizedCommunityAction",
       "msg": "Unauthorized community action"
     },
     {
-      "code": 6024,
+      "code": 6025,
       "name": "communityVerificationAlreadyExists",
       "msg": "Community verification already exists"
     },
     {
-      "code": 6025,
+      "code": 6026,
       "name": "accountTooLarge",
       "msg": "Account too large"
     }
@@ -1230,7 +1235,11 @@ export type PubkeyProtocol = {
           },
           {
             "name": "providerId",
-            "type": "string"
+            "type": {
+              "defined": {
+                "name": "providerId"
+              }
+            }
           },
           {
             "name": "name",
@@ -1344,7 +1353,11 @@ export type PubkeyProtocol = {
           },
           {
             "name": "providerId",
-            "type": "string"
+            "type": {
+              "defined": {
+                "name": "providerId"
+              }
+            }
           },
           {
             "name": "name",
@@ -1390,7 +1403,11 @@ export type PubkeyProtocol = {
           },
           {
             "name": "providerId",
-            "type": "string"
+            "type": {
+              "defined": {
+                "name": "providerId"
+              }
+            }
           },
           {
             "name": "profile",
@@ -1439,6 +1456,26 @@ export type PubkeyProtocol = {
                 }
               }
             }
+          }
+        ]
+      }
+    },
+    {
+      "name": "providerId",
+      "type": {
+        "kind": "enum",
+        "variants": [
+          {
+            "name": "string",
+            "fields": [
+              "string"
+            ]
+          },
+          {
+            "name": "pubKey",
+            "fields": [
+              "pubkey"
+            ]
           }
         ]
       }
@@ -1502,7 +1539,11 @@ export type PubkeyProtocol = {
           },
           {
             "name": "providerId",
-            "type": "string"
+            "type": {
+              "defined": {
+                "name": "providerId"
+              }
+            }
           }
         ]
       }
@@ -1571,7 +1612,7 @@ export type PubkeyProtocol = {
         "kind": "struct",
         "fields": [
           {
-            "name": "providerId",
+            "name": "provider",
             "type": {
               "defined": {
                 "name": "pubKeyIdentityProvider"
