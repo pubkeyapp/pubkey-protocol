@@ -3,7 +3,6 @@ use anchor_lang::{prelude::*, solana_program::hash::hash};
 use crate::constants::*;
 use crate::errors::*;
 use crate::state::*;
-use crate::utils::*;
 
 #[account]
 pub struct Pointer {
@@ -12,7 +11,7 @@ pub struct Pointer {
     // Provider type for Identity
     pub provider: PubKeyIdentityProvider,
     // Provider ID for Identity
-    pub provider_id: ProviderID,
+    pub provider_id: String,
     // Profile that the identity is pointing towards
     pub profile: Pubkey,
 }
@@ -26,7 +25,7 @@ impl Pointer {
     }
 
     pub fn validate(&self) -> Result<()> {
-        let provider_id_len = get_provider_id_len(&self.provider_id);
+        let provider_id_len = self.provider_id.len();
 
         require!(
             provider_id_len <= MAX_PROVIDER_ID_SIZE,
@@ -36,12 +35,12 @@ impl Pointer {
         Ok(())
     }
 
-    pub fn hash_seed(provider: &PubKeyIdentityProvider, provider_id: &ProviderID) -> Vec<u8> {
+    pub fn hash_seed(provider: &PubKeyIdentityProvider, provider_id: &String) -> Vec<u8> {
         let serialized_data = [
             PREFIX,
             POINTER,
             &provider.value().as_bytes(),
-            &provider_id_to_string(provider_id).as_bytes(),
+            &provider_id.as_bytes(),
         ]
         .concat();
 

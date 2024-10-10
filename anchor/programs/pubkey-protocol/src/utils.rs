@@ -115,24 +115,3 @@ pub fn realloc_account<'a>(
     AccountInfo::realloc(&account, new_account_size, false)?;
     Ok(())
 }
-
-pub fn parse_provider_id(provider_id: &ProviderID) -> ProviderID {
-    match provider_id {
-        ProviderID::PubKey(pubkey) => ProviderID::PubKey(*pubkey),
-        ProviderID::String(s) => ProviderID::String(s.clone()),
-    }
-}
-
-pub fn get_provider_id_len(provider_id: &ProviderID) -> usize {
-    match provider_id {
-        ProviderID::String(s) => s.len(),
-        ProviderID::PubKey(_) => 32,
-    }
-}
-
-pub fn provider_id_to_string(provider_id: &ProviderID) -> String {
-    match provider_id {
-        ProviderID::String(s) => s.clone(),
-        ProviderID::PubKey(p) => p.to_string(),
-    }
-}

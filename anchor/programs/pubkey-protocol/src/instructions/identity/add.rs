@@ -50,7 +50,7 @@ pub fn add(ctx: Context<AddIdentity>, args: AddIdentityArgs) -> Result<()> {
     // Initializing pointer account
     pointer.bump = ctx.bumps.pointer;
     pointer.provider = args.provider.clone();
-    pointer.provider_id = parse_provider_id(&args.provider_id);
+    pointer.provider_id = args.provider_id.clone();
     pointer.profile = profile.key();
     pointer.validate()?;
 
@@ -92,6 +92,6 @@ pub fn add(ctx: Context<AddIdentity>, args: AddIdentityArgs) -> Result<()> {
 #[derive(AnchorSerialize, AnchorDeserialize)]
 pub struct AddIdentityArgs {
     provider: PubKeyIdentityProvider,
-    provider_id: ProviderID,
+    provider_id: String,
     name: String,
 }

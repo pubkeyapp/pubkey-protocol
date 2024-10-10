@@ -1,3 +1,5 @@
+use std::str::FromStr;
+
 use crate::constants::*;
 use crate::errors::*;
 use crate::state::*;
@@ -10,7 +12,7 @@ pub struct Identity {
     // The provider name
     pub provider: PubKeyIdentityProvider,
     // The provider ID (address incase of blockchain)
-    pub provider_id: ProviderID,
+    pub provider_id: String,
     // Nickname given to the identity
     pub name: String,
     // Communities that have verified this identity
@@ -26,7 +28,7 @@ impl Identity {
     }
 
     pub fn validate(&self) -> Result<()> {
-        let provider_id_len = get_provider_id_len(&self.provider_id);
+        let provider_id_len = self.provider_id.len();
         let provider_name_len = self.name.len();
 
         require!(
@@ -42,85 +44,68 @@ impl Identity {
         // Validate provider_id based on the provider
         match &self.provider {
             PubKeyIdentityProvider::Solana => {
-                if let ProviderID::PubKey(pubkey) = &self.provider_id {
-                    require!(
-                        is_valid_pubkey(pubkey),
-                        PubkeyProfileError::InvalidSolanaPubKey
-                    );
-                } else {
-                    return Err(PubkeyProfileError::InvalidSolanaPubKey.into());
-                }
-            },
+                require!(
+                    Pubkey::from_str(&self.provider_id).is_ok(),
+                    PubkeyProfileError::InvalidSolanaPubKey
+                );
+            }
             PubKeyIdentityProvider::Discord => {
-                if let ProviderID::String(id) = &self.provider_id {
-                    require!(
-                        is_valid_provider(id, &self.provider.value()),
-                        PubkeyProfileError::InvalidDiscordURL
-                    );
-                } else {
-                    return Err(PubkeyProfileError::InvalidDiscordURL.into());
-                }
-            },
+                require!(
+                    is_valid_provider(
+                        &self.provider.value(),
+                        &PubKeyIdentityProvider::Discord.value()
+                    ),
+                    PubkeyProfileError::InvalidDiscordURL
+                );
+            }
             PubKeyIdentityProvider::Farcaster => {
-                if let ProviderID::String(id) = &self.provider_id {
-                    require!(
-                        is_valid_provider(id, &self.provider.value()),
-                        PubkeyProfileError::InvalidFarcasterURL
-                    );
-                } else {
-                    return Err(PubkeyProfileError::InvalidFarcasterURL.into());
-                }
-            },
+                require!(
+                    is_valid_provider(
+                        &self.provider.value(),
+                        &PubKeyIdentityProvider::Farcaster.value()
+                    ),
+                    PubkeyProfileError::InvalidFarcasterURL
+                );
+            }
             PubKeyIdentityProvider::Github => {
-                if let ProviderID::String(id) = &self.provider_id {
-                    require!(
-                        is_valid_provider(id, &self.provider.value()),
-                        PubkeyProfileError::InvalidGitHubURL
-                    );
-                } else {
-                    return Err(PubkeyProfileError::InvalidGitHubURL.into());
-                }
-            },
+                require!(
+                    is_valid_provider(
+                        &self.provider.value(),
+                        &PubKeyIdentityProvider::Github.value()
+                    ),
+                    PubkeyProfileError::InvalidGitHubURL
+                );
+            }
             PubKeyIdentityProvider::Google => {
-                if let ProviderID::String(id) = &self.provider_id {
-                    require!(
-                        is_valid_provider(id, &self.provider.value()),
-                        PubkeyProfileError::InvalidGoogleURL
-                    );
-                } else {
-                    return Err(PubkeyProfileError::InvalidGoogleURL.into());
-                }
-            },
+                require!(
+                    is_valid_provider(
+                        &self.provider.value(),
+                        &PubKeyIdentityProvider::Google.value()
+                    ),
+                    PubkeyProfileError::InvalidGoogleURL
+                );
+            }
             PubKeyIdentityProvider::Telegram => {
-                if let ProviderID::String(id) = &self.provider_id {
-                    require!(
-                        is_valid_provider(id, &self.provider.value()),
-                        PubkeyProfileError::InvalidTelegramURL
-                    );
-                } else {
-                    return Err(PubkeyProfileError::InvalidTelegramURL.into());
-                }
-            },
+                require!(
+                    is_valid_provider(
+                        &self.provider.value(),
+                        &PubKeyIdentityProvider::Telegram.value()
+                    ),
+                    PubkeyProfileError::InvalidTelegramURL
+                );
+            }
             PubKeyIdentityProvider::Website => {
-                if let ProviderID::String(_id) = &self.provider_id {
-                    require!(
-                        is_valid_url(&self.provider.value()),
-                        PubkeyProfileError::InvalidWebsiteURL
-                    );
-                } else {
-                    return Err(PubkeyProfileError::InvalidWebsiteURL.into());
-                }
-            },
+                require!(
+                    is_valid_url(&self.provider.value()),
+                    PubkeyProfileError::InvalidWebsiteURL
+                );
+            }
             PubKeyIdentityProvider::X => {
-                if let ProviderID::String(id) = &self.provider_id {
-                    require!(
-                        is_valid_provider(id, &self.provider.value()),
-                        PubkeyProfileError::InvalidXURL
-                    );
-                } else {
-                    return Err(PubkeyProfileError::InvalidXURL.into());
-                }
-            },
+                require!(
+                    is_valid_provider(&self.provider.value(), &PubKeyIdentityProvider::X.value()),
+                    PubkeyProfileError::InvalidXURL
+                );
+            }
         }
 
         Ok(())
