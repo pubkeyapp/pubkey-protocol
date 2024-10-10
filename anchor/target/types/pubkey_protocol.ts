@@ -1021,7 +1021,16 @@ export type PubkeyProtocol = {
           "address": "11111111111111111111111111111111"
         }
       ],
-      "args": []
+      "args": [
+        {
+          "name": "args",
+          "type": {
+            "defined": {
+              "name": "verifyProfileForCommunityArgs"
+            }
+          }
+        }
+      ]
     }
   ],
   "accounts": [
@@ -1113,8 +1122,8 @@ export type PubkeyProtocol = {
     },
     {
       "code": 6009,
-      "name": "invalidTelegramUrl",
-      "msg": "Invalid Telegram URL"
+      "name": "invalidGoogleUrl",
+      "msg": "Invalid Google URL"
     },
     {
       "code": 6010,
@@ -1123,66 +1132,76 @@ export type PubkeyProtocol = {
     },
     {
       "code": 6011,
+      "name": "invalidSolanaPubKey",
+      "msg": "Invalid Solana Public Key"
+    },
+    {
+      "code": 6012,
+      "name": "invalidTelegramUrl",
+      "msg": "Invalid Telegram URL"
+    },
+    {
+      "code": 6013,
       "name": "invalidWebsiteUrl",
       "msg": "Invalid Website URL"
     },
     {
-      "code": 6012,
+      "code": 6014,
       "name": "invalidProviderId",
       "msg": "Invalid Provider ID"
     },
     {
-      "code": 6013,
+      "code": 6015,
       "name": "invalidProviderName",
       "msg": "Invalid Provider Name"
     },
     {
-      "code": 6014,
+      "code": 6016,
       "name": "invalidAccountOwner",
       "msg": "Account not owned by program"
     },
     {
-      "code": 6015,
+      "code": 6017,
       "name": "authorityAlreadyExists",
       "msg": "Authority already exists"
     },
     {
-      "code": 6016,
+      "code": 6018,
       "name": "authorityNonExistent",
       "msg": "Authority does not exist"
     },
     {
-      "code": 6017,
+      "code": 6019,
       "name": "cannotRemoveSoloAuthority",
       "msg": "Cannot remove last remaining authority"
     },
     {
-      "code": 6018,
+      "code": 6020,
       "name": "maxSizeReached",
       "msg": "Array reached max size"
     },
     {
-      "code": 6019,
+      "code": 6021,
       "name": "identityAlreadyExists",
       "msg": "Identity already exists"
     },
     {
-      "code": 6020,
+      "code": 6022,
       "name": "identityNonExistent",
       "msg": "Identity does not exist"
     },
     {
-      "code": 6021,
+      "code": 6023,
       "name": "unauthorizedCommunityAction",
       "msg": "Unauthorized community action"
     },
     {
-      "code": 6022,
+      "code": 6024,
       "name": "communityVerificationAlreadyExists",
       "msg": "Community verification already exists"
     },
     {
-      "code": 6023,
+      "code": 6025,
       "name": "accountTooLarge",
       "msg": "Account too large"
     }
@@ -1266,7 +1285,7 @@ export type PubkeyProtocol = {
             "type": {
               "vec": {
                 "defined": {
-                  "name": "identity"
+                  "name": "pubKeyIdentityProvider"
                 }
               }
             }
@@ -1287,6 +1306,18 @@ export type PubkeyProtocol = {
             "name": "github",
             "type": {
               "option": "string"
+            }
+          },
+          {
+            "name": "google",
+            "type": {
+              "option": "string"
+            }
+          },
+          {
+            "name": "solana",
+            "type": {
+              "option": "pubkey"
             }
           },
           {
@@ -1306,36 +1337,6 @@ export type PubkeyProtocol = {
             "type": {
               "option": "string"
             }
-          },
-          {
-            "name": "verifiedProfiles",
-            "type": {
-              "vec": {
-                "defined": {
-                  "name": "profileVerification"
-                }
-              }
-            }
-          }
-        ]
-      }
-    },
-    {
-      "name": "communityVerification",
-      "type": {
-        "kind": "struct",
-        "fields": [
-          {
-            "name": "community",
-            "type": "pubkey"
-          },
-          {
-            "name": "verifiedAt",
-            "type": "i64"
-          },
-          {
-            "name": "verifiedBy",
-            "type": "pubkey"
           }
         ]
       }
@@ -1346,7 +1347,15 @@ export type PubkeyProtocol = {
         "kind": "struct",
         "fields": [
           {
+            "name": "slug",
+            "type": "string"
+          },
+          {
             "name": "avatarUrl",
+            "type": "string"
+          },
+          {
+            "name": "name",
             "type": "string"
           },
           {
@@ -1368,12 +1377,16 @@ export type PubkeyProtocol = {
             }
           },
           {
-            "name": "name",
-            "type": "string"
+            "name": "google",
+            "type": {
+              "option": "string"
+            }
           },
           {
-            "name": "slug",
-            "type": "string"
+            "name": "solana",
+            "type": {
+              "option": "pubkey"
+            }
           },
           {
             "name": "telegram",
@@ -1436,6 +1449,12 @@ export type PubkeyProtocol = {
           {
             "name": "name",
             "type": "string"
+          },
+          {
+            "name": "communities",
+            "type": {
+              "vec": "pubkey"
+            }
           }
         ]
       }
@@ -1520,36 +1539,6 @@ export type PubkeyProtocol = {
                 }
               }
             }
-          },
-          {
-            "name": "communityVerifications",
-            "type": {
-              "vec": {
-                "defined": {
-                  "name": "communityVerification"
-                }
-              }
-            }
-          }
-        ]
-      }
-    },
-    {
-      "name": "profileVerification",
-      "type": {
-        "kind": "struct",
-        "fields": [
-          {
-            "name": "profile",
-            "type": "pubkey"
-          },
-          {
-            "name": "verifiedAt",
-            "type": "i64"
-          },
-          {
-            "name": "verifiedBy",
-            "type": "pubkey"
           }
         ]
       }
@@ -1579,6 +1568,12 @@ export type PubkeyProtocol = {
           },
           {
             "name": "x"
+          },
+          {
+            "name": "website",
+            "fields": [
+              "string"
+            ]
           }
         ]
       }
@@ -1619,6 +1614,12 @@ export type PubkeyProtocol = {
             }
           },
           {
+            "name": "name",
+            "type": {
+              "option": "string"
+            }
+          },
+          {
             "name": "discord",
             "type": {
               "option": "string"
@@ -1637,9 +1638,15 @@ export type PubkeyProtocol = {
             }
           },
           {
-            "name": "name",
+            "name": "google",
             "type": {
               "option": "string"
+            }
+          },
+          {
+            "name": "solana",
+            "type": {
+              "option": "pubkey"
             }
           },
           {
@@ -1696,6 +1703,22 @@ export type PubkeyProtocol = {
             "name": "newAvatarUrl",
             "type": {
               "option": "string"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "verifyProfileForCommunityArgs",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "providerId",
+            "type": {
+              "defined": {
+                "name": "pubKeyIdentityProvider"
+              }
             }
           }
         ]
