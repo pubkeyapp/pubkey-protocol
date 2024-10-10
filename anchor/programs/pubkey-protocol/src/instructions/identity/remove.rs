@@ -22,7 +22,7 @@ pub struct RemoveIdentity<'info> {
 
     #[account(
       mut,
-      seeds = [&Pointer::hash_seed(&pointer.provider, &args.provider_id)],
+      seeds = [&Pointer::hash_seed(&args.provider, &args.provider_id)],
       bump = pointer.bump,
       has_one = profile @ PubkeyProfileError::UnAuthorized,
       close = fee_payer
@@ -41,15 +41,17 @@ pub struct RemoveIdentity<'info> {
 
 pub fn remove(ctx: Context<RemoveIdentity>, args: RemoveIdentityArgs) -> Result<()> {
     let profile = &mut ctx.accounts.profile;
+    let provider = args.provider.clone();
 
     match profile
         .identities
-        .binary_search_by_key(&args.provider_id, |identity| identity.provider_id.clone())
+        .iter()
+        .position(|identity| identity.provider == provider)
     {
-        Ok(identity_to_remove_index) => {
+        Some(identity_to_remove_index) => {
             profile.identities.remove(identity_to_remove_index);
         }
-        Err(_) => return err!(PubkeyProfileError::IdentityNonExistent),
+        None => return err!(PubkeyProfileError::IdentityNonExistent),
     }
 
     profile.validate()?;
@@ -59,5 +61,6 @@ pub fn remove(ctx: Context<RemoveIdentity>, args: RemoveIdentityArgs) -> Result<
 
 #[derive(AnchorSerialize, AnchorDeserialize)]
 pub struct RemoveIdentityArgs {
+    pub provider: PubKeyIdentityProvider,
     pub provider_id: String,
 }
