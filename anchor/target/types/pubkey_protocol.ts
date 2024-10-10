@@ -1235,11 +1235,7 @@ export type PubkeyProtocol = {
           },
           {
             "name": "providerId",
-            "type": {
-              "defined": {
-                "name": "providerId"
-              }
-            }
+            "type": "string"
           },
           {
             "name": "name",
@@ -1353,11 +1349,7 @@ export type PubkeyProtocol = {
           },
           {
             "name": "providerId",
-            "type": {
-              "defined": {
-                "name": "providerId"
-              }
-            }
+            "type": "string"
           },
           {
             "name": "name",
@@ -1403,11 +1395,7 @@ export type PubkeyProtocol = {
           },
           {
             "name": "providerId",
-            "type": {
-              "defined": {
-                "name": "providerId"
-              }
-            }
+            "type": "string"
           },
           {
             "name": "profile",
@@ -1456,26 +1444,6 @@ export type PubkeyProtocol = {
                 }
               }
             }
-          }
-        ]
-      }
-    },
-    {
-      "name": "providerId",
-      "type": {
-        "kind": "enum",
-        "variants": [
-          {
-            "name": "string",
-            "fields": [
-              "string"
-            ]
-          },
-          {
-            "name": "pubKey",
-            "fields": [
-              "pubkey"
-            ]
           }
         ]
       }
@@ -1539,11 +1507,7 @@ export type PubkeyProtocol = {
           },
           {
             "name": "providerId",
-            "type": {
-              "defined": {
-                "name": "providerId"
-              }
-            }
+            "type": "string"
           }
         ]
       }

@@ -1,12 +1,6 @@
 use anchor_lang::prelude::*;
 
-#[derive(AnchorSerialize, AnchorDeserialize, Clone)]
-pub enum ProviderID {
-    String(String),
-    PubKey(Pubkey),
-}
-
-#[derive(AnchorSerialize, AnchorDeserialize, Clone, PartialEq)]
+#[derive(AnchorSerialize, AnchorDeserialize, Clone, PartialEq, Debug)]
 pub enum PubKeyIdentityProvider {
     Discord,
     Farcaster,

@@ -89,7 +89,7 @@ pub fn add(ctx: Context<AddIdentity>, args: AddIdentityArgs) -> Result<()> {
     Ok(())
 }
 
-#[derive(AnchorSerialize, AnchorDeserialize)]
+#[derive(AnchorSerialize, AnchorDeserialize, Debug)]
 pub struct AddIdentityArgs {
     provider: PubKeyIdentityProvider,
     provider_id: String,

@@ -1229,11 +1229,7 @@
           },
           {
             "name": "provider_id",
-            "type": {
-              "defined": {
-                "name": "ProviderID"
-              }
-            }
+            "type": "string"
           },
           {
             "name": "name",
@@ -1347,11 +1343,7 @@
           },
           {
             "name": "provider_id",
-            "type": {
-              "defined": {
-                "name": "ProviderID"
-              }
-            }
+            "type": "string"
           },
           {
             "name": "name",
@@ -1397,11 +1389,7 @@
           },
           {
             "name": "provider_id",
-            "type": {
-              "defined": {
-                "name": "ProviderID"
-              }
-            }
+            "type": "string"
           },
           {
             "name": "profile",
@@ -1450,26 +1438,6 @@
                 }
               }
             }
-          }
-        ]
-      }
-    },
-    {
-      "name": "ProviderID",
-      "type": {
-        "kind": "enum",
-        "variants": [
-          {
-            "name": "String",
-            "fields": [
-              "string"
-            ]
-          },
-          {
-            "name": "PubKey",
-            "fields": [
-              "pubkey"
-            ]
           }
         ]
       }
@@ -1533,11 +1501,7 @@
           },
           {
             "name": "provider_id",
-            "type": {
-              "defined": {
-                "name": "ProviderID"
-              }
-            }
+            "type": "string"
           }
         ]
       }
