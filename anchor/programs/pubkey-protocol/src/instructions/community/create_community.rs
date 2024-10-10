@@ -10,7 +10,7 @@ pub struct CreateCommunity<'info> {
     #[account(
       init,
       payer = fee_payer,
-      space = Community::size(&[authority.key()], &[Identity { provider: PubKeyIdentityProvider::Solana, provider_id: authority.key().to_string(), name: "Community Creator Wallet".to_owned() }], &[]),
+      space = Community::size(&[authority.key()], &[Identity { provider: PubKeyIdentityProvider::Solana, provider_id: authority.key().to_string(), name: "Community Creator Wallet".to_owned() }]),
       seeds = [
         PREFIX,
         COMMUNITY,
@@ -69,7 +69,6 @@ pub fn create_community(ctx: Context<CreateCommunity>, args: CreateCommunityArgs
         telegram,
         website,
         x,
-        verified_profiles: Vec::new(),
     });
 
     community.validate()?;
