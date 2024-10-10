@@ -54,7 +54,7 @@ impl Identity {
             PubKeyIdentityProvider::Discord => {
                 if let ProviderID::String(id) = &self.provider_id {
                     require!(
-                        is_valid_provider(id, &self.provider.value()),
+                        is_valid_provider(id, &self.provider),
                         PubkeyProfileError::InvalidDiscordURL
                     );
                 } else {
@@ -64,7 +64,7 @@ impl Identity {
             PubKeyIdentityProvider::Farcaster => {
                 if let ProviderID::String(id) = &self.provider_id {
                     require!(
-                        is_valid_provider(id, &self.provider.value()),
+                        is_valid_provider(id, &self.provider),
                         PubkeyProfileError::InvalidFarcasterURL
                     );
                 } else {
@@ -74,7 +74,7 @@ impl Identity {
             PubKeyIdentityProvider::Github => {
                 if let ProviderID::String(id) = &self.provider_id {
                     require!(
-                        is_valid_provider(id, &self.provider.value()),
+                        is_valid_provider(id, &self.provider),
                         PubkeyProfileError::InvalidGitHubURL
                     );
                 } else {
@@ -84,7 +84,7 @@ impl Identity {
             PubKeyIdentityProvider::Google => {
                 if let ProviderID::String(id) = &self.provider_id {
                     require!(
-                        is_valid_provider(id, &self.provider.value()),
+                        is_valid_provider(id, &self.provider),
                         PubkeyProfileError::InvalidGoogleURL
                     );
                 } else {
@@ -94,7 +94,7 @@ impl Identity {
             PubKeyIdentityProvider::Telegram => {
                 if let ProviderID::String(id) = &self.provider_id {
                     require!(
-                        is_valid_provider(id, &self.provider.value()),
+                        is_valid_provider(id, &self.provider),
                         PubkeyProfileError::InvalidTelegramURL
                     );
                 } else {
@@ -114,7 +114,7 @@ impl Identity {
             PubKeyIdentityProvider::X => {
                 if let ProviderID::String(id) = &self.provider_id {
                     require!(
-                        is_valid_provider(id, &self.provider.value()),
+                        is_valid_provider(id, &self.provider),
                         PubkeyProfileError::InvalidXURL
                     );
                 } else {

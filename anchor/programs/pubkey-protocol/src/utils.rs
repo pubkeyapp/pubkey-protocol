@@ -2,7 +2,7 @@ use anchor_lang::{prelude::*, system_program};
 
 use crate::errors::*;
 use crate::id;
-use crate::state::ProviderID;
+use crate::state::*;
 
 pub fn is_valid_username(username: &str) -> bool {
     if username.len() < 3 || username.len() > 20 {
@@ -59,17 +59,19 @@ pub fn is_valid_url(url: &str) -> bool {
     valid_scheme && valid_path && valid_domain
 }
 
-pub fn is_valid_provider(url: &str, platform: &str) -> bool {
+pub fn is_valid_provider(url: &str, platform: &PubKeyIdentityProvider) -> bool {
     match platform {
-        "discord" => {
+        PubKeyIdentityProvider::Discord => {
             url.starts_with("https://discord.com/invite/") || url.starts_with("https://discord.gg/")
         }
-        "farcaster" => url.starts_with("https://warpcast.com/"),
-        "github" => url.starts_with("https://github.com/"),
-        "google" => url.starts_with("https://google.com/"),
-        "solana" => url.starts_with("https://solana.com/"),
-        "telegram" => url.starts_with("https://t.me/") || url.starts_with("https://telegram.me/"),
-        "x" => url.starts_with("https://twitter.com/") || url.starts_with("https://x.com/"),
+        PubKeyIdentityProvider::Farcaster => url.starts_with("https://warpcast.com/"),
+        PubKeyIdentityProvider::Github => url.starts_with("https://github.com/"),
+        PubKeyIdentityProvider::Google => url.starts_with("https://google.com/"),
+        PubKeyIdentityProvider::Solana => url.starts_with("https://solana.com/"),
+        PubKeyIdentityProvider::Telegram => {
+            url.starts_with("https://t.me/") || url.starts_with("https://telegram.me/")
+        }
+        PubKeyIdentityProvider::X => url.starts_with("https://twitter.com/") || url.starts_with("https://x.com/"),
         _ => false,
     }
 }
