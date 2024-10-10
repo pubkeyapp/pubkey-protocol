@@ -73,9 +73,12 @@ export function getPubKeyPointerPda({
 
 export enum PubKeyIdentityProvider {
   Discord = 'Discord',
+  Farcaster = 'Farcaster',
   Github = 'Github',
   Google = 'Google',
   Solana = 'Solana',
+  Telegram = 'Telegram',
+  Website = 'Website',
   X = 'X',
 }
 

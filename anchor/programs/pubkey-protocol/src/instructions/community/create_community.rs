@@ -40,14 +40,6 @@ pub fn create_community(ctx: Context<CreateCommunity>, args: CreateCommunityArgs
         slug,
         name,
         avatar_url,
-        discord,
-        farcaster,
-        github,
-        google,
-        solana,
-        telegram,
-        website,
-        x,
     } = args;
 
     community.set_inner(Community {
@@ -59,14 +51,6 @@ pub fn create_community(ctx: Context<CreateCommunity>, args: CreateCommunityArgs
         authority,
         pending_authority: None,
         providers: vec![],
-        discord,
-        farcaster,
-        github,
-        google,
-        solana,
-        telegram,
-        website,
-        x,
     });
 
     community.validate()?;
@@ -79,12 +63,4 @@ pub struct CreateCommunityArgs {
     pub slug: String,
     pub avatar_url: String,
     pub name: String,
-    pub discord: Option<String>,
-    pub farcaster: Option<String>,
-    pub github: Option<String>,
-    pub google: Option<String>,
-    pub solana: Option<Pubkey>,
-    pub telegram: Option<String>,
-    pub website: Option<String>,
-    pub x: Option<String>,
 }

@@ -23,14 +23,6 @@ pub struct Community {
     pub pending_authority: Option<Pubkey>,
     // Providers (identities) user have added onto
     pub providers: Vec<PubKeyIdentityProvider>,
-    pub discord: Option<String>,
-    pub farcaster: Option<String>,
-    pub github: Option<String>,
-    pub google: Option<String>,
-    pub solana: Option<Pubkey>,
-    pub telegram: Option<String>,
-    pub website: Option<String>,
-    pub x: Option<String>,
 }
 
 impl Community {
@@ -46,8 +38,7 @@ impl Community {
         32 + // authority
         1 + 32 + // pending_authority (Option<Pubkey>)
         fee_payers_size +
-        providers_size +
-        (1 + 4 + MAX_URL_SIZE) * 6 // 6 Social Option<String> fields
+        providers_size 
     }
 
     pub fn validate(&self) -> Result<()> {
@@ -81,82 +72,6 @@ impl Community {
             providers_len <= MAX_VECTOR_SIZE.into(),
             PubkeyProfileError::MaxSizeReached
         );
-
-        // Create a Link struct and validate method
-        let social_links = vec![
-            Link::new("discord", self.discord.as_deref()),
-            Link::new("farcaster", self.farcaster.as_deref()),
-            Link::new("github", self.github.as_deref()),
-            Link::new("google", self.google.as_deref()),
-            Link::new("telegram", self.telegram.as_deref()),
-            Link::new("website", self.website.as_deref()),
-            Link::new("x", self.x.as_deref()),
-        ];
-
-        for link in social_links {
-            link.validate_social_links()?;
-        }
-
-        pub struct Link<'a> {
-            link_type: &'a str,
-            url: Option<&'a str>,
-        }
-
-        impl<'a> Link<'a> {
-            pub fn new(link_type: &'a str, url: Option<&'a str>) -> Self {
-                Self { link_type, url }
-            }
-
-            pub fn validate_social_links(&self) -> Result<()> {
-                if let Some(url) = self.url {
-                    match self.link_type {
-                        "discord" => {
-                            require!(
-                                is_valid_provider(url, &PubKeyIdentityProvider::Discord.value()),
-                                PubkeyProfileError::InvalidDiscordURL
-                            )
-                        }
-                        "farcaster" => require!(
-                            is_valid_provider(url, &PubKeyIdentityProvider::Farcaster.value()),
-                            PubkeyProfileError::InvalidFarcasterURL
-                        ),
-                        "github" => {
-                            require!(
-                                is_valid_provider(url, &PubKeyIdentityProvider::Github.value()),
-                                PubkeyProfileError::InvalidGitHubURL
-                            )
-                        }
-                        "google" => {
-                            require!(
-                                is_valid_provider(url, &PubKeyIdentityProvider::Google.value()),
-                                PubkeyProfileError::InvalidGoogleURL
-                            )
-                        }
-                        "telegram" => require!(
-                            is_valid_provider(url, &PubKeyIdentityProvider::Telegram.value()),
-                            PubkeyProfileError::InvalidTelegramURL
-                        ),
-                        "x" => require!(
-                            is_valid_provider(url, &PubKeyIdentityProvider::X.value()),
-                            PubkeyProfileError::InvalidXURL
-                        ),
-                        "website" => {
-                            require!(is_valid_url(url), PubkeyProfileError::InvalidWebsiteURL)
-                        }
-                        _ => return Err(PubkeyProfileError::InvalidProviderID.into()),
-                    }
-                }
-                Ok(())
-            }
-        }
-
-        // Validate Solana pubkey if present
-        if let Some(solana_pubkey) = &self.solana {
-            require!(
-                is_valid_pubkey(solana_pubkey),
-                PubkeyProfileError::InvalidSolanaPubKey
-            );
-        }
 
         Ok(())
     }
