@@ -62,5 +62,5 @@ pub fn remove(ctx: Context<RemoveIdentity>, args: RemoveIdentityArgs) -> Result<
 #[derive(AnchorSerialize, AnchorDeserialize)]
 pub struct RemoveIdentityArgs {
     pub provider: PubKeyIdentityProvider,
-    pub provider_id: ProviderID,
+    pub provider_id: String,
 }
