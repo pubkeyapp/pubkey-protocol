@@ -1,6 +1,6 @@
 use anchor_lang::prelude::*;
 
-#[derive(AnchorSerialize, AnchorDeserialize, Clone)]
+#[derive(AnchorSerialize, AnchorDeserialize, Clone, PartialEq)]
 pub enum PubKeyIdentityProvider {
     Discord,
     Farcaster,
@@ -9,11 +9,12 @@ pub enum PubKeyIdentityProvider {
     Solana,
     Telegram,
     X,
+    Website(String),
 }
 
 impl PubKeyIdentityProvider {
     pub fn value(&self) -> String {
-        match *self {
+        match self {
             PubKeyIdentityProvider::Discord => String::from("Discord"),
             PubKeyIdentityProvider::Farcaster => String::from("Farcaster"),
             PubKeyIdentityProvider::Github => String::from("Github"),
@@ -21,6 +22,13 @@ impl PubKeyIdentityProvider {
             PubKeyIdentityProvider::Solana => String::from("Solana"),
             PubKeyIdentityProvider::Telegram => String::from("Telegram"),
             PubKeyIdentityProvider::X => String::from("X"),
+            PubKeyIdentityProvider::Website(url) => url.clone(),
         }
+    }
+}
+
+impl From<String> for PubKeyIdentityProvider {
+    fn from(url: String) -> Self {
+        PubKeyIdentityProvider::Website(url)
     }
 }

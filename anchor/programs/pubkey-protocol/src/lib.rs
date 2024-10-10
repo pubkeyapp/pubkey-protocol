@@ -88,7 +88,8 @@ pub mod pubkey_protocol {
 
     pub fn verify_profile_for_community(
         ctx: Context<VerifyProfileForCommunity>,
+        args: VerifyProfileForCommunityArgs,
     ) -> Result<()> {
-        community::verify_community_profile(ctx)
+        community::verify_community_profile(ctx, args)
     }
 }

@@ -20,10 +20,14 @@ pub enum PubkeyProfileError {
     InvalidDiscordURL,
     #[msg("Invalid Farcaster URL")]
     InvalidFarcasterURL,
-    #[msg("Invalid Telegram URL")]
-    InvalidTelegramURL,
+    #[msg("Invalid Google URL")]
+    InvalidGoogleURL,
     #[msg("Invalid GitHub URL")]
     InvalidGitHubURL,
+    #[msg("Invalid Solana Public Key")]
+    InvalidSolanaPubKey,
+    #[msg("Invalid Telegram URL")]
+    InvalidTelegramURL,
     #[msg("Invalid Website URL")]
     InvalidWebsiteURL,
     #[msg("Invalid Provider ID")]

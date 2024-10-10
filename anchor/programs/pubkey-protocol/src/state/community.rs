@@ -26,16 +26,15 @@ pub struct Community {
     pub discord: Option<String>,
     pub farcaster: Option<String>,
     pub github: Option<String>,
+    pub google: Option<String>,
+    pub solana: Option<Pubkey>,
     pub telegram: Option<String>,
     pub website: Option<String>,
     pub x: Option<String>,
 }
 
 impl Community {
-    pub fn size(
-        fee_payers: &[Pubkey],
-        providers: &[PubKeyIdentityProvider],
-    ) -> usize {
+    pub fn size(fee_payers: &[Pubkey], providers: &[PubKeyIdentityProvider]) -> usize {
         let fee_payers_size = 4 + (fee_payers.len() * 32);
         let providers_size = 4 + (providers.len() * std::mem::size_of::<PubKeyIdentityProvider>());
 
@@ -88,6 +87,7 @@ impl Community {
             Link::new("discord", self.discord.as_deref()),
             Link::new("farcaster", self.farcaster.as_deref()),
             Link::new("github", self.github.as_deref()),
+            Link::new("google", self.google.as_deref()),
             Link::new("telegram", self.telegram.as_deref()),
             Link::new("website", self.website.as_deref()),
             Link::new("x", self.x.as_deref()),
@@ -111,28 +111,51 @@ impl Community {
                 if let Some(url) = self.url {
                     match self.link_type {
                         "discord" => {
-                            require!(is_valid_discord(url), PubkeyProfileError::InvalidDiscordURL)
+                            require!(
+                                is_valid_provider(url, &PubKeyIdentityProvider::Discord.value()),
+                                PubkeyProfileError::InvalidDiscordURL
+                            )
                         }
                         "farcaster" => require!(
-                            is_valid_farcaster(url),
+                            is_valid_provider(url, &PubKeyIdentityProvider::Farcaster.value()),
                             PubkeyProfileError::InvalidFarcasterURL
                         ),
                         "github" => {
-                            require!(is_valid_github(url), PubkeyProfileError::InvalidGitHubURL)
+                            require!(
+                                is_valid_provider(url, &PubKeyIdentityProvider::Github.value()),
+                                PubkeyProfileError::InvalidGitHubURL
+                            )
+                        }
+                        "google" => {
+                            require!(
+                                is_valid_provider(url, &PubKeyIdentityProvider::Google.value()),
+                                PubkeyProfileError::InvalidGoogleURL
+                            )
                         }
                         "telegram" => require!(
-                            is_valid_telegram(url),
+                            is_valid_provider(url, &PubKeyIdentityProvider::Telegram.value()),
                             PubkeyProfileError::InvalidTelegramURL
+                        ),
+                        "x" => require!(
+                            is_valid_provider(url, &PubKeyIdentityProvider::X.value()),
+                            PubkeyProfileError::InvalidXURL
                         ),
                         "website" => {
                             require!(is_valid_url(url), PubkeyProfileError::InvalidWebsiteURL)
                         }
-                        "x" => require!(is_valid_x(url), PubkeyProfileError::InvalidXURL),
                         _ => return Err(PubkeyProfileError::InvalidProviderID.into()),
                     }
                 }
                 Ok(())
             }
+        }
+
+        // Validate Solana pubkey if present
+        if let Some(solana_pubkey) = &self.solana {
+            require!(
+                is_valid_pubkey(solana_pubkey),
+                PubkeyProfileError::InvalidSolanaPubKey
+            );
         }
 
         Ok(())

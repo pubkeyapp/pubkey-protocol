@@ -58,23 +58,21 @@ pub fn is_valid_url(url: &str) -> bool {
     valid_scheme && valid_path && valid_domain
 }
 
-pub fn is_valid_farcaster(link: &str) -> bool {
-    link.starts_with("https://warpcast.com/")
+pub fn is_valid_provider(url: &str, platform: &str) -> bool {
+    match platform {
+        "discord" => url.starts_with("https://discord.com/invite/") || url.starts_with("https://discord.gg/"),
+        "farcaster" => url.starts_with("https://warpcast.com/"),
+        "github" => url.starts_with("https://github.com/"),
+        "google" => url.starts_with("https://google.com/"),
+        "solana" => url.starts_with("https://solana.com/"),
+        "telegram" => url.starts_with("https://t.me/") || url.starts_with("https://telegram.me/"),
+        "x" => url.starts_with("https://twitter.com/") || url.starts_with("https://x.com/"),
+        _ => false,
+    }
 }
 
-pub fn is_valid_discord(link: &str) -> bool {
-    link.starts_with("https://discord.com/invite/") || link.starts_with("https://discord.gg/")
-}
-
-pub fn is_valid_github(link: &str) -> bool {
-    link.starts_with("https://github.com/")
-}
-
-pub fn is_valid_telegram(link: &str) -> bool {
-    link.starts_with("https://t.me/") || link.starts_with("https://telegram.me/")
-}
-pub fn is_valid_x(link: &str) -> bool {
-    link.starts_with("https://twitter.com/") || link.starts_with("https://x.com/")
+pub fn is_valid_pubkey(pubkey: &Pubkey) -> bool {
+    anchor_lang::prelude::Pubkey::is_on_curve(pubkey)
 }
 
 pub fn realloc_account<'a>(

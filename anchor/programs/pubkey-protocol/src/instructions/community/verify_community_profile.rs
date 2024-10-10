@@ -16,12 +16,42 @@ pub struct VerifyProfileForCommunity<'info> {
     pub system_program: Program<'info, System>,
 }
 
-pub fn verify_community_profile(ctx: Context<VerifyProfileForCommunity>) -> Result<()> {
-    // let community = &mut ctx.accounts.community;
-    // let profile = &mut ctx.accounts.profile;
-    // let authority = &ctx.accounts.authority;
+pub fn verify_community_profile(
+    ctx: Context<VerifyProfileForCommunity>,
+    args: VerifyProfileForCommunityArgs,
+) -> Result<()> {
+    let community = &ctx.accounts.community;
+    let profile = &mut ctx.accounts.profile;
+    let authority = &ctx.accounts.authority;
 
-    // community.add_profile_verification(profile.key(), authority.key())?;
+    require!(
+        community.check_for_authority(&authority.key()),
+        PubkeyProfileError::UnAuthorized
+    );
+
+    // Check if the community has a valid PubKeyIdentityProvider
+    if community.providers.iter().any(|p| *p == args.provider_id) {
+        // Find the corresponding identity in the profile
+        if let Some(identity) = profile
+            .identities
+            .iter_mut()
+            .find(|i| i.provider == args.provider_id)
+        {
+            // Add the community to the identity's communities list if it's not already there
+            if !identity.communities.contains(&community.key()) {
+                identity.communities.push(community.key());
+            }
+        } else {
+            return Err(PubkeyProfileError::InvalidProviderID.into());
+        }
+    } else {
+        return Err(PubkeyProfileError::InvalidProviderID.into());
+    }
 
     Ok(())
+}
+
+#[derive(AnchorSerialize, AnchorDeserialize)]
+pub struct VerifyProfileForCommunityArgs {
+    pub provider_id: PubKeyIdentityProvider,
 }

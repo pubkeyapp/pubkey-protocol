@@ -41,14 +41,11 @@ pub fn update_community_details(
         website,
         telegram,
         farcaster,
+        google,
+        solana,
     } = args;
 
     // Update fields if they are provided
-    if let Some(name) = name {
-        require!(is_valid_name(&name), PubkeyProfileError::InvalidName);
-        community.name = name;
-    }
-
     if let Some(avatar_url) = avatar_url {
         require!(
             is_valid_url(&avatar_url),
@@ -56,50 +53,41 @@ pub fn update_community_details(
         );
         community.avatar_url = avatar_url;
     }
-
-    if let Some(x) = x {
-        require!(is_valid_x(&x), PubkeyProfileError::InvalidXURL);
-        community.x = Some(x);
+    if let Some(name) = name {
+        require!(is_valid_name(&name), PubkeyProfileError::InvalidName);
+        community.name = name;
     }
-
     if let Some(discord) = discord {
-        require!(
-            is_valid_discord(&discord),
-            PubkeyProfileError::InvalidDiscordURL
-        );
+        require!( is_valid_provider(&discord, &PubKeyIdentityProvider::Discord.value()), PubkeyProfileError::InvalidDiscordURL );
         community.discord = Some(discord);
     }
-
+    if let Some(farcaster) = farcaster {
+        require!( is_valid_provider(&farcaster, &PubKeyIdentityProvider::Farcaster.value()), PubkeyProfileError::InvalidFarcasterURL );
+        community.farcaster = Some(farcaster);
+    }
+    if let Some(google) = google {
+        require!( is_valid_provider(&google, &PubKeyIdentityProvider::Google.value()), PubkeyProfileError::InvalidGoogleURL );
+        community.google = Some(google);
+    }
     if let Some(github) = github {
-        require!(
-            is_valid_github(&github),
-            PubkeyProfileError::InvalidGitHubURL
-        );
+        require!( is_valid_provider(&github, &PubKeyIdentityProvider::Github.value()), PubkeyProfileError::InvalidGitHubURL );
         community.github = Some(github);
     }
-
-    if let Some(website) = website {
-        require!(
-            is_valid_url(&website),
-            PubkeyProfileError::InvalidWebsiteURL
-        );
-        community.website = Some(website);
+    if let Some(solana) = solana {
+        require!( is_valid_pubkey(&solana), PubkeyProfileError::InvalidSolanaPubKey );
+        community.solana = Some(solana);
     }
-
     if let Some(telegram) = telegram {
-        require!(
-            is_valid_telegram(&telegram),
-            PubkeyProfileError::InvalidTelegramURL
-        );
+        require!( is_valid_provider(&telegram, &PubKeyIdentityProvider::Telegram.value()), PubkeyProfileError::InvalidTelegramURL );
         community.telegram = Some(telegram);
     }
-
-    if let Some(farcaster) = farcaster {
-        require!(
-            is_valid_farcaster(&farcaster),
-            PubkeyProfileError::InvalidFarcasterURL
-        );
-        community.farcaster = Some(farcaster);
+    if let Some(website) = website {
+        require!( is_valid_url(&website), PubkeyProfileError::InvalidWebsiteURL );
+        community.website = Some(website);
+    }
+    if let Some(x) = x {
+        require!( is_valid_provider(&x, &PubKeyIdentityProvider::X.value()), PubkeyProfileError::InvalidXURL );
+        community.x = Some(x);
     }
 
     Ok(())
@@ -108,10 +96,12 @@ pub fn update_community_details(
 #[derive(AnchorDeserialize, AnchorSerialize)]
 pub struct UpdateCommunityDetailsArgs {
     pub avatar_url: Option<String>,
+    pub name: Option<String>,
     pub discord: Option<String>,
     pub farcaster: Option<String>,
     pub github: Option<String>,
-    pub name: Option<String>,
+    pub google: Option<String>,
+    pub solana: Option<Pubkey>,
     pub telegram: Option<String>,
     pub website: Option<String>,
     pub x: Option<String>,
