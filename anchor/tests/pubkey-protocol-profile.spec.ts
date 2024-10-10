@@ -3,14 +3,9 @@ import { Program } from '@coral-xyz/anchor'
 import { Keypair, LAMPORTS_PER_SOL, SystemProgram } from '@solana/web3.js'
 import { getPubKeyPointerPda, getPubKeyProfilePda, PubKeyIdentityProvider } from '../src'
 import { PubkeyProtocol } from '../target/types/pubkey_protocol'
-
-function unique(str: string) {
-  return `${str}_${Math.random().toString(36).substring(2, 15)}`
-}
-
-function getProfileAvatarUrl(username: string) {
-  return `https://api.dicebear.com/9.x/bottts-neutral/svg?seed=${username}`
-}
+import { unique } from './utils/unique'
+import { getProfileAvatarUrl } from './utils/get-avatar-url'
+import { airdropAccounts } from './utils/airdropper'
 
 describe('pubkey-protocol-profile', () => {
   const username = unique('alice')
@@ -24,20 +19,10 @@ describe('pubkey-protocol-profile', () => {
   const communityMember2 = Keypair.generate()
 
   beforeAll(async () => {
-    const accounts = await Promise.all(
-      [
-        { label: 'communityMember1', publicKey: communityMember1.publicKey },
-        { label: 'communityMember2', publicKey: communityMember2.publicKey },
-      ].map(async ({ label, publicKey }) =>
-        provider.connection
-          .confirmTransaction({
-            ...(await provider.connection.getLatestBlockhash('confirmed')),
-            signature: await provider.connection.requestAirdrop(publicKey, LAMPORTS_PER_SOL),
-          })
-          .then(() => label),
-      ),
-    )
-    console.log(`Airdropped 1 SOL to: ${accounts.join(', ')}`)
+    await airdropAccounts(provider, [
+      { label: 'communityMember1', publicKey: communityMember1.publicKey },
+      { label: 'communityMember2', publicKey: communityMember2.publicKey },
+    ])
   })
 
   describe('Profile', () => {
