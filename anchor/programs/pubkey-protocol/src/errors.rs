@@ -48,6 +48,8 @@ pub enum PubkeyProfileError {
     IdentityAlreadyExists,
     #[msg("Identity does not exist")]
     IdentityNonExistent,
+    #[msg("Invalid Identity Profile Authority")]
+    IdentityProfileInvalid,
     #[msg("Unauthorized community action")]
     UnauthorizedCommunityAction,
     #[msg("Community verification already exists")]

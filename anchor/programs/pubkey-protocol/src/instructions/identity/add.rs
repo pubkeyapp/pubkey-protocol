@@ -22,11 +22,12 @@ pub struct AddIdentity<'info> {
     pub profile: Account<'info, Profile>,
 
     #[account(
-      init,
+      init_if_needed, // dangerous as can be used for reinit but we mitigate with constraint check
       space = Pointer::size(),
       payer = fee_payer,
       seeds = [&Pointer::hash_seed(&args.provider, &args.provider_id)],
-      bump
+      bump,
+      constraint = pointer.profile.key().eq(&profile.key()) @ PubkeyProfileError::IdentityProfileInvalid,
     )]
     pub pointer: Account<'info, Pointer>,
 
@@ -58,11 +59,16 @@ pub fn add(ctx: Context<AddIdentity>, args: AddIdentityArgs) -> Result<()> {
     // Adding identity to profile
     let identity = Identity {
         provider: args.provider,
-        provider_id: args.provider_id.clone(),
+        provider_id: match Pubkey::try_from(args.provider_id.as_str()) {
+            Ok(pubkey) => identity::ProviderID::PubKey(pubkey),
+            Err(_) => identity::ProviderID::String(args.provider_id),
+        },
         name: args.name,
         communities: vec![],
     };
-    
+
+    identity.validate()?;
+
     match profile
         .identities
         .iter()
