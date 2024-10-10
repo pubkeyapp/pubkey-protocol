@@ -398,10 +398,6 @@ export type PubkeyProtocol = {
           }
         },
         {
-          "name": "pointer",
-          "writable": true
-        },
-        {
           "name": "authority",
           "signer": true
         },
@@ -1237,7 +1233,7 @@ export type PubkeyProtocol = {
             "type": "string"
           },
           {
-            "name": "nickname",
+            "name": "name",
             "type": "string"
           }
         ]
@@ -1289,54 +1285,6 @@ export type PubkeyProtocol = {
                 }
               }
             }
-          },
-          {
-            "name": "discord",
-            "type": {
-              "option": "string"
-            }
-          },
-          {
-            "name": "farcaster",
-            "type": {
-              "option": "string"
-            }
-          },
-          {
-            "name": "github",
-            "type": {
-              "option": "string"
-            }
-          },
-          {
-            "name": "google",
-            "type": {
-              "option": "string"
-            }
-          },
-          {
-            "name": "solana",
-            "type": {
-              "option": "pubkey"
-            }
-          },
-          {
-            "name": "telegram",
-            "type": {
-              "option": "string"
-            }
-          },
-          {
-            "name": "website",
-            "type": {
-              "option": "string"
-            }
-          },
-          {
-            "name": "x",
-            "type": {
-              "option": "string"
-            }
           }
         ]
       }
@@ -1357,54 +1305,6 @@ export type PubkeyProtocol = {
           {
             "name": "name",
             "type": "string"
-          },
-          {
-            "name": "discord",
-            "type": {
-              "option": "string"
-            }
-          },
-          {
-            "name": "farcaster",
-            "type": {
-              "option": "string"
-            }
-          },
-          {
-            "name": "github",
-            "type": {
-              "option": "string"
-            }
-          },
-          {
-            "name": "google",
-            "type": {
-              "option": "string"
-            }
-          },
-          {
-            "name": "solana",
-            "type": {
-              "option": "pubkey"
-            }
-          },
-          {
-            "name": "telegram",
-            "type": {
-              "option": "string"
-            }
-          },
-          {
-            "name": "website",
-            "type": {
-              "option": "string"
-            }
-          },
-          {
-            "name": "x",
-            "type": {
-              "option": "string"
-            }
           }
         ]
       }
@@ -1570,10 +1470,7 @@ export type PubkeyProtocol = {
             "name": "x"
           },
           {
-            "name": "website",
-            "fields": [
-              "string"
-            ]
+            "name": "website"
           }
         ]
       }
@@ -1596,6 +1493,14 @@ export type PubkeyProtocol = {
         "kind": "struct",
         "fields": [
           {
+            "name": "provider",
+            "type": {
+              "defined": {
+                "name": "pubKeyIdentityProvider"
+              }
+            }
+          },
+          {
             "name": "providerId",
             "type": "string"
           }
@@ -1615,54 +1520,6 @@ export type PubkeyProtocol = {
           },
           {
             "name": "name",
-            "type": {
-              "option": "string"
-            }
-          },
-          {
-            "name": "discord",
-            "type": {
-              "option": "string"
-            }
-          },
-          {
-            "name": "farcaster",
-            "type": {
-              "option": "string"
-            }
-          },
-          {
-            "name": "github",
-            "type": {
-              "option": "string"
-            }
-          },
-          {
-            "name": "google",
-            "type": {
-              "option": "string"
-            }
-          },
-          {
-            "name": "solana",
-            "type": {
-              "option": "pubkey"
-            }
-          },
-          {
-            "name": "telegram",
-            "type": {
-              "option": "string"
-            }
-          },
-          {
-            "name": "website",
-            "type": {
-              "option": "string"
-            }
-          },
-          {
-            "name": "x",
             "type": {
               "option": "string"
             }
