@@ -2,6 +2,7 @@ use anchor_lang::{prelude::*, system_program};
 
 use crate::errors::*;
 use crate::id;
+use crate::state::ProviderID;
 
 pub fn is_valid_username(username: &str) -> bool {
     if username.len() < 3 || username.len() > 20 {
@@ -60,7 +61,9 @@ pub fn is_valid_url(url: &str) -> bool {
 
 pub fn is_valid_provider(url: &str, platform: &str) -> bool {
     match platform {
-        "discord" => url.starts_with("https://discord.com/invite/") || url.starts_with("https://discord.gg/"),
+        "discord" => {
+            url.starts_with("https://discord.com/invite/") || url.starts_with("https://discord.gg/")
+        }
         "farcaster" => url.starts_with("https://warpcast.com/"),
         "github" => url.starts_with("https://github.com/"),
         "google" => url.starts_with("https://google.com/"),
@@ -111,4 +114,25 @@ pub fn realloc_account<'a>(
 
     AccountInfo::realloc(&account, new_account_size, false)?;
     Ok(())
+}
+
+pub fn parse_provider_id(provider_id: &ProviderID) -> ProviderID {
+    match provider_id {
+        ProviderID::PubKey(pubkey) => ProviderID::PubKey(*pubkey),
+        ProviderID::String(s) => ProviderID::String(s.clone()),
+    }
+}
+
+pub fn get_provider_id_len(provider_id: &ProviderID) -> usize {
+    match provider_id {
+        ProviderID::String(s) => s.len(),
+        ProviderID::PubKey(_) => 32,
+    }
+}
+
+pub fn provider_id_to_string(provider_id: &ProviderID) -> String {
+    match provider_id {
+        ProviderID::String(s) => s.clone(),
+        ProviderID::PubKey(p) => p.to_string(),
+    }
 }

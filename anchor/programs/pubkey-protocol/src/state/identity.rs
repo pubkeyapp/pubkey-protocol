@@ -6,12 +6,6 @@ use crate::utils::*;
 use anchor_lang::prelude::*;
 
 #[derive(AnchorSerialize, AnchorDeserialize, Clone)]
-pub enum ProviderID {
-    String(String),
-    PubKey(Pubkey),
-}
-
-#[derive(AnchorSerialize, AnchorDeserialize, Clone)]
 pub struct Identity {
     // The provider name
     pub provider: PubKeyIdentityProvider,
@@ -32,10 +26,7 @@ impl Identity {
     }
 
     pub fn validate(&self) -> Result<()> {
-        let provider_id_len = match &self.provider_id {
-            ProviderID::String(s) => s.len(),
-            ProviderID::PubKey(_) => 32,
-        };
+        let provider_id_len = get_provider_id_len(&self.provider_id);
         let provider_name_len = self.name.len();
 
         require!(

@@ -50,7 +50,7 @@ pub fn add(ctx: Context<AddIdentity>, args: AddIdentityArgs) -> Result<()> {
     // Initializing pointer account
     pointer.bump = ctx.bumps.pointer;
     pointer.provider = args.provider.clone();
-    pointer.provider_id = args.provider_id.clone();
+    pointer.provider_id = parse_provider_id(&args.provider_id);
     pointer.profile = profile.key();
     pointer.validate()?;
 
@@ -59,10 +59,7 @@ pub fn add(ctx: Context<AddIdentity>, args: AddIdentityArgs) -> Result<()> {
     // Adding identity to profile
     let identity = Identity {
         provider: args.provider,
-        provider_id: match Pubkey::try_from(args.provider_id.as_str()) {
-            Ok(pubkey) => identity::ProviderID::PubKey(pubkey),
-            Err(_) => identity::ProviderID::String(args.provider_id),
-        },
+        provider_id: args.provider_id,
         name: args.name,
         communities: vec![],
     };
@@ -95,6 +92,6 @@ pub fn add(ctx: Context<AddIdentity>, args: AddIdentityArgs) -> Result<()> {
 #[derive(AnchorSerialize, AnchorDeserialize)]
 pub struct AddIdentityArgs {
     provider: PubKeyIdentityProvider,
-    provider_id: String,
+    provider_id: ProviderID,
     name: String,
 }
