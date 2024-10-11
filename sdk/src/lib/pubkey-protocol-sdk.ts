@@ -58,7 +58,7 @@ export interface AddIdentityOptions {
   username: string
   providerId: string
   provider: PubKeyIdentityProvider
-  nickname: string
+  name: string
 }
 
 export interface RemoveIdentityOptions {
@@ -136,13 +136,13 @@ export class PubkeyProtocolSdk {
     return this.createTransaction({ ix, feePayer })
   }
 
-  async addIdentity({ authority, feePayer, username, providerId, provider, nickname }: AddIdentityOptions) {
+  async addIdentity({ authority, feePayer, username, providerId, provider, name }: AddIdentityOptions) {
     const [profile] = this.getProfilePda({ username })
     const [pointer] = this.getPointerPda({ providerId, provider })
 
     const ix = await this.program.methods
       .addIdentity({
-        nickname,
+        name,
         provider: convertFromIdentityProvider(provider),
         providerId,
       })
@@ -164,14 +164,8 @@ export class PubkeyProtocolSdk {
     const ix = await this.program.methods
       .createCommunity({
         avatarUrl: avatarUrl || `https://api.dicebear.com/9.x/glass/svg?seed=${slug}`,
-        discord: null,
-        farcaster: null,
-        github: null,
         name,
         slug,
-        telegram: null,
-        website: null,
-        x: null,
       })
       .accountsStrict({
         authority,
@@ -196,7 +190,8 @@ export class PubkeyProtocolSdk {
       .accountsStrict({
         authority,
         feePayer,
-        pointer,
+        // FIXME: Pointer should still exist
+        // pointer,
         profile,
         systemProgram: SystemProgram.programId,
       })
@@ -369,7 +364,7 @@ export class PubkeyProtocolSdk {
     const [profile] = this.getProfilePda({ username })
     const [pointer] = this.getPointerPda({ providerId, provider })
     const ix = await this.program.methods
-      .removeIdentity({ providerId })
+      .removeIdentity({ provider: convertFromIdentityProvider(provider), providerId })
       .accountsStrict({
         authority,
         feePayer,
@@ -408,9 +403,11 @@ export class PubkeyProtocolSdk {
 
 export const enumMap = {
   [PubKeyIdentityProvider.Discord]: { discord: {} },
+  [PubKeyIdentityProvider.Farcaster]: { farcaster: {} },
   [PubKeyIdentityProvider.Github]: { github: {} },
   [PubKeyIdentityProvider.Google]: { google: {} },
   [PubKeyIdentityProvider.Solana]: { solana: {} },
+  [PubKeyIdentityProvider.Telegram]: { telegram: {} },
   [PubKeyIdentityProvider.X]: { x: {} },
 } as const
 
