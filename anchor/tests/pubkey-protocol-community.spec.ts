@@ -5,6 +5,8 @@ import { PubkeyProtocol } from '../target/types/pubkey_protocol'
 import { airdropAccounts } from './utils/airdropper'
 import { getCommunityAvatarUrl } from './utils/get-avatar-url'
 import { unique } from './utils/unique'
+import { getPubKeyCommunityPda } from '../src'
+import { createTestCommunity } from './utils'
 
 describe('pubkey-protocol-community', () => {
   // Configure the client to use the local cluster.
@@ -25,52 +27,15 @@ describe('pubkey-protocol-community', () => {
   })
 
   describe('Community', () => {
-    let testCommunity: anchor.web3.PublicKey
+    let communityPDA: anchor.web3.PublicKey
     const slug = unique('acme')
 
-    async function createTestCommunity(slug: string) {
-      const PREFIX = 'pubkey_protocol'
-      const COMMUNITY = 'community'
-
-      const [community] = await anchor.web3.PublicKey.findProgramAddress(
-        [Buffer.from(PREFIX), Buffer.from(COMMUNITY), Buffer.from(slug)],
-        program.programId,
-      )
-
-      const createCommunityInput = {
-        slug,
-        name: 'Test Community',
-        avatarUrl: getCommunityAvatarUrl(slug),
-        discord: 'https://discord.gg/testcommunity',
-        farcaster: 'https://warpcast.com/testcommunity',
-        github: 'https://github.com/testcommunity',
-        google: 'https://google.com/testcommunity',
-        solana: profileOwner.publicKey.toBase58(),
-        telegram: 'https://t.me/testcommunity',
-        website: 'https://testcommunity.com',
-        x: 'https://x.com/testcommunity',
-      }
-
-      await program.methods
-        .createCommunity(createCommunityInput)
-        .accountsStrict({
-          community,
-          authority: communityAuthority.publicKey,
-          feePayer: feePayer.publicKey,
-          systemProgram: SystemProgram.programId,
-        })
-        .signers([communityAuthority])
-        .rpc()
-
-      return community
-    }
-
     beforeAll(async () => {
-      testCommunity = await createTestCommunity(slug)
+      communityPDA = await createTestCommunity(slug, program, communityAuthority, feePayer.publicKey)
     })
 
     it('Create Community', async () => {
-      const communityAccount = await program.account.community.fetch(testCommunity)
+      const communityAccount = await program.account.community.fetch(communityPDA)
 
       expect(communityAccount.slug).toEqual(slug)
       expect(communityAccount.name).toEqual('Test Community')
@@ -94,13 +59,13 @@ describe('pubkey-protocol-community', () => {
       await program.methods
         .updateCommunityDetails(input)
         .accounts({
-          community: testCommunity,
+          community: communityPDA,
           authority: communityAuthority.publicKey,
         })
         .signers([communityAuthority])
         .rpc()
 
-      const updatedCommunity = await program.account.community.fetch(testCommunity)
+      const updatedCommunity = await program.account.community.fetch(communityPDA)
       expect(updatedCommunity.name).toEqual(input.name)
       expect(updatedCommunity.avatarUrl).toEqual(input.avatarUrl)
     })
@@ -109,14 +74,14 @@ describe('pubkey-protocol-community', () => {
       await program.methods
         .updateCommunityFeepayers({ newFeePayers: [feePayer.publicKey, communityAuthority2.publicKey] })
         .accounts({
-          community: testCommunity,
+          community: communityPDA,
           authority: communityAuthority.publicKey,
           systemProgram: SystemProgram.programId,
         })
         .signers([communityAuthority])
         .rpc()
 
-      const updatedCommunity = await program.account.community.fetch(testCommunity)
+      const updatedCommunity = await program.account.community.fetch(communityPDA)
       expect(updatedCommunity.feePayers).toEqual(
         expect.arrayContaining([feePayer.publicKey, communityAuthority2.publicKey]),
       )
@@ -133,7 +98,7 @@ describe('pubkey-protocol-community', () => {
         .signers([communityAuthority])
         .rpc()
 
-      const updatedCommunity = await program.account.community.fetch(testCommunity)
+      const updatedCommunity = await program.account.community.fetch(communityPDA)
       expect(updatedCommunity.pendingAuthority).toEqual(communityAuthority2.publicKey)
     })
 
@@ -158,7 +123,7 @@ describe('pubkey-protocol-community', () => {
         .signers([communityAuthority2])
         .rpc()
 
-      const updatedCommunity = await program.account.community.fetch(testCommunity)
+      const updatedCommunity = await program.account.community.fetch(communityPDA)
       expect(updatedCommunity.authority).toEqual(communityAuthority2.publicKey)
       expect(updatedCommunity.pendingAuthority).toBeNull()
     })
@@ -186,7 +151,7 @@ describe('pubkey-protocol-community', () => {
         .signers([communityAuthority])
         .rpc()
 
-      const updatedCommunity = await program.account.community.fetch(testCommunity)
+      const updatedCommunity = await program.account.community.fetch(communityPDA)
       expect(updatedCommunity.authority).toEqual(communityAuthority.publicKey)
       expect(updatedCommunity.pendingAuthority).toBeNull()
     })

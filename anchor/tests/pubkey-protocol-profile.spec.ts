@@ -6,6 +6,7 @@ import { PubkeyProtocol } from '../target/types/pubkey_protocol'
 import { unique } from './utils/unique'
 import { getProfileAvatarUrl } from './utils/get-avatar-url'
 import { airdropAccounts } from './utils/airdropper'
+import { createTestProfile } from './utils'
 
 describe('pubkey-protocol-profile', () => {
   const username = unique('alice')
@@ -27,21 +28,7 @@ describe('pubkey-protocol-profile', () => {
 
   describe('Profile', () => {
     it('Create PubkeyProfile', async () => {
-      const [profile, bump] = getPubKeyProfilePda({ username, programId: program.programId })
-      await program.methods
-        .createProfile({
-          avatarUrl: getProfileAvatarUrl(username),
-          name: 'Test Profile',
-          username,
-        })
-        .accountsStrict({
-          authority: communityMember1.publicKey,
-          feePayer: feePayer.publicKey,
-          profile,
-          systemProgram: SystemProgram.programId,
-        })
-        .signers([communityMember1])
-        .rpc()
+      const [profile, bump] = await createTestProfile(username, program, communityMember1, feePayer.publicKey)
 
       const {
         authorities,
@@ -50,7 +37,7 @@ describe('pubkey-protocol-profile', () => {
         bump: receivedBump,
         feePayer: receivedFeePayer,
         username: receivedUsername,
-      } = await program.account.profile.fetch(profile)
+      } = await program.account.profile.fetch(profile.toString())
 
       const postBalance = await provider.connection.getBalance(communityMember1.publicKey)
 
