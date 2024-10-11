@@ -24,11 +24,12 @@ describe('pubkey-protocol-profile', () => {
       { label: 'communityMember1', publicKey: communityMember1.publicKey },
       { label: 'communityMember2', publicKey: communityMember2.publicKey },
     ])
+    await createTestProfile(username, program, communityMember1, feePayer.publicKey)
   })
 
   describe('Profile', () => {
     it('Create PubkeyProfile', async () => {
-      const [profile, bump] = await createTestProfile(username, program, communityMember1, feePayer.publicKey)
+      const [profile, bump] = getPubKeyProfilePda({ username, programId: program.programId })
 
       const {
         authorities,
@@ -37,7 +38,7 @@ describe('pubkey-protocol-profile', () => {
         bump: receivedBump,
         feePayer: receivedFeePayer,
         username: receivedUsername,
-      } = await program.account.profile.fetch(profile.toString())
+      } = await program.account.profile.fetch(profile)
 
       const postBalance = await provider.connection.getBalance(communityMember1.publicKey)
 
