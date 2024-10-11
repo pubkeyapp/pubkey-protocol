@@ -6,7 +6,8 @@ import { AppLayout } from './app-layout'
 import { ClusterUiSelect } from './features/cluster/cluster-ui'
 import { KeypairFeature } from './features/keypair/feature'
 import { KeypairUiBalance, KeypairUiSelect } from './features/keypair/ui'
-import { WalletIcon } from './features/solana/solana-provider'
+import { WalletIcon } from './features/solana'
+import { DevFeature } from './features/dev/feature'
 
 const ClusterFeature = lazy(() => import('./features/cluster/cluster-feature'))
 
@@ -18,10 +19,12 @@ const links: UiHeaderLink[] = [
   { label: 'Communities', link: '/communities' },
   { label: 'Profiles', link: '/profiles' },
   { label: 'Debug', link: '/debug' },
+  { label: 'Dev', link: '/dev' },
 ]
 
 const routes: RouteObject[] = [
   { path: '/clusters', element: <ClusterFeature /> },
+  { path: '/dev', element: <DevFeature /> },
   { path: '/keypairs/*', element: <KeypairFeature /> },
   { path: '/communities/*', element: <PubkeyCommunityFeature basePath="/communities" /> },
   { path: '/profiles/*', element: <PubkeyProfileFeature basePath="/profiles" /> },
@@ -30,9 +33,8 @@ const routes: RouteObject[] = [
 
 export function AppRoutes() {
   const router = useRoutes([
-    { path: '/', element: <Navigate to="/pubkey-protocol" replace /> },
+    { path: '/', element: <Navigate to="/communities" replace /> },
     ...routes,
-
     { path: '*', element: <UiNotFound /> },
   ])
 

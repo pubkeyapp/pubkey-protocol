@@ -17,10 +17,10 @@ export function PubkeyProtocolUiProfile({
 }) {
   return (
     <Group align="start" wrap="nowrap" justify="space-between" w="100%">
-      <Group align="start" wrap="nowrap">
+      <Group align="center" wrap="nowrap">
         <UiAvatar url={profile.avatarUrl ? profile.avatarUrl : null} name={profile.username} radius={100} size="lg" />
         <Stack gap={0}>
-          <PubkeyProtocolUiProfileAnchor username={profile.username} basePath={basePath} />
+          <PubkeyProtocolUiProfileAnchor name={profile.name} username={profile.username} basePath={basePath} />
           <Stack gap="xs">
             {profile.identities?.map((identity) => (
               <PubkeyProtocolUiIdentity identity={identity} key={identity.providerId} />

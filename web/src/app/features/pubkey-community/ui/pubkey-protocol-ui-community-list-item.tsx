@@ -1,7 +1,7 @@
 import { ReactNode } from 'react'
 import { PubKeyCommunity } from '@pubkey-protocol/anchor'
 import { UiCard, UiDebugModal, UiGroup } from '@pubkey-ui/core'
-import { Group, Stack } from '@mantine/core'
+import { Code, Group, Stack } from '@mantine/core'
 import { ExplorerLink } from '../../cluster/cluster-ui'
 import { ellipsify } from '../../../ui'
 import { PubkeyProtocolUiCommunityAvatar } from './pubkey-protocol-ui-community-avatar'
@@ -18,24 +18,29 @@ export function PubkeyProtocolUiCommunityListItem({
 }) {
   return (
     <UiCard>
-      <UiGroup align="start">
-        <Group align="center" wrap="nowrap" gap="xs">
-          <PubkeyProtocolUiCommunityAvatar community={community} />
-          <Stack gap={0}>
-            <PubkeyProtocolUiCommunityAnchor slug={community.slug} basePath={basePath} />
-            <ExplorerLink
-              size="xs"
-              ff="mono"
-              path={`account/${community.publicKey}`}
-              label={ellipsify(community.publicKey.toString())}
-            />
+      <UiGroup align="start" w="100%">
+        <Group align="start" wrap="nowrap" gap="xs">
+          <PubkeyProtocolUiCommunityAvatar community={community} radius="xs" />
+          <Stack>
+            <Stack gap={0}>
+              <PubkeyProtocolUiCommunityAnchor name={community.name} slug={community.slug} basePath={basePath} />
+              <Group>
+                <Code>{community.slug.trim()}</Code>
+              </Group>
+            </Stack>
+            <Stack>{children}</Stack>
           </Stack>
         </Group>
-        <Group gap="xs">
-          <UiDebugModal size="lg" data={community} />
+        <Group align="center" gap="xs">
+          <ExplorerLink
+            size="xs"
+            ff="mono"
+            path={`account/${community.publicKey}`}
+            label={ellipsify(community.publicKey.toString())}
+          />
+          <UiDebugModal data={community} />
         </Group>
       </UiGroup>
-      {children}
     </UiCard>
   )
 }
