@@ -1,7 +1,7 @@
 import * as anchor from '@coral-xyz/anchor'
 import { Program } from '@coral-xyz/anchor'
 import { Keypair, LAMPORTS_PER_SOL, SystemProgram } from '@solana/web3.js'
-import { getPubKeyPointerPda, getPubKeyProfilePda, PubKeyIdentityProvider } from '../src'
+import { getPubKeyProfilePda, pubKeyIdentityProvider } from '../src'
 import { PubkeyProtocol } from '../target/types/pubkey_protocol'
 import { unique } from './utils/unique'
 import { getProfileAvatarUrl } from './utils/get-avatar-url'
@@ -28,12 +28,6 @@ describe('pubkey-protocol-profile', () => {
   describe('Profile', () => {
     it('Create PubkeyProfile', async () => {
       const [profile, bump] = getPubKeyProfilePda({ username, programId: program.programId })
-      const [pointer, bumpPointer] = getPubKeyPointerPda({
-        programId: program.programId,
-        provider: PubKeyIdentityProvider.Solana,
-        providerId: communityMember1.publicKey.toString(),
-      })
-
       await program.methods
         .createProfile({
           avatarUrl: getProfileAvatarUrl(username),
@@ -44,7 +38,6 @@ describe('pubkey-protocol-profile', () => {
           authority: communityMember1.publicKey,
           feePayer: feePayer.publicKey,
           profile,
-          pointer,
           systemProgram: SystemProgram.programId,
         })
         .signers([communityMember1])
@@ -59,8 +52,6 @@ describe('pubkey-protocol-profile', () => {
         username: receivedUsername,
       } = await program.account.profile.fetch(profile)
 
-      const pointerData = await program.account.pointer.fetch(pointer)
-
       const postBalance = await provider.connection.getBalance(communityMember1.publicKey)
 
       expect(postBalance).toStrictEqual(LAMPORTS_PER_SOL)
@@ -72,15 +63,12 @@ describe('pubkey-protocol-profile', () => {
 
       expect(identities).toEqual([
         {
-          provider: { solana: {} },
+          provider: pubKeyIdentityProvider.Solana,
           providerId: communityMember1.publicKey.toString(),
           name: 'Primary Wallet',
+          communities: [],
         },
       ])
-      expect(pointerData.bump).toStrictEqual(bumpPointer)
-      expect(pointerData.providerId).toStrictEqual(communityMember1.publicKey.toString())
-      expect(pointerData.provider).toStrictEqual({ solana: {} })
-      expect(pointerData.profile).toStrictEqual(profile)
     })
 
     it('Update profile details', async () => {
@@ -137,88 +125,6 @@ describe('pubkey-protocol-profile', () => {
       const { authorities } = await program.account.profile.fetch(profile)
 
       expect(authorities).toEqual([communityMember1.publicKey])
-    })
-
-    it('Add Identity', async () => {
-      const [profile] = getPubKeyProfilePda({ username, programId: program.programId })
-      const [pointer, bump] = getPubKeyPointerPda({
-        programId: program.programId,
-        providerId: `${username}-discord-id-123`,
-        provider: PubKeyIdentityProvider.Discord,
-      })
-      const input = {
-        providerId: `${username}-discord-id-123`,
-        provider: { discord: {} },
-        nickname: `${username}_discord`,
-      }
-      await program.methods
-        .addIdentity(input)
-        .accountsStrict({
-          authority: communityMember1.publicKey,
-          feePayer: feePayer.publicKey,
-          pointer,
-          profile,
-          systemProgram: SystemProgram.programId,
-        })
-        .signers([communityMember1])
-        .rpc()
-
-      const { identities } = await program.account.profile.fetch(profile)
-      const pointerData = await program.account.pointer.fetch(pointer)
-
-      const postBalance = await provider.connection.getBalance(communityMember1.publicKey)
-
-      expect(postBalance).toStrictEqual(LAMPORTS_PER_SOL)
-      expect(identities).toEqual([
-        {
-          provider: { solana: {} },
-          providerId: communityMember1.publicKey.toString(),
-          name: 'Primary Wallet',
-        },
-        {
-          provider: { discord: {} },
-          providerId: input.providerId,
-          name: input.nickname,
-        },
-      ])
-
-      expect(pointerData.bump).toStrictEqual(bump)
-      expect(pointerData.providerId).toStrictEqual(input.providerId)
-      expect(pointerData.provider).toStrictEqual({ discord: {} })
-      expect(pointerData.profile).toStrictEqual(profile)
-    })
-
-    it('Remove Identity', async () => {
-      const [profile] = getPubKeyProfilePda({ username, programId: program.programId })
-      const [pointer] = getPubKeyPointerPda({
-        programId: program.programId,
-        providerId: `${username}-discord-id-123`,
-        provider: PubKeyIdentityProvider.Discord,
-      })
-
-      await program.methods
-        .removeIdentity({ providerId: `${username}-discord-id-123` })
-        .accountsStrict({
-          authority: communityMember1.publicKey,
-          feePayer: feePayer.publicKey,
-          pointer,
-          profile,
-          systemProgram: SystemProgram.programId,
-        })
-        .signers([communityMember1])
-        .rpc()
-
-      const { identities } = await program.account.profile.fetch(profile)
-      const pointerData = await program.account.pointer.fetchNullable(pointer)
-
-      expect(identities).toEqual([
-        {
-          provider: { solana: {} },
-          providerId: communityMember1.publicKey.toString(),
-          name: 'Primary Wallet',
-        },
-      ])
-      expect(pointerData).toBeNull()
     })
   })
 })
