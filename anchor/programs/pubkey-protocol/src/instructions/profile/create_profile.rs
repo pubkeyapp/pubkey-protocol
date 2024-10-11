@@ -40,6 +40,13 @@ pub fn create(ctx: Context<CreateProfile>, args: CreateProfileArgs) -> Result<()
         avatar_url,
     } = args;
 
+    let set_primary_wallet = Identity {
+        provider: PubKeyIdentityProvider::Solana,
+        provider_id: authority.key().to_string(),
+        name: "Primary Wallet".to_owned(),
+        communities: vec![],
+    };
+
     profile.set_inner(Profile {
         bump: ctx.bumps.profile,
         username,
@@ -47,7 +54,7 @@ pub fn create(ctx: Context<CreateProfile>, args: CreateProfileArgs) -> Result<()
         avatar_url,
         fee_payer,
         authorities: vec![authority],
-        identities: vec![],
+        identities: vec![set_primary_wallet],
     });
 
     profile.validate()?;
