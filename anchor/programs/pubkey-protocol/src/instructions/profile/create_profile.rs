@@ -10,7 +10,7 @@ pub struct CreateProfile<'info> {
     #[account(
       init,
       payer = fee_payer,
-      space = Profile::size(&[authority.key()], &[]),
+      space = Profile::size(&[authority.key()], &[Identity { provider: PubKeyIdentityProvider::Solana, provider_id: authority.key().to_string(), name: "Primary Wallet".to_owned(), communities: vec![] }]),
       seeds = [
         PREFIX,
         PROFILE,

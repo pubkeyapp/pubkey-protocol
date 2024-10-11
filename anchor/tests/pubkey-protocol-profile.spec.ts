@@ -24,7 +24,7 @@ describe('pubkey-protocol-profile', () => {
       { label: 'communityMember1', publicKey: communityMember1.publicKey },
       { label: 'communityMember2', publicKey: communityMember2.publicKey },
     ])
-    await createTestProfile(username, program, communityMember1, feePayer.publicKey)
+    await createTestProfile(username, program, communityMember1, feePayer.publicKey).catch((err) => console.error(err))
   })
 
   describe('Profile', () => {

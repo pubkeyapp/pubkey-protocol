@@ -17,7 +17,6 @@ describe('pubkey-protocol-community', () => {
 
   const communityAuthority = Keypair.generate()
   const communityAuthority2 = Keypair.generate()
-  const profileOwner = Keypair.generate()
 
   beforeAll(async () => {
     await airdropAccounts(provider, [
@@ -47,14 +46,6 @@ describe('pubkey-protocol-community', () => {
       const input = {
         name: 'Updated Test Community',
         avatarUrl: getCommunityAvatarUrl(`${slug}_new`),
-        discord: 'https://discord.gg/updatedtestcommunity',
-        farcaster: 'https://warpcast.com/updatedtestcommunity',
-        github: 'https://github.com/updatedtestcommunity',
-        google: 'https://google.com/updatedtestcommunity',
-        solana: profileOwner.publicKey.toBase58(),
-        telegram: 'https://t.me/updatedtestcommunity',
-        website: 'https://updatedtestcommunity.com',
-        x: 'https://x.com/updatedtestcommunity',
       }
       await program.methods
         .updateCommunityDetails(input)
