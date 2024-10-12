@@ -1,7 +1,7 @@
 import * as anchor from '@coral-xyz/anchor'
 import { Program } from '@coral-xyz/anchor'
 import { Keypair, LAMPORTS_PER_SOL, SystemProgram } from '@solana/web3.js'
-import { getPubKeyProfilePda, pubKeyIdentityProvider } from '../src'
+import { getPubKeyPointerPda, getPubKeyProfilePda, PubKeyIdentityProvider, pubKeyIdentityProviderArgs } from '../src'
 import { PubkeyProtocol } from '../target/types/pubkey_protocol'
 import { unique } from './utils/unique'
 import { getProfileAvatarUrl } from './utils/get-avatar-url'
@@ -24,12 +24,17 @@ describe('pubkey-protocol-profile', () => {
       { label: 'communityMember1', publicKey: communityMember1.publicKey },
       { label: 'communityMember2', publicKey: communityMember2.publicKey },
     ])
-    await createTestProfile(username, program, communityMember1, feePayer.publicKey).catch((err) => console.error(err))
   })
 
   describe('Profile', () => {
     it('Create PubkeyProfile', async () => {
       const [profile, bump] = getPubKeyProfilePda({ username, programId: program.programId })
+      const [pointer, bumpPointer] = getPubKeyPointerPda({
+        programId: program.programId,
+        provider: PubKeyIdentityProvider.Solana,
+        providerId: communityMember1.publicKey.toString(),
+      })
+      await createTestProfile(username, program, communityMember1, feePayer.publicKey)
 
       const {
         authorities,
@@ -40,6 +45,7 @@ describe('pubkey-protocol-profile', () => {
         username: receivedUsername,
       } = await program.account.profile.fetch(profile)
 
+      const pointerData = await program.account.pointer.fetch(pointer)
       const postBalance = await provider.connection.getBalance(communityMember1.publicKey)
 
       expect(postBalance).toStrictEqual(LAMPORTS_PER_SOL)
@@ -51,12 +57,16 @@ describe('pubkey-protocol-profile', () => {
 
       expect(identities).toEqual([
         {
-          provider: pubKeyIdentityProvider.Solana,
+          provider: { solana: {} },
           providerId: communityMember1.publicKey.toString(),
           name: 'Primary Wallet',
           communities: [],
         },
       ])
+      expect(pointerData.bump).toStrictEqual(bumpPointer)
+      expect(pointerData.providerId).toStrictEqual(communityMember1.publicKey.toString())
+      expect(pointerData.provider).toStrictEqual({ solana: {} })
+      expect(pointerData.profile).toStrictEqual(profile)
     })
 
     it('Update profile details', async () => {

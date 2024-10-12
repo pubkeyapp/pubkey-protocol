@@ -1,7 +1,7 @@
 // - Check if the identity can be removed and then added again and make sure it can only be done by the profile acc
 import * as anchor from '@coral-xyz/anchor'
 import { Keypair, LAMPORTS_PER_SOL, SystemProgram } from '@solana/web3.js'
-import { getPubKeyPointerPda, getPubKeyProfilePda, pubKeyIdentityProvider, PubkeyProtocol } from '../src'
+import { getPubKeyPointerPda, getPubKeyProfilePda, PubKeyIdentityProvider, pubKeyIdentityProviderArgs, PubkeyProtocol } from '../src'
 import { unique } from './utils/unique'
 import { createTestCommunity, createTestProfile } from './utils'
 
@@ -20,21 +20,21 @@ describe('Identity Profile Verification', () => {
   beforeAll(async () => {
     await provider.connection.requestAirdrop(profileOwner.publicKey, LAMPORTS_PER_SOL)
 
-    const slug = unique('pubkey-rules')
-    community = await createTestCommunity(slug, program, communityAuthority, feePayer.publicKey)
-    testProfile = await createTestProfile(username, program, profileOwner, feePayer.publicKey)[0]
+    const slug = unique('pubkey')    
+    await createTestCommunity(slug, program, communityAuthority, feePayer.publicKey)
+    await createTestProfile(username, program, profileOwner, feePayer.publicKey)
   })
 
   it('Add Identity', async () => {
     const [profile] = getPubKeyProfilePda({ username, programId: program.programId })
     const [pointer, bump] = getPubKeyPointerPda({
       programId: program.programId,
-      provider: pubKeyIdentityProvider.Solana,
+      provider: PubKeyIdentityProvider.Solana,
       providerId: communityAuthority.publicKey.toBase58(),
     })
     const input = {
       providerId: communityAuthority.publicKey.toBase58(),
-      provider: pubKeyIdentityProvider.Solana,
+      provider: pubKeyIdentityProviderArgs.Solana,
       name: `${username}_wallet`,
     }
     await program.methods
@@ -57,13 +57,13 @@ describe('Identity Profile Verification', () => {
     expect(postBalance).toStrictEqual(LAMPORTS_PER_SOL)
     expect(identities).toEqual([
       {
-        provider: pubKeyIdentityProvider.Solana,
+        provider: pubKeyIdentityProviderArgs.Solana,
         providerId: communityAuthority.publicKey,
         name: 'Primary Wallet',
         communities: [],
       },
       {
-        provider: pubKeyIdentityProvider.Discord,
+        provider: pubKeyIdentityProviderArgs.Discord,
         providerId: { string: input.providerId },
         name: input.name,
         communities: [],
@@ -72,7 +72,7 @@ describe('Identity Profile Verification', () => {
 
     expect(pointerData.bump).toStrictEqual(bump)
     expect(pointerData.providerId).toStrictEqual(input.providerId)
-    expect(pointerData.provider).toStrictEqual(pubKeyIdentityProvider.Discord)
+    expect(pointerData.provider).toStrictEqual(pubKeyIdentityProviderArgs.Discord)
     expect(pointerData.profile).toStrictEqual(profile)
   })
 
@@ -81,11 +81,11 @@ describe('Identity Profile Verification', () => {
     const [pointer] = getPubKeyPointerPda({
       programId: program.programId,
       providerId: `${username}-discord-id-123`,
-      provider: pubKeyIdentityProvider.Discord,
+      provider: PubKeyIdentityProvider.Discord,
     })
 
     await program.methods
-      .removeIdentity({ provider: pubKeyIdentityProvider.Discord, providerId: `${username}-discord-id-123` })
+      .removeIdentity({ provider: pubKeyIdentityProviderArgs.Discord, providerId: `${username}-discord-id-123` })
       .accountsStrict({
         authority: profileOwner.publicKey,
         feePayer: feePayer.publicKey,
@@ -101,7 +101,7 @@ describe('Identity Profile Verification', () => {
 
     expect(identities).toEqual([
       {
-        provider: pubKeyIdentityProvider.Solana,
+        provider: pubKeyIdentityProviderArgs.Solana,
         providerId: profileOwner.publicKey.toString(),
         name: 'Primary Wallet',
       },
@@ -112,7 +112,7 @@ describe('Identity Profile Verification', () => {
   it('Verify Profile for Community', async () => {
     await program.methods
       .verifyProfileForCommunity({
-        provider: pubKeyIdentityProvider.Discord,
+        provider: pubKeyIdentityProviderArgs.Discord,
       })
       .accountsStrict({
         community,
@@ -127,7 +127,7 @@ describe('Identity Profile Verification', () => {
     // Fetch and check the Profile account
     const profileAccount = await program.account.profile.fetch(testProfile)
     const identityVerification = profileAccount.identities.find(
-      (i) => i.provider === pubKeyIdentityProvider.Solana
+      (i) => i.provider === pubKeyIdentityProviderArgs.Solana
     )
     expect(identityVerification).toBeDefined()
     if (identityVerification) {
@@ -136,7 +136,7 @@ describe('Identity Profile Verification', () => {
 
     // Fetch and check the Community account
     const communityAccount = await program.account.community.fetch(community)
-    expect(communityAccount.providers).toContain(pubKeyIdentityProvider.Solana)
+    expect(communityAccount.providers).toContain(pubKeyIdentityProviderArgs.Solana)
   })
 
   it('Fails to Verify Profile for Community with Unauthorized Authority', async () => {
@@ -145,7 +145,7 @@ describe('Identity Profile Verification', () => {
     await expect(
       program.methods
         .verifyProfileForCommunity(
-          { provider: pubKeyIdentityProvider.Discord },
+          { provider: pubKeyIdentityProviderArgs.Discord },
         )
         .accountsStrict({
           community,

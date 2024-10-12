@@ -398,6 +398,10 @@ export type PubkeyProtocol = {
           }
         },
         {
+          "name": "pointer",
+          "writable": true
+        },
+        {
           "name": "authority",
           "signer": true
         },

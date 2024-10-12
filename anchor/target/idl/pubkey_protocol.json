@@ -392,6 +392,10 @@
           }
         },
         {
+          "name": "pointer",
+          "writable": true
+        },
+        {
           "name": "authority",
           "signer": true
         },

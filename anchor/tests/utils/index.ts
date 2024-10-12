@@ -1,5 +1,5 @@
 import * as anchor from '@coral-xyz/anchor'
-import { getPubKeyCommunityPda, getPubKeyProfilePda, PubkeyProtocol } from "../../src"
+import { getPubKeyCommunityPda, getPubKeyPointerPda, getPubKeyProfilePda, PubKeyIdentityProvider, PubkeyProtocol } from "../../src"
 import { getCommunityAvatarUrl } from './get-avatar-url'
 import { SystemProgram } from '@solana/web3.js'
 
@@ -32,6 +32,11 @@ export async function createTestCommunity(slug: string, program: anchor.Program<
 export async function createTestProfile(username: string, program: anchor.Program<PubkeyProtocol>, profileOwner: anchor.web3.Keypair, feePayer: anchor.web3.PublicKey) {
     try {
         const [profile] = getPubKeyProfilePda({ username, programId: program.programId })
+        const [pointer] = getPubKeyPointerPda({
+            programId: program.programId,
+            provider: PubKeyIdentityProvider.Solana,
+            providerId: profileOwner.publicKey.toString(),
+        })
 
         await program.methods
             .createProfile({
@@ -43,6 +48,7 @@ export async function createTestProfile(username: string, program: anchor.Progra
                 authority: profileOwner.publicKey,
                 feePayer,
                 profile,
+                pointer,
                 systemProgram: SystemProgram.programId,
             })
             .signers([profileOwner])
