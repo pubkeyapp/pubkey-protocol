@@ -86,7 +86,6 @@ export enum PubKeyIdentityProvider {
   Google = 'Google',
   Solana = 'Solana',
   Telegram = 'Telegram',
-  Website = 'Website',
   X = 'X'
 }
 export const pubKeyIdentityProviderArgs = {
@@ -96,7 +95,6 @@ export const pubKeyIdentityProviderArgs = {
   Google: { google: {} },
   Solana: { solana: {} },
   Telegram: { telegram: {} },
-  Website: { website: {} },
   X: { x: {} }
 }
 export type PubKeyIdentityProviderArgs = typeof pubKeyIdentityProviderArgs[keyof typeof pubKeyIdentityProviderArgs]
@@ -139,7 +137,6 @@ export interface PubKeyCommunity {
   x?: string
   discord?: string
   github?: string
-  website?: string
 }
 
 export function stringToUint8Array(str: string): Uint8Array {

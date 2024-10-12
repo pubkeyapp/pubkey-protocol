@@ -9,7 +9,6 @@ pub enum PubKeyIdentityProvider {
     Solana,
     Telegram,
     X,
-    Website,
 }
 
 impl PubKeyIdentityProvider {
@@ -22,7 +21,6 @@ impl PubKeyIdentityProvider {
             PubKeyIdentityProvider::Solana => String::from("Solana"),
             PubKeyIdentityProvider::Telegram => String::from("Telegram"),
             PubKeyIdentityProvider::X => String::from("X"),
-            PubKeyIdentityProvider::Website => String::from("Website"),
         }
     }
 }

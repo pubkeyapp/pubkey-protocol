@@ -1136,71 +1136,66 @@
     },
     {
       "code": 6013,
-      "name": "InvalidWebsiteURL",
-      "msg": "Invalid Website URL"
-    },
-    {
-      "code": 6014,
       "name": "InvalidProviderID",
       "msg": "Invalid Provider ID"
     },
     {
-      "code": 6015,
+      "code": 6014,
       "name": "InvalidProviderName",
       "msg": "Invalid Provider Name"
     },
     {
-      "code": 6016,
+      "code": 6015,
       "name": "InvalidAccountOwner",
       "msg": "Account not owned by program"
     },
     {
-      "code": 6017,
+      "code": 6016,
       "name": "AuthorityAlreadyExists",
       "msg": "Authority already exists"
     },
     {
-      "code": 6018,
+      "code": 6017,
       "name": "AuthorityNonExistent",
       "msg": "Authority does not exist"
     },
     {
-      "code": 6019,
+      "code": 6018,
       "name": "CannotRemoveSoloAuthority",
       "msg": "Cannot remove last remaining authority"
     },
     {
-      "code": 6020,
+      "code": 6019,
       "name": "MaxSizeReached",
       "msg": "Array reached max size"
     },
     {
-      "code": 6021,
+      "code": 6020,
       "name": "IdentityAlreadyExists",
       "msg": "Identity already exists"
     },
     {
-      "code": 6022,
+      "code": 6021,
       "name": "IdentityNonExistent",
       "msg": "Identity does not exist"
     },
     {
-      "code": 6023,
+      "code": 6022,
       "name": "IdentityProfileInvalid",
       "msg": "Invalid Identity Profile Authority"
     },
     {
-      "code": 6024,
+      "code": 6023,
       "name": "UnauthorizedCommunityAction",
       "msg": "Unauthorized community action"
     },
     {
-      "code": 6025,
+      "code": 6024,
       "name": "CommunityVerificationAlreadyExists",
       "msg": "Community verification already exists"
     },
     {
-      "code": 6026,
+      "code": 6025,
       "name": "AccountTooLarge",
       "msg": "Account too large"
     }
@@ -1471,9 +1466,6 @@
           },
           {
             "name": "X"
-          },
-          {
-            "name": "Website"
           }
         ]
       }

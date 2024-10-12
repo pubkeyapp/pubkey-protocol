@@ -1142,71 +1142,66 @@ export type PubkeyProtocol = {
     },
     {
       "code": 6013,
-      "name": "invalidWebsiteUrl",
-      "msg": "Invalid Website URL"
-    },
-    {
-      "code": 6014,
       "name": "invalidProviderId",
       "msg": "Invalid Provider ID"
     },
     {
-      "code": 6015,
+      "code": 6014,
       "name": "invalidProviderName",
       "msg": "Invalid Provider Name"
     },
     {
-      "code": 6016,
+      "code": 6015,
       "name": "invalidAccountOwner",
       "msg": "Account not owned by program"
     },
     {
-      "code": 6017,
+      "code": 6016,
       "name": "authorityAlreadyExists",
       "msg": "Authority already exists"
     },
     {
-      "code": 6018,
+      "code": 6017,
       "name": "authorityNonExistent",
       "msg": "Authority does not exist"
     },
     {
-      "code": 6019,
+      "code": 6018,
       "name": "cannotRemoveSoloAuthority",
       "msg": "Cannot remove last remaining authority"
     },
     {
-      "code": 6020,
+      "code": 6019,
       "name": "maxSizeReached",
       "msg": "Array reached max size"
     },
     {
-      "code": 6021,
+      "code": 6020,
       "name": "identityAlreadyExists",
       "msg": "Identity already exists"
     },
     {
-      "code": 6022,
+      "code": 6021,
       "name": "identityNonExistent",
       "msg": "Identity does not exist"
     },
     {
-      "code": 6023,
+      "code": 6022,
       "name": "identityProfileInvalid",
       "msg": "Invalid Identity Profile Authority"
     },
     {
-      "code": 6024,
+      "code": 6023,
       "name": "unauthorizedCommunityAction",
       "msg": "Unauthorized community action"
     },
     {
-      "code": 6025,
+      "code": 6024,
       "name": "communityVerificationAlreadyExists",
       "msg": "Community verification already exists"
     },
     {
-      "code": 6026,
+      "code": 6025,
       "name": "accountTooLarge",
       "msg": "Account too large"
     }
@@ -1477,9 +1472,6 @@ export type PubkeyProtocol = {
           },
           {
             "name": "x"
-          },
-          {
-            "name": "website"
           }
         ]
       }

@@ -28,8 +28,6 @@ pub enum PubkeyProfileError {
     InvalidSolanaPubKey,
     #[msg("Invalid Telegram URL")]
     InvalidTelegramURL,
-    #[msg("Invalid Website URL")]
-    InvalidWebsiteURL,
     #[msg("Invalid Provider ID")]
     InvalidProviderID,
     #[msg("Invalid Provider Name")]

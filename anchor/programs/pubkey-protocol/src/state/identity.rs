@@ -79,12 +79,6 @@ impl Identity {
                     PubkeyProfileError::InvalidTelegramURL
                 );
             }
-            PubKeyIdentityProvider::Website => {
-                require!(
-                    is_valid_url(&self.provider.value()),
-                    PubkeyProfileError::InvalidWebsiteURL
-                );
-            }
             PubKeyIdentityProvider::X => {
                 require!(
                     is_valid_provider(&self.provider.value(), &PubKeyIdentityProvider::X),
