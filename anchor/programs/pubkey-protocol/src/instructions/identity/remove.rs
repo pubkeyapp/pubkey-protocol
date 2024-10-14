@@ -43,6 +43,8 @@ pub fn remove(ctx: Context<RemoveIdentity>, args: RemoveIdentityArgs) -> Result<
     let profile = &mut ctx.accounts.profile;
     let provider = args.provider.clone();
 
+    // FIXME: Check if the Solana wallet always exists - you can't delete the last PubKeyIdentityProvider::Solana
+
     match profile
         .identities
         .iter()
