@@ -84,15 +84,9 @@ export interface CommunityCreateInput {
 export interface CommunityCreateOptions {
   authority: PublicKey
   avatarUrl?: string
-  discord?: string
-  farcaster?: string
   feePayer: PublicKey
-  github?: string
   name: string
   slug?: string
-  telegram?: string
-  website?: string
-  x?: string
 }
 
 export interface ProfileCreateOptions {
