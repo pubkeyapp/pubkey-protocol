@@ -5,7 +5,6 @@ import { PubkeyProtocol } from '../target/types/pubkey_protocol'
 import { airdropAccounts } from './utils/airdropper'
 import { getCommunityAvatarUrl } from './utils/get-avatar-url'
 import { unique } from './utils/unique'
-import { getPubKeyCommunityPda } from '../src'
 import { createTestCommunity } from './utils'
 
 describe('pubkey-protocol-community', () => {

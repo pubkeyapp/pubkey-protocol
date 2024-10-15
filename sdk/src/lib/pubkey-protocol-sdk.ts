@@ -1,5 +1,7 @@
 import { AnchorProvider, Program } from '@coral-xyz/anchor'
 import {
+  convertFromIdentityProvider,
+  convertToIdentityProvider,
   getPubKeyCommunityPda,
   getPubKeyPointerPda,
   getPubKeyProfilePda,
@@ -190,8 +192,7 @@ export class PubkeyProtocolSdk {
       .accountsStrict({
         authority,
         feePayer,
-        // FIXME: Pointer should still exist
-        // pointer,
+        pointer,
         profile,
         systemProgram: SystemProgram.programId,
       })
@@ -245,7 +246,7 @@ export class PubkeyProtocolSdk {
         bump: account.bump,
         identities: account.identities.map((identity) => ({
           ...identity,
-          provider: convertToIdentityProvider(identity.provider as unknown as { [key: string]: object }),
+          provider: convertToIdentityProvider(identity.provider),
         })),
         feePayer: account.feePayer,
         name: account.name,
@@ -258,7 +259,7 @@ export class PubkeyProtocolSdk {
     return this.program.account.pointer.all().then((accounts) =>
       accounts.map(({ account, publicKey }) => ({
         publicKey,
-        provider: convertToIdentityProvider(account.provider as unknown as { [key: string]: object }),
+        provider: convertToIdentityProvider(account.provider),
         providerId: account.providerId,
         bump: account.bump,
         profile: account.profile,
@@ -298,7 +299,7 @@ export class PubkeyProtocolSdk {
     return this.program.account.profile.fetch(profilePda).then((res) => {
       const identities = res.identities.map((identity) => ({
         ...identity,
-        provider: convertToIdentityProvider(identity.provider as unknown as { [key: string]: never }),
+        provider: convertToIdentityProvider(identity.provider),
       }))
 
       return {
@@ -316,7 +317,7 @@ export class PubkeyProtocolSdk {
       }
       const identities = res.identities.map((identity) => ({
         ...identity,
-        provider: convertToIdentityProvider(identity.provider as unknown as { [key: string]: never }),
+        provider: convertToIdentityProvider(identity.provider),
       }))
 
       return {
@@ -399,35 +400,4 @@ export class PubkeyProtocolSdk {
       }).compileToV0Message(),
     )
   }
-}
-
-export const enumMap = {
-  [PubKeyIdentityProvider.Discord]: { discord: {} },
-  [PubKeyIdentityProvider.Farcaster]: { farcaster: {} },
-  [PubKeyIdentityProvider.Github]: { github: {} },
-  [PubKeyIdentityProvider.Google]: { google: {} },
-  [PubKeyIdentityProvider.Solana]: { solana: {} },
-  [PubKeyIdentityProvider.Telegram]: { telegram: {} },
-  [PubKeyIdentityProvider.X]: { x: {} },
-} as const
-
-export function convertFromIdentityProvider(provider: PubKeyIdentityProvider) {
-  if (!enumMap[provider]) {
-    throw new Error(`Unknown provider: ${provider}`)
-  }
-  return enumMap[provider]
-}
-
-export function convertToIdentityProvider(provider: { [key: string]: object }): PubKeyIdentityProvider {
-  const key = Object.keys(provider)[0]
-
-  const found: string | undefined = Object.keys(PubKeyIdentityProvider).find(
-    (provider) => provider.toLowerCase() === key,
-  )
-
-  if (!found) {
-    throw new Error(`Unknown provider: ${key}`)
-  }
-
-  return PubKeyIdentityProvider[found as keyof typeof PubKeyIdentityProvider]
 }

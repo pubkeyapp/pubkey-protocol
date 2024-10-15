@@ -1,7 +1,13 @@
-// - Check if the identity can be removed and then added again and make sure it can only be done by the profile acc
 import * as anchor from '@coral-xyz/anchor'
 import { Keypair, LAMPORTS_PER_SOL, SystemProgram } from '@solana/web3.js'
-import { getPubKeyCommunityPda, getPubKeyPointerPda, getPubKeyProfilePda, PubKeyIdentityProvider, pubKeyIdentityProviderArgs, PubkeyProtocol } from '../src'
+import {
+  convertFromIdentityProvider,
+  getPubKeyCommunityPda,
+  getPubKeyPointerPda,
+  getPubKeyProfilePda,
+  PubKeyIdentityProvider,
+  PubkeyProtocol,
+} from '../src'
 import { unique } from './utils/unique'
 import { createTestCommunity, createTestProfile } from './utils'
 
@@ -21,18 +27,17 @@ describe('Identity Profile Verification', () => {
   let profileBump: number
 
   const discordIdentity = {
-    provider: pubKeyIdentityProviderArgs.Discord,
+    provider: PubKeyIdentityProvider.Discord,
     providerId: `https://discord.com/users/${username}`,
-    name: `${username}123`
+    name: `${username}123`,
   }
 
   beforeAll(async () => {
     await provider.connection.requestAirdrop(profileOwner.publicKey, LAMPORTS_PER_SOL)
 
-    await createTestCommunity(slug, program, communityAuthority, feePayer.publicKey);
-    await createTestProfile(username, program, profileOwner, feePayer.publicKey);
-
-    [profilePointer, profileBump] = getPubKeyPointerPda({
+    await createTestCommunity(slug, program, communityAuthority, feePayer.publicKey)
+    await createTestProfile(username, program, profileOwner, feePayer.publicKey)
+    ;[profilePointer, profileBump] = getPubKeyPointerPda({
       programId: program.programId,
       provider: PubKeyIdentityProvider.Discord,
       providerId: discordIdentity.providerId,
@@ -44,7 +49,11 @@ describe('Identity Profile Verification', () => {
 
   it('Add Identity', async () => {
     await program.methods
-      .addIdentity(discordIdentity)
+      .addIdentity({
+        provider: convertFromIdentityProvider(PubKeyIdentityProvider.Discord),
+        providerId: `https://discord.com/users/${username}`,
+        name: `${username}123`,
+      })
       .accountsStrict({
         authority: profileOwner.publicKey,
         feePayer: feePayer.publicKey,
@@ -63,13 +72,13 @@ describe('Identity Profile Verification', () => {
     expect(postBalance).toStrictEqual(LAMPORTS_PER_SOL)
     expect(identities).toEqual([
       {
-        provider: pubKeyIdentityProviderArgs.Solana,
+        provider: convertFromIdentityProvider(PubKeyIdentityProvider.Solana),
         providerId: profileOwner.publicKey.toBase58(),
         name: 'Primary Wallet',
         communities: [],
       },
       {
-        provider: pubKeyIdentityProviderArgs.Discord,
+        provider: convertFromIdentityProvider(discordIdentity.provider),
         providerId: discordIdentity.providerId,
         name: discordIdentity.name,
         communities: [],
@@ -78,13 +87,16 @@ describe('Identity Profile Verification', () => {
 
     expect(pointerData.bump).toStrictEqual(profileBump)
     expect(pointerData.providerId).toStrictEqual(discordIdentity.providerId)
-    expect(pointerData.provider).toStrictEqual(discordIdentity.provider)
+    expect(pointerData.provider).toStrictEqual(convertFromIdentityProvider(discordIdentity.provider))
     expect(pointerData.profile).toStrictEqual(profile)
   })
 
   it('Remove Identity', async () => {
     await program.methods
-      .removeIdentity({ provider: discordIdentity.provider, providerId: discordIdentity.providerId })
+      .removeIdentity({
+        provider: convertFromIdentityProvider(discordIdentity.provider),
+        providerId: discordIdentity.providerId,
+      })
       .accountsStrict({
         authority: profileOwner.publicKey,
         feePayer: feePayer.publicKey,
@@ -100,7 +112,7 @@ describe('Identity Profile Verification', () => {
 
     expect(identities).toEqual([
       {
-        provider: pubKeyIdentityProviderArgs.Solana,
+        provider: convertFromIdentityProvider(PubKeyIdentityProvider.Solana),
         providerId: profileOwner.publicKey.toString(),
         name: 'Primary Wallet',
         communities: [],
@@ -111,14 +123,14 @@ describe('Identity Profile Verification', () => {
 
   // Add this test case after the existing tests
   it('Add Community Provider', async () => {
-    const providerToAdd = pubKeyIdentityProviderArgs.Solana
+    const providerToAdd = PubKeyIdentityProvider.Solana
     const communityBefore = await program.account.community.fetch(community)
     expect(communityBefore.providers).not.toContain(providerToAdd)
 
     // Call the add_community_provider instruction
     await program.methods
       .addCommunityProvider({
-        provider: providerToAdd,
+        provider: convertFromIdentityProvider(providerToAdd),
       })
       .accountsStrict({
         community,
@@ -130,14 +142,14 @@ describe('Identity Profile Verification', () => {
       .rpc()
 
     const communityAfter = await program.account.community.fetch(community)
-    expect(communityAfter.providers).toContainEqual(providerToAdd)
+    expect(communityAfter.providers).toContainEqual(convertFromIdentityProvider(providerToAdd))
     expect(communityAfter.providers.length).toBe(communityBefore.providers.length + 1)
 
     // Try to add the same provider again (should fail)
     try {
       await program.methods
         .addCommunityProvider({
-          provider: providerToAdd,
+          provider: convertFromIdentityProvider(providerToAdd),
         })
         .accountsStrict({
           community,
@@ -165,7 +177,7 @@ describe('Identity Profile Verification', () => {
     })
     await program.methods
       .verifyProfileForCommunity({
-        provider: pubKeyIdentityProviderArgs.Solana,
+        provider: convertFromIdentityProvider(PubKeyIdentityProvider.Solana),
         providerId: profileOwner.publicKey.toString(),
       })
       .accountsStrict({
@@ -181,9 +193,9 @@ describe('Identity Profile Verification', () => {
 
     // Fetch and check the Profile account
     const profileAccount = await program.account.profile.fetch(profile)
-    
+
     const identityVerification = profileAccount.identities.find(
-      (i) => i.providerId === profileOwner.publicKey.toString()
+      (i) => i.providerId === profileOwner.publicKey.toString(),
     )
     expect(identityVerification).toBeDefined()
     if (identityVerification) {
@@ -192,6 +204,6 @@ describe('Identity Profile Verification', () => {
 
     // Fetch and check the Community account
     const communityAccount = await program.account.community.fetch(community)
-    expect(communityAccount.providers).toContainEqual(pubKeyIdentityProviderArgs.Solana)
+    expect(communityAccount.providers).toContainEqual(convertFromIdentityProvider(PubKeyIdentityProvider.Solana))
   })
 })
