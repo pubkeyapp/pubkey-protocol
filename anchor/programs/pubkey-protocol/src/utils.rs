@@ -62,7 +62,7 @@ pub fn is_valid_url(url: &str) -> bool {
 pub fn is_valid_provider(url: &str, platform: &PubKeyIdentityProvider) -> bool {
     match platform {
         PubKeyIdentityProvider::Discord => {
-            url.starts_with("https://discord.com/invite/") || url.starts_with("https://discord.gg/")
+            url.starts_with("https://discord.com/") || url.starts_with("https://discord.gg/")
         }
         PubKeyIdentityProvider::Farcaster => url.starts_with("https://warpcast.com/"),
         PubKeyIdentityProvider::Github => url.starts_with("https://github.com/"),
@@ -71,8 +71,7 @@ pub fn is_valid_provider(url: &str, platform: &PubKeyIdentityProvider) -> bool {
         PubKeyIdentityProvider::Telegram => {
             url.starts_with("https://t.me/") || url.starts_with("https://telegram.me/")
         }
-        PubKeyIdentityProvider::X => url.starts_with("https://twitter.com/") || url.starts_with("https://x.com/"),
-        _ => false,
+        PubKeyIdentityProvider::X => url.starts_with("https://twitter.com/") || url.starts_with("https://x.com/")
     }
 }
 

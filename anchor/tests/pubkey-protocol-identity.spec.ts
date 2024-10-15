@@ -12,7 +12,7 @@ describe('Identity Profile Verification', () => {
   const program = anchor.workspace.PubkeyProtocol as anchor.Program<PubkeyProtocol>
 
   let testProfile: anchor.web3.PublicKey
-  const username = unique('timmy')
+  const username = unique('harkl')
   const communityAuthority = Keypair.generate()
   const profileOwner = Keypair.generate()
   let community: anchor.web3.PublicKey
@@ -26,46 +26,48 @@ describe('Identity Profile Verification', () => {
   })
 
   it('Add Identity', async () => {
+    const providerId = `https://discord.com/users/${username}`
+    const name = `${username}123`
     const [profile] = getPubKeyProfilePda({ username, programId: program.programId })
     const [pointer, bump] = getPubKeyPointerPda({
       programId: program.programId,
-      provider: PubKeyIdentityProvider.Solana,
-      providerId: communityAuthority.publicKey.toBase58(),
+      provider: PubKeyIdentityProvider.Discord,
+      providerId,
     })
     const input = {
-      providerId: communityAuthority.publicKey.toBase58(),
-      provider: pubKeyIdentityProviderArgs.Solana,
-      name: `${username}_wallet`,
+      provider: pubKeyIdentityProviderArgs.Discord,
+      providerId,
+      name,
     }
     await program.methods
       .addIdentity(input)
       .accountsStrict({
-        authority: communityAuthority.publicKey,
+        authority: profileOwner.publicKey,
         feePayer: feePayer.publicKey,
         pointer,
         profile,
         systemProgram: SystemProgram.programId,
       })
-      .signers([communityAuthority])
+      .signers([profileOwner])
       .rpc()
 
     const { identities } = await program.account.profile.fetch(profile)
     const pointerData = await program.account.pointer.fetch(pointer)
 
-    const postBalance = await provider.connection.getBalance(communityAuthority.publicKey)
+    const postBalance = await provider.connection.getBalance(profileOwner.publicKey)
 
     expect(postBalance).toStrictEqual(LAMPORTS_PER_SOL)
     expect(identities).toEqual([
       {
         provider: pubKeyIdentityProviderArgs.Solana,
-        providerId: communityAuthority.publicKey,
+        providerId: profileOwner.publicKey.toBase58(),
         name: 'Primary Wallet',
         communities: [],
       },
       {
         provider: pubKeyIdentityProviderArgs.Discord,
-        providerId: { string: input.providerId },
-        name: input.name,
+        providerId,
+        name,
         communities: [],
       },
     ])

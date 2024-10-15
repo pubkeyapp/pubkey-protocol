@@ -82,10 +82,16 @@ export function PubkeyProtocolProvider({
     switch (identity.provider) {
       case PubKeyIdentityProvider.Discord:
         return `https://discord.com/users/${identity.providerId}`
+      case PubKeyIdentityProvider.Farcaster:
+        return `https://warpcast.com/${identity.name}`
       case PubKeyIdentityProvider.Github:
         return `https://github.com/${identity.name}`
+      case PubKeyIdentityProvider.Google:
+        return `https://google.com/${identity.name}`
       case PubKeyIdentityProvider.Solana:
         return getExplorerUrl(`address/${identity.providerId}`)
+      case PubKeyIdentityProvider.Telegram:
+        return `https://t.me/${identity.name}`
       case PubKeyIdentityProvider.X:
         return `https://x.com/${identity.name}`
       default:

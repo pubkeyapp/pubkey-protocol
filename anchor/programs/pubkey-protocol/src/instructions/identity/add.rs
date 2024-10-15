@@ -22,12 +22,11 @@ pub struct AddIdentity<'info> {
     pub profile: Account<'info, Profile>,
 
     #[account(
-      init_if_needed, // dangerous as can be used for reinit but we mitigate with constraint check
+      init,
       space = Pointer::size(),
       payer = fee_payer,
       seeds = [&Pointer::hash_seed(&args.provider, &args.provider_id)],
       bump,
-      constraint = pointer.profile.key().eq(&profile.key()) @ PubkeyProfileError::IdentityProfileInvalid,
     )]
     pub pointer: Account<'info, Pointer>,
 

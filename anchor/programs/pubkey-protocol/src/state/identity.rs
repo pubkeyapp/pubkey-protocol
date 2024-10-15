@@ -51,37 +51,37 @@ impl Identity {
             }
             PubKeyIdentityProvider::Discord => {
                 require!(
-                    is_valid_provider(&self.provider.value(), &PubKeyIdentityProvider::Discord),
+                    is_valid_provider(&self.provider_id, &PubKeyIdentityProvider::Discord),
                     PubkeyProfileError::InvalidDiscordURL
                 );
             }
             PubKeyIdentityProvider::Farcaster => {
                 require!(
-                    is_valid_provider(&self.provider.value(), &PubKeyIdentityProvider::Farcaster),
+                    is_valid_provider(&self.provider_id, &PubKeyIdentityProvider::Farcaster),
                     PubkeyProfileError::InvalidFarcasterURL
                 );
             }
             PubKeyIdentityProvider::Github => {
                 require!(
-                    is_valid_provider(&self.provider.value(), &PubKeyIdentityProvider::Github),
+                    is_valid_provider(&self.provider_id, &PubKeyIdentityProvider::Github),
                     PubkeyProfileError::InvalidGitHubURL
                 );
             }
             PubKeyIdentityProvider::Google => {
                 require!(
-                    is_valid_provider(&self.provider.value(), &PubKeyIdentityProvider::Google),
+                    is_valid_provider(&self.provider_id, &PubKeyIdentityProvider::Google),
                     PubkeyProfileError::InvalidGoogleURL
                 );
             }
             PubKeyIdentityProvider::Telegram => {
                 require!(
-                    is_valid_provider(&self.provider.value(), &PubKeyIdentityProvider::Telegram),
+                    is_valid_provider(&self.provider_id, &PubKeyIdentityProvider::Telegram),
                     PubkeyProfileError::InvalidTelegramURL
                 );
             }
             PubKeyIdentityProvider::X => {
                 require!(
-                    is_valid_provider(&self.provider.value(), &PubKeyIdentityProvider::X),
+                    is_valid_provider(&self.provider_id, &PubKeyIdentityProvider::X),
                     PubkeyProfileError::InvalidXURL
                 );
             }
