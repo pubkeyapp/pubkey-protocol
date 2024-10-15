@@ -71,7 +71,9 @@ pub fn is_valid_provider(url: &str, platform: &PubKeyIdentityProvider) -> bool {
         PubKeyIdentityProvider::Telegram => {
             url.starts_with("https://t.me/") || url.starts_with("https://telegram.me/")
         }
-        PubKeyIdentityProvider::X => url.starts_with("https://twitter.com/") || url.starts_with("https://x.com/")
+        PubKeyIdentityProvider::X => {
+            url.starts_with("https://twitter.com/") || url.starts_with("https://x.com/")
+        }
     }
 }
 

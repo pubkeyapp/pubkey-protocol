@@ -38,7 +38,7 @@ impl Community {
         32 + // authority
         1 + 32 + // pending_authority (Option<Pubkey>)
         fee_payers_size +
-        providers_size 
+        providers_size
     }
 
     pub fn validate(&self) -> Result<()> {

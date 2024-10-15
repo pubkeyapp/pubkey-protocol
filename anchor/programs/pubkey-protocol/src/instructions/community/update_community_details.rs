@@ -32,10 +32,7 @@ pub fn update_community_details(
     let community = &mut ctx.accounts.community;
 
     // Creating community account
-    let UpdateCommunityDetailsArgs {
-        name,
-        avatar_url,
-    } = args;
+    let UpdateCommunityDetailsArgs { name, avatar_url } = args;
 
     // Update fields if they are provided
     if let Some(avatar_url) = avatar_url {
