@@ -14,6 +14,48 @@ export type PubkeyProtocol = {
   },
   "instructions": [
     {
+      "name": "addCommunityProvider",
+      "discriminator": [
+        73,
+        163,
+        30,
+        215,
+        158,
+        165,
+        114,
+        55
+      ],
+      "accounts": [
+        {
+          "name": "community",
+          "writable": true
+        },
+        {
+          "name": "authority",
+          "signer": true
+        },
+        {
+          "name": "feePayer",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "systemProgram",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "args",
+          "type": {
+            "defined": {
+              "name": "addCommunityProviderArgs"
+            }
+          }
+        }
+      ]
+    },
+    {
       "name": "addIdentity",
       "discriminator": [
         212,
@@ -1080,133 +1122,138 @@ export type PubkeyProtocol = {
   "errors": [
     {
       "code": 6000,
-      "name": "unAuthorized",
-      "msg": "Account unauthorized to perform this action"
-    },
-    {
-      "code": 6001,
-      "name": "invalidFeePayer",
-      "msg": "Invalid Fee payer"
-    },
-    {
-      "code": 6002,
-      "name": "invalidUsername",
-      "msg": "Invalid Username"
-    },
-    {
-      "code": 6003,
-      "name": "invalidName",
-      "msg": "Invalid Name"
-    },
-    {
-      "code": 6004,
-      "name": "invalidSlug",
-      "msg": "Invalid Slug"
-    },
-    {
-      "code": 6005,
-      "name": "invalidAvatarUrl",
-      "msg": "Invalid Avatar Url"
-    },
-    {
-      "code": 6006,
-      "name": "invalidXurl",
-      "msg": "Invalid X (Twitter) URL"
-    },
-    {
-      "code": 6007,
-      "name": "invalidDiscordUrl",
-      "msg": "Invalid Discord URL"
-    },
-    {
-      "code": 6008,
-      "name": "invalidFarcasterUrl",
-      "msg": "Invalid Farcaster URL"
-    },
-    {
-      "code": 6009,
-      "name": "invalidGoogleUrl",
-      "msg": "Invalid Google URL"
-    },
-    {
-      "code": 6010,
-      "name": "invalidGitHubUrl",
-      "msg": "Invalid GitHub URL"
-    },
-    {
-      "code": 6011,
-      "name": "invalidSolanaPubKey",
-      "msg": "Invalid Solana Public Key"
-    },
-    {
-      "code": 6012,
-      "name": "invalidTelegramUrl",
-      "msg": "Invalid Telegram URL"
-    },
-    {
-      "code": 6013,
-      "name": "invalidProviderId",
-      "msg": "Invalid Provider ID"
-    },
-    {
-      "code": 6014,
-      "name": "invalidProviderName",
-      "msg": "Invalid Provider Name"
-    },
-    {
-      "code": 6015,
       "name": "invalidAccountOwner",
       "msg": "Account not owned by program"
     },
     {
-      "code": 6016,
+      "code": 6001,
+      "name": "accountTooLarge",
+      "msg": "Account too large"
+    },
+    {
+      "code": 6002,
+      "name": "unAuthorized",
+      "msg": "Account unauthorized to perform this action"
+    },
+    {
+      "code": 6003,
       "name": "authorityAlreadyExists",
       "msg": "Authority already exists"
     },
     {
-      "code": 6017,
+      "code": 6004,
       "name": "authorityNonExistent",
       "msg": "Authority does not exist"
     },
     {
+      "code": 6005,
+      "name": "invalidFeePayer",
+      "msg": "Invalid Fee payer"
+    },
+    {
+      "code": 6006,
+      "name": "invalidUsername",
+      "msg": "Invalid Username"
+    },
+    {
+      "code": 6007,
+      "name": "invalidName",
+      "msg": "Invalid Name"
+    },
+    {
+      "code": 6008,
+      "name": "invalidSlug",
+      "msg": "Invalid Slug"
+    },
+    {
+      "code": 6009,
+      "name": "invalidAvatarUrl",
+      "msg": "Invalid Avatar Url"
+    },
+    {
+      "code": 6010,
+      "name": "invalidXurl",
+      "msg": "Invalid X (Twitter) URL"
+    },
+    {
+      "code": 6011,
+      "name": "invalidDiscordUrl",
+      "msg": "Invalid Discord URL"
+    },
+    {
+      "code": 6012,
+      "name": "invalidFarcasterUrl",
+      "msg": "Invalid Farcaster URL"
+    },
+    {
+      "code": 6013,
+      "name": "invalidGoogleUrl",
+      "msg": "Invalid Google URL"
+    },
+    {
+      "code": 6014,
+      "name": "invalidGitHubUrl",
+      "msg": "Invalid GitHub URL"
+    },
+    {
+      "code": 6015,
+      "name": "invalidSolanaPubKey",
+      "msg": "Invalid Solana Public Key"
+    },
+    {
+      "code": 6016,
+      "name": "invalidTelegramUrl",
+      "msg": "Invalid Telegram URL"
+    },
+    {
+      "code": 6017,
+      "name": "invalidProviderId",
+      "msg": "Invalid Provider ID"
+    },
+    {
       "code": 6018,
-      "name": "cannotRemoveSoloAuthority",
-      "msg": "Cannot remove last remaining authority"
+      "name": "invalidProviderName",
+      "msg": "Invalid Provider Name"
     },
     {
       "code": 6019,
-      "name": "maxSizeReached",
-      "msg": "Array reached max size"
-    },
-    {
-      "code": 6020,
-      "name": "identityAlreadyExists",
-      "msg": "Identity already exists"
-    },
-    {
-      "code": 6021,
-      "name": "identityNonExistent",
-      "msg": "Identity does not exist"
-    },
-    {
-      "code": 6022,
       "name": "identityProfileInvalid",
       "msg": "Invalid Identity Profile Authority"
     },
     {
+      "code": 6020,
+      "name": "cannotRemoveSoloAuthority",
+      "msg": "Cannot remove last remaining authority"
+    },
+    {
+      "code": 6021,
+      "name": "maxSizeReached",
+      "msg": "Array reached max size"
+    },
+    {
+      "code": 6022,
+      "name": "identityAlreadyExists",
+      "msg": "Identity already exists"
+    },
+    {
       "code": 6023,
+      "name": "identityNonExistent",
+      "msg": "Identity does not exist"
+    },
+    {
+      "code": 6024,
       "name": "unauthorizedCommunityAction",
       "msg": "Unauthorized community action"
     },
     {
-      "code": 6024,
+      "code": 6025,
       "name": "communityVerificationAlreadyExists",
       "msg": "Community verification already exists"
     },
     {
-      "code": 6025,
-      "name": "accountTooLarge",
-      "msg": "Account too large"
+      "code": 6026,
+      "name": "providerAlreadyExists",
+      "msg": "Provider already exists"
     }
   ],
   "types": [
@@ -1218,6 +1265,22 @@ export type PubkeyProtocol = {
           {
             "name": "newAuthority",
             "type": "pubkey"
+          }
+        ]
+      }
+    },
+    {
+      "name": "addCommunityProviderArgs",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "provider",
+            "type": {
+              "defined": {
+                "name": "pubKeyIdentityProvider"
+              }
+            }
           }
         ]
       }

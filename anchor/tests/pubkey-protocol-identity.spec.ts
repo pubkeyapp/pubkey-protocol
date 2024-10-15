@@ -109,10 +109,55 @@ describe('Identity Profile Verification', () => {
     expect(pointerData).toBeNull()
   })
 
+  // Add this test case after the existing tests
+  it('Add Community Provider', async () => {
+    const providerToAdd = pubKeyIdentityProviderArgs.Solana
+    const communityBefore = await program.account.community.fetch(community)
+    expect(communityBefore.providers).not.toContain(providerToAdd)
+
+    // Call the add_community_provider instruction
+    await program.methods
+      .addCommunityProvider({
+        provider: providerToAdd,
+      })
+      .accountsStrict({
+        community,
+        authority: communityAuthority.publicKey,
+        feePayer: feePayer.publicKey,
+        systemProgram: SystemProgram.programId,
+      })
+      .signers([communityAuthority])
+      .rpc()
+
+    const communityAfter = await program.account.community.fetch(community)
+    expect(communityAfter.providers).toContainEqual(providerToAdd)
+    expect(communityAfter.providers.length).toBe(communityBefore.providers.length + 1)
+
+    // Try to add the same provider again (should fail)
+    try {
+      await program.methods
+        .addCommunityProvider({
+          provider: providerToAdd,
+        })
+        .accountsStrict({
+          community,
+          authority: communityAuthority.publicKey,
+          feePayer: feePayer.publicKey,
+          systemProgram: SystemProgram.programId,
+        })
+        .signers([communityAuthority])
+        .rpc()
+
+      expect(true).toBe(false)
+    } catch (error) {
+      expect(error.error.errorCode.code).toBe('ProviderAlreadyExists')
+    }
+
+    const communityFinal = await program.account.community.fetch(community)
+    expect(communityFinal.providers.length).toBe(communityAfter.providers.length)
+  })
+
   it('Verify Profile for Community', async () => {
-    const cc = await program.account.community.fetch(community)
-    console.log('******************cc', cc)
-    
     const [pointer] = getPubKeyPointerPda({
       programId: program.programId,
       provider: PubKeyIdentityProvider.Solana,
@@ -135,9 +180,10 @@ describe('Identity Profile Verification', () => {
       .rpc()
 
     // Fetch and check the Profile account
-    const profileAccount = await program.account.profile.fetch(profileOwner.publicKey)
+    const profileAccount = await program.account.profile.fetch(profile)
+    
     const identityVerification = profileAccount.identities.find(
-      (i) => i.provider === pubKeyIdentityProviderArgs.Solana
+      (i) => i.providerId === profileOwner.publicKey.toString()
     )
     expect(identityVerification).toBeDefined()
     if (identityVerification) {
@@ -146,6 +192,6 @@ describe('Identity Profile Verification', () => {
 
     // Fetch and check the Community account
     const communityAccount = await program.account.community.fetch(community)
-    expect(communityAccount.providers).toContain(pubKeyIdentityProviderArgs.Solana)
+    expect(communityAccount.providers).toContainEqual(pubKeyIdentityProviderArgs.Solana)
   })
 })

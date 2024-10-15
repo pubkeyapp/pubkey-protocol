@@ -2,8 +2,16 @@ use anchor_lang::prelude::*;
 
 #[error_code]
 pub enum PubkeyProfileError {
+    #[msg("Account not owned by program")]
+    InvalidAccountOwner,
+    #[msg("Account too large")]
+    AccountTooLarge,
     #[msg("Account unauthorized to perform this action")]
     UnAuthorized,
+    #[msg("Authority already exists")]
+    AuthorityAlreadyExists,
+    #[msg("Authority does not exist")]
+    AuthorityNonExistent,
     #[msg("Invalid Fee payer")]
     InvalidFeePayer,
     #[msg("Invalid Username")]
@@ -32,12 +40,8 @@ pub enum PubkeyProfileError {
     InvalidProviderID,
     #[msg("Invalid Provider Name")]
     InvalidProviderName,
-    #[msg("Account not owned by program")]
-    InvalidAccountOwner,
-    #[msg("Authority already exists")]
-    AuthorityAlreadyExists,
-    #[msg("Authority does not exist")]
-    AuthorityNonExistent,
+    #[msg("Invalid Identity Profile Authority")]
+    IdentityProfileInvalid,
     #[msg("Cannot remove last remaining authority")]
     CannotRemoveSoloAuthority,
     #[msg("Array reached max size")]
@@ -46,12 +50,10 @@ pub enum PubkeyProfileError {
     IdentityAlreadyExists,
     #[msg("Identity does not exist")]
     IdentityNonExistent,
-    #[msg("Invalid Identity Profile Authority")]
-    IdentityProfileInvalid,
     #[msg("Unauthorized community action")]
     UnauthorizedCommunityAction,
     #[msg("Community verification already exists")]
     CommunityVerificationAlreadyExists,
-    #[msg("Account too large")]
-    AccountTooLarge,
+    #[msg("Provider already exists")]
+    ProviderAlreadyExists,
 }

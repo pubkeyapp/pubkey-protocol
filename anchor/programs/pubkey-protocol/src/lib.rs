@@ -48,6 +48,13 @@ pub mod pubkey_protocol {
     }
 
     // Community Actions
+    pub fn add_community_provider(
+        ctx: Context<AddCommunityProvider>,
+        args: AddCommunityProviderArgs,
+    ) -> Result<()> {
+        community::add_community_provider(ctx, args)
+    }
+
     pub fn create_community(
         ctx: Context<CreateCommunity>,
         args: CreateCommunityArgs,
