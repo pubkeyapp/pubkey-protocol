@@ -17,30 +17,30 @@ describe('Identity Profile Verification', () => {
   const profileOwner = Keypair.generate()
   let community: anchor.web3.PublicKey
 
+  const discordIdentity = {
+    provider: pubKeyIdentityProviderArgs.Discord,
+    providerId: `https://discord.com/users/${username}`,
+    name: `${username}123`
+  }
+
   beforeAll(async () => {
     await provider.connection.requestAirdrop(profileOwner.publicKey, LAMPORTS_PER_SOL)
 
-    const slug = unique('pubkey')    
+    const slug = unique('pubkey')
     await createTestCommunity(slug, program, communityAuthority, feePayer.publicKey)
     await createTestProfile(username, program, profileOwner, feePayer.publicKey)
   })
 
   it('Add Identity', async () => {
-    const providerId = `https://discord.com/users/${username}`
-    const name = `${username}123`
     const [profile] = getPubKeyProfilePda({ username, programId: program.programId })
     const [pointer, bump] = getPubKeyPointerPda({
       programId: program.programId,
       provider: PubKeyIdentityProvider.Discord,
-      providerId,
+      providerId: discordIdentity.providerId,
     })
-    const input = {
-      provider: pubKeyIdentityProviderArgs.Discord,
-      providerId,
-      name,
-    }
+
     await program.methods
-      .addIdentity(input)
+      .addIdentity(discordIdentity)
       .accountsStrict({
         authority: profileOwner.publicKey,
         feePayer: feePayer.publicKey,
@@ -66,15 +66,15 @@ describe('Identity Profile Verification', () => {
       },
       {
         provider: pubKeyIdentityProviderArgs.Discord,
-        providerId,
-        name,
+        providerId: discordIdentity.providerId,
+        name: discordIdentity.name,
         communities: [],
       },
     ])
 
     expect(pointerData.bump).toStrictEqual(bump)
-    expect(pointerData.providerId).toStrictEqual(input.providerId)
-    expect(pointerData.provider).toStrictEqual(pubKeyIdentityProviderArgs.Discord)
+    expect(pointerData.providerId).toStrictEqual(discordIdentity.providerId)
+    expect(pointerData.provider).toStrictEqual(discordIdentity.provider)
     expect(pointerData.profile).toStrictEqual(profile)
   })
 
@@ -82,12 +82,12 @@ describe('Identity Profile Verification', () => {
     const [profile] = getPubKeyProfilePda({ username, programId: program.programId })
     const [pointer] = getPubKeyPointerPda({
       programId: program.programId,
-      providerId: `${username}-discord-id-123`,
       provider: PubKeyIdentityProvider.Discord,
+      providerId: discordIdentity.providerId,
     })
 
     await program.methods
-      .removeIdentity({ provider: pubKeyIdentityProviderArgs.Discord, providerId: `${username}-discord-id-123` })
+      .removeIdentity({ provider: discordIdentity.provider, providerId: discordIdentity.providerId })
       .accountsStrict({
         authority: profileOwner.publicKey,
         feePayer: feePayer.publicKey,
@@ -106,6 +106,7 @@ describe('Identity Profile Verification', () => {
         provider: pubKeyIdentityProviderArgs.Solana,
         providerId: profileOwner.publicKey.toString(),
         name: 'Primary Wallet',
+        communities: [],
       },
     ])
     expect(pointerData).toBeNull()
