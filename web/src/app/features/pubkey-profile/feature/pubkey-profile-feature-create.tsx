@@ -1,6 +1,5 @@
 import { IdentityProvider } from '@pubkey-protocol/anchor'
-import { toastError, toastSuccess, UiCard, UiInfo, UiLoader, UiPage } from '@pubkey-ui/core'
-import { IconUserPlus } from '@tabler/icons-react'
+import { toastError, toastSuccess, UiCard, UiInfo, UiLoader } from '@pubkey-ui/core'
 import { ellipsify } from '../../../ui'
 import { useMutationCreateProfile, useQueryGetProfileByProviderNullable } from '../data-access'
 import { PubkeyProtocolUiProfileCreateForm } from '../ui'
@@ -14,28 +13,24 @@ export function PubkeyProfileFeatureCreate() {
     providerId: authority.toString(),
   })
 
-  return (
-    <UiPage leftAction={<IconUserPlus />} title="Create Profile">
-      {pointerQuery.isLoading ? (
-        <UiLoader />
-      ) : pointerQuery.data ? (
-        <UiInfo
-          message={`Authority ${ellipsify(authority.toString())} is already registered with username ${
-            pointerQuery.data?.username
-          }`}
-        />
-      ) : (
-        <UiCard title="Create Profile">
-          <PubkeyProtocolUiProfileCreateForm
-            submit={(input) =>
-              mutation
-                .mutateAsync(input)
-                .then(() => toastSuccess(`Profile created`))
-                .catch((err) => toastError(`Error: ${err}`))
-            }
-          />
-        </UiCard>
-      )}
-    </UiPage>
+  return pointerQuery.isLoading ? (
+    <UiLoader />
+  ) : pointerQuery.data ? (
+    <UiInfo
+      message={`Authority ${ellipsify(authority.toString())} is already registered with username ${
+        pointerQuery.data?.username
+      }`}
+    />
+  ) : (
+    <UiCard title="Create Profile">
+      <PubkeyProtocolUiProfileCreateForm
+        submit={(input) =>
+          mutation
+            .mutateAsync(input)
+            .then(() => toastSuccess(`Profile created`))
+            .catch((err) => toastError(`Error: ${err}`))
+        }
+      />
+    </UiCard>
   )
 }

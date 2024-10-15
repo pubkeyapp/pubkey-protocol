@@ -11,9 +11,9 @@ export function PubkeyProtocolUiProfileCreateForm({
   const form = useForm<PubKeyProfileCreateInput>({ initialValues: { avatarUrl: '', name: '', username: '' } })
 
   return (
-    <form onSubmit={form.onSubmit((values) => submit({ ...values, name: values.username }))}>
+    <form onSubmit={form.onSubmit((values) => submit({ ...values }))}>
       <UiStack>
-        <TextInput name="username" label="Username" {...form.getInputProps('username')} />
+        <TextInput name="name" label="Name" {...form.getInputProps('name')} />
         <Group justify="right">
           <Button type="submit">Save</Button>
         </Group>

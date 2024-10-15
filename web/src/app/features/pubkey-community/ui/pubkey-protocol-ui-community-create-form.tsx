@@ -8,12 +8,12 @@ export function PubkeyProtocolUiCommunityCreateForm({
 }: {
   submit: (input: PubKeyCommunityCreateInput) => Promise<void>
 }) {
-  const form = useForm<PubKeyCommunityCreateInput>({ initialValues: { avatarUrl: '', name: '', slug: '' } })
+  const form = useForm<PubKeyCommunityCreateInput>({ initialValues: { name: '' } })
 
   return (
-    <form onSubmit={form.onSubmit((values) => submit({ ...values, name: values.slug }))}>
+    <form onSubmit={form.onSubmit((values) => submit({ ...values }))}>
       <UiStack>
-        <TextInput name="slug" label="Slug" {...form.getInputProps('slug')} />
+        <TextInput name="name" label="Name" {...form.getInputProps('name')} />
         <Group justify="right">
           <Button type="submit">Save</Button>
         </Group>

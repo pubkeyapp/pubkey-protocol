@@ -15,8 +15,14 @@ export function useMutationCreateCommunity() {
           authority,
           feePayer,
         })
-        .then(signAndConfirmTransaction),
+        .then(async ({ input, tx }) => {
+          const signature = await signAndConfirmTransaction(tx)
+
+          return { input, tx, signature }
+        }),
     onError,
-    onSuccess,
+    onSuccess: ({ signature }) => {
+      return onSuccess(signature)
+    },
   })
 }

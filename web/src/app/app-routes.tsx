@@ -6,7 +6,7 @@ import { AppLayout } from './app-layout'
 import { ClusterUiSelect } from './features/cluster/cluster-ui'
 import { KeypairFeature } from './features/keypair/feature'
 import { KeypairUiBalance, KeypairUiSelect } from './features/keypair/ui'
-import { WalletIcon } from './features/solana/solana-provider'
+import { WalletIcon } from './features/solana'
 
 const ClusterFeature = lazy(() => import('./features/cluster/cluster-feature'))
 
@@ -30,7 +30,7 @@ const routes: RouteObject[] = [
 
 export function AppRoutes() {
   const router = useRoutes([
-    { path: '/', element: <Navigate to="/pubkey-protocol" replace /> },
+    { path: '/', element: <Navigate to="/communities" replace /> },
     ...routes,
 
     { path: '*', element: <UiNotFound /> },

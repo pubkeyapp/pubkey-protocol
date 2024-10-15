@@ -4,6 +4,7 @@ import { airdropIfRequired, getKeypairFromFile } from '@solana-developers/helper
 import { Connection, Keypair, LAMPORTS_PER_SOL, PublicKey } from '@solana/web3.js'
 import { AnchorKeypairWallet } from './anchor-keypair-wallet'
 import { PubkeyProtocolSdk } from './pubkey-protocol-sdk'
+import { getProfileAvatarUrl } from './utils'
 
 const programId = PUBKEY_PROTOCOL_PROGRAM_ID
 const connection = new Connection('http://localhost:8899', 'confirmed')
@@ -47,7 +48,7 @@ xdescribe('sdk', () => {
     // ARRANGE
     const username = `test-${Date.now()}`
     const name = `Test Profile`
-    const avatarUrl = `https://avatars.dicebear.com/api/avataaars/${username}.svg`
+    const avatarUrl = getProfileAvatarUrl(username)
     // ACT
     console.log({
       authority,

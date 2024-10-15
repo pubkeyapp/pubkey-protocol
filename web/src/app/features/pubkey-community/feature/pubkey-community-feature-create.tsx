@@ -1,23 +1,21 @@
-import { toastError, toastSuccess, UiCard, UiPage } from '@pubkey-ui/core'
-import { IconUserPlus } from '@tabler/icons-react'
+import { toastError, UiCard } from '@pubkey-ui/core'
+import { useNavigate } from 'react-router-dom'
 import { useMutationCreateCommunity } from '../data-access'
 import { PubkeyProtocolUiCommunityCreateForm } from '../ui'
 
 export function PubkeyCommunityFeatureCreate() {
   const mutation = useMutationCreateCommunity()
-
+  const navigate = useNavigate()
   return (
-    <UiPage leftAction={<IconUserPlus />} title="Create Community">
-      <UiCard title="Create Community">
-        <PubkeyProtocolUiCommunityCreateForm
-          submit={(input) =>
-            mutation
-              .mutateAsync(input)
-              .then(() => toastSuccess(`Community created`))
-              .catch((err) => toastError(`Error: ${err}`))
-          }
-        />
-      </UiCard>
-    </UiPage>
+    <UiCard title="Create Community">
+      <PubkeyProtocolUiCommunityCreateForm
+        submit={(input) =>
+          mutation
+            .mutateAsync(input)
+            .then((res) => navigate(`../${res.input.slug}`))
+            .catch((err) => toastError(`Error: ${err}`))
+        }
+      />
+    </UiCard>
   )
 }
