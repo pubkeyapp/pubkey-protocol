@@ -4,6 +4,7 @@
   "license": "MIT",
   "scripts": {
     "anchor": "cd anchor && anchor",
+    "anchor:test": "pnpm anchor test",
     "localnet": "pnpm anchor localnet",
     "build:anchor": "pnpm anchor build",
     "build:web": "nx run web:build",

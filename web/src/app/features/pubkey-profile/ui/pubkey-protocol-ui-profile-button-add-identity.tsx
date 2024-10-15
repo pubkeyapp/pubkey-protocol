@@ -7,7 +7,7 @@ import { ellipsify, getEnumOptions } from '../../../ui'
 import { useMutationAddIdentity } from '../data-access'
 
 export interface PubKeyProfileAddIdentityInput {
-  nickname: string
+  name: string
   providerId: string
   provider: PubKeyIdentityProvider
 }
@@ -15,9 +15,9 @@ export interface PubKeyProfileAddIdentityInput {
 export function PubkeyProtocolUiProfileButtonAddIdentity({ profile }: { profile: PubKeyProfile }) {
   const mutation = useMutationAddIdentity()
 
-  async function submit({ provider, providerId, nickname }: PubKeyProfileAddIdentityInput) {
+  async function submit({ provider, providerId, name }: PubKeyProfileAddIdentityInput) {
     return mutation.mutateAsync({
-      nickname: nickname ?? ellipsify(providerId),
+      name: name ?? ellipsify(providerId),
       providerId,
       provider,
       username: profile.username,
@@ -50,7 +50,7 @@ function PubKeyProfileUiAddIdentityForm({
 }) {
   const form = useForm<PubKeyProfileAddIdentityInput>({
     initialValues: {
-      nickname: '',
+      name: '',
       provider: PubKeyIdentityProvider.Solana,
       providerId: '',
     },
@@ -66,7 +66,7 @@ function PubKeyProfileUiAddIdentityForm({
           {...form.getInputProps('provider')}
         />
         <TextInput name="providerId" label="Provider ID" {...form.getInputProps('providerId')} />
-        <TextInput name="nickname" label="Nickname" {...form.getInputProps('nickname')} />
+        <TextInput name="name" label="Name" {...form.getInputProps('name')} />
         <Group justify="right">
           <Button loading={loading} type="submit">
             Save

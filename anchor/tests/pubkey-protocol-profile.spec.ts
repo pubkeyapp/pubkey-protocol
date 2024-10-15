@@ -1,7 +1,7 @@
 import * as anchor from '@coral-xyz/anchor'
 import { Program } from '@coral-xyz/anchor'
 import { Keypair, LAMPORTS_PER_SOL, SystemProgram } from '@solana/web3.js'
-import { getPubKeyPointerPda, getPubKeyProfilePda, PubKeyIdentityProvider, pubKeyIdentityProviderArgs } from '../src'
+import { getPubKeyPointerPda, getPubKeyProfilePda, PubKeyIdentityProvider } from '../src'
 import { PubkeyProtocol } from '../target/types/pubkey_protocol'
 import { unique } from './utils/unique'
 import { getProfileAvatarUrl } from './utils/get-avatar-url'
