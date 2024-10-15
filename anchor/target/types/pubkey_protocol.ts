@@ -1008,6 +1008,9 @@ export type PubkeyProtocol = {
           "writable": true
         },
         {
+          "name": "pointer"
+        },
+        {
           "name": "authority",
           "signer": true
         },
@@ -1578,6 +1581,10 @@ export type PubkeyProtocol = {
                 "name": "pubKeyIdentityProvider"
               }
             }
+          },
+          {
+            "name": "providerId",
+            "type": "string"
           }
         ]
       }

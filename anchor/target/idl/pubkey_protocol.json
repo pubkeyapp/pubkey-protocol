@@ -1002,6 +1002,9 @@
           "writable": true
         },
         {
+          "name": "pointer"
+        },
+        {
           "name": "authority",
           "signer": true
         },
@@ -1572,6 +1575,10 @@
                 "name": "PubKeyIdentityProvider"
               }
             }
+          },
+          {
+            "name": "provider_id",
+            "type": "string"
           }
         ]
       }
