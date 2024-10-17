@@ -590,8 +590,8 @@
       ]
     },
     {
-      "name": "verify_profile_for_community",
-      "discriminator": [155, 142, 189, 98, 130, 121, 248, 118],
+      "name": "verify_profile_identity",
+      "discriminator": [179, 83, 99, 171, 14, 91, 192, 133],
       "accounts": [
         {
           "name": "community",
@@ -623,7 +623,7 @@
           "name": "args",
           "type": {
             "defined": {
-              "name": "VerifyProfileForCommunityArgs"
+              "name": "VerifyProfileIdentityArgs"
             }
           }
         }
@@ -1262,7 +1262,7 @@
       }
     },
     {
-      "name": "VerifyProfileForCommunityArgs",
+      "name": "VerifyProfileIdentityArgs",
       "type": {
         "kind": "struct",
         "fields": [
