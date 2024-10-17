@@ -94,7 +94,6 @@ describe('Identity Profile Verification', () => {
   it('Remove Identity', async () => {
     await program.methods
       .removeIdentity({
-        provider: convertFromIdentityProvider(discordIdentity.provider),
         providerId: discordIdentity.providerId,
       })
       .accountsStrict({
@@ -169,14 +168,14 @@ describe('Identity Profile Verification', () => {
     expect(communityFinal.providers.length).toBe(communityAfter.providers.length)
   })
 
-  it('Verify Profile for Community', async () => {
+  it('Verify Profile Identity', async () => {
     const [pointer] = getPubKeyPointerPda({
       programId: program.programId,
       provider: PubKeyIdentityProvider.Solana,
       providerId: profileOwner.publicKey.toString(),
     })
     await program.methods
-      .verifyProfileForCommunity({
+      .verifyProfileIdentity({
         provider: convertFromIdentityProvider(PubKeyIdentityProvider.Solana),
         providerId: profileOwner.publicKey.toString(),
       })

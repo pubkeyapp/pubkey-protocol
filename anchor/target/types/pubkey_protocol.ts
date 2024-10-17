@@ -596,8 +596,8 @@ export type PubkeyProtocol = {
       ]
     },
     {
-      name: 'verifyProfileForCommunity'
-      discriminator: [155, 142, 189, 98, 130, 121, 248, 118]
+      name: 'verifyProfileIdentity'
+      discriminator: [179, 83, 99, 171, 14, 91, 192, 133]
       accounts: [
         {
           name: 'community'
@@ -629,7 +629,7 @@ export type PubkeyProtocol = {
           name: 'args'
           type: {
             defined: {
-              name: 'verifyProfileForCommunityArgs'
+              name: 'verifyProfileIdentityArgs'
             }
           }
         },
@@ -1268,7 +1268,7 @@ export type PubkeyProtocol = {
       }
     },
     {
-      name: 'verifyProfileForCommunityArgs'
+      name: 'verifyProfileIdentityArgs'
       type: {
         kind: 'struct'
         fields: [
