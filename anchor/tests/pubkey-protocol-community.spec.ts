@@ -43,8 +43,14 @@ describe('pubkey-protocol-community', () => {
 
     it('Update Community Details', async () => {
       const input = {
-        name: 'Updated Test Community',
         avatarUrl: getCommunityAvatarUrl(`${slug}_new`),
+        name: 'Updated Test Community',
+        discord: 'https://discord.gg/users/test',
+        farcaster: 'https://warpcast.com/test',
+        github: 'https://github.com/test',
+        telegram: 'https://t.me/test',
+        website: 'https://test.com',
+        x: 'https://x.com/test',
       }
       await program.methods
         .updateCommunityDetails(input)
@@ -57,6 +63,12 @@ describe('pubkey-protocol-community', () => {
 
       const updatedCommunity = await program.account.community.fetch(communityPDA)
       expect(updatedCommunity.name).toEqual(input.name)
+      expect(updatedCommunity.discord).toEqual(input.discord)
+      expect(updatedCommunity.farcaster).toEqual(input.farcaster)
+      expect(updatedCommunity.github).toEqual(input.github)
+      expect(updatedCommunity.telegram).toEqual(input.telegram)
+      expect(updatedCommunity.website).toEqual(input.website)
+      expect(updatedCommunity.x).toEqual(input.x)
       expect(updatedCommunity.avatarUrl).toEqual(input.avatarUrl)
     })
 

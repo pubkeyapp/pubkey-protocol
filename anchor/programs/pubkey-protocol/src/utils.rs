@@ -59,26 +59,42 @@ pub fn is_valid_url(url: &str) -> bool {
     valid_scheme && valid_path && valid_domain
 }
 
-pub fn is_valid_provider(url: &str, platform: &PubKeyIdentityProvider) -> bool {
+pub fn is_valid_provider_id(id: &str, platform: &PubKeyIdentityProvider) -> bool {
+    // FIXME: Currently, we only check if the string is a number. We should be more strict
+    // by figuring out the right regex for each platform
     match platform {
-        PubKeyIdentityProvider::Discord => {
-            url.starts_with("https://discord.com/") || url.starts_with("https://discord.gg/")
-        }
-        PubKeyIdentityProvider::Farcaster => url.starts_with("https://warpcast.com/"),
-        PubKeyIdentityProvider::Github => url.starts_with("https://github.com/"),
-        PubKeyIdentityProvider::Google => url.starts_with("https://google.com/"),
-        PubKeyIdentityProvider::Solana => url.starts_with("https://solana.com/"),
-        PubKeyIdentityProvider::Telegram => {
-            url.starts_with("https://t.me/") || url.starts_with("https://telegram.me/")
-        }
-        PubKeyIdentityProvider::X => {
-            url.starts_with("https://twitter.com/") || url.starts_with("https://x.com/")
-        }
+        PubKeyIdentityProvider::Discord
+        | PubKeyIdentityProvider::Farcaster
+        | PubKeyIdentityProvider::Github
+        | PubKeyIdentityProvider::Google
+        | PubKeyIdentityProvider::Solana
+        | PubKeyIdentityProvider::Telegram
+        | PubKeyIdentityProvider::X => id.chars().all(|c| c.is_digit(10)),
     }
 }
 
-pub fn is_valid_pubkey(pubkey: &Pubkey) -> bool {
-    anchor_lang::prelude::Pubkey::is_on_curve(pubkey)
+pub fn is_valid_discord_url(link: &str) -> bool {
+    link.starts_with("https://discord.com/invite/") || link.starts_with("https://discord.gg/")
+}
+
+pub fn is_valid_farcaster_url(link: &str) -> bool {
+    link.starts_with("https://warpcast.com/")
+}
+
+pub fn is_valid_github_url(link: &str) -> bool {
+    link.starts_with("https://github.com/")
+}
+
+pub fn is_valid_telegram_url(link: &str) -> bool {
+    link.starts_with("https://t.me/") || link.starts_with("https://telegram.me/")
+}
+
+pub fn is_valid_website_url(link: &str) -> bool {
+    link.starts_with("https://") || link.starts_with("http://")
+}
+
+pub fn is_valid_x_url(link: &str) -> bool {
+    link.starts_with("https://twitter.com/") || link.starts_with("https://x.com/")
 }
 
 pub fn realloc_account<'a>(

@@ -18,7 +18,7 @@ pub struct Pointer {
 
 impl Pointer {
     pub fn size() -> usize {
-        8 + // Anchor Disciminator
+        8 + // Anchor Discriminator
         1 + 1 + // provider
         MAX_PROVIDER_ID_SIZE +
         32 // profile
@@ -29,7 +29,7 @@ impl Pointer {
 
         require!(
             provider_id_len <= MAX_PROVIDER_ID_SIZE,
-            PubkeyProfileError::InvalidProviderID
+            PubkeyProfileError::InvalidProviderIDTooLong
         );
 
         Ok(())

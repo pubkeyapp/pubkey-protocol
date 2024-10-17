@@ -28,7 +28,7 @@ describe('Identity Profile Verification', () => {
 
   const discordIdentity = {
     provider: PubKeyIdentityProvider.Discord,
-    providerId: `https://discord.com/users/${username}`,
+    providerId: Date.now().toString(),
     name: `${username}123`,
   }
 
@@ -51,7 +51,7 @@ describe('Identity Profile Verification', () => {
     await program.methods
       .addIdentity({
         provider: convertFromIdentityProvider(PubKeyIdentityProvider.Discord),
-        providerId: `https://discord.com/users/${username}`,
+        providerId: discordIdentity.providerId,
         name: `${username}123`,
       })
       .accountsStrict({
