@@ -1,5 +1,5 @@
 import { AnchorProvider } from '@coral-xyz/anchor'
-import { PUBKEY_PROTOCOL_PROGRAM_ID, PubKeyIdentityProvider } from '@pubkey-protocol/anchor'
+import { IdentityProvider, PUBKEY_PROTOCOL_PROGRAM_ID } from '@pubkey-protocol/anchor'
 import { airdropIfRequired, getKeypairFromFile } from '@solana-developers/helpers'
 import { Connection, Keypair, LAMPORTS_PER_SOL, PublicKey } from '@solana/web3.js'
 import { AnchorKeypairWallet } from './anchor-keypair-wallet'
@@ -33,7 +33,7 @@ xdescribe('sdk', () => {
     expect(profileBump).toEqual(254)
 
     const [pointerPDA, pointerBump] = sdk.getPointerPda({
-      provider: PubKeyIdentityProvider.Solana,
+      provider: IdentityProvider.Solana,
       providerId: 'BEEMANPx2jdmfR7jpn1hRdMuM2Vj4E3azBLb6RUBrCDY',
     })
     expect(pointerPDA).toBeTruthy()

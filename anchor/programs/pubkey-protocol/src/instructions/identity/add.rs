@@ -16,8 +16,8 @@ pub struct AddIdentity<'info> {
         &profile.username.as_bytes()
       ],
       bump = profile.bump,
-      has_one = fee_payer @ PubkeyProfileError::UnAuthorized,
-      constraint = profile.check_for_authority(&authority.key()) @ PubkeyProfileError::UnAuthorized
+      has_one = fee_payer @ ProtocolError::UnAuthorized,
+      constraint = profile.check_for_authority(&authority.key()) @ ProtocolError::UnAuthorized
     )]
     pub profile: Account<'info, Profile>,
 
@@ -34,7 +34,7 @@ pub struct AddIdentity<'info> {
 
     #[account(
       mut,
-      constraint = fee_payer.key().ne(&authority.key()) @ PubkeyProfileError::InvalidFeePayer
+      constraint = fee_payer.key().ne(&authority.key()) @ ProtocolError::InvalidFeePayer
     )]
     pub fee_payer: Signer<'info>,
     pub system_program: Program<'info, System>,
@@ -70,7 +70,7 @@ pub fn add(ctx: Context<AddIdentity>, args: AddIdentityArgs) -> Result<()> {
         .iter()
         .position(|identity| identity.provider == provider)
     {
-        Some(_) => return err!(PubkeyProfileError::IdentityAlreadyExists),
+        Some(_) => return err!(ProtocolError::IdentityAlreadyExists),
         None => profile.identities.push(identity),
     }
 
@@ -90,7 +90,7 @@ pub fn add(ctx: Context<AddIdentity>, args: AddIdentityArgs) -> Result<()> {
 
 #[derive(AnchorSerialize, AnchorDeserialize, Debug)]
 pub struct AddIdentityArgs {
-    provider: PubKeyIdentityProvider,
+    provider: IdentityProvider,
     provider_id: String,
     name: String,
 }

@@ -9,7 +9,7 @@ pub struct Pointer {
     // Bump for this address
     pub bump: u8,
     // Provider type for Identity
-    pub provider: PubKeyIdentityProvider,
+    pub provider: IdentityProvider,
     // Provider ID for Identity
     pub provider_id: String,
     // Profile that the identity is pointing towards
@@ -29,13 +29,13 @@ impl Pointer {
 
         require!(
             provider_id_len <= MAX_PROVIDER_ID_SIZE,
-            PubkeyProfileError::InvalidProviderIDTooLong
+            ProtocolError::InvalidProviderIDTooLong
         );
 
         Ok(())
     }
 
-    pub fn hash_seed(provider: &PubKeyIdentityProvider, provider_id: &String) -> Vec<u8> {
+    pub fn hash_seed(provider: &IdentityProvider, provider_id: &String) -> Vec<u8> {
         let serialized_data = [
             PREFIX,
             POINTER,

@@ -1,7 +1,7 @@
 import { Button, Group, Select, TextInput } from '@mantine/core'
 import { useForm } from '@mantine/form'
 import { modals } from '@mantine/modals'
-import { PubKeyIdentityProvider, PubKeyProfile } from '@pubkey-protocol/anchor'
+import { IdentityProvider, PubKeyProfile } from '@pubkey-protocol/anchor'
 import { UiStack } from '@pubkey-ui/core'
 import { ellipsify, getEnumOptions } from '../../../ui'
 import { useMutationAddIdentity } from '../data-access'
@@ -9,7 +9,7 @@ import { useMutationAddIdentity } from '../data-access'
 export interface PubKeyProfileAddIdentityInput {
   name: string
   providerId: string
-  provider: PubKeyIdentityProvider
+  provider: IdentityProvider
 }
 
 export function PubkeyProtocolUiProfileButtonAddIdentity({ profile }: { profile: PubKeyProfile }) {
@@ -51,7 +51,7 @@ function PubKeyProfileUiAddIdentityForm({
   const form = useForm<PubKeyProfileAddIdentityInput>({
     initialValues: {
       name: '',
-      provider: PubKeyIdentityProvider.Solana,
+      provider: IdentityProvider.Solana,
       providerId: '',
     },
   })
@@ -60,7 +60,7 @@ function PubKeyProfileUiAddIdentityForm({
     <form onSubmit={form.onSubmit((values) => submit(values))}>
       <UiStack>
         <Select
-          data={getEnumOptions(PubKeyIdentityProvider)}
+          data={getEnumOptions(IdentityProvider)}
           name="provider"
           label="Provider"
           {...form.getInputProps('provider')}

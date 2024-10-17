@@ -1,5 +1,5 @@
 import { ActionIcon } from '@mantine/core'
-import { PubKeyIdentityProvider, PubKeyProfile } from '@pubkey-protocol/anchor'
+import { IdentityProvider, PubKeyProfile } from '@pubkey-protocol/anchor'
 import { PublicKey } from '@solana/web3.js'
 import { IconTrash } from '@tabler/icons-react'
 import { useMutationRemoveIdentity } from '../data-access'
@@ -11,7 +11,7 @@ export function PubkeyProtocolUiProfileButtonRemoveIdentity({
   feePayer,
   profile,
 }: {
-  provider: PubKeyIdentityProvider
+  provider: IdentityProvider
   providerId: string
   authority: PublicKey
   feePayer: PublicKey

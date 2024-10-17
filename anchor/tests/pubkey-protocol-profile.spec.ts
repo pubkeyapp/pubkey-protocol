@@ -1,7 +1,7 @@
 import * as anchor from '@coral-xyz/anchor'
 import { Program } from '@coral-xyz/anchor'
 import { Keypair, LAMPORTS_PER_SOL, SystemProgram } from '@solana/web3.js'
-import { getPubKeyPointerPda, getPubKeyProfilePda, PubKeyIdentityProvider } from '../src'
+import { getPubKeyPointerPda, getPubKeyProfilePda, IdentityProvider } from '../src'
 import { PubkeyProtocol } from '../target/types/pubkey_protocol'
 import { unique } from './utils/unique'
 import { getProfileAvatarUrl } from './utils/get-avatar-url'
@@ -31,7 +31,7 @@ describe('pubkey-protocol-profile', () => {
       const [profile, bump] = getPubKeyProfilePda({ username, programId: program.programId })
       const [pointer, bumpPointer] = getPubKeyPointerPda({
         programId: program.programId,
-        provider: PubKeyIdentityProvider.Solana,
+        provider: IdentityProvider.Solana,
         providerId: communityMember1.publicKey.toString(),
       })
       await createTestProfile(username, program, communityMember1, feePayer.publicKey)

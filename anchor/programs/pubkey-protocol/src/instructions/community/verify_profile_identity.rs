@@ -18,7 +18,7 @@ pub struct VerifyProfileIdentity<'info> {
       )]
     pub pointer: Account<'info, Pointer>,
 
-    #[account(constraint = community.check_for_authority(&authority.key()) @ PubkeyProfileError::UnAuthorized)]
+    #[account(constraint = community.check_for_authority(&authority.key()) @ ProtocolError::UnAuthorized)]
     pub authority: Signer<'info>,
 
     #[account(mut)]
@@ -38,16 +38,16 @@ pub fn verify_profile_identity(
 
     require!(
         community.check_for_authority(&authority.key()),
-        PubkeyProfileError::UnAuthorized
+        ProtocolError::UnAuthorized
     );
 
     // Check if the pointer exists and matches the provided args
     require!(
         pointer.provider == args.provider && pointer.provider_id == args.provider_id,
-        PubkeyProfileError::IdentityNonExistent
+        ProtocolError::IdentityNonExistent
     );
 
-    // Check if the community has a valid PubKeyIdentityProvider
+    // Check if the community has a valid IdentityProvider
     if community.providers.iter().any(|p| *p == args.provider) {
         // Find the corresponding identity in the profile
         if let Some(identity) = profile
@@ -60,10 +60,10 @@ pub fn verify_profile_identity(
                 identity.communities.push(community.key());
             }
         } else {
-            return Err(PubkeyProfileError::InvalidProviderIDNotFound.into());
+            return Err(ProtocolError::InvalidProviderIDNotFound.into());
         }
     } else {
-        return Err(PubkeyProfileError::InvalidProviderIDNotFound.into());
+        return Err(ProtocolError::InvalidProviderIDNotFound.into());
     }
 
     Ok(())
@@ -71,6 +71,6 @@ pub fn verify_profile_identity(
 
 #[derive(AnchorSerialize, AnchorDeserialize, Debug)]
 pub struct VerifyProfileIdentityArgs {
-    provider: PubKeyIdentityProvider,
+    provider: IdentityProvider,
     provider_id: String,
 }

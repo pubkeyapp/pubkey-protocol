@@ -9,7 +9,7 @@ pub struct AddCommunityProvider<'info> {
     #[account(mut)]
     pub community: Account<'info, Community>,
 
-    #[account(constraint = community.check_for_authority(&authority.key()) @ PubkeyProfileError::UnAuthorized)]
+    #[account(constraint = community.check_for_authority(&authority.key()) @ ProtocolError::UnAuthorized)]
     pub authority: Signer<'info>,
 
     #[account(mut)]
@@ -27,13 +27,13 @@ pub fn add_community_provider(
 
     require!(
         community.check_for_authority(&authority.key()),
-        PubkeyProfileError::UnAuthorized
+        ProtocolError::UnAuthorized
     );
 
     // Check if the provider already exists in the community
     require!(
         !community.providers.contains(&args.provider),
-        PubkeyProfileError::ProviderAlreadyExists
+        ProtocolError::ProviderAlreadyExists
     );
 
     // Add the new provider to the community
@@ -44,5 +44,5 @@ pub fn add_community_provider(
 
 #[derive(AnchorSerialize, AnchorDeserialize, Debug)]
 pub struct AddCommunityProviderArgs {
-    pub provider: PubKeyIdentityProvider,
+    pub provider: IdentityProvider,
 }

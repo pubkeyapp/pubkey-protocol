@@ -14,8 +14,8 @@ pub struct RemoveAuthority<'info> {
         &profile.username.as_bytes()
       ],
       bump = profile.bump,
-      has_one = fee_payer @ PubkeyProfileError::UnAuthorized,
-      constraint = profile.check_for_authority(&authority.key()) @ PubkeyProfileError::UnAuthorized
+      has_one = fee_payer @ ProtocolError::UnAuthorized,
+      constraint = profile.check_for_authority(&authority.key()) @ ProtocolError::UnAuthorized
     )]
     pub profile: Account<'info, Profile>,
 
@@ -23,7 +23,7 @@ pub struct RemoveAuthority<'info> {
 
     #[account(
       mut,
-      constraint = fee_payer.key().ne(&authority.key()) @ PubkeyProfileError::InvalidFeePayer
+      constraint = fee_payer.key().ne(&authority.key()) @ ProtocolError::InvalidFeePayer
     )]
     pub fee_payer: Signer<'info>,
 }
@@ -34,7 +34,7 @@ pub fn remove_authority(ctx: Context<RemoveAuthority>, args: RemoveAuthorityArgs
 
     require!(
         profile.authorities.len() > 1,
-        PubkeyProfileError::CannotRemoveSoloAuthority
+        ProtocolError::CannotRemoveSoloAuthority
     );
 
     // TODO: Not sure if this check should be there
@@ -44,7 +44,7 @@ pub fn remove_authority(ctx: Context<RemoveAuthority>, args: RemoveAuthorityArgs
         Ok(authority_to_remove_index) => {
             profile.authorities.remove(authority_to_remove_index);
         }
-        Err(_) => return err!(PubkeyProfileError::AuthorityNonExistent),
+        Err(_) => return err!(ProtocolError::AuthorityNonExistent),
     }
 
     profile.validate()?;

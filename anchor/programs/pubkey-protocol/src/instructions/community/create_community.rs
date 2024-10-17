@@ -23,7 +23,7 @@ pub struct CreateCommunity<'info> {
 
     #[account(
       mut,
-      constraint = fee_payer.key().ne(&authority.key()) @ PubkeyProfileError::InvalidFeePayer
+      constraint = fee_payer.key().ne(&authority.key()) @ ProtocolError::InvalidFeePayer
     )]
     pub fee_payer: Signer<'info>,
     pub system_program: Program<'info, System>,
@@ -49,7 +49,7 @@ pub fn create_community(ctx: Context<CreateCommunity>, args: CreateCommunityArgs
         fee_payers: vec![fee_payer],
         name,
         pending_authority: None,
-        providers: vec![],
+        providers: vec![IdentityProvider::Solana],
         slug,
         discord: None,
         farcaster: None,

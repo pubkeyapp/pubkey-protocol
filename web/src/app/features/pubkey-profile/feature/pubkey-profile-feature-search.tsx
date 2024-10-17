@@ -1,6 +1,6 @@
 import { ActionIcon, Select, TextInput } from '@mantine/core'
 import { useForm } from '@mantine/form'
-import { PubKeyIdentityProvider, PubKeyProfile } from '@pubkey-protocol/anchor'
+import { IdentityProvider, PubKeyProfile } from '@pubkey-protocol/anchor'
 import { GetProfileByProvider, GetProfileByUsername } from '@pubkey-protocol/sdk'
 import { toastError, toastInfo, toastSuccess, UiCard, UiPage, UiStack } from '@pubkey-ui/core'
 import { IconSearch } from '@tabler/icons-react'
@@ -29,7 +29,7 @@ function SearchByProvider() {
   const { sdk } = usePubKeyProtocol()
   const form = useForm<GetProfileByProvider>({
     initialValues: {
-      provider: PubKeyIdentityProvider.Solana,
+      provider: IdentityProvider.Solana,
       providerId: '',
     },
   })
@@ -52,7 +52,7 @@ function SearchByProvider() {
     <form onSubmit={form.onSubmit((values) => submit(values))}>
       <UiStack>
         <Select
-          data={getEnumOptions(PubKeyIdentityProvider)}
+          data={getEnumOptions(IdentityProvider)}
           name="provider"
           label="Provider"
           {...form.getInputProps('provider')}

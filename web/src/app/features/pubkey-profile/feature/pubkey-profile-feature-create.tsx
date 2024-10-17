@@ -1,4 +1,4 @@
-import { PubKeyIdentityProvider } from '@pubkey-protocol/anchor'
+import { IdentityProvider } from '@pubkey-protocol/anchor'
 import { toastError, toastSuccess, UiCard, UiInfo, UiLoader, UiPage } from '@pubkey-ui/core'
 import { IconUserPlus } from '@tabler/icons-react'
 import { ellipsify } from '../../../ui'
@@ -10,7 +10,7 @@ export function PubkeyProfileFeatureCreate() {
   const mutation = useMutationCreateProfile()
   const { authority } = usePubKeyProtocol()
   const pointerQuery = useQueryGetProfileByProviderNullable({
-    provider: PubKeyIdentityProvider.Solana,
+    provider: IdentityProvider.Solana,
     providerId: authority.toString(),
   })
 

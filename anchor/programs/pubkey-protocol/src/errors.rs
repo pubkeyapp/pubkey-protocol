@@ -1,7 +1,7 @@
 use anchor_lang::prelude::*;
 
 #[error_code]
-pub enum PubkeyProfileError {
+pub enum ProtocolError {
     #[msg("Account not owned by program")]
     InvalidAccountOwner,
     #[msg("Account too large")]
