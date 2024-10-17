@@ -1167,14 +1167,6 @@ export type PubkeyProtocol = {
         kind: 'struct'
         fields: [
           {
-            name: 'provider'
-            type: {
-              defined: {
-                name: 'pubKeyIdentityProvider'
-              }
-            }
-          },
-          {
             name: 'providerId'
             type: 'string'
           },

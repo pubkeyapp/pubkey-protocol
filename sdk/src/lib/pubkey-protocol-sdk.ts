@@ -365,7 +365,7 @@ export class PubkeyProtocolSdk {
     const [profile] = this.getProfilePda({ username })
     const [pointer] = this.getPointerPda({ providerId, provider })
     const ix = await this.program.methods
-      .removeIdentity({ provider: convertFromIdentityProvider(provider), providerId })
+      .removeIdentity({ providerId })
       .accountsStrict({
         authority,
         feePayer,
