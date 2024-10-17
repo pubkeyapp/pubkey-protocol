@@ -6,9 +6,9 @@ import {
   getPubKeyPointerPda,
   getPubKeyProfilePda,
   getPubkeyProtocolProgram,
+  IdentityProvider,
   PUBKEY_PROTOCOL_PROGRAM_ID,
   PubKeyCommunity,
-  PubKeyIdentityProvider,
   PubKeyPointer,
   PubKeyProfile,
   PubkeyProtocol,
@@ -37,7 +37,7 @@ export interface GetCommunityPdaOptions {
   slug: string
 }
 export interface GetPointerPdaOptions {
-  provider: PubKeyIdentityProvider
+  provider: IdentityProvider
   providerId: string
 }
 
@@ -46,7 +46,7 @@ export interface GetProfilePdaOptions {
 }
 
 export interface GetProfileByProvider {
-  provider: PubKeyIdentityProvider
+  provider: IdentityProvider
   providerId: string
 }
 
@@ -59,7 +59,7 @@ export interface AddIdentityOptions {
   feePayer: PublicKey
   username: string
   providerId: string
-  provider: PubKeyIdentityProvider
+  provider: IdentityProvider
   name: string
 }
 
@@ -68,7 +68,7 @@ export interface RemoveIdentityOptions {
   feePayer: PublicKey
   username: string
   providerId: string
-  provider: PubKeyIdentityProvider
+  provider: IdentityProvider
 }
 
 export interface RemoveAuthorityOptions {
@@ -182,7 +182,7 @@ export class PubkeyProtocolSdk {
 
   async createProfile({ authority, avatarUrl, feePayer, name, username }: CreateProfileOptions) {
     const [profile] = this.getProfilePda({ username })
-    const [pointer] = this.getPointerPda({ provider: PubKeyIdentityProvider.Solana, providerId: authority.toString() })
+    const [pointer] = this.getPointerPda({ provider: IdentityProvider.Solana, providerId: authority.toString() })
     const ix = await this.program.methods
       .createProfile({
         avatarUrl: avatarUrl || `https://api.dicebear.com/9.x/bottts-neutral/svg?seed=${username}`,

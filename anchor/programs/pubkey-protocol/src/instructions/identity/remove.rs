@@ -15,8 +15,8 @@ pub struct RemoveIdentity<'info> {
         &profile.username.as_bytes()
       ],
       bump = profile.bump,
-      has_one = fee_payer @ PubkeyProfileError::UnAuthorized,
-      constraint = profile.check_for_authority(&authority.key()) @ PubkeyProfileError::UnAuthorized
+      has_one = fee_payer @ ProtocolError::UnAuthorized,
+      constraint = profile.check_for_authority(&authority.key()) @ ProtocolError::UnAuthorized
     )]
     pub profile: Account<'info, Profile>,
 
@@ -24,7 +24,7 @@ pub struct RemoveIdentity<'info> {
       mut,
       seeds = [&Pointer::hash_seed(&pointer.provider, &args.provider_id)],
       bump = pointer.bump,
-      has_one = profile @ PubkeyProfileError::UnAuthorized,
+      has_one = profile @ ProtocolError::UnAuthorized,
       close = fee_payer
     )]
     pub pointer: Account<'info, Pointer>,
@@ -33,7 +33,7 @@ pub struct RemoveIdentity<'info> {
 
     #[account(
       mut,
-      constraint = fee_payer.key().ne(&authority.key()) @ PubkeyProfileError::InvalidFeePayer
+      constraint = fee_payer.key().ne(&authority.key()) @ ProtocolError::InvalidFeePayer
     )]
     pub fee_payer: Signer<'info>,
     pub system_program: Program<'info, System>,
@@ -43,7 +43,7 @@ pub fn remove(ctx: Context<RemoveIdentity>, args: RemoveIdentityArgs) -> Result<
     let profile = &mut ctx.accounts.profile;
     let provider = ctx.accounts.pointer.provider.clone();
 
-    // FIXME: Check if the Solana wallet always exists - you can't delete the last PubKeyIdentityProvider::Solana
+    // FIXME: Check if the Solana wallet always exists - you can't delete the last IdentityProvider::Solana
 
     match profile.identities.iter().position(|identity| {
         identity.provider == provider && identity.provider_id == args.provider_id
@@ -51,7 +51,7 @@ pub fn remove(ctx: Context<RemoveIdentity>, args: RemoveIdentityArgs) -> Result<
         Some(identity_to_remove_index) => {
             profile.identities.remove(identity_to_remove_index);
         }
-        None => return err!(PubkeyProfileError::IdentityNonExistent),
+        None => return err!(ProtocolError::IdentityNonExistent),
     }
 
     profile.validate()?;

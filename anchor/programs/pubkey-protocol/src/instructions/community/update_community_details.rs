@@ -16,12 +16,12 @@ pub struct UpdateCommunityDetails<'info> {
             &community.slug.as_bytes()
         ],
         bump = community.bump,
-        has_one = authority @ PubkeyProfileError::UnAuthorized,
+        has_one = authority @ ProtocolError::UnAuthorized,
     )]
     pub community: Account<'info, Community>,
     #[account(
         mut,
-        constraint = community.check_for_authority(&authority.key()) @ PubkeyProfileError::UnAuthorized)]
+        constraint = community.check_for_authority(&authority.key()) @ ProtocolError::UnAuthorized)]
     pub authority: Signer<'info>,
 }
 
@@ -47,7 +47,7 @@ pub fn update_community_details(
     if let Some(avatar_url) = avatar_url {
         require!(
             is_valid_url(&avatar_url),
-            PubkeyProfileError::InvalidAvatarURL
+            ProtocolError::InvalidAvatarURL
         );
         community.avatar_url = avatar_url;
     }
@@ -55,7 +55,7 @@ pub fn update_community_details(
     if let Some(discord) = discord {
         require!(
             is_valid_discord_url(&discord),
-            PubkeyProfileError::InvalidDiscordURL
+            ProtocolError::InvalidDiscordURL
         );
         community.discord = Some(discord);
     }
@@ -63,7 +63,7 @@ pub fn update_community_details(
     if let Some(farcaster) = farcaster {
         require!(
             is_valid_farcaster_url(&farcaster),
-            PubkeyProfileError::InvalidFarcasterURL
+            ProtocolError::InvalidFarcasterURL
         );
         community.farcaster = Some(farcaster);
     }
@@ -71,20 +71,20 @@ pub fn update_community_details(
     if let Some(github) = github {
         require!(
             is_valid_github_url(&github),
-            PubkeyProfileError::InvalidGitHubURL
+            ProtocolError::InvalidGitHubURL
         );
         community.github = Some(github);
     }
 
     if let Some(name) = name {
-        require!(is_valid_name(&name), PubkeyProfileError::InvalidName);
+        require!(is_valid_name(&name), ProtocolError::InvalidName);
         community.name = name;
     }
 
     if let Some(telegram) = telegram {
         require!(
             is_valid_telegram_url(&telegram),
-            PubkeyProfileError::InvalidTelegramURL
+            ProtocolError::InvalidTelegramURL
         );
         community.telegram = Some(telegram);
     }
@@ -92,13 +92,13 @@ pub fn update_community_details(
     if let Some(website) = website {
         require!(
             is_valid_website_url(&website),
-            PubkeyProfileError::InvalidWebsiteURL
+            ProtocolError::InvalidWebsiteURL
         );
         community.website = Some(website);
     }
 
     if let Some(x) = x {
-        require!(is_valid_x_url(&x), PubkeyProfileError::InvalidXURL);
+        require!(is_valid_x_url(&x), ProtocolError::InvalidXURL);
         community.x = Some(x);
     }
 

@@ -3,7 +3,7 @@ import {
   getPubKeyCommunityPda,
   getPubKeyPointerPda,
   getPubKeyProfilePda,
-  PubKeyIdentityProvider,
+  IdentityProvider,
   PubkeyProtocol,
 } from '../../src'
 import { getCommunityAvatarUrl } from './get-avatar-url'
@@ -50,7 +50,7 @@ export async function createTestProfile(
     const [profile] = getPubKeyProfilePda({ username, programId: program.programId })
     const [pointer] = getPubKeyPointerPda({
       programId: program.programId,
-      provider: PubKeyIdentityProvider.Solana,
+      provider: IdentityProvider.Solana,
       providerId: profileOwner.publicKey.toString(),
     })
 

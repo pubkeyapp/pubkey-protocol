@@ -22,7 +22,7 @@ pub struct Community {
     // Pending authority that must sign to complete
     pub pending_authority: Option<Pubkey>,
     // Providers (identities) user have added onto
-    pub providers: Vec<PubKeyIdentityProvider>,
+    pub providers: Vec<IdentityProvider>,
     // Links to the community
     pub discord: Option<String>,
     pub farcaster: Option<String>,
@@ -33,9 +33,9 @@ pub struct Community {
 }
 
 impl Community {
-    pub fn size(fee_payers: &[Pubkey], providers: &[PubKeyIdentityProvider]) -> usize {
+    pub fn size(fee_payers: &[Pubkey], providers: &[IdentityProvider]) -> usize {
         let fee_payers_size = 4 + (fee_payers.len() * 32);
-        let providers_size = 4 + (providers.len() * std::mem::size_of::<PubKeyIdentityProvider>());
+        let providers_size = 4 + (providers.len() * std::mem::size_of::<IdentityProvider>());
         let links_count = 6;
         let links_size = (1 + 4 + MAX_URL_SIZE) * links_count;
 
@@ -58,29 +58,29 @@ impl Community {
 
         require!(
             is_valid_username(&self.slug),
-            PubkeyProfileError::InvalidSlug
+            ProtocolError::InvalidSlug
         );
 
-        require!(is_valid_name(&self.name), PubkeyProfileError::InvalidName);
+        require!(is_valid_name(&self.name), ProtocolError::InvalidName);
 
         require!(
             is_valid_url(&self.avatar_url),
-            PubkeyProfileError::InvalidAvatarURL
+            ProtocolError::InvalidAvatarURL
         );
 
         require!(
             avatar_url_len > 0 && avatar_url_len <= MAX_URL_SIZE,
-            PubkeyProfileError::InvalidAvatarURL
+            ProtocolError::InvalidAvatarURL
         );
 
         require!(
             fee_payers_len <= MAX_VECTOR_SIZE.into(),
-            PubkeyProfileError::MaxSizeReached
+            ProtocolError::MaxSizeReached
         );
 
         require!(
             providers_len <= MAX_VECTOR_SIZE.into(),
-            PubkeyProfileError::MaxSizeReached
+            ProtocolError::MaxSizeReached
         );
 
         Ok(())

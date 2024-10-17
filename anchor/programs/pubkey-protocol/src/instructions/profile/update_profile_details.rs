@@ -16,14 +16,14 @@ pub struct UpdateProfileDetails<'info> {
         &profile.username.as_bytes()
       ],
       bump = profile.bump,
-      has_one = fee_payer @ PubkeyProfileError::UnAuthorized,
-      constraint = profile.check_for_authority(&args.authority) @ PubkeyProfileError::UnAuthorized
+      has_one = fee_payer @ ProtocolError::UnAuthorized,
+      constraint = profile.check_for_authority(&args.authority) @ ProtocolError::UnAuthorized
     )]
     pub profile: Account<'info, Profile>,
 
     #[account(
       mut,
-      constraint = fee_payer.key().ne(&args.authority) @ PubkeyProfileError::InvalidFeePayer
+      constraint = fee_payer.key().ne(&args.authority) @ ProtocolError::InvalidFeePayer
     )]
     pub fee_payer: Signer<'info>,
 }
@@ -35,14 +35,14 @@ pub fn update_profile_details(
     let profile = &mut ctx.accounts.profile;
 
     if let Some(new_name) = args.new_name {
-        require!(is_valid_name(&new_name), PubkeyProfileError::InvalidName);
+        require!(is_valid_name(&new_name), ProtocolError::InvalidName);
         profile.name = new_name;
     }
 
     if let Some(new_avatar_url) = args.new_avatar_url {
         require!(
             is_valid_url(&new_avatar_url),
-            PubkeyProfileError::InvalidAvatarURL
+            ProtocolError::InvalidAvatarURL
         );
         profile.avatar_url = new_avatar_url;
     }

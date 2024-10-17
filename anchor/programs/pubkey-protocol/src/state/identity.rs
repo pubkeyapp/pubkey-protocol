@@ -10,10 +10,10 @@ use anchor_lang::prelude::*;
 #[derive(AnchorSerialize, AnchorDeserialize, Clone)]
 pub struct Identity {
     // The provider name
-    pub provider: PubKeyIdentityProvider,
-    // The provider ID (address incase of blockchain)
+    pub provider: IdentityProvider,
+    // The provider ID
     pub provider_id: String,
-    // Nickname given to the identity
+    // Name given to the identity
     pub name: String,
     // Communities that have verified this identity
     pub communities: Vec<Pubkey>,
@@ -33,56 +33,56 @@ impl Identity {
 
         require!(
             provider_id_len <= MAX_PROVIDER_ID_SIZE,
-            PubkeyProfileError::InvalidProviderIDTooLong,
+            ProtocolError::InvalidProviderIDTooLong,
         );
 
         require!(
             provider_name_len <= MAX_PROVIDER_NAME_SIZE,
-            PubkeyProfileError::InvalidProviderNameTooLong
+            ProtocolError::InvalidProviderNameTooLong
         );
 
         // Validate provider_id based on the provider
         match &self.provider {
-            PubKeyIdentityProvider::Solana => {
+            IdentityProvider::Solana => {
                 require!(
                     Pubkey::from_str(&self.provider_id).is_ok(),
-                    PubkeyProfileError::InvalidSolanaPubKey
+                    ProtocolError::InvalidSolanaPubKey
                 );
             }
-            PubKeyIdentityProvider::Discord => {
+            IdentityProvider::Discord => {
                 require!(
-                    is_valid_provider_id(&self.provider_id, &PubKeyIdentityProvider::Discord),
-                    PubkeyProfileError::InvalidDiscordID
+                    is_valid_provider_id(&self.provider_id, &IdentityProvider::Discord),
+                    ProtocolError::InvalidDiscordID
                 );
             }
-            PubKeyIdentityProvider::Farcaster => {
+            IdentityProvider::Farcaster => {
                 require!(
-                    is_valid_provider_id(&self.provider_id, &PubKeyIdentityProvider::Farcaster),
-                    PubkeyProfileError::InvalidFarcasterID
+                    is_valid_provider_id(&self.provider_id, &IdentityProvider::Farcaster),
+                    ProtocolError::InvalidFarcasterID
                 );
             }
-            PubKeyIdentityProvider::Github => {
+            IdentityProvider::Github => {
                 require!(
-                    is_valid_provider_id(&self.provider_id, &PubKeyIdentityProvider::Github),
-                    PubkeyProfileError::InvalidGitHubID
+                    is_valid_provider_id(&self.provider_id, &IdentityProvider::Github),
+                    ProtocolError::InvalidGitHubID
                 );
             }
-            PubKeyIdentityProvider::Google => {
+            IdentityProvider::Google => {
                 require!(
-                    is_valid_provider_id(&self.provider_id, &PubKeyIdentityProvider::Google),
-                    PubkeyProfileError::InvalidGoogleID
+                    is_valid_provider_id(&self.provider_id, &IdentityProvider::Google),
+                    ProtocolError::InvalidGoogleID
                 );
             }
-            PubKeyIdentityProvider::Telegram => {
+            IdentityProvider::Telegram => {
                 require!(
-                    is_valid_provider_id(&self.provider_id, &PubKeyIdentityProvider::Telegram),
-                    PubkeyProfileError::InvalidTelegramID
+                    is_valid_provider_id(&self.provider_id, &IdentityProvider::Telegram),
+                    ProtocolError::InvalidTelegramID
                 );
             }
-            PubKeyIdentityProvider::X => {
+            IdentityProvider::X => {
                 require!(
-                    is_valid_provider_id(&self.provider_id, &PubKeyIdentityProvider::X),
-                    PubkeyProfileError::InvalidXID
+                    is_valid_provider_id(&self.provider_id, &IdentityProvider::X),
+                    ProtocolError::InvalidXID
                 );
             }
         }

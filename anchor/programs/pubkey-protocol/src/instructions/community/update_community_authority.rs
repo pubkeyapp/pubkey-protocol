@@ -15,7 +15,7 @@ pub struct InitiateUpdateAuthority<'info> {
             &community.slug.as_bytes()
         ],
         bump = community.bump,
-        constraint = community.check_for_authority(&authority.key()) @ PubkeyProfileError::UnAuthorized,
+        constraint = community.check_for_authority(&authority.key()) @ ProtocolError::UnAuthorized,
     )]
     pub community: Account<'info, Community>,
     pub authority: Signer<'info>,
@@ -32,7 +32,7 @@ pub struct FinalizeUpdateAuthority<'info> {
             &community.slug.as_bytes()
         ],
         bump = community.bump,
-        constraint = community.pending_authority == Some(new_authority.key()) @ PubkeyProfileError::UnAuthorized,
+        constraint = community.pending_authority == Some(new_authority.key()) @ ProtocolError::UnAuthorized,
     )]
     pub community: Account<'info, Community>,
     pub new_authority: Signer<'info>,
@@ -49,7 +49,7 @@ pub struct CancelUpdateAuthority<'info> {
             &community.slug.as_bytes()
         ],
         bump = community.bump,
-        constraint = community.check_for_authority(&authority.key()) @ PubkeyProfileError::UnAuthorized,
+        constraint = community.check_for_authority(&authority.key()) @ ProtocolError::UnAuthorized,
     )]
     pub community: Account<'info, Community>,
     pub authority: Signer<'info>,

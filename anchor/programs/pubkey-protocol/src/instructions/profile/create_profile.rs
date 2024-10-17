@@ -10,7 +10,7 @@ pub struct CreateProfile<'info> {
     #[account(
       init,
       payer = fee_payer,
-      space = Profile::size(&[authority.key()], &[Identity { provider: PubKeyIdentityProvider::Solana, provider_id: authority.key().to_string(), name: "Primary Wallet".to_owned(), communities: vec![] }]),
+      space = Profile::size(&[authority.key()], &[Identity { provider: IdentityProvider::Solana, provider_id: authority.key().to_string(), name: "Primary Wallet".to_owned(), communities: vec![] }]),
       seeds = [
         PREFIX,
         PROFILE,
@@ -25,7 +25,7 @@ pub struct CreateProfile<'info> {
       space = Pointer::size(),
       payer = fee_payer,
       seeds = [
-        &Pointer::hash_seed(&PubKeyIdentityProvider::Solana, &authority.key().to_string())
+        &Pointer::hash_seed(&IdentityProvider::Solana, &authority.key().to_string())
       ],
       bump
     )]
@@ -35,7 +35,7 @@ pub struct CreateProfile<'info> {
 
     #[account(
       mut,
-      constraint = fee_payer.key().ne(&authority.key()) @ PubkeyProfileError::InvalidFeePayer
+      constraint = fee_payer.key().ne(&authority.key()) @ ProtocolError::InvalidFeePayer
     )]
     pub fee_payer: Signer<'info>,
 
@@ -52,7 +52,7 @@ pub fn create(ctx: Context<CreateProfile>, args: CreateProfileArgs) -> Result<()
     pointer.set_inner(Pointer {
         bump: ctx.bumps.pointer,
         profile: profile.key(),
-        provider: PubKeyIdentityProvider::Solana,
+        provider: IdentityProvider::Solana,
         provider_id: authority.to_string(),
     });
 
@@ -66,7 +66,7 @@ pub fn create(ctx: Context<CreateProfile>, args: CreateProfileArgs) -> Result<()
     } = args;
 
     let set_primary_wallet = Identity {
-        provider: PubKeyIdentityProvider::Solana,
+        provider: IdentityProvider::Solana,
         provider_id: authority.key().to_string(),
         name: "Primary Wallet".to_owned(),
         communities: vec![],

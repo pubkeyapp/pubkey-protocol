@@ -59,17 +59,17 @@ pub fn is_valid_url(url: &str) -> bool {
     valid_scheme && valid_path && valid_domain
 }
 
-pub fn is_valid_provider_id(id: &str, platform: &PubKeyIdentityProvider) -> bool {
+pub fn is_valid_provider_id(id: &str, platform: &IdentityProvider) -> bool {
     // FIXME: Currently, we only check if the string is a number. We should be more strict
     // by figuring out the right regex for each platform
     match platform {
-        PubKeyIdentityProvider::Discord
-        | PubKeyIdentityProvider::Farcaster
-        | PubKeyIdentityProvider::Github
-        | PubKeyIdentityProvider::Google
-        | PubKeyIdentityProvider::Solana
-        | PubKeyIdentityProvider::Telegram
-        | PubKeyIdentityProvider::X => id.chars().all(|c| c.is_digit(10)),
+        IdentityProvider::Discord
+        | IdentityProvider::Farcaster
+        | IdentityProvider::Github
+        | IdentityProvider::Google
+        | IdentityProvider::Solana
+        | IdentityProvider::Telegram
+        | IdentityProvider::X => id.chars().all(|c| c.is_digit(10)),
     }
 }
 
@@ -106,7 +106,7 @@ pub fn realloc_account<'a>(
     require_keys_eq!(
         *account.owner,
         id(),
-        PubkeyProfileError::InvalidAccountOwner
+        ProtocolError::InvalidAccountOwner
     );
 
     let current_account_size = account.data.borrow().len();

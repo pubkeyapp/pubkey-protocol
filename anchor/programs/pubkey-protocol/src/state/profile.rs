@@ -58,32 +58,32 @@ impl Profile {
         // Username
         require!(
             is_valid_username(&self.username),
-            PubkeyProfileError::InvalidUsername
+            ProtocolError::InvalidUsername
         );
 
         // Name
-        require!(is_valid_name(&self.name), PubkeyProfileError::InvalidName);
+        require!(is_valid_name(&self.name), ProtocolError::InvalidName);
 
         // Avatar URL
         require!(
             is_valid_url(&self.avatar_url),
-            PubkeyProfileError::InvalidAvatarURL
+            ProtocolError::InvalidAvatarURL
         );
         require!(
             avatar_url_len > 0 && avatar_url_len <= MAX_URL_SIZE,
-            PubkeyProfileError::InvalidAvatarURL
+            ProtocolError::InvalidAvatarURL
         );
 
         // Authorities
         require!(
             authorities_len <= MAX_VECTOR_SIZE.into(),
-            PubkeyProfileError::MaxSizeReached
+            ProtocolError::MaxSizeReached
         );
 
         // Identities
         require!(
             identities_len <= MAX_VECTOR_SIZE.into(),
-            PubkeyProfileError::MaxSizeReached
+            ProtocolError::MaxSizeReached
         );
         for identity in self.identities.clone() {
             identity.validate()?;
