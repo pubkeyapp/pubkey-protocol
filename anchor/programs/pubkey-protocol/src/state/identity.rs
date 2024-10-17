@@ -33,12 +33,12 @@ impl Identity {
 
         require!(
             provider_id_len <= MAX_PROVIDER_ID_SIZE,
-            PubkeyProfileError::InvalidProviderID
+            PubkeyProfileError::InvalidProviderIDTooLong,
         );
 
         require!(
             provider_name_len <= MAX_PROVIDER_NAME_SIZE,
-            PubkeyProfileError::InvalidProviderName
+            PubkeyProfileError::InvalidProviderNameTooLong
         );
 
         // Validate provider_id based on the provider
@@ -51,38 +51,38 @@ impl Identity {
             }
             PubKeyIdentityProvider::Discord => {
                 require!(
-                    is_valid_provider(&self.provider_id, &PubKeyIdentityProvider::Discord),
-                    PubkeyProfileError::InvalidDiscordURL
+                    is_valid_provider_id(&self.provider_id, &PubKeyIdentityProvider::Discord),
+                    PubkeyProfileError::InvalidDiscordID
                 );
             }
             PubKeyIdentityProvider::Farcaster => {
                 require!(
-                    is_valid_provider(&self.provider_id, &PubKeyIdentityProvider::Farcaster),
-                    PubkeyProfileError::InvalidFarcasterURL
+                    is_valid_provider_id(&self.provider_id, &PubKeyIdentityProvider::Farcaster),
+                    PubkeyProfileError::InvalidFarcasterID
                 );
             }
             PubKeyIdentityProvider::Github => {
                 require!(
-                    is_valid_provider(&self.provider_id, &PubKeyIdentityProvider::Github),
-                    PubkeyProfileError::InvalidGitHubURL
+                    is_valid_provider_id(&self.provider_id, &PubKeyIdentityProvider::Github),
+                    PubkeyProfileError::InvalidGitHubID
                 );
             }
             PubKeyIdentityProvider::Google => {
                 require!(
-                    is_valid_provider(&self.provider_id, &PubKeyIdentityProvider::Google),
-                    PubkeyProfileError::InvalidGoogleURL
+                    is_valid_provider_id(&self.provider_id, &PubKeyIdentityProvider::Google),
+                    PubkeyProfileError::InvalidGoogleID
                 );
             }
             PubKeyIdentityProvider::Telegram => {
                 require!(
-                    is_valid_provider(&self.provider_id, &PubKeyIdentityProvider::Telegram),
-                    PubkeyProfileError::InvalidTelegramURL
+                    is_valid_provider_id(&self.provider_id, &PubKeyIdentityProvider::Telegram),
+                    PubkeyProfileError::InvalidTelegramID
                 );
             }
             PubKeyIdentityProvider::X => {
                 require!(
-                    is_valid_provider(&self.provider_id, &PubKeyIdentityProvider::X),
-                    PubkeyProfileError::InvalidXURL
+                    is_valid_provider_id(&self.provider_id, &PubKeyIdentityProvider::X),
+                    PubkeyProfileError::InvalidXID
                 );
             }
         }

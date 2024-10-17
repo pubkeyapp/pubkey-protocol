@@ -60,10 +60,10 @@ pub fn verify_community_profile(
                 identity.communities.push(community.key());
             }
         } else {
-            return Err(PubkeyProfileError::InvalidProviderID.into());
+            return Err(PubkeyProfileError::InvalidProviderIDNotFound.into());
         }
     } else {
-        return Err(PubkeyProfileError::InvalidProviderID.into());
+        return Err(PubkeyProfileError::InvalidProviderIDNotFound.into());
     }
 
     Ok(())

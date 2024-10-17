@@ -23,12 +23,21 @@ pub struct Community {
     pub pending_authority: Option<Pubkey>,
     // Providers (identities) user have added onto
     pub providers: Vec<PubKeyIdentityProvider>,
+    // Links to the community
+    pub discord: Option<String>,
+    pub farcaster: Option<String>,
+    pub github: Option<String>,
+    pub telegram: Option<String>,
+    pub website: Option<String>,
+    pub x: Option<String>,
 }
 
 impl Community {
     pub fn size(fee_payers: &[Pubkey], providers: &[PubKeyIdentityProvider]) -> usize {
         let fee_payers_size = 4 + (fee_payers.len() * 32);
         let providers_size = 4 + (providers.len() * std::mem::size_of::<PubKeyIdentityProvider>());
+        let links_count = 6;
+        let links_size = (1 + 4 + MAX_URL_SIZE) * links_count;
 
         8 + // Anchor discriminator
         1 + // bump
@@ -38,7 +47,8 @@ impl Community {
         32 + // authority
         1 + 32 + // pending_authority (Option<Pubkey>)
         fee_payers_size +
-        providers_size
+        providers_size +
+        links_size
     }
 
     pub fn validate(&self) -> Result<()> {

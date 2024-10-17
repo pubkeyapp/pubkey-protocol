@@ -43,14 +43,20 @@ pub fn create_community(ctx: Context<CreateCommunity>, args: CreateCommunityArgs
     } = args;
 
     community.set_inner(Community {
-        bump: ctx.bumps.community,
-        slug,
-        name,
-        avatar_url,
-        fee_payers: vec![fee_payer],
         authority,
+        avatar_url,
+        bump: ctx.bumps.community,
+        fee_payers: vec![fee_payer],
+        name,
         pending_authority: None,
         providers: vec![],
+        slug,
+        discord: None,
+        farcaster: None,
+        github: None,
+        telegram: None,
+        website: None,
+        x: None,
     });
 
     community.validate()?;

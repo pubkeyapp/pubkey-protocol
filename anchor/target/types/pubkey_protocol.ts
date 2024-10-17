@@ -678,111 +678,151 @@ export type PubkeyProtocol = {
     },
     {
       code: 6005
-      name: 'invalidFeePayer'
-      msg: 'Invalid Fee payer'
-    },
-    {
-      code: 6006
-      name: 'invalidUsername'
-      msg: 'Invalid Username'
-    },
-    {
-      code: 6007
-      name: 'invalidName'
-      msg: 'Invalid Name'
-    },
-    {
-      code: 6008
-      name: 'invalidSlug'
-      msg: 'Invalid Slug'
-    },
-    {
-      code: 6009
       name: 'invalidAvatarUrl'
       msg: 'Invalid Avatar Url'
     },
     {
-      code: 6010
-      name: 'invalidXurl'
-      msg: 'Invalid X (Twitter) URL'
+      code: 6006
+      name: 'invalidDiscordId'
+      msg: 'Invalid Discord ID'
     },
     {
-      code: 6011
+      code: 6007
       name: 'invalidDiscordUrl'
       msg: 'Invalid Discord URL'
     },
     {
-      code: 6012
+      code: 6008
+      name: 'invalidFarcasterId'
+      msg: 'Invalid Farcaster ID'
+    },
+    {
+      code: 6009
       name: 'invalidFarcasterUrl'
       msg: 'Invalid Farcaster URL'
     },
     {
-      code: 6013
-      name: 'invalidGoogleUrl'
-      msg: 'Invalid Google URL'
+      code: 6010
+      name: 'invalidFeePayer'
+      msg: 'Invalid Fee payer'
     },
     {
-      code: 6014
+      code: 6011
+      name: 'invalidGitHubId'
+      msg: 'Invalid GitHub ID'
+    },
+    {
+      code: 6012
       name: 'invalidGitHubUrl'
       msg: 'Invalid GitHub URL'
     },
     {
+      code: 6013
+      name: 'invalidGoogleId'
+      msg: 'Invalid Google ID'
+    },
+    {
+      code: 6014
+      name: 'invalidGoogleUrl'
+      msg: 'Invalid Google URL'
+    },
+    {
       code: 6015
+      name: 'invalidName'
+      msg: 'Invalid Name'
+    },
+    {
+      code: 6016
+      name: 'invalidProviderIdTooLong'
+      msg: 'Invalid Provider ID (too long)'
+    },
+    {
+      code: 6017
+      name: 'invalidProviderIdNotFound'
+      msg: 'Invalid Provider ID (not found)'
+    },
+    {
+      code: 6018
+      name: 'invalidProviderNameTooLong'
+      msg: 'Invalid Provider Name (too long)'
+    },
+    {
+      code: 6019
+      name: 'invalidSlug'
+      msg: 'Invalid Slug'
+    },
+    {
+      code: 6020
       name: 'invalidSolanaPubKey'
       msg: 'Invalid Solana Public Key'
     },
     {
-      code: 6016
+      code: 6021
+      name: 'invalidTelegramId'
+      msg: 'Invalid Telegram ID'
+    },
+    {
+      code: 6022
       name: 'invalidTelegramUrl'
       msg: 'Invalid Telegram URL'
     },
     {
-      code: 6017
-      name: 'invalidProviderId'
-      msg: 'Invalid Provider ID'
+      code: 6023
+      name: 'invalidUsername'
+      msg: 'Invalid Username'
     },
     {
-      code: 6018
-      name: 'invalidProviderName'
-      msg: 'Invalid Provider Name'
+      code: 6024
+      name: 'invalidWebsiteUrl'
+      msg: 'Invalid Website URL'
     },
     {
-      code: 6019
+      code: 6025
+      name: 'invalidXid'
+      msg: 'Invalid X ID'
+    },
+    {
+      code: 6026
+      name: 'invalidXurl'
+      msg: 'Invalid X URL'
+    },
+    {
+      code: 6027
       name: 'identityProfileInvalid'
       msg: 'Invalid Identity Profile Authority'
     },
     {
-      code: 6020
+      code: 6028
       name: 'cannotRemoveSoloAuthority'
       msg: 'Cannot remove last remaining authority'
     },
     {
-      code: 6021
+      code: 6029
       name: 'maxSizeReached'
       msg: 'Array reached max size'
     },
     {
-      code: 6022
+      code: 6030
       name: 'identityAlreadyExists'
       msg: 'Identity already exists'
     },
     {
-      code: 6023
+      code: 6031
       name: 'identityNonExistent'
       msg: 'Identity does not exist'
     },
     {
-      code: 6024
+      code: 6032
       name: 'unauthorizedCommunityAction'
       msg: 'Unauthorized community action'
     },
     {
-      code: 6025
+      code: 6033
       name: 'communityVerificationAlreadyExists'
       msg: 'Community verification already exists'
     },
     {
-      code: 6026
+      code: 6034
       name: 'providerAlreadyExists'
       msg: 'Provider already exists'
     },
@@ -885,6 +925,42 @@ export type PubkeyProtocol = {
                   name: 'pubKeyIdentityProvider'
                 }
               }
+            }
+          },
+          {
+            name: 'discord'
+            type: {
+              option: 'string'
+            }
+          },
+          {
+            name: 'farcaster'
+            type: {
+              option: 'string'
+            }
+          },
+          {
+            name: 'github'
+            type: {
+              option: 'string'
+            }
+          },
+          {
+            name: 'telegram'
+            type: {
+              option: 'string'
+            }
+          },
+          {
+            name: 'website'
+            type: {
+              option: 'string'
+            }
+          },
+          {
+            name: 'x'
+            type: {
+              option: 'string'
             }
           },
         ]
@@ -1117,7 +1193,43 @@ export type PubkeyProtocol = {
             }
           },
           {
+            name: 'discord'
+            type: {
+              option: 'string'
+            }
+          },
+          {
+            name: 'farcaster'
+            type: {
+              option: 'string'
+            }
+          },
+          {
+            name: 'github'
+            type: {
+              option: 'string'
+            }
+          },
+          {
             name: 'name'
+            type: {
+              option: 'string'
+            }
+          },
+          {
+            name: 'telegram'
+            type: {
+              option: 'string'
+            }
+          },
+          {
+            name: 'website'
+            type: {
+              option: 'string'
+            }
+          },
+          {
+            name: 'x'
             type: {
               option: 'string'
             }
