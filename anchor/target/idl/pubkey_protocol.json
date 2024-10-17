@@ -1161,14 +1161,6 @@
         "kind": "struct",
         "fields": [
           {
-            "name": "provider",
-            "type": {
-              "defined": {
-                "name": "PubKeyIdentityProvider"
-              }
-            }
-          },
-          {
             "name": "provider_id",
             "type": "string"
           }
