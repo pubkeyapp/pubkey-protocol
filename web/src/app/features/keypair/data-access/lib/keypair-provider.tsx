@@ -1,4 +1,4 @@
-import { AnchorKeypairWallet } from '@pubkey-program-library/sdk'
+import { AnchorKeypairWallet } from '@pubkey-protocol/sdk'
 import { Keypair as SolanaKeypair, PublicKey, VersionedTransaction } from '@solana/web3.js'
 
 import { atom, useAtomValue, useSetAtom } from 'jotai'

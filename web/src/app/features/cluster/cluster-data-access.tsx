@@ -1,7 +1,8 @@
-import { clusterApiUrl } from '@solana/web3.js'
+import { Cluster as SolanaCluster, clusterApiUrl } from '@solana/web3.js'
 import { atom, useAtomValue, useSetAtom } from 'jotai'
 import { atomWithStorage } from 'jotai/utils'
 import { createContext, ReactNode, useContext } from 'react'
+import { getExplorerUrl } from '@pubkey-protocol/sdk'
 
 export interface Cluster {
   name: string
@@ -76,31 +77,11 @@ export function ClusterProvider({ children }: { children: ReactNode }) {
       setClusters(clusters.filter((item) => item.name !== cluster.name))
     },
     setCluster: (cluster: Cluster) => setCluster(cluster),
-    getExplorerUrl: (path: string) => `https://solana.fm/${path}${getClusterUrlParam(cluster)}`,
+    getExplorerUrl: (path: string) => getExplorerUrl(path, cluster.network as SolanaCluster),
   }
   return <Context.Provider value={value}>{children}</Context.Provider>
 }
 
 export function useCluster() {
   return useContext(Context)
-}
-
-function getClusterUrlParam(cluster: Cluster): string {
-  let suffix = ''
-  switch (cluster.network) {
-    case ClusterNetwork.Devnet:
-      suffix = 'devnet-solana'
-      break
-    case ClusterNetwork.Mainnet:
-      suffix = 'mainnet-solana'
-      break
-    case ClusterNetwork.Testnet:
-      suffix = 'testnet-solana'
-      break
-    default:
-      suffix = `localnet-solana&customUrl=${encodeURIComponent(cluster.endpoint)}`
-      break
-  }
-
-  return suffix.length ? `?cluster=${suffix}` : ''
 }
