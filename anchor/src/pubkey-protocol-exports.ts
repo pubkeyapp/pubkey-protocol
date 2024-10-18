@@ -150,18 +150,21 @@ export interface PubKeyPointer {
 }
 
 export interface PubKeyCommunity {
-  publicKey: PublicKey
-  bump: number
-  slug: string
-  name: string
-  avatarUrl: string
-  feePayers: PublicKey[]
   authority: PublicKey
+  avatarUrl: string
+  bump: number
+  discord?: string
+  farcaster?: string
+  feePayers: PublicKey[]
+  github?: string
+  name: string
   pendingAuthority: PublicKey | null
   providers: IdentityProvider[]
+  publicKey: PublicKey
+  slug: string
+  telegram?: string
+  website?: string
   x?: string
-  discord?: string
-  github?: string
 }
 
 export function stringToUint8Array(str: string): Uint8Array {

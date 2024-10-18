@@ -24,8 +24,8 @@ import {
   TransactionMessage,
   VersionedTransaction,
 } from '@solana/web3.js'
-import { getCommunityAvatarUrl, getProfileAvatarUrl } from './utils'
 import { slugify } from './slugify'
+import { getCommunityAvatarUrl, getProfileAvatarUrl } from './utils'
 
 export interface PubKeyProfileSdkOptions {
   readonly connection: Connection
@@ -116,7 +116,21 @@ export interface CreateProfileOptions {
   username?: string
 }
 
-export interface UpdateAvatarUrlOptions {
+export interface UpdateCommunityOptions {
+  authority: PublicKey
+  avatarUrl?: string
+  discord?: string
+  farcaster?: string
+  feePayer: PublicKey
+  github?: string
+  name?: string
+  slug: string
+  telegram?: string
+  website?: string
+  x?: string
+}
+
+export interface UpdateProfileOptions {
   avatarUrl: string
   authority: PublicKey
   feePayer: PublicKey
@@ -401,7 +415,33 @@ export class PubkeyProtocolSdk {
     return this.createTransaction({ ix, feePayer })
   }
 
-  async updateProfileDetails({ avatarUrl, authority, feePayer, name: newName, username }: UpdateAvatarUrlOptions) {
+  async updateCommunity(options: UpdateCommunityOptions) {
+    const [community] = this.getCommunityPda({ slug: options.slug })
+
+    const input = {
+      avatarUrl: options.avatarUrl?.length ? options.avatarUrl : null,
+      discord: options.discord?.length ? options.discord : null,
+      farcaster: options.farcaster?.length ? options.farcaster : null,
+      github: options.github?.length ? options.github : null,
+      name: options.name?.length ? options.name : null,
+      telegram: options.telegram?.length ? options.telegram : null,
+      website: options.website?.length ? options.website : null,
+      x: options.x?.length ? options.x : null,
+    }
+    const ix = await this.program.methods
+      .updateCommunityDetails(input)
+      .accountsStrict({
+        authority: options.authority,
+        community,
+      })
+      .instruction()
+
+    const tx = await this.createTransaction({ ix, feePayer: options.feePayer })
+
+    return { input, tx }
+  }
+
+  async updateProfile({ avatarUrl, authority, feePayer, name: newName, username }: UpdateProfileOptions) {
     const [profile] = this.getProfilePda({ username })
 
     const ix = await this.program.methods
