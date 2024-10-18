@@ -1,4 +1,4 @@
-import { PubKeyIdentityProvider } from '@pubkey-protocol/anchor'
+import { IdentityProvider } from '@pubkey-protocol/anchor'
 import {
   IconBrandDiscordFilled,
   IconBrandGithubFilled,
@@ -11,19 +11,19 @@ export function PubkeyProtocolUiIdentityProviderIcon({
   provider,
   size = 24,
 }: {
-  provider: PubKeyIdentityProvider
+  provider: IdentityProvider
   size?: number
 }) {
   switch (provider) {
-    case PubKeyIdentityProvider.Discord:
+    case IdentityProvider.Discord:
       return <IconBrandDiscordFilled size={size} />
-    case PubKeyIdentityProvider.Github:
+    case IdentityProvider.Github:
       return <IconBrandGithubFilled size={size} />
-    case PubKeyIdentityProvider.Google:
+    case IdentityProvider.Google:
       return <IconBrandGoogleFilled size={size} />
-    case PubKeyIdentityProvider.Solana:
+    case IdentityProvider.Solana:
       return <IconCurrencySolana size={size} />
-    case PubKeyIdentityProvider.X:
+    case IdentityProvider.X:
       return <IconBrandXFilled size={size} />
     default:
       return null

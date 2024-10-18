@@ -10,7 +10,7 @@ pub struct CreateCommunity<'info> {
     #[account(
       init,
       payer = fee_payer,
-      space = Community::size(&[authority.key()], &[Identity { provider: PubKeyIdentityProvider::Solana, provider_id: authority.key().to_string(), name: "Community Creator Wallet".to_owned() }]),
+      space = Community::size(&[authority.key()], &[]),
       seeds = [
         PREFIX,
         COMMUNITY,
@@ -23,7 +23,7 @@ pub struct CreateCommunity<'info> {
 
     #[account(
       mut,
-      constraint = fee_payer.key().ne(&authority.key()) @ PubkeyProfileError::InvalidFeePayer
+      constraint = fee_payer.key().ne(&authority.key()) @ ProtocolError::InvalidFeePayer
     )]
     pub fee_payer: Signer<'info>,
     pub system_program: Program<'info, System>,
@@ -40,35 +40,23 @@ pub fn create_community(ctx: Context<CreateCommunity>, args: CreateCommunityArgs
         slug,
         name,
         avatar_url,
-        discord,
-        farcaster,
-        github,
-        telegram,
-        website,
-        x,
     } = args;
 
-    let identity = Identity {
-        provider: PubKeyIdentityProvider::Solana,
-        provider_id: authority.key().to_string(),
-        name: "Community Creator Wallet".to_owned(),
-    };
-
     community.set_inner(Community {
-        bump: ctx.bumps.community,
-        slug,
-        name,
-        avatar_url,
-        fee_payers: vec![fee_payer],
         authority,
+        avatar_url,
+        bump: ctx.bumps.community,
+        fee_payers: vec![fee_payer],
+        name,
         pending_authority: None,
-        providers: vec![identity],
-        discord,
-        farcaster,
-        github,
-        telegram,
-        website,
-        x,
+        providers: vec![IdentityProvider::Solana],
+        slug,
+        discord: None,
+        farcaster: None,
+        github: None,
+        telegram: None,
+        website: None,
+        x: None,
     });
 
     community.validate()?;
@@ -78,13 +66,7 @@ pub fn create_community(ctx: Context<CreateCommunity>, args: CreateCommunityArgs
 
 #[derive(AnchorSerialize, AnchorDeserialize)]
 pub struct CreateCommunityArgs {
-    pub avatar_url: String,
-    pub discord: Option<String>,
-    pub farcaster: Option<String>,
-    pub github: Option<String>,
-    pub name: String,
     pub slug: String,
-    pub telegram: Option<String>,
-    pub website: Option<String>,
-    pub x: Option<String>,
+    pub avatar_url: String,
+    pub name: String,
 }

@@ -1,4 +1,4 @@
-import { PubKeyIdentity, PubKeyIdentityProvider } from '@pubkey-protocol/anchor'
+import { IdentityProvider, PubKeyIdentity } from '@pubkey-protocol/anchor'
 import { PubkeyProtocolSdk } from '@pubkey-protocol/sdk'
 import { toastError, UiAlert, UiInfo, UiLoader, UiStack } from '@pubkey-ui/core'
 import {
@@ -80,13 +80,19 @@ export function PubkeyProtocolProvider({
 
   function getIdentityUrl(identity: PubKeyIdentity) {
     switch (identity.provider) {
-      case PubKeyIdentityProvider.Discord:
+      case IdentityProvider.Discord:
         return `https://discord.com/users/${identity.providerId}`
-      case PubKeyIdentityProvider.Github:
+      case IdentityProvider.Farcaster:
+        return `https://warpcast.com/${identity.name}`
+      case IdentityProvider.Github:
         return `https://github.com/${identity.name}`
-      case PubKeyIdentityProvider.Solana:
+      case IdentityProvider.Google:
+        return `https://google.com/${identity.name}`
+      case IdentityProvider.Solana:
         return getExplorerUrl(`address/${identity.providerId}`)
-      case PubKeyIdentityProvider.X:
+      case IdentityProvider.Telegram:
+        return `https://t.me/${identity.name}`
+      case IdentityProvider.X:
         return `https://x.com/${identity.name}`
       default:
         return undefined

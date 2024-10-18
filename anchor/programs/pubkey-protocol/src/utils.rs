@@ -2,6 +2,7 @@ use anchor_lang::{prelude::*, system_program};
 
 use crate::errors::*;
 use crate::id;
+use crate::state::*;
 
 pub fn is_valid_username(username: &str) -> bool {
     if username.len() < 3 || username.len() > 20 {
@@ -58,22 +59,41 @@ pub fn is_valid_url(url: &str) -> bool {
     valid_scheme && valid_path && valid_domain
 }
 
-pub fn is_valid_farcaster(link: &str) -> bool {
-    link.starts_with("https://warpcast.com/")
+pub fn is_valid_provider_id(id: &str, platform: &IdentityProvider) -> bool {
+    // FIXME: Currently, we only check if the string is a number. We should be more strict
+    // by figuring out the right regex for each platform
+    match platform {
+        IdentityProvider::Discord
+        | IdentityProvider::Farcaster
+        | IdentityProvider::Github
+        | IdentityProvider::Google
+        | IdentityProvider::Solana
+        | IdentityProvider::Telegram
+        | IdentityProvider::X => id.chars().all(|c| c.is_digit(10)),
+    }
 }
 
-pub fn is_valid_discord(link: &str) -> bool {
+pub fn is_valid_discord_url(link: &str) -> bool {
     link.starts_with("https://discord.com/invite/") || link.starts_with("https://discord.gg/")
 }
 
-pub fn is_valid_github(link: &str) -> bool {
+pub fn is_valid_farcaster_url(link: &str) -> bool {
+    link.starts_with("https://warpcast.com/")
+}
+
+pub fn is_valid_github_url(link: &str) -> bool {
     link.starts_with("https://github.com/")
 }
 
-pub fn is_valid_telegram(link: &str) -> bool {
+pub fn is_valid_telegram_url(link: &str) -> bool {
     link.starts_with("https://t.me/") || link.starts_with("https://telegram.me/")
 }
-pub fn is_valid_x(link: &str) -> bool {
+
+pub fn is_valid_website_url(link: &str) -> bool {
+    link.starts_with("https://") || link.starts_with("http://")
+}
+
+pub fn is_valid_x_url(link: &str) -> bool {
     link.starts_with("https://twitter.com/") || link.starts_with("https://x.com/")
 }
 
@@ -86,7 +106,7 @@ pub fn realloc_account<'a>(
     require_keys_eq!(
         *account.owner,
         id(),
-        PubkeyProfileError::InvalidAccountOwner
+        ProtocolError::InvalidAccountOwner
     );
 
     let current_account_size = account.data.borrow().len();

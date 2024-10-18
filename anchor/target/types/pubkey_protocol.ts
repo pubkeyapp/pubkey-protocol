@@ -14,6 +14,48 @@ export type PubkeyProtocol = {
   },
   "instructions": [
     {
+      "name": "addCommunityProvider",
+      "discriminator": [
+        73,
+        163,
+        30,
+        215,
+        158,
+        165,
+        114,
+        55
+      ],
+      "accounts": [
+        {
+          "name": "community",
+          "writable": true
+        },
+        {
+          "name": "authority",
+          "signer": true
+        },
+        {
+          "name": "feePayer",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "systemProgram",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "args",
+          "type": {
+            "defined": {
+              "name": "addCommunityProviderArgs"
+            }
+          }
+        }
+      ]
+    },
+    {
       "name": "addIdentity",
       "discriminator": [
         212,
@@ -985,6 +1027,55 @@ export type PubkeyProtocol = {
           }
         }
       ]
+    },
+    {
+      "name": "verifyProfileIdentity",
+      "discriminator": [
+        179,
+        83,
+        99,
+        171,
+        14,
+        91,
+        192,
+        133
+      ],
+      "accounts": [
+        {
+          "name": "community",
+          "writable": true
+        },
+        {
+          "name": "profile",
+          "writable": true
+        },
+        {
+          "name": "pointer"
+        },
+        {
+          "name": "authority",
+          "signer": true
+        },
+        {
+          "name": "feePayer",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "systemProgram",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "args",
+          "type": {
+            "defined": {
+              "name": "verifyProfileIdentityArgs"
+            }
+          }
+        }
+      ]
     }
   ],
   "accounts": [
@@ -1031,28 +1122,28 @@ export type PubkeyProtocol = {
   "errors": [
     {
       "code": 6000,
+      "name": "invalidAccountOwner",
+      "msg": "Account not owned by program"
+    },
+    {
+      "code": 6001,
+      "name": "accountTooLarge",
+      "msg": "Account too large"
+    },
+    {
+      "code": 6002,
       "name": "unAuthorized",
       "msg": "Account unauthorized to perform this action"
     },
     {
-      "code": 6001,
-      "name": "invalidFeePayer",
-      "msg": "Invalid Fee payer"
-    },
-    {
-      "code": 6002,
-      "name": "invalidUsername",
-      "msg": "Invalid Username"
-    },
-    {
       "code": 6003,
-      "name": "invalidName",
-      "msg": "Invalid Name"
+      "name": "authorityAlreadyExists",
+      "msg": "Authority already exists"
     },
     {
       "code": 6004,
-      "name": "invalidSlug",
-      "msg": "Invalid Slug"
+      "name": "authorityNonExistent",
+      "msg": "Authority does not exist"
     },
     {
       "code": 6005,
@@ -1061,8 +1152,8 @@ export type PubkeyProtocol = {
     },
     {
       "code": 6006,
-      "name": "invalidXurl",
-      "msg": "Invalid X (Twitter) URL"
+      "name": "invalidDiscordId",
+      "msg": "Invalid Discord ID"
     },
     {
       "code": 6007,
@@ -1071,68 +1162,138 @@ export type PubkeyProtocol = {
     },
     {
       "code": 6008,
+      "name": "invalidFarcasterId",
+      "msg": "Invalid Farcaster ID"
+    },
+    {
+      "code": 6009,
       "name": "invalidFarcasterUrl",
       "msg": "Invalid Farcaster URL"
     },
     {
-      "code": 6009,
-      "name": "invalidTelegramUrl",
-      "msg": "Invalid Telegram URL"
+      "code": 6010,
+      "name": "invalidFeePayer",
+      "msg": "Invalid Fee payer"
     },
     {
-      "code": 6010,
+      "code": 6011,
+      "name": "invalidGitHubId",
+      "msg": "Invalid GitHub ID"
+    },
+    {
+      "code": 6012,
       "name": "invalidGitHubUrl",
       "msg": "Invalid GitHub URL"
     },
     {
-      "code": 6011,
+      "code": 6013,
+      "name": "invalidGoogleId",
+      "msg": "Invalid Google ID"
+    },
+    {
+      "code": 6014,
+      "name": "invalidGoogleUrl",
+      "msg": "Invalid Google URL"
+    },
+    {
+      "code": 6015,
+      "name": "invalidName",
+      "msg": "Invalid Name"
+    },
+    {
+      "code": 6016,
+      "name": "invalidProviderIdTooLong",
+      "msg": "Invalid Provider ID (too long)"
+    },
+    {
+      "code": 6017,
+      "name": "invalidProviderIdNotFound",
+      "msg": "Invalid Provider ID (not found)"
+    },
+    {
+      "code": 6018,
+      "name": "invalidProviderNameTooLong",
+      "msg": "Invalid Provider Name (too long)"
+    },
+    {
+      "code": 6019,
+      "name": "invalidSlug",
+      "msg": "Invalid Slug"
+    },
+    {
+      "code": 6020,
+      "name": "invalidSolanaPubKey",
+      "msg": "Invalid Solana Public Key"
+    },
+    {
+      "code": 6021,
+      "name": "invalidTelegramId",
+      "msg": "Invalid Telegram ID"
+    },
+    {
+      "code": 6022,
+      "name": "invalidTelegramUrl",
+      "msg": "Invalid Telegram URL"
+    },
+    {
+      "code": 6023,
+      "name": "invalidUsername",
+      "msg": "Invalid Username"
+    },
+    {
+      "code": 6024,
       "name": "invalidWebsiteUrl",
       "msg": "Invalid Website URL"
     },
     {
-      "code": 6012,
-      "name": "invalidProviderId",
-      "msg": "Invalid Provider ID"
+      "code": 6025,
+      "name": "invalidXid",
+      "msg": "Invalid X ID"
     },
     {
-      "code": 6013,
-      "name": "invalidProviderName",
-      "msg": "Invalid Provider Name"
+      "code": 6026,
+      "name": "invalidXurl",
+      "msg": "Invalid X URL"
     },
     {
-      "code": 6014,
-      "name": "invalidAccountOwner",
-      "msg": "Account not owned by program"
+      "code": 6027,
+      "name": "identityProfileInvalid",
+      "msg": "Invalid Identity Profile Authority"
     },
     {
-      "code": 6015,
-      "name": "authorityAlreadyExists",
-      "msg": "Authority already exists"
-    },
-    {
-      "code": 6016,
-      "name": "authorityNonExistent",
-      "msg": "Authority does not exist"
-    },
-    {
-      "code": 6017,
+      "code": 6028,
       "name": "cannotRemoveSoloAuthority",
       "msg": "Cannot remove last remaining authority"
     },
     {
-      "code": 6018,
+      "code": 6029,
       "name": "maxSizeReached",
       "msg": "Array reached max size"
     },
     {
-      "code": 6019,
+      "code": 6030,
       "name": "identityAlreadyExists",
       "msg": "Identity already exists"
     },
     {
-      "code": 6020,
+      "code": 6031,
       "name": "identityNonExistent",
       "msg": "Identity does not exist"
+    },
+    {
+      "code": 6032,
+      "name": "unauthorizedCommunityAction",
+      "msg": "Unauthorized community action"
+    },
+    {
+      "code": 6033,
+      "name": "communityVerificationAlreadyExists",
+      "msg": "Community verification already exists"
+    },
+    {
+      "code": 6034,
+      "name": "providerAlreadyExists",
+      "msg": "Provider already exists"
     }
   ],
   "types": [
@@ -1149,6 +1310,22 @@ export type PubkeyProtocol = {
       }
     },
     {
+      "name": "addCommunityProviderArgs",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "provider",
+            "type": {
+              "defined": {
+                "name": "identityProvider"
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
       "name": "addIdentityArgs",
       "type": {
         "kind": "struct",
@@ -1157,7 +1334,7 @@ export type PubkeyProtocol = {
             "name": "provider",
             "type": {
               "defined": {
-                "name": "pubKeyIdentityProvider"
+                "name": "identityProvider"
               }
             }
           },
@@ -1166,7 +1343,7 @@ export type PubkeyProtocol = {
             "type": "string"
           },
           {
-            "name": "nickname",
+            "name": "name",
             "type": "string"
           }
         ]
@@ -1214,7 +1391,7 @@ export type PubkeyProtocol = {
             "type": {
               "vec": {
                 "defined": {
-                  "name": "identity"
+                  "name": "identityProvider"
                 }
               }
             }
@@ -1264,52 +1441,16 @@ export type PubkeyProtocol = {
         "kind": "struct",
         "fields": [
           {
-            "name": "avatarUrl",
-            "type": "string"
-          },
-          {
-            "name": "discord",
-            "type": {
-              "option": "string"
-            }
-          },
-          {
-            "name": "farcaster",
-            "type": {
-              "option": "string"
-            }
-          },
-          {
-            "name": "github",
-            "type": {
-              "option": "string"
-            }
-          },
-          {
-            "name": "name",
-            "type": "string"
-          },
-          {
             "name": "slug",
             "type": "string"
           },
           {
-            "name": "telegram",
-            "type": {
-              "option": "string"
-            }
+            "name": "avatarUrl",
+            "type": "string"
           },
           {
-            "name": "website",
-            "type": {
-              "option": "string"
-            }
-          },
-          {
-            "name": "x",
-            "type": {
-              "option": "string"
-            }
+            "name": "name",
+            "type": "string"
           }
         ]
       }
@@ -1343,7 +1484,7 @@ export type PubkeyProtocol = {
             "name": "provider",
             "type": {
               "defined": {
-                "name": "pubKeyIdentityProvider"
+                "name": "identityProvider"
               }
             }
           },
@@ -1354,6 +1495,41 @@ export type PubkeyProtocol = {
           {
             "name": "name",
             "type": "string"
+          },
+          {
+            "name": "communities",
+            "type": {
+              "vec": "pubkey"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "identityProvider",
+      "type": {
+        "kind": "enum",
+        "variants": [
+          {
+            "name": "discord"
+          },
+          {
+            "name": "farcaster"
+          },
+          {
+            "name": "github"
+          },
+          {
+            "name": "google"
+          },
+          {
+            "name": "solana"
+          },
+          {
+            "name": "telegram"
+          },
+          {
+            "name": "x"
           }
         ]
       }
@@ -1383,7 +1559,7 @@ export type PubkeyProtocol = {
             "name": "provider",
             "type": {
               "defined": {
-                "name": "pubKeyIdentityProvider"
+                "name": "identityProvider"
               }
             }
           },
@@ -1438,35 +1614,6 @@ export type PubkeyProtocol = {
                 }
               }
             }
-          }
-        ]
-      }
-    },
-    {
-      "name": "pubKeyIdentityProvider",
-      "type": {
-        "kind": "enum",
-        "variants": [
-          {
-            "name": "discord"
-          },
-          {
-            "name": "farcaster"
-          },
-          {
-            "name": "github"
-          },
-          {
-            "name": "google"
-          },
-          {
-            "name": "solana"
-          },
-          {
-            "name": "telegram"
-          },
-          {
-            "name": "x"
           }
         ]
       }
@@ -1585,6 +1732,26 @@ export type PubkeyProtocol = {
             "type": {
               "option": "string"
             }
+          }
+        ]
+      }
+    },
+    {
+      "name": "verifyProfileIdentityArgs",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "provider",
+            "type": {
+              "defined": {
+                "name": "identityProvider"
+              }
+            }
+          },
+          {
+            "name": "providerId",
+            "type": "string"
           }
         ]
       }

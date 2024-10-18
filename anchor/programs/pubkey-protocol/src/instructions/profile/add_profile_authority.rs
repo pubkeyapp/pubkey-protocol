@@ -15,8 +15,8 @@ pub struct AddAuthority<'info> {
         &profile.username.as_bytes()
       ],
       bump = profile.bump,
-      has_one = fee_payer @ PubkeyProfileError::UnAuthorized,
-      constraint = profile.check_for_authority(&authority.key()) @ PubkeyProfileError::UnAuthorized
+      has_one = fee_payer @ ProtocolError::UnAuthorized,
+      constraint = profile.check_for_authority(&authority.key()) @ ProtocolError::UnAuthorized
     )]
     pub profile: Account<'info, Profile>,
 
@@ -24,7 +24,7 @@ pub struct AddAuthority<'info> {
 
     #[account(
       mut,
-      constraint = fee_payer.key().ne(&authority.key()) @ PubkeyProfileError::InvalidFeePayer
+      constraint = fee_payer.key().ne(&authority.key()) @ ProtocolError::InvalidFeePayer
     )]
     pub fee_payer: Signer<'info>,
     pub system_program: Program<'info, System>,
@@ -39,7 +39,7 @@ pub fn add_authority(ctx: Context<AddAuthority>, args: AddAuthorityArgs) -> Resu
     let new_authority = args.new_authority;
 
     match profile.authorities.binary_search(&new_authority) {
-        Ok(_) => return err!(PubkeyProfileError::AuthorityAlreadyExists),
+        Ok(_) => return err!(ProtocolError::AuthorityAlreadyExists),
         Err(new_authority_index) => profile
             .authorities
             .insert(new_authority_index, new_authority),

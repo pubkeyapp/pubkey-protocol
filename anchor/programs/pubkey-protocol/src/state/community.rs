@@ -22,7 +22,8 @@ pub struct Community {
     // Pending authority that must sign to complete
     pub pending_authority: Option<Pubkey>,
     // Providers (identities) user have added onto
-    pub providers: Vec<Identity>,
+    pub providers: Vec<IdentityProvider>,
+    // Links to the community
     pub discord: Option<String>,
     pub farcaster: Option<String>,
     pub github: Option<String>,
@@ -32,10 +33,12 @@ pub struct Community {
 }
 
 impl Community {
-    pub fn size(fee_payers: &[Pubkey], providers: &[Identity]) -> usize {
+    pub fn size(fee_payers: &[Pubkey], providers: &[IdentityProvider]) -> usize {
         let fee_payers_size = 4 + (fee_payers.len() * 32);
-        let providers_size = 4 + (providers.len() * Identity::size());
-    
+        let providers_size = 4 + (providers.len() * std::mem::size_of::<IdentityProvider>());
+        let links_count = 6;
+        let links_size = (1 + 4 + MAX_URL_SIZE) * links_count;
+
         8 + // Anchor discriminator
         1 + // bump
         4 + MAX_SLUG_SIZE +
@@ -45,7 +48,7 @@ impl Community {
         1 + 32 + // pending_authority (Option<Pubkey>)
         fee_payers_size +
         providers_size +
-        (1 + 4 + MAX_URL_SIZE) * 6 // 6 Social Option<String> fields
+        links_size
     }
 
     pub fn validate(&self) -> Result<()> {
@@ -55,73 +58,30 @@ impl Community {
 
         require!(
             is_valid_username(&self.slug),
-            PubkeyProfileError::InvalidSlug
+            ProtocolError::InvalidSlug
         );
 
-        require!(is_valid_name(&self.name), PubkeyProfileError::InvalidName);
+        require!(is_valid_name(&self.name), ProtocolError::InvalidName);
 
         require!(
             is_valid_url(&self.avatar_url),
-            PubkeyProfileError::InvalidAvatarURL
+            ProtocolError::InvalidAvatarURL
         );
 
         require!(
             avatar_url_len > 0 && avatar_url_len <= MAX_URL_SIZE,
-            PubkeyProfileError::InvalidAvatarURL
+            ProtocolError::InvalidAvatarURL
         );
 
         require!(
             fee_payers_len <= MAX_VECTOR_SIZE.into(),
-            PubkeyProfileError::MaxSizeReached
+            ProtocolError::MaxSizeReached
         );
 
         require!(
             providers_len <= MAX_VECTOR_SIZE.into(),
-            PubkeyProfileError::MaxSizeReached
+            ProtocolError::MaxSizeReached
         );
-        for identity in self.providers.clone() {
-            identity.validate()?;
-        }
-
-        // Create a Link struct and validate method
-        let social_links = vec![
-            Link::new("discord", self.discord.as_deref()),
-            Link::new("farcaster", self.farcaster.as_deref()),
-            Link::new("github", self.github.as_deref()),
-            Link::new("telegram", self.telegram.as_deref()),
-            Link::new("website", self.website.as_deref()),
-            Link::new("x", self.x.as_deref()),
-        ];
-
-        for link in social_links {
-            link.validate()?;
-        }
-
-        pub struct Link<'a> {
-            link_type: &'a str,
-            url: Option<&'a str>,
-        }
-
-        impl<'a> Link<'a> {
-            pub fn new(link_type: &'a str, url: Option<&'a str>) -> Self {
-                Self { link_type, url }
-            }
-
-            pub fn validate(&self) -> Result<()> {
-                if let Some(url) = self.url {
-                    match self.link_type {
-                        "discord" => require!(is_valid_discord(url), PubkeyProfileError::InvalidDiscordURL),
-                        "farcaster" => require!(is_valid_farcaster(url), PubkeyProfileError::InvalidFarcasterURL),
-                        "github" => require!(is_valid_github(url), PubkeyProfileError::InvalidGitHubURL),
-                        "telegram" => require!(is_valid_telegram(url), PubkeyProfileError::InvalidTelegramURL),
-                        "website" => require!(is_valid_url(url), PubkeyProfileError::InvalidWebsiteURL),
-                        "x" => require!(is_valid_x(url), PubkeyProfileError::InvalidXURL),
-                        _ => return Err(PubkeyProfileError::InvalidProviderID.into()),
-                    }
-                }
-                Ok(())
-            }
-        }
 
         Ok(())
     }

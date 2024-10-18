@@ -23,22 +23,31 @@ pub struct Profile {
     pub identities: Vec<Identity>,
 }
 
+#[derive(AnchorSerialize, AnchorDeserialize, Clone, Copy, Debug)]
+pub struct CommunityVerification {
+    pub community: Pubkey,
+    pub verified_by: Pubkey,
+}
+
 impl Profile {
     pub fn size(authorities: &[Pubkey], identities: &[Identity]) -> usize {
         let authorities_size = 4 + // Vector discriminator
         (authorities.len() * 32); // Total authorities pubkey length
 
         let identities_size = 4 + // Vector discriminator
-            (identities.len() * Identity::size()); // Total identities length
+        identities.iter().map(|identity| Identity::size(identity)).sum::<usize>();
+
+        let communities_size = 4 + (0 * std::mem::size_of::<CommunityVerification>());
 
         8 + // Anchor discriminator
         1 + // bump
-        4 + MAX_USERNAME_SIZE + // username
-        4 + MAX_NAME_SIZE + // name
-        4 + MAX_URL_SIZE + // avatar_url
+        4 + MAX_USERNAME_SIZE +
+        4 + MAX_NAME_SIZE +
+        4 + MAX_URL_SIZE +
         32 + // fee_payer
-        authorities_size + // authorities
-        identities_size // identities
+        authorities_size +
+        identities_size +
+        communities_size
     }
 
     pub fn validate(&self) -> Result<()> {
@@ -49,32 +58,32 @@ impl Profile {
         // Username
         require!(
             is_valid_username(&self.username),
-            PubkeyProfileError::InvalidUsername
+            ProtocolError::InvalidUsername
         );
 
         // Name
-        require!(is_valid_name(&self.name), PubkeyProfileError::InvalidName);
+        require!(is_valid_name(&self.name), ProtocolError::InvalidName);
 
         // Avatar URL
         require!(
             is_valid_url(&self.avatar_url),
-            PubkeyProfileError::InvalidAvatarURL
+            ProtocolError::InvalidAvatarURL
         );
         require!(
             avatar_url_len > 0 && avatar_url_len <= MAX_URL_SIZE,
-            PubkeyProfileError::InvalidAvatarURL
+            ProtocolError::InvalidAvatarURL
         );
 
         // Authorities
         require!(
             authorities_len <= MAX_VECTOR_SIZE.into(),
-            PubkeyProfileError::MaxSizeReached
+            ProtocolError::MaxSizeReached
         );
 
         // Identities
         require!(
             identities_len <= MAX_VECTOR_SIZE.into(),
-            PubkeyProfileError::MaxSizeReached
+            ProtocolError::MaxSizeReached
         );
         for identity in self.identities.clone() {
             identity.validate()?;

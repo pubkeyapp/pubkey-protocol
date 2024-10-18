@@ -16,8 +16,8 @@ pub struct AddIdentity<'info> {
         &profile.username.as_bytes()
       ],
       bump = profile.bump,
-      has_one = fee_payer @ PubkeyProfileError::UnAuthorized,
-      constraint = profile.check_for_authority(&authority.key()) @ PubkeyProfileError::UnAuthorized
+      has_one = fee_payer @ ProtocolError::UnAuthorized,
+      constraint = profile.check_for_authority(&authority.key()) @ ProtocolError::UnAuthorized
     )]
     pub profile: Account<'info, Profile>,
 
@@ -26,7 +26,7 @@ pub struct AddIdentity<'info> {
       space = Pointer::size(),
       payer = fee_payer,
       seeds = [&Pointer::hash_seed(&args.provider, &args.provider_id)],
-      bump
+      bump,
     )]
     pub pointer: Account<'info, Pointer>,
 
@@ -34,7 +34,7 @@ pub struct AddIdentity<'info> {
 
     #[account(
       mut,
-      constraint = fee_payer.key().ne(&authority.key()) @ PubkeyProfileError::InvalidFeePayer
+      constraint = fee_payer.key().ne(&authority.key()) @ ProtocolError::InvalidFeePayer
     )]
     pub fee_payer: Signer<'info>,
     pub system_program: Program<'info, System>,
@@ -53,19 +53,25 @@ pub fn add(ctx: Context<AddIdentity>, args: AddIdentityArgs) -> Result<()> {
     pointer.profile = profile.key();
     pointer.validate()?;
 
+    let provider = args.provider.clone();
+
     // Adding identity to profile
     let identity = Identity {
         provider: args.provider,
-        provider_id: args.provider_id.clone(),
-        name: args.nickname,
+        provider_id: args.provider_id,
+        name: args.name,
+        communities: vec![],
     };
+
+    identity.validate()?;
 
     match profile
         .identities
-        .binary_search_by_key(&args.provider_id, |identity| identity.provider_id.clone())
+        .iter()
+        .position(|identity| identity.provider == provider)
     {
-        Ok(_) => return err!(PubkeyProfileError::IdentityAlreadyExists),
-        Err(new_identity_index) => profile.identities.insert(new_identity_index, identity),
+        Some(_) => return err!(ProtocolError::IdentityAlreadyExists),
+        None => profile.identities.push(identity),
     }
 
     let new_profile_size = Profile::size(&profile.authorities, &profile.identities);
@@ -82,9 +88,9 @@ pub fn add(ctx: Context<AddIdentity>, args: AddIdentityArgs) -> Result<()> {
     Ok(())
 }
 
-#[derive(AnchorSerialize, AnchorDeserialize)]
+#[derive(AnchorSerialize, AnchorDeserialize, Debug)]
 pub struct AddIdentityArgs {
-    provider: PubKeyIdentityProvider,
+    provider: IdentityProvider,
     provider_id: String,
-    nickname: String,
+    name: String,
 }

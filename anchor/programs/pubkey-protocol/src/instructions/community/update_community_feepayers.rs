@@ -16,13 +16,14 @@ pub struct UpdateFeePayers<'info> {
             &community.slug.as_bytes()
         ],
         bump = community.bump,
-        has_one = authority @ PubkeyProfileError::UnAuthorized,
+        has_one = authority @ ProtocolError::UnAuthorized,
     )]
     pub community: Account<'info, Community>,
 
     #[account(
-        mut,
-        constraint = community.check_for_authority(&authority.key()) @ PubkeyProfileError::UnAuthorized)]
+      mut,
+      constraint = community.check_for_authority(&authority.key()) @ ProtocolError::UnAuthorized)
+    ]
     pub authority: Signer<'info>,
 
     pub system_program: Program<'info, System>,

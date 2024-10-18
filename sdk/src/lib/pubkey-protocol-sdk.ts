@@ -1,12 +1,14 @@
 import { AnchorProvider, Program } from '@coral-xyz/anchor'
 import {
+  convertFromIdentityProvider,
+  convertToIdentityProvider,
   getPubKeyCommunityPda,
   getPubKeyPointerPda,
   getPubKeyProfilePda,
   getPubkeyProtocolProgram,
+  IdentityProvider,
   PUBKEY_PROTOCOL_PROGRAM_ID,
   PubKeyCommunity,
-  PubKeyIdentityProvider,
   PubKeyPointer,
   PubKeyProfile,
   PubkeyProtocol,
@@ -35,7 +37,7 @@ export interface GetCommunityPdaOptions {
   slug: string
 }
 export interface GetPointerPdaOptions {
-  provider: PubKeyIdentityProvider
+  provider: IdentityProvider
   providerId: string
 }
 
@@ -44,7 +46,7 @@ export interface GetProfilePdaOptions {
 }
 
 export interface GetProfileByProvider {
-  provider: PubKeyIdentityProvider
+  provider: IdentityProvider
   providerId: string
 }
 
@@ -57,8 +59,8 @@ export interface AddIdentityOptions {
   feePayer: PublicKey
   username: string
   providerId: string
-  provider: PubKeyIdentityProvider
-  nickname: string
+  provider: IdentityProvider
+  name: string
 }
 
 export interface RemoveIdentityOptions {
@@ -66,7 +68,7 @@ export interface RemoveIdentityOptions {
   feePayer: PublicKey
   username: string
   providerId: string
-  provider: PubKeyIdentityProvider
+  provider: IdentityProvider
 }
 
 export interface RemoveAuthorityOptions {
@@ -136,13 +138,13 @@ export class PubkeyProtocolSdk {
     return this.createTransaction({ ix, feePayer })
   }
 
-  async addIdentity({ authority, feePayer, username, providerId, provider, nickname }: AddIdentityOptions) {
+  async addIdentity({ authority, feePayer, username, providerId, provider, name }: AddIdentityOptions) {
     const [profile] = this.getProfilePda({ username })
     const [pointer] = this.getPointerPda({ providerId, provider })
 
     const ix = await this.program.methods
       .addIdentity({
-        nickname,
+        name,
         provider: convertFromIdentityProvider(provider),
         providerId,
       })
@@ -164,14 +166,8 @@ export class PubkeyProtocolSdk {
     const ix = await this.program.methods
       .createCommunity({
         avatarUrl: avatarUrl || `https://api.dicebear.com/9.x/glass/svg?seed=${slug}`,
-        discord: null,
-        farcaster: null,
-        github: null,
         name,
         slug,
-        telegram: null,
-        website: null,
-        x: null,
       })
       .accountsStrict({
         authority,
@@ -186,7 +182,7 @@ export class PubkeyProtocolSdk {
 
   async createProfile({ authority, avatarUrl, feePayer, name, username }: CreateProfileOptions) {
     const [profile] = this.getProfilePda({ username })
-    const [pointer] = this.getPointerPda({ provider: PubKeyIdentityProvider.Solana, providerId: authority.toString() })
+    const [pointer] = this.getPointerPda({ provider: IdentityProvider.Solana, providerId: authority.toString() })
     const ix = await this.program.methods
       .createProfile({
         avatarUrl: avatarUrl || `https://api.dicebear.com/9.x/bottts-neutral/svg?seed=${username}`,
@@ -250,7 +246,7 @@ export class PubkeyProtocolSdk {
         bump: account.bump,
         identities: account.identities.map((identity) => ({
           ...identity,
-          provider: convertToIdentityProvider(identity.provider as unknown as { [key: string]: object }),
+          provider: convertToIdentityProvider(identity.provider),
         })),
         feePayer: account.feePayer,
         name: account.name,
@@ -263,7 +259,7 @@ export class PubkeyProtocolSdk {
     return this.program.account.pointer.all().then((accounts) =>
       accounts.map(({ account, publicKey }) => ({
         publicKey,
-        provider: convertToIdentityProvider(account.provider as unknown as { [key: string]: object }),
+        provider: convertToIdentityProvider(account.provider),
         providerId: account.providerId,
         bump: account.bump,
         profile: account.profile,
@@ -303,7 +299,7 @@ export class PubkeyProtocolSdk {
     return this.program.account.profile.fetch(profilePda).then((res) => {
       const identities = res.identities.map((identity) => ({
         ...identity,
-        provider: convertToIdentityProvider(identity.provider as unknown as { [key: string]: never }),
+        provider: convertToIdentityProvider(identity.provider),
       }))
 
       return {
@@ -321,7 +317,7 @@ export class PubkeyProtocolSdk {
       }
       const identities = res.identities.map((identity) => ({
         ...identity,
-        provider: convertToIdentityProvider(identity.provider as unknown as { [key: string]: never }),
+        provider: convertToIdentityProvider(identity.provider),
       }))
 
       return {
@@ -404,33 +400,4 @@ export class PubkeyProtocolSdk {
       }).compileToV0Message(),
     )
   }
-}
-
-export const enumMap = {
-  [PubKeyIdentityProvider.Discord]: { discord: {} },
-  [PubKeyIdentityProvider.Github]: { github: {} },
-  [PubKeyIdentityProvider.Google]: { google: {} },
-  [PubKeyIdentityProvider.Solana]: { solana: {} },
-  [PubKeyIdentityProvider.X]: { x: {} },
-} as const
-
-export function convertFromIdentityProvider(provider: PubKeyIdentityProvider) {
-  if (!enumMap[provider]) {
-    throw new Error(`Unknown provider: ${provider}`)
-  }
-  return enumMap[provider]
-}
-
-export function convertToIdentityProvider(provider: { [key: string]: object }): PubKeyIdentityProvider {
-  const key = Object.keys(provider)[0]
-
-  const found: string | undefined = Object.keys(PubKeyIdentityProvider).find(
-    (provider) => provider.toLowerCase() === key,
-  )
-
-  if (!found) {
-    throw new Error(`Unknown provider: ${key}`)
-  }
-
-  return PubKeyIdentityProvider[found as keyof typeof PubKeyIdentityProvider]
 }

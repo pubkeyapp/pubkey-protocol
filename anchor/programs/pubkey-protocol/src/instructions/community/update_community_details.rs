@@ -16,12 +16,12 @@ pub struct UpdateCommunityDetails<'info> {
             &community.slug.as_bytes()
         ],
         bump = community.bump,
-        has_one = authority @ PubkeyProfileError::UnAuthorized,
+        has_one = authority @ ProtocolError::UnAuthorized,
     )]
     pub community: Account<'info, Community>,
     #[account(
         mut,
-        constraint = community.check_for_authority(&authority.key()) @ PubkeyProfileError::UnAuthorized)]
+        constraint = community.check_for_authority(&authority.key()) @ ProtocolError::UnAuthorized)]
     pub authority: Signer<'info>,
 }
 
@@ -33,73 +33,73 @@ pub fn update_community_details(
 
     // Creating community account
     let UpdateCommunityDetailsArgs {
-        name,
         avatar_url,
-        x,
         discord,
-        github,
-        website,
-        telegram,
         farcaster,
+        github,
+        name,
+        telegram,
+        website,
+        x,
     } = args;
 
     // Update fields if they are provided
-    if let Some(name) = name {
-        require!(is_valid_name(&name), PubkeyProfileError::InvalidName);
-        community.name = name;
-    }
-
     if let Some(avatar_url) = avatar_url {
         require!(
             is_valid_url(&avatar_url),
-            PubkeyProfileError::InvalidAvatarURL
+            ProtocolError::InvalidAvatarURL
         );
         community.avatar_url = avatar_url;
     }
 
-    if let Some(x) = x {
-        require!(is_valid_x(&x), PubkeyProfileError::InvalidXURL);
-        community.x = Some(x);
-    }
-
     if let Some(discord) = discord {
         require!(
-            is_valid_discord(&discord),
-            PubkeyProfileError::InvalidDiscordURL
+            is_valid_discord_url(&discord),
+            ProtocolError::InvalidDiscordURL
         );
         community.discord = Some(discord);
     }
 
+    if let Some(farcaster) = farcaster {
+        require!(
+            is_valid_farcaster_url(&farcaster),
+            ProtocolError::InvalidFarcasterURL
+        );
+        community.farcaster = Some(farcaster);
+    }
+
     if let Some(github) = github {
         require!(
-            is_valid_github(&github),
-            PubkeyProfileError::InvalidGitHubURL
+            is_valid_github_url(&github),
+            ProtocolError::InvalidGitHubURL
         );
         community.github = Some(github);
     }
 
-    if let Some(website) = website {
-        require!(
-            is_valid_url(&website),
-            PubkeyProfileError::InvalidWebsiteURL
-        );
-        community.website = Some(website);
+    if let Some(name) = name {
+        require!(is_valid_name(&name), ProtocolError::InvalidName);
+        community.name = name;
     }
 
     if let Some(telegram) = telegram {
         require!(
-            is_valid_telegram(&telegram),
-            PubkeyProfileError::InvalidTelegramURL
+            is_valid_telegram_url(&telegram),
+            ProtocolError::InvalidTelegramURL
         );
         community.telegram = Some(telegram);
     }
 
-    if let Some(farcaster) = farcaster {
+    if let Some(website) = website {
         require!(
-            is_valid_farcaster(&farcaster),
-            PubkeyProfileError::InvalidFarcasterURL
+            is_valid_website_url(&website),
+            ProtocolError::InvalidWebsiteURL
         );
-        community.farcaster = Some(farcaster);
+        community.website = Some(website);
+    }
+
+    if let Some(x) = x {
+        require!(is_valid_x_url(&x), ProtocolError::InvalidXURL);
+        community.x = Some(x);
     }
 
     Ok(())

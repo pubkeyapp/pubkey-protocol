@@ -56,7 +56,7 @@ export function getPubKeyPointerPda({
   providerId,
 }: {
   programId: PublicKey
-  provider: PubKeyIdentityProvider
+  provider: IdentityProvider
   providerId: string
 }) {
   const hash = sha256(
@@ -71,12 +71,52 @@ export function getPubKeyPointerPda({
   return PublicKey.findProgramAddressSync([hash], programId)
 }
 
-export enum PubKeyIdentityProvider {
+export enum IdentityProvider {
   Discord = 'Discord',
+  Farcaster = 'Farcaster',
   Github = 'Github',
   Google = 'Google',
   Solana = 'Solana',
+  Telegram = 'Telegram',
   X = 'X',
+}
+
+export const enumMap = {
+  [IdentityProvider.Discord]: { discord: {} },
+  [IdentityProvider.Farcaster]: { farcaster: {} },
+  [IdentityProvider.Github]: { github: {} },
+  [IdentityProvider.Google]: { google: {} },
+  [IdentityProvider.Solana]: { solana: {} },
+  [IdentityProvider.Telegram]: { telegram: {} },
+  [IdentityProvider.X]: { x: {} },
+} as const
+
+export type AnchorIdentityProvider =
+  | { discord: object }
+  | { farcaster: object }
+  | { github: object }
+  | { google: object }
+  | { solana: object }
+  | { telegram: object }
+  | { x: object }
+
+export function convertFromIdentityProvider(provider: IdentityProvider) {
+  if (!enumMap[provider]) {
+    throw new Error(`Unknown provider: ${provider}`)
+  }
+  return enumMap[provider]
+}
+
+export function convertToIdentityProvider(provider: AnchorIdentityProvider): IdentityProvider {
+  const key = Object.keys(provider)[0]
+
+  const found: string | undefined = Object.keys(IdentityProvider).find((provider) => provider.toLowerCase() === key)
+
+  if (!found) {
+    throw new Error(`Unknown provider: ${key}`)
+  }
+
+  return IdentityProvider[found as keyof typeof IdentityProvider]
 }
 
 export interface PubKeyProfile {
@@ -92,13 +132,13 @@ export interface PubKeyProfile {
 
 export interface PubKeyIdentity {
   name: string
-  provider: PubKeyIdentityProvider
+  provider: IdentityProvider
   providerId: string
 }
 
 export interface PubKeyPointer {
   publicKey: PublicKey
-  provider: PubKeyIdentityProvider
+  provider: IdentityProvider
   providerId: string
   bump?: number
   profile: PublicKey
@@ -117,7 +157,6 @@ export interface PubKeyCommunity {
   x?: string
   discord?: string
   github?: string
-  website?: string
 }
 
 export function stringToUint8Array(str: string): Uint8Array {

@@ -48,6 +48,13 @@ pub mod pubkey_protocol {
     }
 
     // Community Actions
+    pub fn add_community_provider(
+        ctx: Context<AddCommunityProvider>,
+        args: AddCommunityProviderArgs,
+    ) -> Result<()> {
+        community::add_community_provider(ctx, args)
+    }
+
     pub fn create_community(
         ctx: Context<CreateCommunity>,
         args: CreateCommunityArgs,
@@ -84,5 +91,12 @@ pub mod pubkey_protocol {
 
     pub fn cancel_update_community_authority(ctx: Context<CancelUpdateAuthority>) -> Result<()> {
         community::cancel_update_authority(ctx)
+    }
+
+    pub fn verify_profile_identity(
+        ctx: Context<VerifyProfileIdentity>,
+        args: VerifyProfileIdentityArgs,
+    ) -> Result<()> {
+        community::verify_profile_identity(ctx, args)
     }
 }

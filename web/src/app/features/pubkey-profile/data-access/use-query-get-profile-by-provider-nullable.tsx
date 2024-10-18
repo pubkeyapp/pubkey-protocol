@@ -1,4 +1,4 @@
-import { PubKeyIdentityProvider } from '@pubkey-protocol/anchor'
+import { IdentityProvider } from '@pubkey-protocol/anchor'
 import { useQuery } from '@tanstack/react-query'
 import { usePubKeyProtocol } from '../../pubkey-protocol'
 
@@ -6,7 +6,7 @@ export function useQueryGetProfileByProviderNullable({
   provider,
   providerId,
 }: {
-  provider: PubKeyIdentityProvider
+  provider: IdentityProvider
   providerId: string
 }) {
   const { cluster, sdk } = usePubKeyProtocol()
