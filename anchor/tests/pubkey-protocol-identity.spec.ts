@@ -1,7 +1,7 @@
 import * as anchor from '@coral-xyz/anchor'
 import { Keypair, LAMPORTS_PER_SOL, SystemProgram } from '@solana/web3.js'
 import {
-  convertFromIdentityProvider,
+  convertToAnchorIdentityProvider,
   getPubKeyCommunityPda,
   getPubKeyPointerPda,
   getPubKeyProfilePda,
@@ -50,7 +50,7 @@ describe('Identity Profile Verification', () => {
   it('Add Identity', async () => {
     await program.methods
       .addIdentity({
-        provider: convertFromIdentityProvider(IdentityProvider.Discord),
+        provider: convertToAnchorIdentityProvider(IdentityProvider.Discord),
         providerId: discordIdentity.providerId,
         name: `${username}123`,
       })
@@ -72,13 +72,13 @@ describe('Identity Profile Verification', () => {
     expect(postBalance).toStrictEqual(LAMPORTS_PER_SOL)
     expect(identities).toEqual([
       {
-        provider: convertFromIdentityProvider(IdentityProvider.Solana),
+        provider: convertToAnchorIdentityProvider(IdentityProvider.Solana),
         providerId: profileOwner.publicKey.toBase58(),
         name: 'Primary Wallet',
         communities: [],
       },
       {
-        provider: convertFromIdentityProvider(discordIdentity.provider),
+        provider: convertToAnchorIdentityProvider(discordIdentity.provider),
         providerId: discordIdentity.providerId,
         name: discordIdentity.name,
         communities: [],
@@ -87,7 +87,7 @@ describe('Identity Profile Verification', () => {
 
     expect(pointerData.bump).toStrictEqual(profileBump)
     expect(pointerData.providerId).toStrictEqual(discordIdentity.providerId)
-    expect(pointerData.provider).toStrictEqual(convertFromIdentityProvider(discordIdentity.provider))
+    expect(pointerData.provider).toStrictEqual(convertToAnchorIdentityProvider(discordIdentity.provider))
     expect(pointerData.profile).toStrictEqual(profile)
   })
 
@@ -111,7 +111,7 @@ describe('Identity Profile Verification', () => {
 
     expect(identities).toEqual([
       {
-        provider: convertFromIdentityProvider(IdentityProvider.Solana),
+        provider: convertToAnchorIdentityProvider(IdentityProvider.Solana),
         providerId: profileOwner.publicKey.toString(),
         name: 'Primary Wallet',
         communities: [],
@@ -129,7 +129,7 @@ describe('Identity Profile Verification', () => {
     // Call the add_community_provider instruction
     await program.methods
       .addCommunityProvider({
-        provider: convertFromIdentityProvider(providerToAdd),
+        provider: convertToAnchorIdentityProvider(providerToAdd),
       })
       .accountsStrict({
         community,
@@ -141,15 +141,15 @@ describe('Identity Profile Verification', () => {
       .rpc()
 
     const communityAfter = await program.account.community.fetch(community)
-    expect(communityAfter.providers).toContainEqual(convertFromIdentityProvider(IdentityProvider.Solana))
-    expect(communityAfter.providers).toContainEqual(convertFromIdentityProvider(providerToAdd))
+    expect(communityAfter.providers).toContainEqual(convertToAnchorIdentityProvider(IdentityProvider.Solana))
+    expect(communityAfter.providers).toContainEqual(convertToAnchorIdentityProvider(providerToAdd))
     expect(communityAfter.providers.length).toBe(communityBefore.providers.length + 1)
 
     // Try to add the same provider again (should fail)
     try {
       await program.methods
         .addCommunityProvider({
-          provider: convertFromIdentityProvider(providerToAdd),
+          provider: convertToAnchorIdentityProvider(providerToAdd),
         })
         .accountsStrict({
           community,
@@ -177,7 +177,7 @@ describe('Identity Profile Verification', () => {
     })
     await program.methods
       .verifyProfileIdentity({
-        provider: convertFromIdentityProvider(IdentityProvider.Solana),
+        provider: convertToAnchorIdentityProvider(IdentityProvider.Solana),
         providerId: profileOwner.publicKey.toString(),
       })
       .accountsStrict({
@@ -204,6 +204,6 @@ describe('Identity Profile Verification', () => {
 
     // Fetch and check the Community account
     const communityAccount = await program.account.community.fetch(community)
-    expect(communityAccount.providers).toContainEqual(convertFromIdentityProvider(IdentityProvider.Solana))
+    expect(communityAccount.providers).toContainEqual(convertToAnchorIdentityProvider(IdentityProvider.Solana))
   })
 })

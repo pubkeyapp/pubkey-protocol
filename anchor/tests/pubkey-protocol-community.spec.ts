@@ -6,6 +6,7 @@ import { airdropAccounts } from './utils/airdropper'
 import { getCommunityAvatarUrl } from './utils/get-avatar-url'
 import { unique } from './utils/unique'
 import { createTestCommunity } from './utils'
+import { convertToAnchorIdentityProvider, IdentityProvider } from '../src'
 
 describe('pubkey-protocol-community', () => {
   // Configure the client to use the local cluster.
@@ -39,6 +40,14 @@ describe('pubkey-protocol-community', () => {
       expect(communityAccount.name).toEqual('Test Community')
       expect(communityAccount.avatarUrl).toEqual(getCommunityAvatarUrl(slug))
       expect(communityAccount.authority).toEqual(communityAuthority.publicKey)
+      expect(communityAccount.pendingAuthority).toBeNull()
+      expect(communityAccount.providers).toContainEqual(convertToAnchorIdentityProvider(IdentityProvider.Solana))
+      expect(communityAccount.discord).toBeNull()
+      expect(communityAccount.farcaster).toBeNull()
+      expect(communityAccount.github).toBeNull()
+      expect(communityAccount.telegram).toBeNull()
+      expect(communityAccount.website).toBeNull()
+      expect(communityAccount.x).toBeNull()
     })
 
     it('Update Community Details', async () => {

@@ -1,7 +1,8 @@
 import { AnchorProvider, Program } from '@coral-xyz/anchor'
 import {
-  convertFromIdentityProvider,
-  convertToIdentityProvider,
+  convertAnchorIdentityProvider,
+  convertAnchorIdentityProviders,
+  convertToAnchorIdentityProvider,
   getPubKeyCommunityPda,
   getPubKeyPointerPda,
   getPubKeyProfilePda,
@@ -23,7 +24,8 @@ import {
   TransactionMessage,
   VersionedTransaction,
 } from '@solana/web3.js'
-import { getCommunityAvatarUrl, getProfileAvatarUrl, slugify } from './utils'
+import { getCommunityAvatarUrl, getProfileAvatarUrl } from './utils'
+import { slugify } from './slugify'
 
 export interface PubKeyProfileSdkOptions {
   readonly connection: Connection
@@ -158,7 +160,7 @@ export class PubkeyProtocolSdk {
     const ix = await this.program.methods
       .addIdentity({
         name,
-        provider: convertFromIdentityProvider(provider),
+        provider: convertToAnchorIdentityProvider(provider),
         providerId,
       })
       .accountsStrict({
@@ -177,7 +179,7 @@ export class PubkeyProtocolSdk {
     input: CreateCommunityInput
     tx: VersionedTransaction
   }> {
-    const slug = options.slug || slugify(options.name)
+    const slug = options.slug?.length ? options.slug : slugify(options.name)
     const avatarUrl = options.avatarUrl || getCommunityAvatarUrl(slug)
     const [community] = this.getCommunityPda({ slug })
 
@@ -201,52 +203,51 @@ export class PubkeyProtocolSdk {
     return { input, tx }
   }
 
-  async createProfile({ authority, avatarUrl, feePayer, name, username }: CreateProfileOptions) {
-    username = username || slugify(name)
+  async createProfile(options: CreateProfileOptions) {
+    const username = options.username?.length ? options.username : slugify(options.name)
     const [profile] = this.getProfilePda({ username })
-    const [pointer] = this.getPointerPda({ provider: IdentityProvider.Solana, providerId: authority.toString() })
+    const [pointer] = this.getPointerPda({
+      provider: IdentityProvider.Solana,
+      providerId: options.authority.toString(),
+    })
     const ix = await this.program.methods
       .createProfile({
-        avatarUrl: avatarUrl || getProfileAvatarUrl(username),
-        name,
+        avatarUrl: options.avatarUrl || getProfileAvatarUrl(username),
+        name: options.name,
         username,
       })
       .accountsStrict({
-        authority,
-        feePayer,
+        authority: options.authority,
+        feePayer: options.feePayer,
         pointer,
         profile,
         systemProgram: SystemProgram.programId,
       })
       .instruction()
 
-    return this.createTransaction({ ix, feePayer })
+    return this.createTransaction({ ix, feePayer: options.feePayer })
   }
 
   async getCommunity({ communityPda }: { communityPda: PublicKey }): Promise<PubKeyCommunity> {
-    return this.program.account.community.fetch(communityPda).then((res) => {
-      // FIXME: Properly clean up the PubKey Community Data.
+    return this.program.account.community.fetch(communityPda).then((account) => {
       return {
-        ...res,
+        ...account,
         publicKey: communityPda,
-        providers: [],
+        providers: convertAnchorIdentityProviders(account.providers),
       } as PubKeyCommunity
     })
   }
 
   async getCommunities(): Promise<PubKeyCommunity[]> {
-    return this.program.account.community.all().then((accounts) =>
-      accounts.map(({ account, publicKey }) => {
-        // FIXME: Properly clean up the PubKey Community Data.
+    return this.program.account.community.all().then((accounts) => {
+      return accounts.map(({ account, publicKey }) => {
         return {
+          ...account,
           publicKey,
-          avatarUrl: account.avatarUrl,
-          bump: account.bump,
-          name: account.name,
-          slug: account.slug,
+          providers: convertAnchorIdentityProviders(account.providers),
         } as PubKeyCommunity
-      }),
-    )
+      })
+    })
   }
 
   async getCommunityBySlug({ slug }: GetCommunityBySlug): Promise<PubKeyCommunity> {
@@ -268,7 +269,7 @@ export class PubkeyProtocolSdk {
         bump: account.bump,
         identities: account.identities.map((identity) => ({
           ...identity,
-          provider: convertToIdentityProvider(identity.provider),
+          provider: convertAnchorIdentityProvider(identity.provider),
         })),
         feePayer: account.feePayer,
         name: account.name,
@@ -281,7 +282,7 @@ export class PubkeyProtocolSdk {
     return this.program.account.pointer.all().then((accounts) =>
       accounts.map(({ account, publicKey }) => ({
         publicKey,
-        provider: convertToIdentityProvider(account.provider),
+        provider: convertAnchorIdentityProvider(account.provider),
         providerId: account.providerId,
         bump: account.bump,
         profile: account.profile,
@@ -321,7 +322,7 @@ export class PubkeyProtocolSdk {
     return this.program.account.profile.fetch(profilePda).then((res) => {
       const identities = res.identities.map((identity) => ({
         ...identity,
-        provider: convertToIdentityProvider(identity.provider),
+        provider: convertAnchorIdentityProvider(identity.provider),
       }))
 
       return {
@@ -339,7 +340,7 @@ export class PubkeyProtocolSdk {
       }
       const identities = res.identities.map((identity) => ({
         ...identity,
-        provider: convertToIdentityProvider(identity.provider),
+        provider: convertAnchorIdentityProvider(identity.provider),
       }))
 
       return {

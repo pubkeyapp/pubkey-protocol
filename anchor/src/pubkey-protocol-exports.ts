@@ -100,14 +100,14 @@ export type AnchorIdentityProvider =
   | { telegram: object }
   | { x: object }
 
-export function convertFromIdentityProvider(provider: IdentityProvider) {
+export function convertToAnchorIdentityProvider(provider: IdentityProvider) {
   if (!enumMap[provider]) {
     throw new Error(`Unknown provider: ${provider}`)
   }
   return enumMap[provider]
 }
 
-export function convertToIdentityProvider(provider: AnchorIdentityProvider): IdentityProvider {
+export function convertAnchorIdentityProvider(provider: AnchorIdentityProvider): IdentityProvider {
   const key = Object.keys(provider)[0]
 
   const found: string | undefined = Object.keys(IdentityProvider).find((provider) => provider.toLowerCase() === key)
@@ -117,6 +117,10 @@ export function convertToIdentityProvider(provider: AnchorIdentityProvider): Ide
   }
 
   return IdentityProvider[found as keyof typeof IdentityProvider]
+}
+
+export function convertAnchorIdentityProviders(providers: AnchorIdentityProvider[]): IdentityProvider[] {
+  return providers.map((p) => convertAnchorIdentityProvider(p))
 }
 
 export interface PubKeyProfile {
@@ -134,6 +138,7 @@ export interface PubKeyIdentity {
   name: string
   provider: IdentityProvider
   providerId: string
+  communities?: PublicKey[]
 }
 
 export interface PubKeyPointer {
@@ -153,7 +158,7 @@ export interface PubKeyCommunity {
   feePayers: PublicKey[]
   authority: PublicKey
   pendingAuthority: PublicKey | null
-  providers: PubKeyIdentity[]
+  providers: IdentityProvider[]
   x?: string
   discord?: string
   github?: string

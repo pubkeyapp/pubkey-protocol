@@ -1,3 +1,6 @@
 export * from './lib/anchor-keypair-wallet'
+export * from './lib/ellipsify'
 export * from './lib/pubkey-protocol-sdk'
+export * from './lib/sdk-helpers'
+export * from './lib/slugify'
 export * from './lib/utils'
