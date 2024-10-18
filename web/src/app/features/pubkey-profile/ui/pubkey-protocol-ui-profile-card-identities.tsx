@@ -1,11 +1,11 @@
 import { PubKeyProfile } from '@pubkey-protocol/anchor'
 import { UiGroup } from '@pubkey-ui/core'
 import { PublicKey } from '@solana/web3.js'
+import { UiAppCard } from '../../../ui'
 import { useKeypair } from '../../keypair/data-access'
-import { UiAppCard } from '../../../ui/ui-app-card'
+import { PubkeyProtocolUiIdentity } from './pubkey-protocol-ui-identity'
 import { PubkeyProtocolUiProfileButtonAddIdentity } from './pubkey-protocol-ui-profile-button-add-identity'
 import { PubkeyProtocolUiProfileButtonRemoveIdentity } from './pubkey-protocol-ui-profile-button-remove-identity'
-import { PubkeyProtocolUiIdentity } from './pubkey-protocol-ui-identity'
 
 export function PubkeyProtocolUiProfileCardIdentities({
   profile,

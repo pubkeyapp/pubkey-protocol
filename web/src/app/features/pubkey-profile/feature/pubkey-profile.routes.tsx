@@ -1,13 +1,13 @@
+import { Button, Group } from '@mantine/core'
+import { UiPage } from '@pubkey-ui/core'
 import { IconUser } from '@tabler/icons-react'
 import { Link, useRoutes } from 'react-router-dom'
+import { PubKeyProtocolLoader } from '../../pubkey-protocol'
 
 import { PubkeyProfileFeatureCreate } from './pubkey-profile-feature-create'
 import { PubkeyProfileFeatureDetail } from './pubkey-profile-feature-detail'
 import { PubkeyProfileFeatureList } from './pubkey-profile-feature-list'
 import { PubkeyProfileFeatureSearch } from './pubkey-profile-feature-search'
-import { PubKeyProtocolLoader } from '../../pubkey-protocol'
-import { Button, Group } from '@mantine/core'
-import { UiPage } from '@pubkey-ui/core'
 
 export default function PubkeyProfileRoutes({ basePath }: { basePath: string }) {
   const routes = useRoutes([

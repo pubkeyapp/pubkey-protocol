@@ -1,9 +1,9 @@
 import { Group, Stack, Text } from '@mantine/core'
 import { PubKeyIdentity } from '@pubkey-protocol/anchor'
+import { ellipsify } from '@pubkey-protocol/sdk'
 import { UiAnchor } from '@pubkey-ui/core'
-import { ellipsify } from '../../../ui'
-import { PubkeyProtocolUiIdentityProviderIcon } from './pubkey-protocol-ui-identity-provider-icon'
 import { usePubKeyProtocol } from '../../pubkey-protocol'
+import { PubkeyProtocolUiIdentityProviderIcon } from './pubkey-protocol-ui-identity-provider-icon'
 
 export function PubkeyProtocolUiIdentity({ identity }: { identity: PubKeyIdentity }) {
   const { getIdentityUrl } = usePubKeyProtocol()

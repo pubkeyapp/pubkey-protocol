@@ -1,41 +1,46 @@
-import { ReactNode } from 'react'
+import { Code, Group, Stack } from '@mantine/core'
 import { PubKeyCommunity } from '@pubkey-protocol/anchor'
+import { ellipsify } from '@pubkey-protocol/sdk'
 import { UiCard, UiDebugModal, UiGroup } from '@pubkey-ui/core'
-import { Group, Stack } from '@mantine/core'
+import { ReactNode } from 'react'
 import { ExplorerLink } from '../../cluster/cluster-ui'
-import { ellipsify } from '../../../ui'
-import { PubkeyProtocolUiCommunityAvatar } from './pubkey-protocol-ui-community-avatar'
 import { PubkeyProtocolUiCommunityAnchor } from './pubkey-protocol-ui-community-anchor'
+import { PubkeyProtocolUiCommunityAvatar } from './pubkey-protocol-ui-community-avatar'
 
 export function PubkeyProtocolUiCommunityListItem({
   children,
   community,
-  basePath,
+  to,
 }: {
   children?: ReactNode
   community: PubKeyCommunity
-  basePath?: string
+  to?: string
 }) {
   return (
     <UiCard>
-      <UiGroup align="start">
-        <Group align="center" wrap="nowrap" gap="xs">
+      <UiGroup align="start" w="100%">
+        <Group align="start" wrap="nowrap" gap="xs">
           <PubkeyProtocolUiCommunityAvatar community={community} />
-          <Stack gap={0}>
-            <PubkeyProtocolUiCommunityAnchor name={community.name} slug={community.slug} basePath={basePath} />
-            <ExplorerLink
-              size="xs"
-              ff="mono"
-              path={`account/${community.publicKey}`}
-              label={ellipsify(community.publicKey.toString())}
-            />
+          <Stack>
+            <Stack gap={0}>
+              <PubkeyProtocolUiCommunityAnchor community={community} to={to} />
+              <Group>
+                <Code>{community.slug.trim()}</Code>
+              </Group>
+            </Stack>
+            <Stack>{children}</Stack>
           </Stack>
         </Group>
-        <Group gap="xs">
-          <UiDebugModal size="lg" data={community} />
+        <Group align="center" gap="xs">
+          <ExplorerLink
+            size="xs"
+            ff="mono"
+            path={`account/${community.publicKey}`}
+            label={ellipsify(community.publicKey.toString())}
+          />
+          <UiDebugModal data={community} />
         </Group>
       </UiGroup>
-      {children}
     </UiCard>
   )
 }

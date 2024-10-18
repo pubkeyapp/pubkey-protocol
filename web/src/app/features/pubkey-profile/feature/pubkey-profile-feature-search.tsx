@@ -2,25 +2,23 @@ import { ActionIcon, Select, TextInput } from '@mantine/core'
 import { useForm } from '@mantine/form'
 import { IdentityProvider, PubKeyProfile } from '@pubkey-protocol/anchor'
 import { GetProfileByProvider, GetProfileByUsername } from '@pubkey-protocol/sdk'
-import { toastError, toastInfo, toastSuccess, UiCard, UiPage, UiStack } from '@pubkey-ui/core'
+import { toastError, toastInfo, toastSuccess, UiCard, UiStack } from '@pubkey-ui/core'
 import { IconSearch } from '@tabler/icons-react'
 import { useState } from 'react'
 import { getEnumOptions } from '../../../ui'
-import { PubkeyProtocolUiProfile } from '../ui'
 import { usePubKeyProtocol } from '../../pubkey-protocol'
+import { PubkeyProtocolUiProfile } from '../ui'
 
 export function PubkeyProfileFeatureSearch() {
   return (
-    <UiPage leftAction={<IconSearch />} title="Search">
-      <UiStack>
-        <UiCard title="Search by Username">
-          <SearchByUsername />
-        </UiCard>
-        <UiCard title="Search by Provider">
-          <SearchByProvider />
-        </UiCard>
-      </UiStack>
-    </UiPage>
+    <UiStack>
+      <UiCard title="Search by Username">
+        <SearchByUsername />
+      </UiCard>
+      <UiCard title="Search by Provider">
+        <SearchByProvider />
+      </UiCard>
+    </UiStack>
   )
 }
 
@@ -71,7 +69,7 @@ function SearchByProvider() {
 
         {result ? (
           <UiCard>
-            <PubkeyProtocolUiProfile profile={result} />{' '}
+            <PubkeyProtocolUiProfile profile={result} to={`/profiles/${result.username}`} />
           </UiCard>
         ) : null}
       </UiStack>
@@ -117,7 +115,7 @@ function SearchByUsername() {
         />
         {result ? (
           <UiCard>
-            <PubkeyProtocolUiProfile profile={result} />{' '}
+            <PubkeyProtocolUiProfile profile={result} to={`/profiles/${result.username}`} />{' '}
           </UiCard>
         ) : null}
       </UiStack>

@@ -1,9 +1,9 @@
 import { IdentityProvider } from '@pubkey-protocol/anchor'
+import { ellipsify } from '@pubkey-protocol/sdk'
 import { toastError, toastSuccess, UiCard, UiInfo, UiLoader } from '@pubkey-ui/core'
-import { ellipsify } from '../../../ui'
+import { usePubKeyProtocol } from '../../pubkey-protocol'
 import { useMutationCreateProfile, useQueryGetProfileByProviderNullable } from '../data-access'
 import { PubkeyProtocolUiProfileCreateForm } from '../ui'
-import { usePubKeyProtocol } from '../../pubkey-protocol'
 
 export function PubkeyProfileFeatureCreate() {
   const mutation = useMutationCreateProfile()

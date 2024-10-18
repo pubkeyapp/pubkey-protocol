@@ -5,7 +5,7 @@ import { ReactNode } from 'react'
 import { PubkeyProtocolUiCommunityAnchor } from './pubkey-protocol-ui-community-anchor'
 import { PubkeyProtocolUiCommunityAvatar } from './pubkey-protocol-ui-community-avatar'
 
-export function PubkeyProtocolUiCommunity({
+export function PubkeyProtocolUiCommunityGridItem({
   children,
   community,
   basePath,
@@ -19,7 +19,7 @@ export function PubkeyProtocolUiCommunity({
       <Group align="start" wrap="nowrap">
         <PubkeyProtocolUiCommunityAvatar community={community} />
         <Stack gap={0}>
-          <PubkeyProtocolUiCommunityAnchor name={community.name} slug={community.slug} basePath={basePath} />
+          <PubkeyProtocolUiCommunityAnchor community={community} to={`${basePath}/${community.slug}`} />
           {children ?? community.slug}
         </Stack>
       </Group>

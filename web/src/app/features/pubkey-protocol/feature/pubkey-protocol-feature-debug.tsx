@@ -1,6 +1,6 @@
 import { UiDebug, UiPage } from '@pubkey-ui/core'
 import { IconBug } from '@tabler/icons-react'
-import { ellipsify } from '../../../ui'
+import { ellipsify } from '@pubkey-protocol/sdk'
 import { ExplorerLink } from '../../cluster/cluster-ui'
 import { usePubKeyProtocol } from '../data-access'
 import { useQueryGetCommunities } from '../../pubkey-community/data-access'

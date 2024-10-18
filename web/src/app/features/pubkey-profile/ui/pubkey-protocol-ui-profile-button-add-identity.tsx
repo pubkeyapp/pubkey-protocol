@@ -2,8 +2,9 @@ import { Button, Group, Select, TextInput } from '@mantine/core'
 import { useForm } from '@mantine/form'
 import { modals } from '@mantine/modals'
 import { IdentityProvider, PubKeyProfile } from '@pubkey-protocol/anchor'
+import { ellipsify } from '@pubkey-protocol/sdk'
 import { UiStack } from '@pubkey-ui/core'
-import { ellipsify, getEnumOptions } from '../../../ui'
+import { getEnumOptions } from '../../../ui'
 import { useMutationAddIdentity } from '../data-access'
 
 export interface PubKeyProfileAddIdentityInput {

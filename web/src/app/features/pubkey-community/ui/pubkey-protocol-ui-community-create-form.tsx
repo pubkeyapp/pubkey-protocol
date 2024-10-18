@@ -1,7 +1,7 @@
-import { PubKeyCommunityCreateInput } from '../data-access'
+import { Button, Group, TextInput } from '@mantine/core'
 import { useForm } from '@mantine/form'
 import { UiStack } from '@pubkey-ui/core'
-import { Button, Group, TextInput } from '@mantine/core'
+import { PubKeyCommunityCreateInput } from '../data-access'
 
 export function PubkeyProtocolUiCommunityCreateForm({
   submit,

@@ -1,10 +1,10 @@
 import { Text } from '@mantine/core'
 import { PubKeyProfile } from '@pubkey-protocol/anchor'
+import { ellipsify } from '@pubkey-protocol/sdk'
 import { UiGroup } from '@pubkey-ui/core'
 import { PublicKey } from '@solana/web3.js'
-import { ellipsify } from '../../../ui'
+import { UiAppCard } from '../../../ui'
 import { useKeypair } from '../../keypair/data-access'
-import { UiAppCard } from '../../../ui/ui-app-card'
 import { PubkeyProtocolUiProfileButtonAddAuthority } from './pubkey-protocol-ui-profile-button-add-authority'
 import { PubkeyProtocolUiProfileButtonRemoveAuthority } from './pubkey-protocol-ui-profile-button-remove-authority'
 

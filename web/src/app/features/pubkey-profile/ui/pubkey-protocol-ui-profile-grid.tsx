@@ -9,7 +9,7 @@ export function PubkeyProtocolUiProfileGrid({ profiles, basePath }: { profiles: 
     <SimpleGrid cols={{ base: 1, md: 2 }}>
       {profiles.map((profile) => (
         <UiCard key={profile.username}>
-          <PubkeyProtocolUiProfile profile={profile} basePath={basePath} />
+          <PubkeyProtocolUiProfile profile={profile} to={`${basePath}/${profile.username}`} />
         </UiCard>
       ))}
     </SimpleGrid>

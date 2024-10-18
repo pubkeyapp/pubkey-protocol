@@ -3,7 +3,7 @@ import { UiError, UiInfo, UiStack, UiTime } from '@pubkey-ui/core'
 import { PublicKey } from '@solana/web3.js'
 import { IconRefresh } from '@tabler/icons-react'
 import { useMemo, useState } from 'react'
-import { ellipsify } from '../../../../ui'
+import { ellipsify } from '@pubkey-protocol/sdk'
 import { ExplorerLink } from '../../../cluster/cluster-ui'
 import { useGetSignatures } from '../../data-access'
 

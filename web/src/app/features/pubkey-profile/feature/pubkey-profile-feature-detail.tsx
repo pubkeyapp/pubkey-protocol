@@ -1,5 +1,4 @@
-import { UiLoader, UiPage, UiWarning } from '@pubkey-ui/core'
-import { IconUser } from '@tabler/icons-react'
+import { UiLoader, UiStack, UiWarning } from '@pubkey-ui/core'
 import { useParams } from 'react-router-dom'
 import { useQueryGetProfileByUsername } from '../data-access'
 import { PubkeyProtocolUiProfileCard } from '../ui'
@@ -10,7 +9,7 @@ export function PubkeyProfileFeatureDetail() {
   const query = useQueryGetProfileByUsername({ username })
 
   return (
-    <UiPage leftAction={<IconUser />} title={username}>
+    <UiStack>
       {query.isLoading ? (
         <UiLoader />
       ) : query.data ? (
@@ -18,6 +17,6 @@ export function PubkeyProfileFeatureDetail() {
       ) : (
         <UiWarning message="Profile not found" />
       )}
-    </UiPage>
+    </UiStack>
   )
 }

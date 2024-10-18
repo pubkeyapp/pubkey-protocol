@@ -1,10 +1,10 @@
 import { Box, UnstyledButton } from '@mantine/core'
 import { PubKeyProfile } from '@pubkey-protocol/anchor'
 import { PublicKey } from '@solana/web3.js'
-import { useMutationUpdateAvatarUrl } from '../data-access'
 import { UiAppCard } from '../../../ui/ui-app-card'
-import { PubkeyProtocolUiProfileAvatar } from './pubkey-protocol-ui-profile-avatar'
 import { usePubKeyProtocol } from '../../pubkey-protocol'
+import { useMutationUpdateAvatarUrl } from '../data-access'
+import { PubkeyProtocolUiProfileAvatar } from './pubkey-protocol-ui-profile-avatar'
 
 export function PubkeyProtocolUiProfileAvatarUpdateButton({
   profile,
