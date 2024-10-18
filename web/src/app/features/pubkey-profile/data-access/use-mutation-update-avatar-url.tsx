@@ -1,12 +1,12 @@
-import { UpdateAvatarUrlOptions } from '@pubkey-program-library/sdk'
+import { UpdateAvatarUrlOptions } from '@pubkey-protocol/sdk'
 import { useMutation } from '@tanstack/react-query'
-import { usePubKeyProfile } from './pubkey-profile-provider'
+import { usePubKeyProtocol } from '../../pubkey-protocol'
 
 export function useMutationUpdateAvatarUrl() {
-  const { sdk, signAndConfirmTransaction, onError, onSuccess } = usePubKeyProfile()
+  const { sdk, signAndConfirmTransaction, onError, onSuccess } = usePubKeyProtocol()
 
   return useMutation({
-    mutationFn: (options: UpdateAvatarUrlOptions) => sdk.updateAvatarUrl(options).then(signAndConfirmTransaction),
+    mutationFn: (options: UpdateAvatarUrlOptions) => sdk.updateProfileDetails(options).then(signAndConfirmTransaction),
     onError,
     onSuccess,
   })

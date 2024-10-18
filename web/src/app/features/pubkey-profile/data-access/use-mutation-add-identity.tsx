@@ -1,11 +1,11 @@
-import { AddIdentityOptions } from '@pubkey-program-library/sdk'
+import { AddIdentityOptions } from '@pubkey-protocol/sdk'
 import { useMutation } from '@tanstack/react-query'
-import { usePubKeyProfile } from './pubkey-profile-provider'
+import { usePubKeyProtocol } from '../../pubkey-protocol'
 
 export type PubKeyAddIdentity = Omit<AddIdentityOptions, 'authority' | 'feePayer'>
 
 export function useMutationAddIdentity() {
-  const { authority, feePayer, sdk, signAndConfirmTransaction, onError, onSuccess } = usePubKeyProfile()
+  const { authority, feePayer, sdk, signAndConfirmTransaction, onError, onSuccess } = usePubKeyProtocol()
 
   return useMutation({
     mutationFn: (options: PubKeyAddIdentity) =>

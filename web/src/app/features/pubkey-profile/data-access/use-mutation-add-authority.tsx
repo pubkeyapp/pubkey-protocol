@@ -1,12 +1,12 @@
-import { AddAuthorityOptions } from '@pubkey-program-library/sdk'
+import { AddAuthorityOptions } from '@pubkey-protocol/sdk'
 import { useMutation } from '@tanstack/react-query'
-import { usePubKeyProfile } from './pubkey-profile-provider'
+import { usePubKeyProtocol } from '../../pubkey-protocol'
 
 export function useMutationAddAuthority() {
-  const { sdk, signAndConfirmTransaction, onError, onSuccess } = usePubKeyProfile()
+  const { sdk, signAndConfirmTransaction, onError, onSuccess } = usePubKeyProtocol()
 
   return useMutation({
-    mutationFn: (options: AddAuthorityOptions) => sdk.addAuthority(options).then(signAndConfirmTransaction),
+    mutationFn: (options: AddAuthorityOptions) => sdk.addProfileAuthority(options).then(signAndConfirmTransaction),
     onError,
     onSuccess,
   })

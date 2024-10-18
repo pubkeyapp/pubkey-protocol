@@ -1,11 +1,11 @@
 import { useQuery } from '@tanstack/react-query'
-import { usePubKeyProfile } from './pubkey-profile-provider'
+import { usePubKeyProtocol } from '../../pubkey-protocol'
 
 export function useQueryGetPointers() {
-  const { cluster, sdk } = usePubKeyProfile()
+  const { cluster, sdk } = usePubKeyProtocol()
 
   return useQuery({
-    queryKey: ['pubkey-profile', 'getPointers', { cluster }],
+    queryKey: ['pubkey-protocol', 'getPointers', { cluster }],
     queryFn: () => sdk.getPointers(),
   })
 }
