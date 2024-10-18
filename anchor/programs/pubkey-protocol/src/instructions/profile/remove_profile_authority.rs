@@ -34,7 +34,7 @@ pub fn remove_authority(ctx: Context<RemoveAuthority>, args: RemoveAuthorityArgs
 
     require!(
         profile.authorities.len() > 1,
-        ProtocolError::CannotRemoveSoloAuthority
+        ProtocolError::CannotRemoveLastAuthority
     );
 
     // TODO: Not sure if this check should be there

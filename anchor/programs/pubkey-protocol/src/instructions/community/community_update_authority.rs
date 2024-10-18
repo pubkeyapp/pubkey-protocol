@@ -6,7 +6,7 @@ use crate::state::*;
 
 #[derive(Accounts)]
 #[instruction()]
-pub struct InitiateUpdateAuthority<'info> {
+pub struct CommunityUpdateAuthorityInitiate<'info> {
     #[account(
         mut,
         seeds = [
@@ -23,7 +23,7 @@ pub struct InitiateUpdateAuthority<'info> {
 
 #[derive(Accounts)]
 #[instruction()]
-pub struct FinalizeUpdateAuthority<'info> {
+pub struct CommunityUpdateAuthorityFinalize<'info> {
     #[account(
         mut,
         seeds = [
@@ -40,7 +40,7 @@ pub struct FinalizeUpdateAuthority<'info> {
 
 #[derive(Accounts)]
 #[instruction()]
-pub struct CancelUpdateAuthority<'info> {
+pub struct CommunityUpdateAuthorityCancel<'info> {
     #[account(
         mut,
         seeds = [
@@ -55,14 +55,14 @@ pub struct CancelUpdateAuthority<'info> {
     pub authority: Signer<'info>,
 }
 
-pub fn initiate_update_authority(
-    ctx: Context<InitiateUpdateAuthority>,
-    args: InitiateUpdateAuthorityArgs,
+pub fn community_update_authority_initiate(
+    ctx: Context<CommunityUpdateAuthorityInitiate>,
+    args: CommunityUpdateAuthorityInitiateArgs,
 ) -> Result<()> {
     let community = &mut ctx.accounts.community;
 
     // Creating community account
-    let InitiateUpdateAuthorityArgs { new_authority } = args;
+    let CommunityUpdateAuthorityInitiateArgs { new_authority } = args;
 
     // Set the pending_authority
     community.pending_authority = Some(new_authority);
@@ -70,7 +70,7 @@ pub fn initiate_update_authority(
     Ok(())
 }
 
-pub fn finalize_update_authority(ctx: Context<FinalizeUpdateAuthority>) -> Result<()> {
+pub fn community_update_authority_finalize(ctx: Context<CommunityUpdateAuthorityFinalize>) -> Result<()> {
     let community = &mut ctx.accounts.community;
 
     // Update the authority to the new one
@@ -80,7 +80,7 @@ pub fn finalize_update_authority(ctx: Context<FinalizeUpdateAuthority>) -> Resul
     Ok(())
 }
 
-pub fn cancel_update_authority(ctx: Context<CancelUpdateAuthority>) -> Result<()> {
+pub fn community_update_authority_cancel(ctx: Context<CommunityUpdateAuthorityCancel>) -> Result<()> {
     let community = &mut ctx.accounts.community;
 
     // Clear the pending_authority
@@ -90,6 +90,6 @@ pub fn cancel_update_authority(ctx: Context<CancelUpdateAuthority>) -> Result<()
 }
 
 #[derive(AnchorSerialize, AnchorDeserialize)]
-pub struct InitiateUpdateAuthorityArgs {
+pub struct CommunityUpdateAuthorityInitiateArgs {
     pub new_authority: Pubkey,
 }

@@ -2,9 +2,9 @@ import { Text } from '@mantine/core'
 import { PubKeyCommunity } from '@pubkey-protocol/anchor'
 import { UiGroup, UiStack, UiWarning } from '@pubkey-ui/core'
 import { WalletMultiButton } from '@pubkeyapp/wallet-adapter-mantine-ui'
-import { useWallet } from '@solana/wallet-adapter-react'
-import { ReactNode, useMemo } from 'react'
+import { ReactNode } from 'react'
 import { ExplorerLink } from '../../cluster/cluster-ui'
+import { useCommunityIsAuthorityConnected } from '../data-access'
 
 export function PubkeyProtocolUiCommunityAuthorityGuard({
   children,
@@ -13,16 +13,7 @@ export function PubkeyProtocolUiCommunityAuthorityGuard({
   children: ReactNode
   community: PubKeyCommunity
 }) {
-  const { publicKey: wallet, connecting } = useWallet()
-
-  const hasAuthority = useMemo(() => {
-    if (connecting) {
-      console.log('connecting...')
-      return false
-    }
-    console.log('connected as ', wallet?.toString())
-    return community.authority.toString() === wallet?.toString()
-  }, [connecting, community.authority, wallet])
+  const hasAuthority = useCommunityIsAuthorityConnected({ community })
 
   return hasAuthority ? (
     children

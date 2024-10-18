@@ -4,10 +4,10 @@ import { toastError, UiCard, UiInfo, UiStack } from '@pubkey-ui/core'
 import { useWallet } from '@solana/wallet-adapter-react'
 import { ExplorerLink } from '../../cluster/cluster-ui'
 import {
-  useMutationCancelUpdateCommunityAuthority,
-  useMutationFinalizeUpdateCommunityAuthority,
-  useMutationInitiateUpdateCommunityAuthority,
-  useQueryGetCommunityBySlug,
+  useMutationCommunityUpdateAuthorityCancel,
+  useMutationCommunityUpdateAuthorityFinalize,
+  useMutationCommunityUpdateAuthorityInitiate,
+  useQueryCommunityGetBySlug,
 } from '../data-access'
 import { PubkeyProtocolUiCommunityAuthorityForm } from '../ui'
 
@@ -15,10 +15,10 @@ import { PubkeyProtocolUiCommunityAuthorityGuard } from '../ui/pubkey-protocol-u
 
 export function PubkeyCommunityFeatureAuthority({ community }: { community: PubKeyCommunity }) {
   const { publicKey } = useWallet()
-  const query = useQueryGetCommunityBySlug({ slug: community.slug })
-  const mutationInitiate = useMutationInitiateUpdateCommunityAuthority({ community })
-  const mutationFinalize = useMutationFinalizeUpdateCommunityAuthority({ community })
-  const mutationCancel = useMutationCancelUpdateCommunityAuthority({ community })
+  const query = useQueryCommunityGetBySlug({ slug: community.slug })
+  const mutationInitiate = useMutationCommunityUpdateAuthorityInitiate({ community })
+  const mutationFinalize = useMutationCommunityUpdateAuthorityFinalize({ community })
+  const mutationCancel = useMutationCommunityUpdateAuthorityCancel({ community })
 
   return (
     <UiCard>

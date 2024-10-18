@@ -13,9 +13,9 @@ declare_id!("PUBKEYsiC4c87gFa5qGcH7t6VobVu3A4QqPUA2wzvam");
 
 #[program]
 pub mod pubkey_protocol {
-    use super::*;
+  use super::*;
 
-    // Profile Actions
+  // Profile Actions
     pub fn create_profile(ctx: Context<CreateProfile>, args: CreateProfileArgs) -> Result<()> {
         profile::create(ctx, args)
     }
@@ -48,49 +48,58 @@ pub mod pubkey_protocol {
     }
 
     // Community Actions
-    pub fn add_community_provider(
-        ctx: Context<AddCommunityProvider>,
-        args: AddCommunityProviderArgs,
+    pub fn community_create(
+        ctx: Context<CommunityCreate>,
+        args: CommunityCreateArgs,
     ) -> Result<()> {
-        community::add_community_provider(ctx, args)
+        community::community_create(ctx, args)
     }
 
-    pub fn create_community(
-        ctx: Context<CreateCommunity>,
-        args: CreateCommunityArgs,
+    pub fn community_provider_disable(
+        ctx: Context<CommunityProviderDisable>,
+        args: CommunityProviderDisableArgs,
     ) -> Result<()> {
-        community::create_community(ctx, args)
+        community::community_provider_disable(ctx, args)
     }
 
-    pub fn update_community_details(
+    pub fn community_provider_enable(
+        ctx: Context<CommunityProviderEnable>,
+        args: CommunityProviderEnableArgs,
+    ) -> Result<()> {
+        community::community_provider_enable(ctx, args)
+    }
+
+    pub fn community_update_authority_cancel(
+        ctx: Context<CommunityUpdateAuthorityCancel>,
+    ) -> Result<()> {
+        community::community_update_authority_cancel(ctx)
+    }
+
+    pub fn community_update_authority_finalize(
+        ctx: Context<CommunityUpdateAuthorityFinalize>,
+    ) -> Result<()> {
+        community::community_update_authority_finalize(ctx)
+    }
+
+    pub fn community_update_authority_initiate(
+        ctx: Context<CommunityUpdateAuthorityInitiate>,
+        args: CommunityUpdateAuthorityInitiateArgs,
+    ) -> Result<()> {
+        community::community_update_authority_initiate(ctx, args)
+    }
+
+    pub fn community_update_details(
         ctx: Context<UpdateCommunityDetails>,
         args: UpdateCommunityDetailsArgs,
     ) -> Result<()> {
-        community::update_community_details(ctx, args)
+        community::community_update_details(ctx, args)
     }
 
-    pub fn update_community_feepayers(
+    pub fn community_update_feepayers(
         ctx: Context<UpdateFeePayers>,
         args: UpdateFeePayersArgs,
     ) -> Result<()> {
-        community::update_community_feepayers(ctx, args)
-    }
-
-    pub fn initiate_update_community_authority(
-        ctx: Context<InitiateUpdateAuthority>,
-        args: InitiateUpdateAuthorityArgs,
-    ) -> Result<()> {
-        community::initiate_update_authority(ctx, args)
-    }
-
-    pub fn finalize_update_community_authority(
-        ctx: Context<FinalizeUpdateAuthority>,
-    ) -> Result<()> {
-        community::finalize_update_authority(ctx)
-    }
-
-    pub fn cancel_update_community_authority(ctx: Context<CancelUpdateAuthority>) -> Result<()> {
-        community::cancel_update_authority(ctx)
+        community::community_update_feepayers(ctx, args)
     }
 
     pub fn verify_profile_identity(

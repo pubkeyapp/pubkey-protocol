@@ -28,12 +28,12 @@ xdescribe('sdk', () => {
     console.log('FeePayer', feePayer.publicKey.toBase58())
     const sdk = new PubkeyProtocolSdk({ programId, connection, provider })
 
-    const [profilePDA, profileBump] = sdk.getProfilePda({ username: 'test' })
+    const [profilePDA, profileBump] = sdk.pdaProfile({ username: 'test' })
     expect(profilePDA).toBeTruthy()
     expect(profilePDA.toBase58()).toEqual('687R8BWizeLZmsWF7svEfV3d5EKgwbmDzdN7qfpBhX4M')
     expect(profileBump).toEqual(254)
 
-    const [pointerPDA, pointerBump] = sdk.getPointerPda({
+    const [pointerPDA, pointerBump] = sdk.pdaPointer({
       provider: IdentityProvider.Solana,
       providerId: 'BEEMANPx2jdmfR7jpn1hRdMuM2Vj4E3azBLb6RUBrCDY',
     })

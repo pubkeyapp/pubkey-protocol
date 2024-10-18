@@ -2,6 +2,12 @@ use anchor_lang::prelude::*;
 
 #[error_code]
 pub enum ProtocolError {
+    #[msg("Cannot remove last remaining authority")]
+    CannotRemoveLastAuthority,
+    #[msg("Cannot remove the Solana provider")]
+    CannotRemoveSolanaProvider,
+    #[msg("Community verification already exists")]
+    CommunityVerificationAlreadyExists,
     #[msg("Account not owned by program")]
     InvalidAccountOwner,
     #[msg("Account too large")]
@@ -58,18 +64,16 @@ pub enum ProtocolError {
     InvalidXURL,
     #[msg("Invalid Identity Profile Authority")]
     IdentityProfileInvalid,
-    #[msg("Cannot remove last remaining authority")]
-    CannotRemoveSoloAuthority,
-    #[msg("Array reached max size")]
-    MaxSizeReached,
     #[msg("Identity already exists")]
     IdentityAlreadyExists,
     #[msg("Identity does not exist")]
     IdentityNonExistent,
-    #[msg("Unauthorized community action")]
-    UnauthorizedCommunityAction,
-    #[msg("Community verification already exists")]
-    CommunityVerificationAlreadyExists,
+    #[msg("Array reached max size")]
+    MaxSizeReached,
     #[msg("Provider already exists")]
     ProviderAlreadyExists,
+    #[msg("Provider does not exist")]
+    ProviderDoesNotExist,
+    #[msg("Unauthorized community action")]
+    UnauthorizedCommunityAction,
 }

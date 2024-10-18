@@ -4,13 +4,13 @@ import { usePubKeyProtocol } from '../../pubkey-protocol'
 
 export type PubKeyCommunityUpdateInput = Omit<UpdateCommunityOptions, 'authority' | 'feePayer'>
 
-export function useMutationUpdateCommunity() {
+export function useMutationCommunityUpdate() {
   const { authority, feePayer, sdk, signAndConfirmTransaction, onError, onSuccess } = usePubKeyProtocol()
 
   return useMutation({
     mutationFn: (options: PubKeyCommunityUpdateInput) =>
       sdk
-        .updateCommunity({
+        .communityUpdate({
           ...options,
           authority,
           feePayer,

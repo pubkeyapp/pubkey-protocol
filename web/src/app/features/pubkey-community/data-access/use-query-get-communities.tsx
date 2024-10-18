@@ -6,6 +6,6 @@ export function useQueryGetCommunities() {
 
   return useQuery({
     queryKey: ['pubkey-protocol', 'getCommunities', { cluster }],
-    queryFn: () => sdk.getCommunities(),
+    queryFn: () => sdk.communityGetAll(),
   })
 }

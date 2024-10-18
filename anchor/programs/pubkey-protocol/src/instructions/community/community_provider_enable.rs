@@ -4,8 +4,8 @@ use crate::errors::*;
 use crate::state::*;
 
 #[derive(Accounts)]
-#[instruction(args: AddCommunityProviderArgs)]
-pub struct AddCommunityProvider<'info> {
+#[instruction(args: CommunityProviderEnableArgs)]
+pub struct CommunityProviderEnable<'info> {
     #[account(mut)]
     pub community: Account<'info, Community>,
 
@@ -18,9 +18,9 @@ pub struct AddCommunityProvider<'info> {
     pub system_program: Program<'info, System>,
 }
 
-pub fn add_community_provider(
-    ctx: Context<AddCommunityProvider>,
-    args: AddCommunityProviderArgs,
+pub fn community_provider_enable(
+    ctx: Context<CommunityProviderEnable>,
+    args: CommunityProviderEnableArgs,
 ) -> Result<()> {
     let community = &mut ctx.accounts.community;
     let authority = &ctx.accounts.authority;
@@ -43,6 +43,6 @@ pub fn add_community_provider(
 }
 
 #[derive(AnchorSerialize, AnchorDeserialize, Debug)]
-pub struct AddCommunityProviderArgs {
+pub struct CommunityProviderEnableArgs {
     pub provider: IdentityProvider,
 }

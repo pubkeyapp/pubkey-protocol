@@ -1,15 +1,16 @@
 import { UiCard, UiDebug, UiInfoTable, UiLoader, UiStack, UiTabRoutes, UiWarning } from '@pubkey-ui/core'
 import { useParams } from 'react-router-dom'
 import { ExplorerLink } from '../../cluster/cluster-ui'
-import { useQueryGetCommunityBySlug } from '../data-access'
+import { useQueryCommunityGetBySlug } from '../data-access'
 import { PubkeyProtocolUiCommunityHeader } from '../ui/'
 import { PubkeyCommunityFeatureAuthority } from './pubkey-community-feature-authority'
+import { PubkeyCommunityFeatureProviders } from './pubkey-community-feature-providers'
 import { PubkeyCommunityFeatureSettings } from './pubkey-community-feature-settings'
 
 export function PubkeyCommunityFeatureDetail() {
   const { slug } = useParams() as { slug: string }
 
-  const query = useQueryGetCommunityBySlug({ slug })
+  const query = useQueryCommunityGetBySlug({ slug })
 
   return query.isLoading ? (
     <UiLoader />
@@ -38,6 +39,7 @@ export function PubkeyCommunityFeatureDetail() {
                           label={query.data?.publicKey.toString()}
                         />,
                       ],
+                      ['Debug', <UiDebug data={query.data} />],
                     ]}
                   />
                 </UiCard>
@@ -45,14 +47,14 @@ export function PubkeyCommunityFeatureDetail() {
             ),
           },
           {
-            label: 'Debug',
-            path: 'debug',
-            element: <UiDebug data={query.data} open />,
-          },
-          {
             label: 'Authority',
             path: 'authority',
             element: <PubkeyCommunityFeatureAuthority community={query.data} />,
+          },
+          {
+            label: 'Providers',
+            path: 'providers',
+            element: <PubkeyCommunityFeatureProviders community={query.data} />,
           },
           {
             label: 'Settings',

@@ -1,4 +1,5 @@
 import * as anchor from '@coral-xyz/anchor'
+import { SystemProgram } from '@solana/web3.js'
 import {
   getPubKeyCommunityPda,
   getPubKeyPointerPda,
@@ -7,7 +8,6 @@ import {
   PubkeyProtocol,
 } from '../../src'
 import { getCommunityAvatarUrl, getProfileAvatarUrl } from './get-avatar-url'
-import { SystemProgram } from '@solana/web3.js'
 
 export async function createTestCommunity(
   slug: string,
@@ -19,7 +19,7 @@ export async function createTestCommunity(
     const [community] = getPubKeyCommunityPda({ programId: program.programId, slug })
 
     await program.methods
-      .createCommunity({
+      .communityCreate({
         slug,
         name: 'Test Community',
         avatarUrl: getCommunityAvatarUrl(slug),

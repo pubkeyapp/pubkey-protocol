@@ -1,16 +1,16 @@
-import { CreateCommunityOptions } from '@pubkey-protocol/sdk'
+import { CommunityCreateOptions } from '@pubkey-protocol/sdk'
 import { useMutation } from '@tanstack/react-query'
 import { usePubKeyProtocol } from '../../pubkey-protocol'
 
-export type PubKeyCommunityCreateInput = Omit<CreateCommunityOptions, 'authority' | 'feePayer'>
+export type PubKeyCommunityCreateInput = Omit<CommunityCreateOptions, 'authority' | 'feePayer'>
 
-export function useMutationCreateCommunity() {
+export function useMutationCommunityCreate() {
   const { authority, feePayer, sdk, signAndConfirmTransaction, onError, onSuccess } = usePubKeyProtocol()
 
   return useMutation({
     mutationFn: (options: PubKeyCommunityCreateInput) =>
       sdk
-        .createCommunity({
+        .communityCreate({
           ...options,
           authority,
           feePayer,

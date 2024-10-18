@@ -5,8 +5,8 @@ use crate::errors::*;
 use crate::state::*;
 
 #[derive(Accounts)]
-#[instruction(args: CreateCommunityArgs)]
-pub struct CreateCommunity<'info> {
+#[instruction(args: CommunityCreateArgs)]
+pub struct CommunityCreate<'info> {
     #[account(
       init,
       payer = fee_payer,
@@ -29,14 +29,14 @@ pub struct CreateCommunity<'info> {
     pub system_program: Program<'info, System>,
 }
 
-pub fn create_community(ctx: Context<CreateCommunity>, args: CreateCommunityArgs) -> Result<()> {
+pub fn community_create(ctx: Context<CommunityCreate>, args: CommunityCreateArgs) -> Result<()> {
     let community = &mut ctx.accounts.community;
 
     let authority = ctx.accounts.authority.key();
     let fee_payer = ctx.accounts.fee_payer.key();
 
     // Creating community account
-    let CreateCommunityArgs {
+    let CommunityCreateArgs {
         slug,
         name,
         avatar_url,
@@ -65,7 +65,7 @@ pub fn create_community(ctx: Context<CreateCommunity>, args: CreateCommunityArgs
 }
 
 #[derive(AnchorSerialize, AnchorDeserialize)]
-pub struct CreateCommunityArgs {
+pub struct CommunityCreateArgs {
     pub slug: String,
     pub avatar_url: String,
     pub name: String,

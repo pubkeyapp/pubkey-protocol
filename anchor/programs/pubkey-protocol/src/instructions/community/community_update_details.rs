@@ -25,7 +25,7 @@ pub struct UpdateCommunityDetails<'info> {
     pub authority: Signer<'info>,
 }
 
-pub fn update_community_details(
+pub fn community_update_details(
     ctx: Context<UpdateCommunityDetails>,
     args: UpdateCommunityDetailsArgs,
 ) -> Result<()> {

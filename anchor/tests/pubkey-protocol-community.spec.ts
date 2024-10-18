@@ -62,7 +62,7 @@ describe('pubkey-protocol-community', () => {
         x: 'https://x.com/test',
       }
       await program.methods
-        .updateCommunityDetails(input)
+        .communityUpdateDetails(input)
         .accounts({
           community: communityPDA,
           authority: communityAuthority.publicKey,
@@ -91,7 +91,7 @@ describe('pubkey-protocol-community', () => {
 
     it('should update community fee payers', async () => {
       await program.methods
-        .updateCommunityFeepayers({ newFeePayers: [feePayer.publicKey, communityAuthority2.publicKey] })
+        .communityUpdateFeepayers({ newFeePayers: [feePayer.publicKey, communityAuthority2.publicKey] })
         .accounts({
           community: communityPDA,
           authority: communityAuthority.publicKey,
@@ -113,15 +113,13 @@ describe('pubkey-protocol-community', () => {
       communityPDA = await createTestCommunity(unique('acme'), program, communityAuthority, feePayer.publicKey)
     })
 
-    it('should add a provider to a community', async () => {
-      const providerToAdd = IdentityProvider.Discord
+    async function communityEnableProvider(provider: IdentityProvider) {
       const communityBefore = await program.account.community.fetch(communityPDA)
-      expect(communityBefore.providers).not.toContain(providerToAdd)
+      expect(communityBefore.providers).not.toContain(provider)
 
-      // Call the add_community_provider instruction
       await program.methods
-        .addCommunityProvider({
-          provider: convertToAnchorIdentityProvider(providerToAdd),
+        .communityProviderEnable({
+          provider: convertToAnchorIdentityProvider(provider),
         })
         .accountsStrict({
           community: communityPDA,
@@ -134,17 +132,18 @@ describe('pubkey-protocol-community', () => {
 
       const communityAfter = await program.account.community.fetch(communityPDA)
       expect(communityAfter.providers).toContainEqual(convertToAnchorIdentityProvider(IdentityProvider.Solana))
-      expect(communityAfter.providers).toContainEqual(convertToAnchorIdentityProvider(providerToAdd))
+      expect(communityAfter.providers).toContainEqual(convertToAnchorIdentityProvider(provider))
       expect(communityAfter.providers.length).toBe(communityBefore.providers.length + 1)
-    })
+    }
 
-    it('should not add the same provider twice', async () => {
-      const providerToAdd = IdentityProvider.Discord
+    it('should enable a provider for a community', async () => {
+      const providerToEnable = IdentityProvider.Discord
+      const communityBefore = await program.account.community.fetch(communityPDA)
+      expect(communityBefore.providers).not.toContain(providerToEnable)
 
-      // Call the add_community_provider instruction
       await program.methods
-        .addCommunityProvider({
-          provider: convertToAnchorIdentityProvider(providerToAdd),
+        .communityProviderEnable({
+          provider: convertToAnchorIdentityProvider(providerToEnable),
         })
         .accountsStrict({
           community: communityPDA,
@@ -156,12 +155,22 @@ describe('pubkey-protocol-community', () => {
         .rpc()
 
       const communityAfter = await program.account.community.fetch(communityPDA)
+      expect(communityAfter.providers).toContainEqual(convertToAnchorIdentityProvider(IdentityProvider.Solana))
+      expect(communityAfter.providers).toContainEqual(convertToAnchorIdentityProvider(providerToEnable))
+      expect(communityAfter.providers.length).toBe(communityBefore.providers.length + 1)
+    })
 
-      // Try to add the same provider again (should fail)
+    it('should not enable the same provider twice', async () => {
+      const providerToEnable = IdentityProvider.Discord
+      await communityEnableProvider(providerToEnable)
+
+      const communityAfter = await program.account.community.fetch(communityPDA)
+
+      // Try to enable the same provider again (should fail)
       try {
         await program.methods
-          .addCommunityProvider({
-            provider: convertToAnchorIdentityProvider(providerToAdd),
+          .communityProviderEnable({
+            provider: convertToAnchorIdentityProvider(providerToEnable),
           })
           .accountsStrict({
             community: communityPDA,
@@ -180,6 +189,54 @@ describe('pubkey-protocol-community', () => {
       const communityFinal = await program.account.community.fetch(communityPDA)
       expect(communityFinal.providers.length).toBe(communityAfter.providers.length)
     })
+
+    it('should disable a provider for a community', async () => {
+      const providerToDisable = IdentityProvider.Discord
+      await communityEnableProvider(providerToDisable)
+
+      await program.methods
+        .communityProviderDisable({
+          provider: convertToAnchorIdentityProvider(providerToDisable),
+        })
+        .accountsStrict({
+          community: communityPDA,
+          authority: communityAuthority.publicKey,
+          feePayer: feePayer.publicKey,
+          systemProgram: SystemProgram.programId,
+        })
+        .signers([communityAuthority])
+        .rpc()
+
+      const communityAfter = await program.account.community.fetch(communityPDA)
+      expect(communityAfter.providers).not.toContainEqual(convertToAnchorIdentityProvider(providerToDisable))
+    })
+
+    it('should not disable the Solana provider', async () => {
+      const providerToDisable = IdentityProvider.Solana
+      const communityBefore = await program.account.community.fetch(communityPDA)
+      expect(communityBefore.providers).toContainEqual(convertToAnchorIdentityProvider(providerToDisable))
+
+      try {
+        await program.methods
+          .communityProviderDisable({
+            provider: convertToAnchorIdentityProvider(providerToDisable),
+          })
+          .accountsStrict({
+            community: communityPDA,
+            authority: communityAuthority.publicKey,
+            feePayer: feePayer.publicKey,
+            systemProgram: SystemProgram.programId,
+          })
+          .signers([communityAuthority])
+          .rpc()
+        expect(true).toBe(false)
+      } catch (error) {
+        expect(error.error.errorCode.code).toBe('CannotRemoveSolanaProvider')
+      }
+
+      const communityAfter = await program.account.community.fetch(communityPDA)
+      expect(communityAfter.providers).toContainEqual(convertToAnchorIdentityProvider(providerToDisable))
+    })
   })
 
   describe('Authorities', () => {
@@ -191,7 +248,7 @@ describe('pubkey-protocol-community', () => {
 
     it('should initiate an authority update', async () => {
       await program.methods
-        .initiateUpdateCommunityAuthority({
+        .communityUpdateAuthorityInitiate({
           newAuthority: communityAuthority2.publicKey,
         })
         .accountsStrict({
@@ -208,7 +265,7 @@ describe('pubkey-protocol-community', () => {
     it('should finalize an authority update', async () => {
       // First, initiate the authority update
       await program.methods
-        .initiateUpdateCommunityAuthority({
+        .communityUpdateAuthorityInitiate({
           newAuthority: communityAuthority2.publicKey,
         })
         .accountsStrict({
@@ -220,7 +277,7 @@ describe('pubkey-protocol-community', () => {
 
       // Then, finalize the authority update
       await program.methods
-        .finalizeUpdateCommunityAuthority()
+        .communityUpdateAuthorityFinalize()
         .accountsStrict({
           community: communityPDA,
           newAuthority: communityAuthority2.publicKey,
@@ -238,7 +295,7 @@ describe('pubkey-protocol-community', () => {
 
       // First, initiate the authority update
       await program.methods
-        .initiateUpdateCommunityAuthority({
+        .communityUpdateAuthorityInitiate({
           newAuthority,
         })
         .accountsStrict({
@@ -250,7 +307,7 @@ describe('pubkey-protocol-community', () => {
 
       // Then, cancel the authority update
       await program.methods
-        .cancelUpdateCommunityAuthority()
+        .communityUpdateAuthorityCancel()
         .accountsStrict({
           community: communityPDA,
           authority: communityAuthority.publicKey,

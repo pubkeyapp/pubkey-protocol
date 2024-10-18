@@ -29,7 +29,7 @@ pub struct UpdateFeePayers<'info> {
     pub system_program: Program<'info, System>,
 }
 
-pub fn update_community_feepayers(
+pub fn community_update_feepayers(
     ctx: Context<UpdateFeePayers>,
     args: UpdateFeePayersArgs,
 ) -> Result<()> {

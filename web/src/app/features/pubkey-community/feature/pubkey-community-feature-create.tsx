@@ -1,10 +1,10 @@
 import { toastError, UiCard } from '@pubkey-ui/core'
 import { useNavigate } from 'react-router-dom'
-import { useMutationCreateCommunity } from '../data-access'
+import { useMutationCommunityCreate } from '../data-access'
 import { PubkeyProtocolUiCommunityCreateForm } from '../ui'
 
 export function PubkeyCommunityFeatureCreate() {
-  const mutation = useMutationCreateCommunity()
+  const mutation = useMutationCommunityCreate()
   const navigate = useNavigate()
   return (
     <UiCard title="Create Community">
