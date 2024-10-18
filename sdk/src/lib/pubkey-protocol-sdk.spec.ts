@@ -56,7 +56,7 @@ xdescribe('sdk', () => {
       feePayer,
       username,
     })
-    const created = await sdk.createProfile({
+    const created = await sdk.profileCreate({
       authority,
       avatarUrl,
       feePayer: feePayer.publicKey,
@@ -64,7 +64,7 @@ xdescribe('sdk', () => {
       username,
     })
     console.log('Created', created)
-    const profile = await sdk.getProfileByUsername({ username })
+    const profile = await sdk.profileGetByUsername({ username })
     console.log('Profile', profile)
     // ASSERT
   })

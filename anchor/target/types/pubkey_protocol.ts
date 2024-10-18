@@ -104,92 +104,6 @@ export type PubkeyProtocol = {
       ]
     },
     {
-      "name": "addProfileAuthority",
-      "discriminator": [
-        193,
-        106,
-        183,
-        12,
-        216,
-        250,
-        151,
-        31
-      ],
-      "accounts": [
-        {
-          "name": "profile",
-          "writable": true,
-          "pda": {
-            "seeds": [
-              {
-                "kind": "const",
-                "value": [
-                  112,
-                  117,
-                  98,
-                  107,
-                  101,
-                  121,
-                  95,
-                  112,
-                  114,
-                  111,
-                  116,
-                  111,
-                  99,
-                  111,
-                  108
-                ]
-              },
-              {
-                "kind": "const",
-                "value": [
-                  112,
-                  114,
-                  111,
-                  102,
-                  105,
-                  108,
-                  101
-                ]
-              },
-              {
-                "kind": "account",
-                "path": "profile.username",
-                "account": "profile"
-              }
-            ]
-          }
-        },
-        {
-          "name": "authority",
-          "signer": true
-        },
-        {
-          "name": "feePayer",
-          "writable": true,
-          "signer": true,
-          "relations": [
-            "profile"
-          ]
-        },
-        {
-          "name": "systemProgram",
-          "address": "11111111111111111111111111111111"
-        }
-      ],
-      "args": [
-        {
-          "name": "args",
-          "type": {
-            "defined": {
-              "name": "addAuthorityArgs"
-            }
-          }
-        }
-      ]
-    },
-    {
       "name": "communityCreate",
       "discriminator": [
         239,
@@ -732,16 +646,184 @@ export type PubkeyProtocol = {
       ]
     },
     {
-      "name": "createProfile",
+      "name": "profileAuthorityAdd",
       "discriminator": [
-        225,
-        205,
-        234,
-        143,
-        17,
-        186,
-        50,
-        220
+        60,
+        2,
+        107,
+        19,
+        25,
+        126,
+        252,
+        248
+      ],
+      "accounts": [
+        {
+          "name": "profile",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  112,
+                  117,
+                  98,
+                  107,
+                  101,
+                  121,
+                  95,
+                  112,
+                  114,
+                  111,
+                  116,
+                  111,
+                  99,
+                  111,
+                  108
+                ]
+              },
+              {
+                "kind": "const",
+                "value": [
+                  112,
+                  114,
+                  111,
+                  102,
+                  105,
+                  108,
+                  101
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "profile.username",
+                "account": "profile"
+              }
+            ]
+          }
+        },
+        {
+          "name": "authority",
+          "signer": true
+        },
+        {
+          "name": "feePayer",
+          "writable": true,
+          "signer": true,
+          "relations": [
+            "profile"
+          ]
+        },
+        {
+          "name": "systemProgram",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "args",
+          "type": {
+            "defined": {
+              "name": "profileAuthorityAddArgs"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "profileAuthorityRemove",
+      "discriminator": [
+        107,
+        162,
+        170,
+        103,
+        144,
+        101,
+        63,
+        237
+      ],
+      "accounts": [
+        {
+          "name": "profile",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  112,
+                  117,
+                  98,
+                  107,
+                  101,
+                  121,
+                  95,
+                  112,
+                  114,
+                  111,
+                  116,
+                  111,
+                  99,
+                  111,
+                  108
+                ]
+              },
+              {
+                "kind": "const",
+                "value": [
+                  112,
+                  114,
+                  111,
+                  102,
+                  105,
+                  108,
+                  101
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "profile.username",
+                "account": "profile"
+              }
+            ]
+          }
+        },
+        {
+          "name": "authority",
+          "signer": true
+        },
+        {
+          "name": "feePayer",
+          "writable": true,
+          "signer": true,
+          "relations": [
+            "profile"
+          ]
+        }
+      ],
+      "args": [
+        {
+          "name": "args",
+          "type": {
+            "defined": {
+              "name": "profileAuthorityRemoveArgs"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "profileCreate",
+      "discriminator": [
+        119,
+        211,
+        42,
+        30,
+        71,
+        78,
+        152,
+        201
       ],
       "accounts": [
         {
@@ -811,23 +893,23 @@ export type PubkeyProtocol = {
           "name": "args",
           "type": {
             "defined": {
-              "name": "createProfileArgs"
+              "name": "profileCreateArgs"
             }
           }
         }
       ]
     },
     {
-      "name": "removeAuthority",
+      "name": "profileUpdateDetails",
       "discriminator": [
-        242,
-        104,
-        208,
-        132,
-        190,
-        250,
-        74,
-        216
+        157,
+        158,
+        155,
+        130,
+        206,
+        93,
+        40,
+        61
       ],
       "accounts": [
         {
@@ -876,10 +958,6 @@ export type PubkeyProtocol = {
           }
         },
         {
-          "name": "authority",
-          "signer": true
-        },
-        {
           "name": "feePayer",
           "writable": true,
           "signer": true,
@@ -893,7 +971,7 @@ export type PubkeyProtocol = {
           "name": "args",
           "type": {
             "defined": {
-              "name": "removeAuthorityArgs"
+              "name": "updateProfileDetailsArgs"
             }
           }
         }
@@ -987,84 +1065,6 @@ export type PubkeyProtocol = {
           "type": {
             "defined": {
               "name": "removeIdentityArgs"
-            }
-          }
-        }
-      ]
-    },
-    {
-      "name": "updateProfileDetails",
-      "discriminator": [
-        218,
-        18,
-        64,
-        5,
-        242,
-        160,
-        11,
-        38
-      ],
-      "accounts": [
-        {
-          "name": "profile",
-          "writable": true,
-          "pda": {
-            "seeds": [
-              {
-                "kind": "const",
-                "value": [
-                  112,
-                  117,
-                  98,
-                  107,
-                  101,
-                  121,
-                  95,
-                  112,
-                  114,
-                  111,
-                  116,
-                  111,
-                  99,
-                  111,
-                  108
-                ]
-              },
-              {
-                "kind": "const",
-                "value": [
-                  112,
-                  114,
-                  111,
-                  102,
-                  105,
-                  108,
-                  101
-                ]
-              },
-              {
-                "kind": "account",
-                "path": "profile.username",
-                "account": "profile"
-              }
-            ]
-          }
-        },
-        {
-          "name": "feePayer",
-          "writable": true,
-          "signer": true,
-          "relations": [
-            "profile"
-          ]
-        }
-      ],
-      "args": [
-        {
-          "name": "args",
-          "type": {
-            "defined": {
-              "name": "updateProfileDetailsArgs"
             }
           }
         }
@@ -1350,18 +1350,6 @@ export type PubkeyProtocol = {
   ],
   "types": [
     {
-      "name": "addAuthorityArgs",
-      "type": {
-        "kind": "struct",
-        "fields": [
-          {
-            "name": "newAuthority",
-            "type": "pubkey"
-          }
-        ]
-      }
-    },
-    {
       "name": "addIdentityArgs",
       "type": {
         "kind": "struct",
@@ -1536,26 +1524,6 @@ export type PubkeyProtocol = {
       }
     },
     {
-      "name": "createProfileArgs",
-      "type": {
-        "kind": "struct",
-        "fields": [
-          {
-            "name": "username",
-            "type": "string"
-          },
-          {
-            "name": "name",
-            "type": "string"
-          },
-          {
-            "name": "avatarUrl",
-            "type": "string"
-          }
-        ]
-      }
-    },
-    {
       "name": "identity",
       "type": {
         "kind": "struct",
@@ -1687,13 +1655,45 @@ export type PubkeyProtocol = {
       }
     },
     {
-      "name": "removeAuthorityArgs",
+      "name": "profileAuthorityAddArgs",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "newAuthority",
+            "type": "pubkey"
+          }
+        ]
+      }
+    },
+    {
+      "name": "profileAuthorityRemoveArgs",
       "type": {
         "kind": "struct",
         "fields": [
           {
             "name": "authorityToRemove",
             "type": "pubkey"
+          }
+        ]
+      }
+    },
+    {
+      "name": "profileCreateArgs",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "username",
+            "type": "string"
+          },
+          {
+            "name": "name",
+            "type": "string"
+          },
+          {
+            "name": "avatarUrl",
+            "type": "string"
           }
         ]
       }

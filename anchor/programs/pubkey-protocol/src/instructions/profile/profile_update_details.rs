@@ -28,7 +28,7 @@ pub struct UpdateProfileDetails<'info> {
     pub fee_payer: Signer<'info>,
 }
 
-pub fn update_profile_details(
+pub fn profile_update_details(
     ctx: Context<UpdateProfileDetails>,
     args: UpdateProfileDetailsArgs,
 ) -> Result<()> {

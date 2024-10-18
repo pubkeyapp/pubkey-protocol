@@ -1,9 +1,9 @@
-pub mod add_profile_authority;
-pub mod create_profile;
-pub mod remove_profile_authority;
-pub mod update_profile_details;
+pub mod profile_authority_add;
+pub mod profile_create;
+pub mod profile_authority_remove;
+pub mod profile_update_details;
 
-pub use add_profile_authority::*;
-pub use create_profile::*;
-pub use remove_profile_authority::*;
-pub use update_profile_details::*;
+pub use profile_authority_add::*;
+pub use profile_authority_remove::*;
+pub use profile_create::*;
+pub use profile_update_details::*;

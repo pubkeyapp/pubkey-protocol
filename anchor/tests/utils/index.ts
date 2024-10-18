@@ -55,7 +55,7 @@ export async function createTestProfile(
     })
 
     await program.methods
-      .createProfile({
+      .profileCreate({
         avatarUrl: getProfileAvatarUrl(username),
         name: 'Test Verified User',
         username,

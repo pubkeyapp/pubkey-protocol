@@ -13,7 +13,7 @@ export function useQueryGetProfileByProviderNullable({
 
   return useQuery({
     queryKey: ['pubkey-protocol', 'getProfileByProviderNullable', { cluster, provider, providerId }],
-    queryFn: () => sdk.getProfileByProviderNullable({ provider, providerId }),
+    queryFn: () => sdk.profileGetByProviderNullable({ provider, providerId }),
     retry: false,
   })
 }

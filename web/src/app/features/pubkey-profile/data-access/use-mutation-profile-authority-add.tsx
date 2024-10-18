@@ -1,12 +1,12 @@
-import { RemoveAuthorityOptions } from '@pubkey-protocol/sdk'
+import { AddAuthorityOptions } from '@pubkey-protocol/sdk'
 import { useMutation } from '@tanstack/react-query'
 import { usePubKeyProtocol } from '../../pubkey-protocol'
 
-export function useMutationRemoveAuthority() {
+export function useMutationProfileAuthorityAdd() {
   const { sdk, signAndConfirmTransaction, onError, onSuccess } = usePubKeyProtocol()
 
   return useMutation({
-    mutationFn: (options: RemoveAuthorityOptions) => sdk.removeAuthority(options).then(signAndConfirmTransaction),
+    mutationFn: (options: AddAuthorityOptions) => sdk.profileAuthorityAdd(options).then(signAndConfirmTransaction),
     onError,
     onSuccess,
   })

@@ -6,6 +6,6 @@ export function useQueryGetProfileByUsername({ username }: { username: string })
 
   return useQuery({
     queryKey: ['pubkey-protocol', 'getProfileByUsername', { cluster, username }],
-    queryFn: () => sdk.getProfileByUsername({ username }),
+    queryFn: () => sdk.profileGetByUsername({ username }),
   })
 }

@@ -6,7 +6,7 @@ use crate::state::*;
 use crate::utils::*;
 
 #[derive(Accounts)]
-pub struct AddAuthority<'info> {
+pub struct ProfileAuthorityAdd<'info> {
     #[account(
       mut,
       seeds = [
@@ -30,7 +30,7 @@ pub struct AddAuthority<'info> {
     pub system_program: Program<'info, System>,
 }
 
-pub fn add_authority(ctx: Context<AddAuthority>, args: AddAuthorityArgs) -> Result<()> {
+pub fn profile_authority_add(ctx: Context<ProfileAuthorityAdd>, args: ProfileAuthorityAddArgs) -> Result<()> {
     let profile = &mut ctx.accounts.profile;
 
     let fee_payer = &mut ctx.accounts.fee_payer;
@@ -60,6 +60,6 @@ pub fn add_authority(ctx: Context<AddAuthority>, args: AddAuthorityArgs) -> Resu
 }
 
 #[derive(AnchorSerialize, AnchorDeserialize)]
-pub struct AddAuthorityArgs {
+pub struct ProfileAuthorityAddArgs {
     pub new_authority: Pubkey,
 }

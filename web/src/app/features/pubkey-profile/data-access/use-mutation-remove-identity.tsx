@@ -6,7 +6,7 @@ export function useMutationRemoveIdentity() {
   const { sdk, signAndConfirmTransaction, onError, onSuccess } = usePubKeyProtocol()
 
   return useMutation({
-    mutationFn: (options: RemoveIdentityOptions) => sdk.removeIdentity(options).then(signAndConfirmTransaction),
+    mutationFn: (options: RemoveIdentityOptions) => sdk.profileIdentityRemove(options).then(signAndConfirmTransaction),
     onError,
     onSuccess,
   })

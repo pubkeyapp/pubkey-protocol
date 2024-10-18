@@ -16,26 +16,26 @@ pub mod pubkey_protocol {
   use super::*;
 
   // Profile Actions
-    pub fn create_profile(ctx: Context<CreateProfile>, args: CreateProfileArgs) -> Result<()> {
-        profile::create(ctx, args)
+    pub fn profile_authority_add(ctx: Context<ProfileAuthorityAdd>, args: ProfileAuthorityAddArgs) -> Result<()> {
+        profile::profile_authority_add(ctx, args)
     }
 
-    pub fn update_profile_details(
+    pub fn profile_authority_remove(
+        ctx: Context<ProfileAuthorityRemove>,
+        args: ProfileAuthorityRemoveArgs,
+    ) -> Result<()> {
+        profile::profile_authority_remove(ctx, args)
+    }
+
+    pub fn profile_create(ctx: Context<ProfileCreate>, args: ProfileCreateArgs) -> Result<()> {
+        profile::profile_create(ctx, args)
+    }
+
+    pub fn profile_update_details(
         ctx: Context<UpdateProfileDetails>,
         args: UpdateProfileDetailsArgs,
     ) -> Result<()> {
-        profile::update_profile_details(ctx, args)
-    }
-
-    pub fn add_profile_authority(ctx: Context<AddAuthority>, args: AddAuthorityArgs) -> Result<()> {
-        profile::add_authority(ctx, args)
-    }
-
-    pub fn remove_authority(
-        ctx: Context<RemoveAuthority>,
-        args: RemoveAuthorityArgs,
-    ) -> Result<()> {
-        profile::remove_authority(ctx, args)
+        profile::profile_update_details(ctx, args)
     }
 
     // Identity Actions

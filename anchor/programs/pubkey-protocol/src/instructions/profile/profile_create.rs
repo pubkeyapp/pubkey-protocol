@@ -5,8 +5,8 @@ use crate::errors::*;
 use crate::state::*;
 
 #[derive(Accounts)]
-#[instruction(args: CreateProfileArgs)]
-pub struct CreateProfile<'info> {
+#[instruction(args: ProfileCreateArgs)]
+pub struct ProfileCreate<'info> {
     #[account(
       init,
       payer = fee_payer,
@@ -42,7 +42,7 @@ pub struct CreateProfile<'info> {
     pub system_program: Program<'info, System>,
 }
 
-pub fn create(ctx: Context<CreateProfile>, args: CreateProfileArgs) -> Result<()> {
+pub fn profile_create(ctx: Context<ProfileCreate>, args: ProfileCreateArgs) -> Result<()> {
     let profile = &mut ctx.accounts.profile;
     let authority = ctx.accounts.authority.key();
     let fee_payer = ctx.accounts.fee_payer.key();
@@ -59,7 +59,7 @@ pub fn create(ctx: Context<CreateProfile>, args: CreateProfileArgs) -> Result<()
     pointer.validate()?;
 
     // Creating profile account
-    let CreateProfileArgs {
+    let ProfileCreateArgs {
         username,
         name,
         avatar_url,
@@ -88,7 +88,7 @@ pub fn create(ctx: Context<CreateProfile>, args: CreateProfileArgs) -> Result<()
 }
 
 #[derive(AnchorSerialize, AnchorDeserialize)]
-pub struct CreateProfileArgs {
+pub struct ProfileCreateArgs {
     pub username: String,
     pub name: String,
     pub avatar_url: String,

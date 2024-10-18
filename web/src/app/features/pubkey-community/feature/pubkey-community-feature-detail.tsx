@@ -1,4 +1,6 @@
-import { UiCard, UiDebug, UiInfoTable, UiLoader, UiStack, UiTabRoutes, UiWarning } from '@pubkey-ui/core'
+import { PubKeyCommunity } from '@pubkey-protocol/anchor'
+import { ellipsify } from '@pubkey-protocol/sdk'
+import { UiAnchor, UiCard, UiDebugModal, UiInfoTable, UiLoader, UiStack, UiTabRoutes, UiWarning } from '@pubkey-ui/core'
 import { useParams } from 'react-router-dom'
 import { ExplorerLink } from '../../cluster/cluster-ui'
 import { useQueryCommunityGetBySlug } from '../data-access'
@@ -25,23 +27,7 @@ export function PubkeyCommunityFeatureDetail() {
             element: (
               <UiStack>
                 <UiCard>
-                  <UiInfoTable
-                    items={[
-                      ['Name', query.data?.name],
-                      ['Slug', query.data?.slug],
-                      ['Avatar URL', query.data?.avatarUrl],
-                      [
-                        'Account',
-                        <ExplorerLink
-                          size="xs"
-                          ff="mono"
-                          path={`account/${query.data?.publicKey}`}
-                          label={query.data?.publicKey.toString()}
-                        />,
-                      ],
-                      ['Debug', <UiDebug data={query.data} />],
-                    ]}
-                  />
+                  <CommunityInfo community={query.data}></CommunityInfo>
                 </UiCard>
               </UiStack>
             ),
@@ -66,5 +52,41 @@ export function PubkeyCommunityFeatureDetail() {
     </UiStack>
   ) : (
     <UiWarning message="Community not found" />
+  )
+}
+
+export function CommunityInfo({ community }: { community: PubKeyCommunity }) {
+  return (
+    <UiInfoTable
+      items={[
+        ['Name', community?.name],
+        ['Slug', community?.slug],
+        ['Avatar URL', community?.avatarUrl],
+        ['Discord', <MaybeLink link={community?.discord} />],
+        ['Farcaster', <MaybeLink link={community?.farcaster} />],
+        ['Github', <MaybeLink link={community?.github} />],
+        ['Telegram', <MaybeLink link={community?.telegram} />],
+        ['Website', <MaybeLink link={community?.website} />],
+        ['X', <MaybeLink link={community?.x} />],
+        [
+          'Account',
+          <ExplorerLink
+            path={`account/${community?.publicKey}`}
+            label={ellipsify(community?.publicKey.toString(), 8)}
+          />,
+        ],
+        ['Debug', <UiDebugModal data={community} />],
+      ]}
+    />
+  )
+}
+
+function MaybeLink({ link }: { link?: string }) {
+  return link ? (
+    <UiAnchor to={link} target="_blank">
+      {link.replace('https://', '')}
+    </UiAnchor>
+  ) : (
+    'None'
   )
 }

@@ -6,6 +6,6 @@ export function useQueryGetPointers() {
 
   return useQuery({
     queryKey: ['pubkey-protocol', 'getPointers', { cluster }],
-    queryFn: () => sdk.getPointers(),
+    queryFn: () => sdk.pointerGetAll(),
   })
 }

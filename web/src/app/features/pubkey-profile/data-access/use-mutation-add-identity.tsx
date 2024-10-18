@@ -9,7 +9,7 @@ export function useMutationAddIdentity() {
 
   return useMutation({
     mutationFn: (options: PubKeyAddIdentity) =>
-      sdk.addIdentity({ ...options, authority, feePayer }).then(signAndConfirmTransaction),
+      sdk.profileIdentityAdd({ ...options, authority, feePayer }).then(signAndConfirmTransaction),
     onError,
     onSuccess,
   })

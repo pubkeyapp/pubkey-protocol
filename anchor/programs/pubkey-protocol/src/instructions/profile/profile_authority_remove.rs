@@ -5,7 +5,7 @@ use crate::errors::*;
 use crate::state::*;
 
 #[derive(Accounts)]
-pub struct RemoveAuthority<'info> {
+pub struct ProfileAuthorityRemove<'info> {
     #[account(
       mut,
       seeds = [
@@ -28,7 +28,7 @@ pub struct RemoveAuthority<'info> {
     pub fee_payer: Signer<'info>,
 }
 
-pub fn remove_authority(ctx: Context<RemoveAuthority>, args: RemoveAuthorityArgs) -> Result<()> {
+pub fn profile_authority_remove(ctx: Context<ProfileAuthorityRemove>, args: ProfileAuthorityRemoveArgs) -> Result<()> {
     let profile = &mut ctx.accounts.profile;
     let authority_to_remove = args.authority_to_remove;
 
@@ -53,6 +53,6 @@ pub fn remove_authority(ctx: Context<RemoveAuthority>, args: RemoveAuthorityArgs
 }
 
 #[derive(AnchorSerialize, AnchorDeserialize)]
-pub struct RemoveAuthorityArgs {
+pub struct ProfileAuthorityRemoveArgs {
     pub authority_to_remove: Pubkey,
 }

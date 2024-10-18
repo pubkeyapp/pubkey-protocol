@@ -6,6 +6,6 @@ export function useQueryGetProfiles() {
 
   return useQuery({
     queryKey: ['pubkey-protocol', 'getProfiles', { cluster }],
-    queryFn: () => sdk.getProfiles(),
+    queryFn: () => sdk.profilesGetAll(),
   })
 }

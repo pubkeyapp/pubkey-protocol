@@ -77,7 +77,7 @@ describe('pubkey-protocol-profile', () => {
         newAvatarUrl: getProfileAvatarUrl(`${username}_new`),
       }
       await program.methods
-        .updateProfileDetails(input)
+        .profileUpdateDetails(input)
         .accounts({
           profile,
           feePayer: feePayer.publicKey,
@@ -95,7 +95,7 @@ describe('pubkey-protocol-profile', () => {
       const [profile] = getPubKeyProfilePda({ username, programId: program.programId })
 
       await program.methods
-        .addProfileAuthority({ newAuthority: communityMember2.publicKey })
+        .profileAuthorityAdd({ newAuthority: communityMember2.publicKey })
         .accountsStrict({
           profile,
           authority: communityMember1.publicKey,
@@ -117,7 +117,7 @@ describe('pubkey-protocol-profile', () => {
       const [profile] = getPubKeyProfilePda({ username, programId: program.programId })
 
       await program.methods
-        .removeAuthority({ authorityToRemove: communityMember2.publicKey })
+        .profileAuthorityRemove({ authorityToRemove: communityMember2.publicKey })
         .accountsStrict({ profile, authority: communityMember1.publicKey, feePayer: feePayer.publicKey })
         .signers([communityMember1])
         .rpc()
