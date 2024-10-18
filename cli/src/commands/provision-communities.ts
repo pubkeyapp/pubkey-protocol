@@ -1,14 +1,10 @@
-import { CommunityCreateOptions, getExplorerUrl, PubkeyProtocolSdk, SolanaCluster } from '@pubkey-protocol/sdk'
-import { Connection, Keypair } from '@solana/web3.js'
+import { CommunityCreateOptions, getExplorerUrl } from '@pubkey-protocol/sdk'
+import { getConfig } from '../utils/get-config'
 
 export const provisionCommunities: Omit<CommunityCreateOptions, 'authority' | 'feePayer'>[] = [
   {
     name: 'PubKey',
     avatarUrl: 'https://github.com/pubkeyapp.png',
-    // discord: 'https://discord.gg/XxuZQeDPNf',
-    // github: 'https://github.com/pubkeyapp',
-    // website: 'https://pubkey.app',
-    // x: 'https://x.com/pubkeyapp',
   },
   {
     name: 'Legends of SOL',
@@ -31,14 +27,9 @@ export const provisionCommunities: Omit<CommunityCreateOptions, 'authority' | 'f
   },
 ]
 
-export async function provisionCommunitiesIfNeeded(
-  sdk: PubkeyProtocolSdk,
-  authority: Keypair,
-  feePayer: Keypair,
-  connection: Connection,
-  cluster: SolanaCluster,
-  endpoint: string,
-) {
+export async function provisionCommunitiesIfNeeded() {
+  const { authority, connection, endpoint, feePayer, cluster, sdk } = await getConfig()
+
   const existing = await sdk.communityGetAll()
   const existingNames = existing.map((c) => c.name)
   console.log(`Found ${existing.length} communities`, existingNames.join(', '))

@@ -1,8 +1,8 @@
+import { getExplorerUrl } from '@pubkey-protocol/sdk'
 import { Cluster as SolanaCluster, clusterApiUrl } from '@solana/web3.js'
 import { atom, useAtomValue, useSetAtom } from 'jotai'
 import { atomWithStorage } from 'jotai/utils'
 import { createContext, ReactNode, useContext } from 'react'
-import { getExplorerUrl } from '@pubkey-protocol/sdk'
 
 export interface Cluster {
   name: string

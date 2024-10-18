@@ -4,9 +4,9 @@ import { toastError, UiCard, UiInfo, UiStack } from '@pubkey-ui/core'
 import { useWallet } from '@solana/wallet-adapter-react'
 import { ExplorerLink } from '../../cluster/cluster-ui'
 import {
-  useMutationCommunityUpdateAuthorityCancel,
-  useMutationCommunityUpdateAuthorityFinalize,
-  useMutationCommunityUpdateAuthorityInitiate,
+  useMutationCommunityUpdateAuthorityApprove,
+  useMutationCommunityUpdateAuthorityDecline,
+  useMutationCommunityUpdateAuthorityRequest,
   useQueryCommunityGetBySlug,
 } from '../data-access'
 import { PubkeyProtocolUiCommunityAuthorityForm } from '../ui'
@@ -16,9 +16,9 @@ import { PubkeyProtocolUiCommunityAuthorityGuard } from '../ui/pubkey-protocol-u
 export function PubkeyCommunityFeatureAuthority({ community }: { community: PubKeyCommunity }) {
   const { publicKey } = useWallet()
   const query = useQueryCommunityGetBySlug({ slug: community.slug })
-  const mutationInitiate = useMutationCommunityUpdateAuthorityInitiate({ community })
-  const mutationFinalize = useMutationCommunityUpdateAuthorityFinalize({ community })
-  const mutationCancel = useMutationCommunityUpdateAuthorityCancel({ community })
+  const mutationApprove = useMutationCommunityUpdateAuthorityApprove({ community })
+  const mutationDecline = useMutationCommunityUpdateAuthorityDecline({ community })
+  const mutationRequest = useMutationCommunityUpdateAuthorityRequest({ community })
 
   return (
     <UiCard>
@@ -69,7 +69,7 @@ export function PubkeyCommunityFeatureAuthority({ community }: { community: PubK
                   if (!community.pendingAuthority) {
                     return
                   }
-                  return mutationFinalize
+                  return mutationApprove
                     .mutateAsync({ newAuthority: community.pendingAuthority })
                     .then(() => query.refetch())
                 }}
@@ -82,10 +82,10 @@ export function PubkeyCommunityFeatureAuthority({ community }: { community: PubK
                   if (!community.authority) {
                     return
                   }
-                  return mutationCancel.mutateAsync({ authority: community.authority }).then(() => query.refetch())
+                  return mutationDecline.mutateAsync({ authority: community.authority }).then(() => query.refetch())
                 }}
               >
-                Cancel
+                Decline
               </Button>
             </Button.Group>
           </UiStack>
@@ -95,7 +95,7 @@ export function PubkeyCommunityFeatureAuthority({ community }: { community: PubK
           <PubkeyProtocolUiCommunityAuthorityForm
             community={community}
             submit={(input) =>
-              mutationInitiate
+              mutationRequest
                 .mutateAsync(input)
                 .then(async () => {
                   await query.refetch()

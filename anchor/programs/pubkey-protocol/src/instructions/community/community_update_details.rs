@@ -45,10 +45,7 @@ pub fn community_update_details(
 
     // Update fields if they are provided
     if let Some(avatar_url) = avatar_url {
-        require!(
-            is_valid_url(&avatar_url),
-            ProtocolError::InvalidAvatarURL
-        );
+        require!(is_valid_url(&avatar_url), ProtocolError::InvalidAvatarURL);
         community.avatar_url = avatar_url;
     }
 

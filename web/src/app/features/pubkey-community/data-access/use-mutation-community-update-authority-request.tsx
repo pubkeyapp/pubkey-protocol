@@ -3,16 +3,17 @@ import { PublicKeyString } from '@pubkey-protocol/sdk'
 import { useMutation } from '@tanstack/react-query'
 import { usePubKeyProtocol } from '../../pubkey-protocol'
 
-export function useMutationCommunityUpdateAuthorityCancel({ community }: { community: PubKeyCommunity }) {
+export function useMutationCommunityUpdateAuthorityRequest({ community }: { community: PubKeyCommunity }) {
   const { feePayer, sdk, signAndConfirmTransaction, onError, onSuccess } = usePubKeyProtocol()
 
   return useMutation({
-    mutationFn: ({ authority }: { authority: PublicKeyString }) =>
+    mutationFn: ({ authority, newAuthority }: { authority: PublicKeyString; newAuthority: PublicKeyString }) =>
       sdk
-        .communityUpdateAuthorityCancel({
+        .communityUpdateAuthorityRequest({
+          slug: community.slug,
+          newAuthority,
           authority,
           feePayer,
-          slug: community.slug,
         })
         .then(async (tx) => {
           const signature = await signAndConfirmTransaction(tx)

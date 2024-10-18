@@ -16,7 +16,10 @@ pub mod pubkey_protocol {
   use super::*;
 
   // Profile Actions
-    pub fn profile_authority_add(ctx: Context<ProfileAuthorityAdd>, args: ProfileAuthorityAddArgs) -> Result<()> {
+    pub fn profile_authority_add(
+        ctx: Context<ProfileAuthorityAdd>,
+        args: ProfileAuthorityAddArgs,
+    ) -> Result<()> {
         profile::profile_authority_add(ctx, args)
     }
 
@@ -69,23 +72,23 @@ pub mod pubkey_protocol {
         community::community_provider_enable(ctx, args)
     }
 
-    pub fn community_update_authority_cancel(
-        ctx: Context<CommunityUpdateAuthorityCancel>,
+    pub fn community_update_authority_approve(
+        ctx: Context<CommunityUpdateAuthorityApprove>,
     ) -> Result<()> {
-        community::community_update_authority_cancel(ctx)
+        community::community_update_authority_approve(ctx)
     }
 
-    pub fn community_update_authority_finalize(
-        ctx: Context<CommunityUpdateAuthorityFinalize>,
+    pub fn community_update_authority_decline(
+        ctx: Context<CommunityUpdateAuthorityDecline>,
     ) -> Result<()> {
-        community::community_update_authority_finalize(ctx)
+        community::community_update_authority_decline(ctx)
     }
 
-    pub fn community_update_authority_initiate(
-        ctx: Context<CommunityUpdateAuthorityInitiate>,
-        args: CommunityUpdateAuthorityInitiateArgs,
+    pub fn community_update_authority_request(
+        ctx: Context<CommunityUpdateAuthorityRequest>,
+        args: CommunityUpdateAuthorityRequestArgs,
     ) -> Result<()> {
-        community::community_update_authority_initiate(ctx, args)
+        community::community_update_authority_request(ctx, args)
     }
 
     pub fn community_update_details(

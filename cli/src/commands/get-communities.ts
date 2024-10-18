@@ -1,8 +1,6 @@
 import { getExplorerUrl } from '@pubkey-protocol/sdk'
-import { Connection } from '@solana/web3.js'
 import { Command } from 'commander'
 import { createInterface } from 'readline'
-import { getPubkeyProtocolSdk } from '../utils'
 import { getConfig } from '../utils/get-config'
 
 async function ask(message: string): Promise<string> {
@@ -26,9 +24,7 @@ export function getCommunities(): Command {
     .command('list')
     .description('List all communities')
     .action(async () => {
-      const { endpoint, programId } = await getConfig()
-      const connection = new Connection(endpoint, 'confirmed')
-      const sdk = await getPubkeyProtocolSdk({ connection, programId })
+      const { sdk } = await getConfig()
 
       const communities = await sdk.communityGetAll()
       console.log(`Found ${communities.length} communities:`, communities.map((c) => c.name).join(', '))
@@ -41,9 +37,7 @@ export function getCommunities(): Command {
       // Prompt the user for the necessary information
       const name = await ask('Enter the name of the community: ')
       console.log('Create community functionality goes here', name)
-      const { authority, cluster, endpoint, feePayer, programId } = await getConfig()
-      const connection = new Connection(endpoint, 'confirmed')
-      const sdk = await getPubkeyProtocolSdk({ connection, programId })
+      const { authority, cluster, connection, endpoint, feePayer, sdk } = await getConfig()
 
       const { input, tx: transaction } = await sdk.communityCreate({
         authority: authority.publicKey,

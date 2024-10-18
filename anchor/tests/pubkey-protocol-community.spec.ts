@@ -121,11 +121,10 @@ describe('pubkey-protocol-community', () => {
         .communityProviderEnable({
           provider: convertToAnchorIdentityProvider(provider),
         })
-        .accountsStrict({
+        .accounts({
           community: communityPDA,
           authority: communityAuthority.publicKey,
           feePayer: feePayer.publicKey,
-          systemProgram: SystemProgram.programId,
         })
         .signers([communityAuthority])
         .rpc()
@@ -136,6 +135,51 @@ describe('pubkey-protocol-community', () => {
       expect(communityAfter.providers.length).toBe(communityBefore.providers.length + 1)
     }
 
+    describe('Providers Unauthorized', () => {
+      let communityPDA: anchor.web3.PublicKey
+      const unauthorizedAuthority = Keypair.generate()
+
+      beforeEach(async () => {
+        // Create community using an authorized authority
+        communityPDA = await createTestCommunity(unique('acme'), program, communityAuthority, feePayer.publicKey)
+
+        // Ensure the unauthorized authority is funded for transaction signing
+        await airdropAccounts(provider, [
+          { label: 'unauthorizedAuthority', publicKey: unauthorizedAuthority.publicKey },
+        ])
+      })
+
+      it('should not allow a non-authority to enable a provider', async () => {
+        const providerToEnable = IdentityProvider.Discord
+
+        try {
+          await program.methods
+            .communityProviderEnable({
+              provider: convertToAnchorIdentityProvider(providerToEnable),
+            })
+            .accounts({
+              community: communityPDA,
+              authority: unauthorizedAuthority.publicKey, // Use unauthorized authority here
+              feePayer: feePayer.publicKey,
+            })
+            .signers([unauthorizedAuthority])
+            .rpc()
+
+          // If no error, fail the test as it should not succeed
+          expect(true).toBe(false)
+        } catch (error) {
+          // Check that the error is related to unauthorized action
+          expect(error.error.errorCode.code).toEqual('UnAuthorized')
+          expect(error.error.errorCode.number).toEqual(6005)
+          expect(error.error.errorMessage).toEqual('Account unauthorized to perform this action')
+        }
+
+        // Confirm the provider was not added
+        const communityAfter = await program.account.community.fetch(communityPDA)
+        expect(communityAfter.providers).not.toContainEqual(convertToAnchorIdentityProvider(providerToEnable))
+      })
+    })
+
     it('should enable a provider for a community', async () => {
       const providerToEnable = IdentityProvider.Discord
       const communityBefore = await program.account.community.fetch(communityPDA)
@@ -145,11 +189,10 @@ describe('pubkey-protocol-community', () => {
         .communityProviderEnable({
           provider: convertToAnchorIdentityProvider(providerToEnable),
         })
-        .accountsStrict({
+        .accounts({
           community: communityPDA,
           authority: communityAuthority.publicKey,
           feePayer: feePayer.publicKey,
-          systemProgram: SystemProgram.programId,
         })
         .signers([communityAuthority])
         .rpc()
@@ -172,11 +215,10 @@ describe('pubkey-protocol-community', () => {
           .communityProviderEnable({
             provider: convertToAnchorIdentityProvider(providerToEnable),
           })
-          .accountsStrict({
+          .accounts({
             community: communityPDA,
             authority: communityAuthority.publicKey,
             feePayer: feePayer.publicKey,
-            systemProgram: SystemProgram.programId,
           })
           .signers([communityAuthority])
           .rpc()
@@ -198,11 +240,10 @@ describe('pubkey-protocol-community', () => {
         .communityProviderDisable({
           provider: convertToAnchorIdentityProvider(providerToDisable),
         })
-        .accountsStrict({
+        .accounts({
           community: communityPDA,
           authority: communityAuthority.publicKey,
           feePayer: feePayer.publicKey,
-          systemProgram: SystemProgram.programId,
         })
         .signers([communityAuthority])
         .rpc()
@@ -221,11 +262,10 @@ describe('pubkey-protocol-community', () => {
           .communityProviderDisable({
             provider: convertToAnchorIdentityProvider(providerToDisable),
           })
-          .accountsStrict({
+          .accounts({
             community: communityPDA,
             authority: communityAuthority.publicKey,
             feePayer: feePayer.publicKey,
-            systemProgram: SystemProgram.programId,
           })
           .signers([communityAuthority])
           .rpc()
@@ -246,9 +286,9 @@ describe('pubkey-protocol-community', () => {
       communityPDA = await createTestCommunity(unique('acme'), program, communityAuthority, feePayer.publicKey)
     })
 
-    it('should initiate an authority update', async () => {
+    it('should request an authority update', async () => {
       await program.methods
-        .communityUpdateAuthorityInitiate({
+        .communityUpdateAuthorityRequest({
           newAuthority: communityAuthority2.publicKey,
         })
         .accountsStrict({
@@ -262,10 +302,10 @@ describe('pubkey-protocol-community', () => {
       expect(updatedCommunity.pendingAuthority).toEqual(communityAuthority2.publicKey)
     })
 
-    it('should finalize an authority update', async () => {
+    it('should approve an authority update', async () => {
       // First, initiate the authority update
       await program.methods
-        .communityUpdateAuthorityInitiate({
+        .communityUpdateAuthorityRequest({
           newAuthority: communityAuthority2.publicKey,
         })
         .accountsStrict({
@@ -275,9 +315,9 @@ describe('pubkey-protocol-community', () => {
         .signers([communityAuthority])
         .rpc()
 
-      // Then, finalize the authority update
+      // Then, approve the authority update
       await program.methods
-        .communityUpdateAuthorityFinalize()
+        .communityUpdateAuthorityApprove()
         .accountsStrict({
           community: communityPDA,
           newAuthority: communityAuthority2.publicKey,
@@ -290,12 +330,12 @@ describe('pubkey-protocol-community', () => {
       expect(updatedCommunity.pendingAuthority).toBeNull()
     })
 
-    it('should cancel an authority update', async () => {
+    it('should decline an authority update', async () => {
       const newAuthority = Keypair.generate().publicKey
 
       // First, initiate the authority update
       await program.methods
-        .communityUpdateAuthorityInitiate({
+        .communityUpdateAuthorityRequest({
           newAuthority,
         })
         .accountsStrict({
@@ -305,9 +345,9 @@ describe('pubkey-protocol-community', () => {
         .signers([communityAuthority])
         .rpc()
 
-      // Then, cancel the authority update
+      // Then, decline the authority update
       await program.methods
-        .communityUpdateAuthorityCancel()
+        .communityUpdateAuthorityDecline()
         .accountsStrict({
           community: communityPDA,
           authority: communityAuthority.publicKey,

@@ -30,7 +30,10 @@ pub struct ProfileAuthorityAdd<'info> {
     pub system_program: Program<'info, System>,
 }
 
-pub fn profile_authority_add(ctx: Context<ProfileAuthorityAdd>, args: ProfileAuthorityAddArgs) -> Result<()> {
+pub fn profile_authority_add(
+    ctx: Context<ProfileAuthorityAdd>,
+    args: ProfileAuthorityAddArgs,
+) -> Result<()> {
     let profile = &mut ctx.accounts.profile;
 
     let fee_payer = &mut ctx.accounts.fee_payer;

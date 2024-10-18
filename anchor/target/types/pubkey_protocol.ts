@@ -212,10 +212,6 @@ export type PubkeyProtocol = {
           "name": "feePayer",
           "writable": true,
           "signer": true
-        },
-        {
-          "name": "systemProgram",
-          "address": "11111111111111111111111111111111"
         }
       ],
       "args": [
@@ -254,10 +250,6 @@ export type PubkeyProtocol = {
           "name": "feePayer",
           "writable": true,
           "signer": true
-        },
-        {
-          "name": "systemProgram",
-          "address": "11111111111111111111111111111111"
         }
       ],
       "args": [
@@ -272,83 +264,16 @@ export type PubkeyProtocol = {
       ]
     },
     {
-      "name": "communityUpdateAuthorityCancel",
+      "name": "communityUpdateAuthorityApprove",
       "discriminator": [
-        153,
-        207,
-        96,
-        217,
-        129,
-        74,
-        67,
-        83
-      ],
-      "accounts": [
-        {
-          "name": "community",
-          "writable": true,
-          "pda": {
-            "seeds": [
-              {
-                "kind": "const",
-                "value": [
-                  112,
-                  117,
-                  98,
-                  107,
-                  101,
-                  121,
-                  95,
-                  112,
-                  114,
-                  111,
-                  116,
-                  111,
-                  99,
-                  111,
-                  108
-                ]
-              },
-              {
-                "kind": "const",
-                "value": [
-                  99,
-                  111,
-                  109,
-                  109,
-                  117,
-                  110,
-                  105,
-                  116,
-                  121
-                ]
-              },
-              {
-                "kind": "account",
-                "path": "community.slug",
-                "account": "community"
-              }
-            ]
-          }
-        },
-        {
-          "name": "authority",
-          "signer": true
-        }
-      ],
-      "args": []
-    },
-    {
-      "name": "communityUpdateAuthorityFinalize",
-      "discriminator": [
-        68,
-        114,
-        86,
-        87,
-        118,
-        16,
-        9,
-        4
+        60,
+        211,
+        14,
+        245,
+        160,
+        250,
+        55,
+        11
       ],
       "accounts": [
         {
@@ -406,16 +331,83 @@ export type PubkeyProtocol = {
       "args": []
     },
     {
-      "name": "communityUpdateAuthorityInitiate",
+      "name": "communityUpdateAuthorityDecline",
       "discriminator": [
-        170,
-        4,
-        128,
-        255,
-        193,
-        36,
-        52,
-        66
+        189,
+        132,
+        120,
+        231,
+        150,
+        179,
+        232,
+        108
+      ],
+      "accounts": [
+        {
+          "name": "community",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  112,
+                  117,
+                  98,
+                  107,
+                  101,
+                  121,
+                  95,
+                  112,
+                  114,
+                  111,
+                  116,
+                  111,
+                  99,
+                  111,
+                  108
+                ]
+              },
+              {
+                "kind": "const",
+                "value": [
+                  99,
+                  111,
+                  109,
+                  109,
+                  117,
+                  110,
+                  105,
+                  116,
+                  121
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "community.slug",
+                "account": "community"
+              }
+            ]
+          }
+        },
+        {
+          "name": "authority",
+          "signer": true
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "communityUpdateAuthorityRequest",
+      "discriminator": [
+        95,
+        207,
+        17,
+        53,
+        8,
+        64,
+        249,
+        252
       ],
       "accounts": [
         {
@@ -475,7 +467,7 @@ export type PubkeyProtocol = {
           "name": "args",
           "type": {
             "defined": {
-              "name": "communityUpdateAuthorityInitiateArgs"
+              "name": "communityUpdateAuthorityRequestArgs"
             }
           }
         }
@@ -1102,10 +1094,6 @@ export type PubkeyProtocol = {
           "name": "feePayer",
           "writable": true,
           "signer": true
-        },
-        {
-          "name": "systemProgram",
-          "address": "11111111111111111111111111111111"
         }
       ],
       "args": [
@@ -1512,7 +1500,7 @@ export type PubkeyProtocol = {
       }
     },
     {
-      "name": "communityUpdateAuthorityInitiateArgs",
+      "name": "communityUpdateAuthorityRequestArgs",
       "type": {
         "kind": "struct",
         "fields": [

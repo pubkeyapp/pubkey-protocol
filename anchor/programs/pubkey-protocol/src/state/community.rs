@@ -56,10 +56,7 @@ impl Community {
         let providers_len = self.providers.len();
         let fee_payers_len = self.fee_payers.len();
 
-        require!(
-            is_valid_username(&self.slug),
-            ProtocolError::InvalidSlug
-        );
+        require!(is_valid_username(&self.slug), ProtocolError::InvalidSlug);
 
         require!(is_valid_name(&self.name), ProtocolError::InvalidName);
 

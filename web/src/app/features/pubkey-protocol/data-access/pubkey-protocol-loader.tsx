@@ -1,5 +1,7 @@
+import { Title } from '@mantine/core'
+import { UiStack } from '@pubkey-ui/core'
 import { ReactNode } from 'react'
-import { SolanaConnectionLoader } from '../../solana'
+import { SolanaConnectionLoader, WalletButton } from '../../solana'
 import { PubKeyProtocolProvider } from './pubkey-protocol-provider'
 
 export function PubKeyProtocolLoader({
@@ -13,6 +15,12 @@ export function PubKeyProtocolLoader({
 }) {
   return (
     <SolanaConnectionLoader
+      noWallet={
+        <UiStack align="center" gap="xl" my="xl" py="xl">
+          <Title order={2}>Connect your wallet to continue.</Title>
+          <WalletButton />
+        </UiStack>
+      }
       {...props}
       render={(props) => <PubKeyProtocolProvider {...props}>{children}</PubKeyProtocolProvider>}
     />

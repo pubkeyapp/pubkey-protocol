@@ -103,11 +103,7 @@ pub fn realloc_account<'a>(
     rent_payer: AccountInfo<'a>,
     system_program: AccountInfo<'a>,
 ) -> Result<()> {
-    require_keys_eq!(
-        *account.owner,
-        id(),
-        ProtocolError::InvalidAccountOwner
-    );
+    require_keys_eq!(*account.owner, id(), ProtocolError::InvalidAccountOwner);
 
     let current_account_size = account.data.borrow().len();
     if current_account_size >= new_account_size {

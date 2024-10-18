@@ -14,8 +14,6 @@ pub struct CommunityProviderDisable<'info> {
 
     #[account(mut)]
     pub fee_payer: Signer<'info>,
-
-    pub system_program: Program<'info, System>,
 }
 
 pub fn community_provider_disable(

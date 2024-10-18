@@ -28,7 +28,10 @@ pub struct ProfileAuthorityRemove<'info> {
     pub fee_payer: Signer<'info>,
 }
 
-pub fn profile_authority_remove(ctx: Context<ProfileAuthorityRemove>, args: ProfileAuthorityRemoveArgs) -> Result<()> {
+pub fn profile_authority_remove(
+    ctx: Context<ProfileAuthorityRemove>,
+    args: ProfileAuthorityRemoveArgs,
+) -> Result<()> {
     let profile = &mut ctx.accounts.profile;
     let authority_to_remove = args.authority_to_remove;
 

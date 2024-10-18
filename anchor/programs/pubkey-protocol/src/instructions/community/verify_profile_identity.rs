@@ -23,8 +23,6 @@ pub struct VerifyProfileIdentity<'info> {
 
     #[account(mut)]
     pub fee_payer: Signer<'info>,
-
-    pub system_program: Program<'info, System>,
 }
 
 pub fn verify_profile_identity(

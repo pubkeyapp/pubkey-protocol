@@ -1,6 +1,6 @@
 import { IdentityProvider, PubKeyCommunity, PubKeyIdentity, PubKeyProfile } from '@pubkey-protocol/anchor'
+import { ellipsify, getAvatarUrlCommunity, getAvatarUrlProfile, slugify } from '@pubkey-protocol/sdk'
 import { PublicKey } from '@solana/web3.js'
-import { ellipsify, getCommunityAvatarUrl, getProfileAvatarUrl, slugify } from '@pubkey-protocol/sdk'
 
 export function createDevCommunity({
   avatarUrl,
@@ -15,7 +15,7 @@ export function createDevCommunity({
 
   return {
     authority: PublicKey.default,
-    avatarUrl: avatarUrl ?? getCommunityAvatarUrl(slug),
+    avatarUrl: avatarUrl ?? getAvatarUrlCommunity(slug),
     bump: 0,
     discord: undefined,
     feePayers: [],
@@ -49,7 +49,7 @@ export function createDevProfile({
   username?: string
 }): PubKeyProfile {
   const username = props.username ?? slugify(name)
-  const avatarUrl = getProfileAvatarUrl(username)
+  const avatarUrl = getAvatarUrlProfile(username)
 
   return {
     bump: 0,

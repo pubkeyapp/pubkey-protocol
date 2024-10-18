@@ -2,9 +2,10 @@ import { AnchorProvider } from '@coral-xyz/anchor'
 import { IdentityProvider, PUBKEY_PROTOCOL_PROGRAM_ID } from '@pubkey-protocol/anchor'
 import { airdropIfRequired, getKeypairFromFile } from '@solana-developers/helpers'
 import { Connection, Keypair, LAMPORTS_PER_SOL, PublicKey } from '@solana/web3.js'
-import { AnchorKeypairWallet } from './anchor-keypair-wallet'
 import { PubkeyProtocolSdk } from './pubkey-protocol-sdk'
-import { getProfileAvatarUrl } from './utils'
+import { AnchorKeypairWallet } from './utils/anchor-keypair-wallet'
+
+import { getAvatarUrlProfile } from './utils/get-avatar-url-profile'
 
 const programId = PUBKEY_PROTOCOL_PROGRAM_ID
 const connection = new Connection('http://localhost:8899', 'confirmed')
@@ -48,7 +49,7 @@ xdescribe('sdk', () => {
     // ARRANGE
     const username = `test-${Date.now()}`
     const name = `Test Profile`
-    const avatarUrl = getProfileAvatarUrl(username)
+    const avatarUrl = getAvatarUrlProfile(username)
     // ACT
     console.log({
       authority,

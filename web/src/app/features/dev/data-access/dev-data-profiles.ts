@@ -1,8 +1,8 @@
 import { PubKeyProfile } from '@pubkey-protocol/anchor'
-import { createDevIdentityGithub, createDevIdentitySolana, createDevProfile } from './index'
-import { convertPubKeyProfilesToMap, PubKeyProfileMap } from '@pubkey-protocol/sdk'
 import { PublicKey } from '@solana/web3.js'
+import { convertPubKeyProfilesToMap, PubKeyProfileMap } from './convert-to-map'
 import { losPda, pubkeyPda } from './dev-data-communities'
+import { createDevIdentityGithub, createDevIdentitySolana, createDevProfile } from './index'
 
 export const beemanPda = new PublicKey('BeeLReKDRAZS1bNv32gVXn5k8gQmfJJtSmDrTfVGF2R9')
 export const harklPda = new PublicKey('HKL3NaGgrLaPAAxQrERJjT3LPgz48csGAaQmrGJxsQkr')

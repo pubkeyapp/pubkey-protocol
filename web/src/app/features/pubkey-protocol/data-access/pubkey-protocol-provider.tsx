@@ -1,9 +1,10 @@
 import { IdentityProvider, PubKeyIdentity } from '@pubkey-protocol/anchor'
 import { PubkeyProtocolSdk } from '@pubkey-protocol/sdk'
-import { toastError, UiAlert, UiInfo, UiLoader, UiStack } from '@pubkey-ui/core'
+import { toastError, UiAlert, UiLoader } from '@pubkey-ui/core'
 import {
   AccountInfo,
   Cluster as SolanaCluster,
+  Connection,
   ParsedAccountData,
   PublicKey,
   VersionedTransaction,
@@ -12,7 +13,7 @@ import { useQueryClient } from '@tanstack/react-query'
 import { createContext, ReactNode, useContext } from 'react'
 import { Cluster, useCluster } from '../../cluster/cluster-data-access'
 import { uiToastLink, useKeypair } from '../../keypair/data-access'
-import { SolanaConnectionRenderProps, WalletButton } from '../../solana'
+import { SolanaConnectionRenderProps } from '../../solana'
 import { usePubkeyProtocolSdk } from './use-pubkey-protocol-sdk'
 import { useQueryGetProgramAccount } from './use-query-get-program-account'
 
@@ -39,7 +40,7 @@ export function PubKeyProtocolProvider({
   wallet,
 }: {
   children: ReactNode
-} & SolanaConnectionRenderProps) {
+} & Omit<SolanaConnectionRenderProps, 'connection' | 'publicKey'> & { connection: Connection; publicKey: PublicKey }) {
   const client = useQueryClient()
   const { cluster, getExplorerUrl } = useCluster()
   const { feePayer, feePayerSign } = useKeypair()
@@ -100,7 +101,7 @@ export function PubKeyProtocolProvider({
   }
 
   const value: PubKeyProfileProviderContext = {
-    authority: publicKey ?? PublicKey.unique(),
+    authority: publicKey,
     cluster,
     feePayer,
     getExplorerUrl,
@@ -112,25 +113,16 @@ export function PubKeyProtocolProvider({
     signAndConfirmTransaction,
   }
 
-  return publicKey ? (
-    programAccountQuery.isLoading ? (
-      <UiLoader />
-    ) : value.program ? (
-      <Context.Provider value={value}>{children}</Context.Provider>
-    ) : (
-      <UiAlert
-        message={
-          <span>
-            Program account not found. Make sure you have deployed the program and are on the correct cluster.
-          </span>
-        }
-      />
-    )
+  return programAccountQuery.isLoading ? (
+    <UiLoader />
+  ) : value.program ? (
+    <Context.Provider value={value}>{children}</Context.Provider>
   ) : (
-    <UiStack align="center">
-      <UiInfo message="Connect your wallet to continue" />
-      <WalletButton />
-    </UiStack>
+    <UiAlert
+      message={
+        <span>Program account not found. Make sure you have deployed the program and are on the correct cluster.</span>
+      }
+    />
   )
 }
 

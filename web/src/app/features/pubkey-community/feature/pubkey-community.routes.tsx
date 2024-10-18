@@ -9,26 +9,27 @@ import { PubkeyCommunityFeatureList } from './pubkey-community-feature-list'
 
 export default function PubkeyCommunityRoutes({ basePath }: { basePath: string }) {
   const routes = useRoutes([
-    { index: true, element: <PubkeyCommunityFeatureList basePath={basePath} /> },
+    {
+      index: true,
+      element: (
+        <UiPage
+          leftAction={<IconUsers />}
+          title="Communities"
+          rightAction={
+            <Group>
+              <Button size="xs" component={Link} to="create">
+                Create
+              </Button>
+            </Group>
+          }
+        >
+          <PubkeyCommunityFeatureList basePath={basePath} />
+        </UiPage>
+      ),
+    },
     { path: 'create', element: <PubkeyCommunityFeatureCreate /> },
     { path: ':slug/*', element: <PubkeyCommunityFeatureDetail /> },
   ])
 
-  return (
-    <PubKeyProtocolLoader>
-      <UiPage
-        leftAction={<IconUsers />}
-        title="Communities"
-        rightAction={
-          <Group>
-            <Button size="xs" component={Link} to="create">
-              Create
-            </Button>
-          </Group>
-        }
-      >
-        {routes}
-      </UiPage>
-    </PubKeyProtocolLoader>
-  )
+  return <PubKeyProtocolLoader>{routes}</PubKeyProtocolLoader>
 }

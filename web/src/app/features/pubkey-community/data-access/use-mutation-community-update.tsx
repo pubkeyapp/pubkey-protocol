@@ -1,8 +1,8 @@
-import { UpdateCommunityOptions } from '@pubkey-protocol/sdk'
+import { CommunityUpdateOptions } from '@pubkey-protocol/sdk'
 import { useMutation } from '@tanstack/react-query'
 import { usePubKeyProtocol } from '../../pubkey-protocol'
 
-export type PubKeyCommunityUpdateInput = Omit<UpdateCommunityOptions, 'authority' | 'feePayer'>
+export type PubKeyCommunityUpdateInput = Omit<CommunityUpdateOptions, 'authority' | 'feePayer'>
 
 export function useMutationCommunityUpdate() {
   const { authority, feePayer, sdk, signAndConfirmTransaction, onError, onSuccess } = usePubKeyProtocol()
