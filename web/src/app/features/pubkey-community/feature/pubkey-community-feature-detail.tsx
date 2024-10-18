@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom'
 import { ExplorerLink } from '../../cluster/cluster-ui'
 import { useQueryGetCommunityBySlug } from '../data-access'
 import { PubkeyProtocolUiCommunityHeader } from '../ui/'
+import { PubkeyCommunityFeatureAuthority } from './pubkey-community-feature-authority'
 import { PubkeyCommunityFeatureSettings } from './pubkey-community-feature-settings'
 
 export function PubkeyCommunityFeatureDetail() {
@@ -47,6 +48,11 @@ export function PubkeyCommunityFeatureDetail() {
             label: 'Debug',
             path: 'debug',
             element: <UiDebug data={query.data} open />,
+          },
+          {
+            label: 'Authority',
+            path: 'authority',
+            element: <PubkeyCommunityFeatureAuthority community={query.data} />,
           },
           {
             label: 'Settings',

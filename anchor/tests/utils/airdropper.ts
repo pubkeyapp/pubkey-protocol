@@ -16,7 +16,6 @@ export async function airdropAccounts(
         signature,
       })
 
-      console.log(`Airdropped 1 SOL to: ${label}`)
       return label
     }),
   )

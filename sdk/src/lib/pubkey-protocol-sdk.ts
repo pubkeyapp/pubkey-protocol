@@ -27,6 +27,8 @@ import {
 import { slugify } from './slugify'
 import { getCommunityAvatarUrl, getProfileAvatarUrl } from './utils'
 
+export type PublicKeyString = PublicKey | string
+
 export interface PubKeyProfileSdkOptions {
   readonly connection: Connection
   readonly programId?: PublicKey
@@ -385,6 +387,49 @@ export class PubkeyProtocolSdk {
 
   getPointerPda({ provider, providerId }: GetPointerPdaOptions): [PublicKey, number] {
     return getPubKeyPointerPda({ programId: this.programId, providerId, provider })
+  }
+
+  async cancelUpdateCommunityAuthority(options: {
+    authority: PublicKeyString
+    feePayer: PublicKeyString
+    slug: string
+  }) {
+    const [community] = this.getCommunityPda({ slug: options.slug })
+    const ix = await this.program.methods
+      .cancelUpdateCommunityAuthority()
+      .accountsStrict({ authority: new PublicKey(options.authority), community })
+      .instruction()
+
+    return this.createTransaction({ ix, feePayer: new PublicKey(options.feePayer) })
+  }
+
+  async finalizeUpdateCommunityAuthority(options: {
+    feePayer: PublicKeyString
+    newAuthority: PublicKeyString
+    slug: string
+  }): Promise<VersionedTransaction> {
+    const [community] = this.getCommunityPda({ slug: options.slug })
+    const ix = await this.program.methods
+      .finalizeUpdateCommunityAuthority()
+      .accountsStrict({ community, newAuthority: new PublicKey(options.newAuthority) })
+      .instruction()
+
+    return this.createTransaction({ ix, feePayer: new PublicKey(options.feePayer) })
+  }
+
+  async initiateUpdateCommunityAuthority(options: {
+    slug: string
+    newAuthority: PublicKeyString
+    authority: PublicKeyString
+    feePayer: PublicKeyString
+  }) {
+    const [community] = this.getCommunityPda({ slug: options.slug })
+    const ix = await this.program.methods
+      .initiateUpdateCommunityAuthority({ newAuthority: new PublicKey(options.newAuthority) })
+      .accountsStrict({ authority: new PublicKey(options.authority), community })
+      .instruction()
+
+    return this.createTransaction({ ix, feePayer: new PublicKey(options.feePayer) })
   }
 
   async removeAuthority({ authorityToRemove, authority, feePayer, username }: RemoveAuthorityOptions) {

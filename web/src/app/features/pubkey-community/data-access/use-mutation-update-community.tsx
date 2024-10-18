@@ -8,13 +8,8 @@ export function useMutationUpdateCommunity() {
   const { authority, feePayer, sdk, signAndConfirmTransaction, onError, onSuccess } = usePubKeyProtocol()
 
   return useMutation({
-    mutationFn: (options: PubKeyCommunityUpdateInput) => {
-      console.log({
-        ...options,
-        authority,
-        feePayer,
-      })
-      return sdk
+    mutationFn: (options: PubKeyCommunityUpdateInput) =>
+      sdk
         .updateCommunity({
           ...options,
           authority,
@@ -24,11 +19,8 @@ export function useMutationUpdateCommunity() {
           const signature = await signAndConfirmTransaction(tx)
 
           return { input, tx, signature }
-        })
-    },
+        }),
     onError,
-    onSuccess: ({ signature }) => {
-      return onSuccess(signature)
-    },
+    onSuccess: ({ signature }) => onSuccess(signature),
   })
 }

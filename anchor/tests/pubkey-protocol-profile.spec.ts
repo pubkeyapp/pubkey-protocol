@@ -3,10 +3,10 @@ import { Program } from '@coral-xyz/anchor'
 import { Keypair, LAMPORTS_PER_SOL, SystemProgram } from '@solana/web3.js'
 import { getPubKeyPointerPda, getPubKeyProfilePda, IdentityProvider } from '../src'
 import { PubkeyProtocol } from '../target/types/pubkey_protocol'
-import { unique } from './utils/unique'
-import { getProfileAvatarUrl } from './utils/get-avatar-url'
-import { airdropAccounts } from './utils/airdropper'
 import { createTestProfile } from './utils'
+import { airdropAccounts } from './utils/airdropper'
+import { getProfileAvatarUrl } from './utils/get-avatar-url'
+import { unique } from './utils/unique'
 
 describe('pubkey-protocol-profile', () => {
   const username = unique('alice')
@@ -26,8 +26,8 @@ describe('pubkey-protocol-profile', () => {
     ])
   })
 
-  describe('Profile', () => {
-    it('Create PubkeyProfile', async () => {
+  describe('Create and update', () => {
+    it('should create a profile', async () => {
       const [profile, bump] = getPubKeyProfilePda({ username, programId: program.programId })
       const [pointer, bumpPointer] = getPubKeyPointerPda({
         programId: program.programId,
@@ -69,7 +69,7 @@ describe('pubkey-protocol-profile', () => {
       expect(pointerData.profile).toStrictEqual(profile)
     })
 
-    it('Update profile details', async () => {
+    it('should update profile details', async () => {
       const [profile] = getPubKeyProfilePda({ username, programId: program.programId })
       const input = {
         authority: communityMember1.publicKey,
@@ -88,8 +88,10 @@ describe('pubkey-protocol-profile', () => {
       expect(newAvatarUrl).toStrictEqual(input.newAvatarUrl)
       expect(newName).toStrictEqual(input.newName)
     })
+  })
 
-    it('Add Authority', async () => {
+  describe('Authorities', () => {
+    it('should add an authority', async () => {
       const [profile] = getPubKeyProfilePda({ username, programId: program.programId })
 
       await program.methods
@@ -111,7 +113,7 @@ describe('pubkey-protocol-profile', () => {
       expect(authorities.length).toStrictEqual(2)
     })
 
-    it('Remove Authority', async () => {
+    it('should remove an authority', async () => {
       const [profile] = getPubKeyProfilePda({ username, programId: program.programId })
 
       await program.methods

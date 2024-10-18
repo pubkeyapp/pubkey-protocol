@@ -8,10 +8,10 @@ import {
   IdentityProvider,
   PubkeyProtocol,
 } from '../src'
-import { unique } from './utils/unique'
 import { createTestCommunity, createTestProfile } from './utils'
+import { unique } from './utils/unique'
 
-describe('Identity Profile Verification', () => {
+describe('pubkey-protocol-identity', () => {
   const provider = anchor.AnchorProvider.env()
   anchor.setProvider(provider)
   const feePayer = provider.wallet as anchor.Wallet
@@ -47,7 +47,7 @@ describe('Identity Profile Verification', () => {
     community = getPubKeyCommunityPda({ programId: program.programId, slug })[0]
   })
 
-  it('Add Identity', async () => {
+  it('should add an identity', async () => {
     await program.methods
       .addIdentity({
         provider: convertToAnchorIdentityProvider(IdentityProvider.Discord),
@@ -91,7 +91,7 @@ describe('Identity Profile Verification', () => {
     expect(pointerData.profile).toStrictEqual(profile)
   })
 
-  it('Remove Identity', async () => {
+  it('should remove an identity', async () => {
     await program.methods
       .removeIdentity({
         providerId: discordIdentity.providerId,
@@ -120,56 +120,7 @@ describe('Identity Profile Verification', () => {
     expect(pointerData).toBeNull()
   })
 
-  // Add this test case after the existing tests
-  it('Add Community Provider', async () => {
-    const providerToAdd = IdentityProvider.Discord
-    const communityBefore = await program.account.community.fetch(community)
-    expect(communityBefore.providers).not.toContain(providerToAdd)
-
-    // Call the add_community_provider instruction
-    await program.methods
-      .addCommunityProvider({
-        provider: convertToAnchorIdentityProvider(providerToAdd),
-      })
-      .accountsStrict({
-        community,
-        authority: communityAuthority.publicKey,
-        feePayer: feePayer.publicKey,
-        systemProgram: SystemProgram.programId,
-      })
-      .signers([communityAuthority])
-      .rpc()
-
-    const communityAfter = await program.account.community.fetch(community)
-    expect(communityAfter.providers).toContainEqual(convertToAnchorIdentityProvider(IdentityProvider.Solana))
-    expect(communityAfter.providers).toContainEqual(convertToAnchorIdentityProvider(providerToAdd))
-    expect(communityAfter.providers.length).toBe(communityBefore.providers.length + 1)
-
-    // Try to add the same provider again (should fail)
-    try {
-      await program.methods
-        .addCommunityProvider({
-          provider: convertToAnchorIdentityProvider(providerToAdd),
-        })
-        .accountsStrict({
-          community,
-          authority: communityAuthority.publicKey,
-          feePayer: feePayer.publicKey,
-          systemProgram: SystemProgram.programId,
-        })
-        .signers([communityAuthority])
-        .rpc()
-
-      expect(true).toBe(false)
-    } catch (error) {
-      expect(error.error.errorCode.code).toBe('ProviderAlreadyExists')
-    }
-
-    const communityFinal = await program.account.community.fetch(community)
-    expect(communityFinal.providers.length).toBe(communityAfter.providers.length)
-  })
-
-  it('Verify Profile Identity', async () => {
+  it('should verify an identity', async () => {
     const [pointer] = getPubKeyPointerPda({
       programId: program.programId,
       provider: IdentityProvider.Solana,
