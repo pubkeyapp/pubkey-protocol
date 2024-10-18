@@ -31,7 +31,7 @@ export interface PubKeyProfileProviderContext {
 
 const Context = createContext<PubKeyProfileProviderContext>({} as PubKeyProfileProviderContext)
 
-export function PubkeyProtocolProvider({
+export function PubKeyProtocolProvider({
   children,
   connection,
   publicKey,

@@ -6,7 +6,7 @@ import {
   IdentityProvider,
   PubkeyProtocol,
 } from '../../src'
-import { getCommunityAvatarUrl } from './get-avatar-url'
+import { getCommunityAvatarUrl, getProfileAvatarUrl } from './get-avatar-url'
 import { SystemProgram } from '@solana/web3.js'
 
 export async function createTestCommunity(
@@ -56,7 +56,7 @@ export async function createTestProfile(
 
     await program.methods
       .createProfile({
-        avatarUrl: `https://api.dicebear.com/9.x/bottts-neutral/svg?seed=${username}`,
+        avatarUrl: getProfileAvatarUrl(username),
         name: 'Test Verified User',
         username,
       })

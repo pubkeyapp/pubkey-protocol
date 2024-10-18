@@ -12,27 +12,33 @@ export interface SolanaConnectionRenderProps {
 }
 
 export function SolanaConnectionLoader({
+  loader = <Loader />,
+  noConnection = <div>No Solana Connection in context</div>,
+  noWallet = <WalletMultiButton />,
   render,
 }: {
+  loader?: ReactNode
+  noConnection?: ReactNode
+  noWallet?: ReactNode
   render: ({ connection, publicKey, signTransaction, wallet }: SolanaConnectionRenderProps) => ReactNode
 }) {
   const { publicKey, signTransaction, wallet } = useWallet()
   const { connection } = useConnection()
 
   if (!connection) {
-    return null
+    return noConnection
   }
 
   if (!wallet) {
-    return <WalletMultiButton />
+    return noWallet
   }
 
   if (!publicKey) {
-    return <Loader />
+    return loader
   }
 
   if (!signTransaction) {
-    return <Loader />
+    return loader
   }
 
   return render({ connection, publicKey, signTransaction, wallet })

@@ -1,14 +1,22 @@
 import { Anchor, Text } from '@mantine/core'
 import { Link } from 'react-router-dom'
 
-export function PubkeyProtocolUiCommunityAnchor({ slug, basePath }: { slug: string; basePath?: string }) {
+export function PubkeyProtocolUiCommunityAnchor({
+  name,
+  slug,
+  basePath,
+}: {
+  name: string
+  slug: string
+  basePath?: string
+}) {
   return basePath ? (
     <Anchor component={Link} to={`${basePath}/${slug}`} size="xl" fw="bold">
-      {slug}
+      {name}
     </Anchor>
   ) : (
     <Text size="xl" fw="bold">
-      {slug}
+      {name}
     </Text>
   )
 }

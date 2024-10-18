@@ -2,9 +2,9 @@ import { Group, Stack } from '@mantine/core'
 import { PubKeyProfile } from '@pubkey-protocol/anchor'
 import { UiDebugModal } from '@pubkey-ui/core'
 import { ReactNode } from 'react'
-import { UiAvatar } from '../../../ui/ui-avatar'
 import { PubkeyProtocolUiProfileAnchor } from './pubkey-protocol-ui-profile-anchor'
 import { PubkeyProtocolUiIdentity } from './pubkey-protocol-ui-identity'
+import { PubkeyProtocolUiProfileAvatar } from './pubkey-protocol-ui-profile-avatar'
 
 export function PubkeyProtocolUiProfile({
   children,
@@ -18,7 +18,7 @@ export function PubkeyProtocolUiProfile({
   return (
     <Group align="start" wrap="nowrap" justify="space-between" w="100%">
       <Group align="start" wrap="nowrap">
-        <UiAvatar url={profile.avatarUrl ? profile.avatarUrl : null} name={profile.username} radius={100} size="lg" />
+        <PubkeyProtocolUiProfileAvatar profile={profile} />
         <Stack gap={0}>
           <PubkeyProtocolUiProfileAnchor username={profile.username} basePath={basePath} />
           <Stack gap="xs">

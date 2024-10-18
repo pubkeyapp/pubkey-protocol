@@ -23,6 +23,7 @@ import {
   TransactionMessage,
   VersionedTransaction,
 } from '@solana/web3.js'
+import { getCommunityAvatarUrl, getProfileAvatarUrl, slugify } from './utils'
 
 export interface PubKeyProfileSdkOptions {
   readonly connection: Connection
@@ -85,20 +86,32 @@ export interface AddAuthorityOptions {
   username: string
 }
 
-export interface CreateCommunityOptions {
+export interface CreateCommunityInput {
   avatarUrl: string
-  authority: PublicKey
-  feePayer: PublicKey
   name: string
   slug: string
 }
 
+export interface CreateCommunityOptions {
+  authority: PublicKey
+  avatarUrl?: string
+  discord?: string
+  farcaster?: string
+  feePayer: PublicKey
+  github?: string
+  name: string
+  slug?: string
+  telegram?: string
+  website?: string
+  x?: string
+}
+
 export interface CreateProfileOptions {
-  avatarUrl: string
+  avatarUrl?: string
   authority: PublicKey
   feePayer: PublicKey
   name: string
-  username: string
+  username?: string
 }
 
 export interface UpdateAvatarUrlOptions {
@@ -160,32 +173,41 @@ export class PubkeyProtocolSdk {
     return this.createTransaction({ ix, feePayer })
   }
 
-  async createCommunity({ authority, avatarUrl, feePayer, name, slug }: CreateCommunityOptions) {
+  async createCommunity(options: CreateCommunityOptions): Promise<{
+    input: CreateCommunityInput
+    tx: VersionedTransaction
+  }> {
+    const slug = options.slug || slugify(options.name)
+    const avatarUrl = options.avatarUrl || getCommunityAvatarUrl(slug)
     const [community] = this.getCommunityPda({ slug })
 
+    const input: CreateCommunityInput = {
+      avatarUrl,
+      name: options.name,
+      slug,
+    }
     const ix = await this.program.methods
-      .createCommunity({
-        avatarUrl: avatarUrl || `https://api.dicebear.com/9.x/glass/svg?seed=${slug}`,
-        name,
-        slug,
-      })
+      .createCommunity(input)
       .accountsStrict({
-        authority,
-        feePayer,
+        authority: options.authority,
+        feePayer: options.feePayer,
         community,
         systemProgram: SystemProgram.programId,
       })
       .instruction()
 
-    return this.createTransaction({ ix, feePayer })
+    const tx = await this.createTransaction({ ix, feePayer: options.feePayer })
+
+    return { input, tx }
   }
 
   async createProfile({ authority, avatarUrl, feePayer, name, username }: CreateProfileOptions) {
+    username = username || slugify(name)
     const [profile] = this.getProfilePda({ username })
     const [pointer] = this.getPointerPda({ provider: IdentityProvider.Solana, providerId: authority.toString() })
     const ix = await this.program.methods
       .createProfile({
-        avatarUrl: avatarUrl || `https://api.dicebear.com/9.x/bottts-neutral/svg?seed=${username}`,
+        avatarUrl: avatarUrl || getProfileAvatarUrl(username),
         name,
         username,
       })

@@ -22,7 +22,7 @@ export function PubkeyProtocolUiCommunityListItem({
         <Group align="center" wrap="nowrap" gap="xs">
           <PubkeyProtocolUiCommunityAvatar community={community} />
           <Stack gap={0}>
-            <PubkeyProtocolUiCommunityAnchor slug={community.slug} basePath={basePath} />
+            <PubkeyProtocolUiCommunityAnchor name={community.name} slug={community.slug} basePath={basePath} />
             <ExplorerLink
               size="xs"
               ff="mono"
