@@ -1,6 +1,9 @@
 import { PubKeyCommunity } from '@pubkey-protocol/anchor'
-import { UiAvatar } from '../../../ui/ui-avatar'
+import { UiAvatar, UiAvatarProps } from '../../../ui/ui-avatar'
 
-export function PubkeyProtocolUiCommunityAvatar({ community: { avatarUrl, slug } }: { community: PubKeyCommunity }) {
-  return <UiAvatar url={avatarUrl ? avatarUrl : null} name={slug} radius={100} size="lg" />
+export function PubkeyProtocolUiCommunityAvatar({
+  community: { avatarUrl, slug },
+  ...props
+}: UiAvatarProps & { community: PubKeyCommunity }) {
+  return <UiAvatar url={avatarUrl ? avatarUrl : null} name={slug} radius={100} size="lg" {...props} />
 }

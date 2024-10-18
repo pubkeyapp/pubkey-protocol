@@ -19,7 +19,7 @@ export function PubkeyProtocolUiCommunity({
       <Group align="start" wrap="nowrap">
         <UiAvatar url={community.avatarUrl ? community.avatarUrl : null} name={community.slug} radius="md" size="lg" />
         <Stack gap={0}>
-          <PubkeyProtocolUiCommunityAnchor slug={community.slug} basePath={basePath} />
+          <PubkeyProtocolUiCommunityAnchor name={community.name} slug={community.slug} basePath={basePath} />
           {children ?? community.name}
         </Stack>
       </Group>

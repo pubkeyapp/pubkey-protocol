@@ -134,6 +134,7 @@ export interface PubKeyIdentity {
   name: string
   provider: IdentityProvider
   providerId: string
+  communities?: PublicKey[]
 }
 
 export interface PubKeyPointer {
@@ -153,7 +154,7 @@ export interface PubKeyCommunity {
   feePayers: PublicKey[]
   authority: PublicKey
   pendingAuthority: PublicKey | null
-  providers: PubKeyIdentity[]
+  providers: IdentityProvider[]
   x?: string
   discord?: string
   github?: string
