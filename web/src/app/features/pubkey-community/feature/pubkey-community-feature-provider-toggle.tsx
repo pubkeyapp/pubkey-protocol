@@ -1,8 +1,11 @@
 import { Switch } from '@mantine/core'
 import { IdentityProvider, PubKeyCommunity } from '@pubkey-protocol/anchor'
 import { toastError, toastSuccess } from '@pubkey-ui/core'
-import { useMutationCommunityProviderEnable, useQueryCommunityGetBySlug } from '../data-access'
-import { useMutationCommunityProviderDisable } from '../data-access/use-mutation-community-provider-enable'
+import {
+  useMutationCommunityProviderDisable,
+  useMutationCommunityProviderEnable,
+  useQueryCommunityGetBySlug,
+} from '../data-access'
 
 export function PubkeyCommunityFeatureProviderToggle({
   community,

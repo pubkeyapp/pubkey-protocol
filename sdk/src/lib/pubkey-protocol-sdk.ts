@@ -4,12 +4,14 @@ import {
   convertAnchorIdentityProviders,
   convertToAnchorIdentityProvider,
   getPubKeyCommunityPda,
+  getPubKeyConfigPda,
   getPubKeyPointerPda,
   getPubKeyProfilePda,
   getPubkeyProtocolProgram,
   IdentityProvider,
   PUBKEY_PROTOCOL_PROGRAM_ID,
   PubKeyCommunity,
+  PubKeyConfig,
   PubKeyPointer,
   PubKeyProfile,
   PubkeyProtocol,
@@ -84,9 +86,9 @@ export interface CommunityCreateInput {
 }
 
 export interface CommunityCreateOptions {
+  communityAuthority: PublicKey
   authority: PublicKey
   avatarUrl?: string
-  feePayer: PublicKey
   name: string
   slug?: string
 }
@@ -140,6 +142,7 @@ export class PubkeyProtocolSdk {
   }> {
     const slug = options.slug?.length ? options.slug : slugify(options.name)
     const avatarUrl = options.avatarUrl || getAvatarUrlCommunity(slug)
+    const [config] = this.pdaConfig()
     const [community] = this.pdaCommunity({ slug })
 
     const input: CommunityCreateInput = {
@@ -150,14 +153,15 @@ export class PubkeyProtocolSdk {
     const ix = await this.program.methods
       .communityCreate(input)
       .accountsStrict({
+        communityAuthority: options.communityAuthority,
         authority: options.authority,
-        feePayer: options.feePayer,
         community,
         systemProgram: SystemProgram.programId,
+        config,
       })
       .instruction()
 
-    const tx = await this.createTransaction({ ix, feePayer: options.feePayer })
+    const tx = await this.createTransaction({ ix, feePayer: options.authority })
 
     return { input, tx }
   }
@@ -224,6 +228,46 @@ export class PubkeyProtocolSdk {
 
     const ix = await this.program.methods
       .communityProviderEnable({ provider: convertToAnchorIdentityProvider(options.provider) })
+      .accounts({ authority, community, feePayer })
+      .instruction()
+
+    const tx = await this.createTransaction({ ix, feePayer })
+
+    return { tx }
+  }
+
+  async communitySignerAdd(options: {
+    authority: PublicKeyString
+    feePayer: PublicKeyString
+    slug: string
+    signer: PublicKeyString
+  }) {
+    const [community] = this.pdaCommunity({ slug: options.slug })
+    const authority = new PublicKey(options.authority)
+    const feePayer = new PublicKey(options.feePayer)
+
+    const ix = await this.program.methods
+      .communitySignerAdd({ signer: new PublicKey(options.signer) })
+      .accounts({ authority, community, feePayer })
+      .instruction()
+
+    const tx = await this.createTransaction({ ix, feePayer })
+
+    return { tx }
+  }
+
+  async communitySignerRemove(options: {
+    authority: PublicKeyString
+    feePayer: PublicKeyString
+    slug: string
+    signer: PublicKeyString
+  }) {
+    const [community] = this.pdaCommunity({ slug: options.slug })
+    const authority = new PublicKey(options.authority)
+    const feePayer = new PublicKey(options.feePayer)
+
+    const ix = await this.program.methods
+      .communitySignerRemove({ signer: new PublicKey(options.signer) })
       .accounts({ authority, community, feePayer })
       .instruction()
 
@@ -299,6 +343,46 @@ export class PubkeyProtocolSdk {
       .instruction()
 
     return this.createTransaction({ ix, feePayer: new PublicKey(options.feePayer) })
+  }
+
+  async configGet(): Promise<PubKeyConfig> {
+    const [config] = this.pdaConfig()
+
+    return this.program.account.config.fetch(config).then(
+      (res) =>
+        ({
+          ...res,
+          publicKey: config,
+        } as PubKeyConfig),
+    )
+  }
+
+  async configGetNullable(): Promise<PubKeyConfig | null> {
+    const [config] = this.pdaConfig()
+
+    return this.program.account.config.fetchNullable(config).then(
+      (res) =>
+        ({
+          ...res,
+          publicKey: config,
+        } as PubKeyConfig),
+    )
+  }
+
+  async configInit(options: { communityAuthority: PublicKeyString; authority: PublicKeyString }) {
+    const authority = new PublicKey(options.authority)
+    const communityAuthority = new PublicKey(options.communityAuthority)
+
+    const ix = await this.program.methods
+      .configInit({
+        communityAuthority: communityAuthority,
+      })
+      .accounts({ authority })
+      .instruction()
+
+    const tx = await this.createTransaction({ ix, feePayer: new PublicKey(options.communityAuthority) })
+
+    return { config: this.pdaConfig(), tx }
   }
 
   async getProgramAccount(): Promise<AccountInfo<ParsedAccountData>> {
@@ -533,8 +617,12 @@ export class PubkeyProtocolSdk {
     )
   }
 
-  pdaProfile(options: { username: string }): [PublicKey, number] {
-    return getPubKeyProfilePda({ programId: this.programId, username: options.username })
+  pdaCommunity(options: { slug: string }): [PublicKey, number] {
+    return getPubKeyCommunityPda({ programId: this.programId, slug: options.slug })
+  }
+
+  pdaConfig(): [PublicKey, number] {
+    return getPubKeyConfigPda({ programId: this.programId })
   }
 
   pdaPointer(options: { provider: IdentityProvider; providerId: string }): [PublicKey, number] {
@@ -545,7 +633,7 @@ export class PubkeyProtocolSdk {
     })
   }
 
-  pdaCommunity(options: { slug: string }): [PublicKey, number] {
-    return getPubKeyCommunityPda({ programId: this.programId, slug: options.slug })
+  pdaProfile(options: { username: string }): [PublicKey, number] {
+    return getPubKeyProfilePda({ programId: this.programId, username: options.username })
   }
 }

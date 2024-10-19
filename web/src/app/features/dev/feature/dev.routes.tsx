@@ -1,10 +1,11 @@
-import { UiCard, UiDebug, UiPage, UiStack } from '@pubkey-ui/core'
-import { communities, communityMap } from '../data-access/dev-data-communities'
-import { profileMap, profiles } from '../data-access/dev-data-profiles'
 import { Box, Divider, Group, SimpleGrid, Text } from '@mantine/core'
+import { ellipsify } from '@pubkey-protocol/sdk'
+import { UiCard, UiDebug, UiPage, UiStack } from '@pubkey-ui/core'
+import { PubkeyProtocolUiCommunityLinkItem } from '../../pubkey-community/ui'
 import { PubkeyProtocolUiCommunityListItem } from '../../pubkey-community/ui/pubkey-protocol-ui-community-list-item'
 import { PubkeyProtocolUiIdentityProviderIcon, PubkeyProtocolUiProfileListItem } from '../../pubkey-profile/ui'
-import { PubkeyProtocolUiCommunityLinkItem } from '../../pubkey-community/ui'
+import { communities, communityMap } from '../data-access/dev-data-communities'
+import { profileMap, profiles } from '../data-access/dev-data-profiles'
 
 export default function DevRoutes() {
   return (
@@ -46,7 +47,7 @@ export default function DevRoutes() {
                             <UiStack gap={0} w="100%">
                               <Text>{i.name.toString()}</Text>
                               <Text ff="monospace" c="dimmed" size="xs">
-                                {i.providerId.toString()}
+                                {ellipsify(i.providerId.toString(), 8)}
                               </Text>
                               <Divider label="Verified by" labelPosition="left" my="sm" />
                               <UiStack gap="xs">

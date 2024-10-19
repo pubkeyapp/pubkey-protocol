@@ -1,11 +1,11 @@
 import { useQuery } from '@tanstack/react-query'
 import { usePubKeyProtocol } from '../../pubkey-protocol'
 
-export function useQueryGetCommunities() {
+export function useQueryCommunityGetAll() {
   const { cluster, sdk } = usePubKeyProtocol()
 
   return useQuery({
-    queryKey: ['pubkey-protocol', 'getCommunities', { cluster }],
+    queryKey: ['pubkey-protocol', 'communityGetAll', { cluster }],
     queryFn: () => sdk.communityGetAll(),
   })
 }

@@ -17,7 +17,7 @@ async function ask(message: string): Promise<string> {
   })
 }
 
-export function getCommunities(): Command {
+export function getCommunityCommand(): Command {
   const community = new Command('community').description('Manage communities')
 
   community
@@ -41,10 +41,10 @@ export function getCommunities(): Command {
 
       const { input, tx: transaction } = await sdk.communityCreate({
         authority: authority.publicKey,
-        feePayer: feePayer.publicKey,
+        communityAuthority: authority.publicKey,
         name,
       })
-      transaction.sign([authority, feePayer])
+      transaction.sign([authority])
       const s = await connection.sendRawTransaction(transaction.serialize(), { skipPreflight: true })
       console.log(`Created community: ${name} ${input.slug}`, s)
       console.log(getExplorerUrl(`tx/${s}?cluster=custom&customUrl=http%3A%2F%2Flocalhost%3A8899`, cluster, endpoint))

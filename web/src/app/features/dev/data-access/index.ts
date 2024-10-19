@@ -18,7 +18,7 @@ export function createDevCommunity({
     avatarUrl: avatarUrl ?? getAvatarUrlCommunity(slug),
     bump: 0,
     discord: undefined,
-    feePayers: [],
+    signers: [],
     github: undefined,
     pendingAuthority: PublicKey.default,
     providers: [

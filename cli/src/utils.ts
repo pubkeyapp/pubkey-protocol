@@ -1,7 +1,8 @@
-import { Connection, Keypair, PublicKey } from '@solana/web3.js'
 import { AnchorProvider } from '@coral-xyz/anchor'
 import { AnchorKeypairWallet, PubkeyProtocolSdk } from '@pubkey-protocol/sdk'
+import { Connection, Keypair, PublicKey } from '@solana/web3.js'
 
+let sdk: PubkeyProtocolSdk | null = null
 export async function getPubkeyProtocolSdk({
   connection,
   programId,
@@ -9,17 +10,21 @@ export async function getPubkeyProtocolSdk({
   connection: Connection
   programId: PublicKey
 }) {
+  if (sdk) {
+    return sdk
+  }
   await assertProgramDeployed({ connection, programId })
   const provider = new AnchorProvider(connection, new AnchorKeypairWallet(Keypair.generate()), {
     commitment: connection.commitment,
     skipPreflight: true,
   })
 
-  return new PubkeyProtocolSdk({
+  sdk = new PubkeyProtocolSdk({
     connection,
     programId,
     provider,
   })
+  return sdk
 }
 
 async function assertEndpointUp({ connection }: { connection: Connection }) {
@@ -38,5 +43,15 @@ async function assertProgramDeployed({ connection, programId }: { connection: Co
     console.log(`Program is deployed. Owner: ${account?.owner.toString()}`)
   } catch (err) {
     throw new Error('Program not deployed')
+  }
+}
+
+export async function assertConfigInitialized({ sdk }: { sdk: PubkeyProtocolSdk }) {
+  try {
+    const account = await sdk.configGetNullable()
+    console.log(` -> Config initialized: configAuthority: ${account?.configAuthority?.toString()}`)
+    return account
+  } catch (err) {
+    throw new Error(' ! Config not initialized')
   }
 }

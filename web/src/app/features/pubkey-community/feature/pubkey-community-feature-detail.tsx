@@ -19,6 +19,7 @@ import { PubkeyProtocolUiCommunityAvatar, PubkeyProtocolUiCommunityHeader } from
 import { PubkeyCommunityFeatureAuthority } from './pubkey-community-feature-authority'
 import { PubkeyCommunityFeatureProviders } from './pubkey-community-feature-providers'
 import { PubkeyCommunityFeatureSettings } from './pubkey-community-feature-settings'
+import { PubkeyCommunityFeatureSigners } from './pubkey-community-feature-signers'
 
 export function PubkeyCommunityFeatureDetail() {
   const { slug } = useParams() as { slug: string }
@@ -51,6 +52,11 @@ export function PubkeyCommunityFeatureDetail() {
             element: <PubkeyCommunityFeatureAuthority community={query.data} />,
           },
           {
+            label: 'Signers',
+            path: 'signers',
+            element: <PubkeyCommunityFeatureSigners community={query.data} />,
+          },
+          {
             label: 'Providers',
             path: 'providers',
             element: <PubkeyCommunityFeatureProviders community={query.data} />,
@@ -72,17 +78,6 @@ export function CommunityInfo({ community }: { community: PubKeyCommunity }) {
   return (
     <UiInfoTable
       items={[
-        ['Avatar', <PubkeyProtocolUiCommunityAvatar community={community} size="sm" />],
-        ['Name', community?.name],
-        ['Slug', community?.slug],
-        ['Authority', community.authority?.toString()],
-        ['Providers enabled', community?.providers.map((p) => p.toString()).join(', ')],
-        ['Discord', <MaybeLink link={community?.discord} />],
-        ['Farcaster', <MaybeLink link={community?.farcaster} />],
-        ['Github', <MaybeLink link={community?.github} />],
-        ['Telegram', <MaybeLink link={community?.telegram} />],
-        ['Website', <MaybeLink link={community?.website} />],
-        ['X', <MaybeLink link={community?.x} />],
         [
           'Account',
           <ExplorerLink
@@ -90,6 +85,20 @@ export function CommunityInfo({ community }: { community: PubKeyCommunity }) {
             label={ellipsify(community?.publicKey.toString(), 8)}
           />,
         ],
+        [
+          'Authority',
+          <ExplorerLink path={`account/${community.authority}`} label={ellipsify(community.authority.toString(), 8)} />,
+        ],
+        ['Avatar', <PubkeyProtocolUiCommunityAvatar community={community} size="sm" />],
+        ['Name', community?.name],
+        ['Slug', community?.slug],
+        ['Providers', community?.providers.map((p) => p.toString()).join(', ')],
+        ['Discord', <MaybeLink link={community?.discord} />],
+        ['Farcaster', <MaybeLink link={community?.farcaster} />],
+        ['Github', <MaybeLink link={community?.github} />],
+        ['Telegram', <MaybeLink link={community?.telegram} />],
+        ['Website', <MaybeLink link={community?.website} />],
+        ['X', <MaybeLink link={community?.x} />],
       ]}
     />
   )

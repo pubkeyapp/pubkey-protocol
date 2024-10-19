@@ -30,6 +30,7 @@ export function getPubkeyProtocolProgramId(cluster: Cluster) {
 // Here we define the seeds and prefixes for the PubkeyProtocol program.
 export const PUBKEY_PROTOCOL_PREFIX = new TextEncoder().encode('pubkey_protocol')
 export const PUBKEY_PROTOCOL_SEED_COMMUNITY = new TextEncoder().encode('community')
+export const PUBKEY_PROTOCOL_SEED_CONFIG = new TextEncoder().encode('config')
 export const PUBKEY_PROTOCOL_SEED_POINTER = new TextEncoder().encode('pointer')
 export const PUBKEY_PROTOCOL_SEED_PROFILE = new TextEncoder().encode('profile')
 
@@ -39,6 +40,11 @@ export function getPubKeyCommunityPda({ programId, slug }: { programId: PublicKe
     [PUBKEY_PROTOCOL_PREFIX, PUBKEY_PROTOCOL_SEED_COMMUNITY, stringToUint8Array(slug)],
     programId,
   )
+}
+
+// Helper method to get the Config PDA
+export function getPubKeyConfigPda({ programId }: { programId: PublicKey }) {
+  return PublicKey.findProgramAddressSync([PUBKEY_PROTOCOL_PREFIX, PUBKEY_PROTOCOL_SEED_CONFIG], programId)
 }
 
 // Helper method to get the PubKeyProfile PDA
@@ -149,18 +155,25 @@ export interface PubKeyPointer {
   profile: PublicKey
 }
 
+export interface PubKeyConfig {
+  publicKey: PublicKey
+  bump: number
+  communityAuthority: PublicKey
+  configAuthority: PublicKey
+}
+
 export interface PubKeyCommunity {
   authority: PublicKey
   avatarUrl: string
   bump: number
   discord?: string
   farcaster?: string
-  feePayers: PublicKey[]
   github?: string
   name: string
   pendingAuthority: PublicKey | null
   providers: IdentityProvider[]
   publicKey: PublicKey
+  signers: PublicKey[]
   slug: string
   telegram?: string
   website?: string

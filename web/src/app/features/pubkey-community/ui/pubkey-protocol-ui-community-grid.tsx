@@ -11,12 +11,14 @@ export function PubkeyProtocolUiCommunityGrid({
   basePath?: string
 }) {
   return (
-    <SimpleGrid cols={{ base: 1, md: 2 }}>
-      {communities.map((community) => (
-        <UiCard key={community.slug}>
-          <PubkeyProtocolUiCommunityGridItem community={community} basePath={basePath} />
-        </UiCard>
-      ))}
+    <SimpleGrid cols={{ base: 1, sm: 2 }}>
+      {communities
+        .sort((a, b) => (a.name > b.name ? 1 : -1))
+        .map((community) => (
+          <UiCard key={community.slug}>
+            <PubkeyProtocolUiCommunityGridItem community={community} basePath={basePath} />
+          </UiCard>
+        ))}
     </SimpleGrid>
   )
 }

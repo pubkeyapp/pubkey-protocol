@@ -163,11 +163,16 @@ export type PubkeyProtocol = {
           }
         },
         {
-          "name": "authority",
+          "name": "config",
+          "writable": true
+        },
+        {
+          "name": "communityAuthority",
+          "writable": true,
           "signer": true
         },
         {
-          "name": "feePayer",
+          "name": "authority",
           "writable": true,
           "signer": true
         },
@@ -258,6 +263,174 @@ export type PubkeyProtocol = {
           "type": {
             "defined": {
               "name": "communityProviderEnableArgs"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "communitySignerAdd",
+      "discriminator": [
+        34,
+        232,
+        190,
+        181,
+        19,
+        13,
+        141,
+        229
+      ],
+      "accounts": [
+        {
+          "name": "community",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  112,
+                  117,
+                  98,
+                  107,
+                  101,
+                  121,
+                  95,
+                  112,
+                  114,
+                  111,
+                  116,
+                  111,
+                  99,
+                  111,
+                  108
+                ]
+              },
+              {
+                "kind": "const",
+                "value": [
+                  99,
+                  111,
+                  109,
+                  109,
+                  117,
+                  110,
+                  105,
+                  116,
+                  121
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "community.slug",
+                "account": "community"
+              }
+            ]
+          }
+        },
+        {
+          "name": "authority",
+          "writable": true,
+          "signer": true,
+          "relations": [
+            "community"
+          ]
+        },
+        {
+          "name": "systemProgram",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "args",
+          "type": {
+            "defined": {
+              "name": "communitySignerAddArgs"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "communitySignerRemove",
+      "discriminator": [
+        94,
+        107,
+        113,
+        213,
+        95,
+        68,
+        166,
+        195
+      ],
+      "accounts": [
+        {
+          "name": "community",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  112,
+                  117,
+                  98,
+                  107,
+                  101,
+                  121,
+                  95,
+                  112,
+                  114,
+                  111,
+                  116,
+                  111,
+                  99,
+                  111,
+                  108
+                ]
+              },
+              {
+                "kind": "const",
+                "value": [
+                  99,
+                  111,
+                  109,
+                  109,
+                  117,
+                  110,
+                  105,
+                  116,
+                  121
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "community.slug",
+                "account": "community"
+              }
+            ]
+          }
+        },
+        {
+          "name": "authority",
+          "writable": true,
+          "signer": true,
+          "relations": [
+            "community"
+          ]
+        },
+        {
+          "name": "systemProgram",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "args",
+          "type": {
+            "defined": {
+              "name": "communitySignerRemoveArgs"
             }
           }
         }
@@ -554,20 +727,20 @@ export type PubkeyProtocol = {
       ]
     },
     {
-      "name": "communityUpdateFeepayers",
+      "name": "configInit",
       "discriminator": [
-        123,
-        71,
-        33,
-        60,
-        208,
-        74,
-        58,
-        255
+        13,
+        236,
+        164,
+        173,
+        106,
+        253,
+        164,
+        185
       ],
       "accounts": [
         {
-          "name": "community",
+          "name": "config",
           "writable": true,
           "pda": {
             "seeds": [
@@ -596,19 +769,11 @@ export type PubkeyProtocol = {
                 "value": [
                   99,
                   111,
-                  109,
-                  109,
-                  117,
                   110,
+                  102,
                   105,
-                  116,
-                  121
+                  103
                 ]
-              },
-              {
-                "kind": "account",
-                "path": "community.slug",
-                "account": "community"
               }
             ]
           }
@@ -616,10 +781,7 @@ export type PubkeyProtocol = {
         {
           "name": "authority",
           "writable": true,
-          "signer": true,
-          "relations": [
-            "community"
-          ]
+          "signer": true
         },
         {
           "name": "systemProgram",
@@ -631,7 +793,7 @@ export type PubkeyProtocol = {
           "name": "args",
           "type": {
             "defined": {
-              "name": "updateFeePayersArgs"
+              "name": "configInitArgs"
             }
           }
         }
@@ -1123,6 +1285,19 @@ export type PubkeyProtocol = {
       ]
     },
     {
+      "name": "config",
+      "discriminator": [
+        155,
+        12,
+        170,
+        224,
+        30,
+        250,
+        204,
+        130
+      ]
+    },
+    {
       "name": "pointer",
       "discriminator": [
         31,
@@ -1177,23 +1352,23 @@ export type PubkeyProtocol = {
     },
     {
       "code": 6005,
-      "name": "unAuthorized",
-      "msg": "Account unauthorized to perform this action"
-    },
-    {
-      "code": 6006,
       "name": "authorityAlreadyExists",
       "msg": "Authority already exists"
     },
     {
-      "code": 6007,
+      "code": 6006,
       "name": "authorityNonExistent",
       "msg": "Authority does not exist"
     },
     {
-      "code": 6008,
+      "code": 6007,
       "name": "invalidAvatarUrl",
       "msg": "Invalid Avatar Url"
+    },
+    {
+      "code": 6008,
+      "name": "invalidCommunityAuthority",
+      "msg": "Invalid Community Authority"
     },
     {
       "code": 6009,
@@ -1332,8 +1507,33 @@ export type PubkeyProtocol = {
     },
     {
       "code": 6036,
+      "name": "signerAlreadyExists",
+      "msg": "Signer already exists"
+    },
+    {
+      "code": 6037,
+      "name": "signerDoesNotExist",
+      "msg": "Signer does not exist"
+    },
+    {
+      "code": 6038,
+      "name": "signerRequired",
+      "msg": "At least one signer is required"
+    },
+    {
+      "code": 6039,
+      "name": "unAuthorized",
+      "msg": "Account unauthorized to perform this action"
+    },
+    {
+      "code": 6040,
       "name": "unauthorizedCommunityAction",
       "msg": "Unauthorized community action"
+    },
+    {
+      "code": 6041,
+      "name": "unAuthorizedCommunityAuthority",
+      "msg": "Account is not defined in config.community_authority"
     }
   ],
   "types": [
@@ -1383,7 +1583,7 @@ export type PubkeyProtocol = {
             "type": "string"
           },
           {
-            "name": "feePayers",
+            "name": "signers",
             "type": {
               "vec": "pubkey"
             }
@@ -1500,12 +1700,68 @@ export type PubkeyProtocol = {
       }
     },
     {
+      "name": "communitySignerAddArgs",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "signer",
+            "type": "pubkey"
+          }
+        ]
+      }
+    },
+    {
+      "name": "communitySignerRemoveArgs",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "signer",
+            "type": "pubkey"
+          }
+        ]
+      }
+    },
+    {
       "name": "communityUpdateAuthorityRequestArgs",
       "type": {
         "kind": "struct",
         "fields": [
           {
             "name": "newAuthority",
+            "type": "pubkey"
+          }
+        ]
+      }
+    },
+    {
+      "name": "config",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "bump",
+            "type": "u8"
+          },
+          {
+            "name": "communityAuthority",
+            "type": "pubkey"
+          },
+          {
+            "name": "configAuthority",
+            "type": "pubkey"
+          }
+        ]
+      }
+    },
+    {
+      "name": "configInitArgs",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "communityAuthority",
             "type": "pubkey"
           }
         ]
@@ -1749,20 +2005,6 @@ export type PubkeyProtocol = {
             "name": "x",
             "type": {
               "option": "string"
-            }
-          }
-        ]
-      }
-    },
-    {
-      "name": "updateFeePayersArgs",
-      "type": {
-        "kind": "struct",
-        "fields": [
-          {
-            "name": "newFeePayers",
-            "type": {
-              "vec": "pubkey"
             }
           }
         ]

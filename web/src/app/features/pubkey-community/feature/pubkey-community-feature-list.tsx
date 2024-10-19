@@ -1,9 +1,9 @@
 import { UiDebug, UiLoader, UiStack } from '@pubkey-ui/core'
-import { useQueryGetCommunities } from '../data-access'
+import { useQueryCommunityGetAll } from '../data-access'
 import { PubkeyProtocolUiCommunityGrid } from '../ui'
 
 export function PubkeyCommunityFeatureList({ basePath }: { basePath: string }) {
-  const query = useQueryGetCommunities()
+  const query = useQueryCommunityGetAll()
 
   return query.isLoading ? (
     <UiLoader />

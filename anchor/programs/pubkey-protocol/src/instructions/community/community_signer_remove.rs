@@ -6,8 +6,8 @@ use crate::state::*;
 use crate::utils::*;
 
 #[derive(Accounts)]
-#[instruction(args: UpdateFeePayersArgs)]
-pub struct UpdateFeePayers<'info> {
+#[instruction(args: CommunitySignerRemoveArgs)]
+pub struct CommunitySignerRemove<'info> {
     #[account(
         mut,
         seeds = [
@@ -29,18 +29,27 @@ pub struct UpdateFeePayers<'info> {
     pub system_program: Program<'info, System>,
 }
 
-pub fn community_update_feepayers(
-    ctx: Context<UpdateFeePayers>,
-    args: UpdateFeePayersArgs,
+pub fn community_signer_remove(
+    ctx: Context<CommunitySignerRemove>,
+    args: CommunitySignerRemoveArgs,
 ) -> Result<()> {
     let community = &mut ctx.accounts.community;
-    let new_fee_payers = args.new_fee_payers;
+    let signer = args.signer;
 
-    // Update the fee_payers vector
-    community.fee_payers = new_fee_payers;
+    // Ensure the signer is in the community.signers vector
+    require!(
+        community.signers.contains(&signer),
+        ProtocolError::SignerDoesNotExist
+    );
+
+    // Ensure there is at least one signer left after removing this signer
+    require!(community.signers.len() > 1, ProtocolError::SignerRequired);
+
+    // Remove the signer from the community.signers vector
+    community.signers.retain(|s| !s.eq(&signer));
 
     // Calculate the new account size
-    let new_account_size = Community::size(&community.fee_payers, &community.providers);
+    let new_account_size = Community::size(&community.signers, &community.providers);
 
     // Reallocate the account if necessary
     realloc_account(
@@ -57,6 +66,6 @@ pub fn community_update_feepayers(
 }
 
 #[derive(AnchorSerialize, AnchorDeserialize)]
-pub struct UpdateFeePayersArgs {
-    pub new_fee_payers: Vec<Pubkey>,
+pub struct CommunitySignerRemoveArgs {
+    pub signer: Pubkey,
 }

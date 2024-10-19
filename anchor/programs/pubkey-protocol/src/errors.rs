@@ -12,14 +12,14 @@ pub enum ProtocolError {
     InvalidAccountOwner,
     #[msg("Account too large")]
     AccountTooLarge,
-    #[msg("Account unauthorized to perform this action")]
-    UnAuthorized,
     #[msg("Authority already exists")]
     AuthorityAlreadyExists,
     #[msg("Authority does not exist")]
     AuthorityNonExistent,
     #[msg("Invalid Avatar Url")]
     InvalidAvatarURL,
+    #[msg("Invalid Community Authority")]
+    InvalidCommunityAuthority,
     #[msg("Invalid Discord ID")]
     InvalidDiscordID,
     #[msg("Invalid Discord URL")]
@@ -74,6 +74,16 @@ pub enum ProtocolError {
     ProviderAlreadyExists,
     #[msg("Provider does not exist")]
     ProviderDoesNotExist,
+    #[msg("Signer already exists")]
+    SignerAlreadyExists,
+    #[msg("Signer does not exist")]
+    SignerDoesNotExist,
+    #[msg("At least one signer is required")]
+    SignerRequired,
+    #[msg("Account unauthorized to perform this action")]
+    UnAuthorized,
     #[msg("Unauthorized community action")]
     UnauthorizedCommunityAction,
+    #[msg("Account is not defined in config.community_authority")]
+    UnAuthorizedCommunityAuthority,
 }

@@ -27,7 +27,7 @@ export interface PubKeyProfileProviderContext {
   onSuccess: (tx: string) => Promise<void>
   program?: AccountInfo<ParsedAccountData> | null
   sdk: PubkeyProtocolSdk
-  signAndConfirmTransaction: (tx: VersionedTransaction) => Promise<string>
+  signAndConfirmTransaction: (tx: VersionedTransaction, options?: { withFeePayer: boolean }) => Promise<string>
 }
 
 const Context = createContext<PubKeyProfileProviderContext>({} as PubKeyProfileProviderContext)
@@ -68,12 +68,21 @@ export function PubKeyProtocolProvider({
     return signature
   }
 
-  async function signAndConfirmTransaction(tx: VersionedTransaction) {
+  async function signAndConfirmTransaction(
+    tx: VersionedTransaction,
+    options: { withFeePayer: boolean } = {
+      withFeePayer: true,
+    },
+  ) {
     if (!signTransaction) {
       toastError('Wallet not connected')
       throw new Error('Wallet not connected')
     }
     const userSignedTx = await signTransaction(tx)
+
+    if (!options.withFeePayer) {
+      return sendAndConfirmTransaction({ transaction: userSignedTx })
+    }
     const feePayerSignedTx = await feePayerSign(userSignedTx)
 
     return sendAndConfirmTransaction({ transaction: feePayerSignedTx })

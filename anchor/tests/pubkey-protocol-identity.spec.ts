@@ -1,15 +1,14 @@
 import * as anchor from '@coral-xyz/anchor'
 import { Keypair, LAMPORTS_PER_SOL, SystemProgram } from '@solana/web3.js'
+import { convertToAnchorIdentityProvider, getPubKeyPointerPda, IdentityProvider, PubkeyProtocol } from '../src'
 import {
-  convertToAnchorIdentityProvider,
-  getPubKeyCommunityPda,
-  getPubKeyPointerPda,
-  getPubKeyProfilePda,
-  IdentityProvider,
-  PubkeyProtocol,
-} from '../src'
-import { createTestCommunity, createTestProfile } from './utils'
-import { unique } from './utils/unique'
+  airdropAccounts,
+  createOrGetTestConfig,
+  createTestCommunity,
+  createTestProfile,
+  getTestPdaPointer,
+  unique,
+} from './utils'
 
 describe('pubkey-protocol-identity', () => {
   const provider = anchor.AnchorProvider.env()
@@ -23,8 +22,7 @@ describe('pubkey-protocol-identity', () => {
   const profileOwner = Keypair.generate()
   let community: anchor.web3.PublicKey
   let profile: anchor.web3.PublicKey
-  let profilePointer: anchor.web3.PublicKey
-  let profileBump: number
+  let config: anchor.web3.PublicKey
 
   const discordIdentity = {
     provider: IdentityProvider.Discord,
@@ -32,19 +30,22 @@ describe('pubkey-protocol-identity', () => {
     name: `${username}123`,
   }
 
+  const profilePda = getTestPdaPointer({
+    programId: program.programId,
+    provider: IdentityProvider.Discord,
+    providerId: discordIdentity.providerId,
+  })
+
   beforeAll(async () => {
-    await provider.connection.requestAirdrop(profileOwner.publicKey, LAMPORTS_PER_SOL)
+    const res = await createOrGetTestConfig(program, feePayer.publicKey)
+    config = res.config
 
-    await createTestCommunity(slug, program, communityAuthority, feePayer.publicKey)
-    await createTestProfile(username, program, profileOwner, feePayer.publicKey)
-    ;[profilePointer, profileBump] = getPubKeyPointerPda({
-      programId: program.programId,
-      provider: IdentityProvider.Discord,
-      providerId: discordIdentity.providerId,
-    })
-
-    profile = getPubKeyProfilePda({ username, programId: program.programId })[0]
-    community = getPubKeyCommunityPda({ programId: program.programId, slug })[0]
+    await airdropAccounts(provider, [
+      { label: 'communityAuthority', publicKey: communityAuthority.publicKey },
+      { label: 'profileOwner', publicKey: profileOwner.publicKey },
+    ])
+    community = await createTestCommunity({ slug, program, authority: communityAuthority, wallet: feePayer, config })
+    profile = await createTestProfile(username, program, profileOwner, feePayer.publicKey)
   })
 
   it('should add an identity', async () => {
@@ -57,7 +58,7 @@ describe('pubkey-protocol-identity', () => {
       .accountsStrict({
         authority: profileOwner.publicKey,
         feePayer: feePayer.publicKey,
-        pointer: profilePointer,
+        pointer: profilePda.publicKey,
         profile,
         systemProgram: SystemProgram.programId,
       })
@@ -65,7 +66,7 @@ describe('pubkey-protocol-identity', () => {
       .rpc()
 
     const { identities } = await program.account.profile.fetch(profile)
-    const pointerData = await program.account.pointer.fetch(profilePointer)
+    const pointerData = await program.account.pointer.fetch(profilePda.publicKey)
 
     const postBalance = await provider.connection.getBalance(profileOwner.publicKey)
 
@@ -85,7 +86,7 @@ describe('pubkey-protocol-identity', () => {
       },
     ])
 
-    expect(pointerData.bump).toStrictEqual(profileBump)
+    expect(pointerData.bump).toStrictEqual(profilePda.bump)
     expect(pointerData.providerId).toStrictEqual(discordIdentity.providerId)
     expect(pointerData.provider).toStrictEqual(convertToAnchorIdentityProvider(discordIdentity.provider))
     expect(pointerData.profile).toStrictEqual(profile)
@@ -99,7 +100,7 @@ describe('pubkey-protocol-identity', () => {
       .accountsStrict({
         authority: profileOwner.publicKey,
         feePayer: feePayer.publicKey,
-        pointer: profilePointer,
+        pointer: profilePda.publicKey,
         profile,
         systemProgram: SystemProgram.programId,
       })
@@ -107,7 +108,7 @@ describe('pubkey-protocol-identity', () => {
       .rpc()
 
     const { identities } = await program.account.profile.fetch(profile)
-    const pointerData = await program.account.pointer.fetchNullable(profilePointer)
+    const pointerData = await program.account.pointer.fetchNullable(profilePda.publicKey)
 
     expect(identities).toEqual([
       {
@@ -137,7 +138,6 @@ describe('pubkey-protocol-identity', () => {
         pointer,
         authority: communityAuthority.publicKey,
         feePayer: feePayer.publicKey,
-        systemProgram: SystemProgram.programId,
       })
       .signers([communityAuthority])
       .rpc()

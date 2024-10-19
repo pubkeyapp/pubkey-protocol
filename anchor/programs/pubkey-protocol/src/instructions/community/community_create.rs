@@ -9,7 +9,7 @@ use crate::state::*;
 pub struct CommunityCreate<'info> {
     #[account(
       init,
-      payer = fee_payer,
+      payer = community_authority,
       space = Community::size(&[authority.key()], &[]),
       seeds = [
         PREFIX,
@@ -19,13 +19,15 @@ pub struct CommunityCreate<'info> {
       bump
     )]
     pub community: Account<'info, Community>,
-    pub authority: Signer<'info>,
-
+    #[account(mut)]
+    pub config: Account<'info, Config>,
     #[account(
       mut,
-      constraint = fee_payer.key().ne(&authority.key()) @ ProtocolError::InvalidFeePayer
+      constraint = config.check_for_community_authority(&community_authority.key()) @ ProtocolError::UnAuthorizedCommunityAuthority
     )]
-    pub fee_payer: Signer<'info>,
+    pub community_authority: Signer<'info>,
+    #[account(mut)]
+    pub authority: Signer<'info>,
     pub system_program: Program<'info, System>,
 }
 
@@ -33,7 +35,6 @@ pub fn community_create(ctx: Context<CommunityCreate>, args: CommunityCreateArgs
     let community = &mut ctx.accounts.community;
 
     let authority = ctx.accounts.authority.key();
-    let fee_payer = ctx.accounts.fee_payer.key();
 
     // Creating community account
     let CommunityCreateArgs {
@@ -46,7 +47,7 @@ pub fn community_create(ctx: Context<CommunityCreate>, args: CommunityCreateArgs
         authority,
         avatar_url,
         bump: ctx.bumps.community,
-        fee_payers: vec![fee_payer],
+        signers: vec![authority],
         name,
         pending_authority: None,
         providers: vec![IdentityProvider::Solana],

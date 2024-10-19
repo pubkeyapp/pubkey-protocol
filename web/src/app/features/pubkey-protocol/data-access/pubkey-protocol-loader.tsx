@@ -2,6 +2,7 @@ import { Title } from '@mantine/core'
 import { UiStack } from '@pubkey-ui/core'
 import { ReactNode } from 'react'
 import { SolanaConnectionLoader, WalletButton } from '../../solana'
+import { PubkeyProtocolConfigGuard } from './pubkey-protocol-config-guard'
 import { PubKeyProtocolProvider } from './pubkey-protocol-provider'
 
 export function PubKeyProtocolLoader({
@@ -22,7 +23,11 @@ export function PubKeyProtocolLoader({
         </UiStack>
       }
       {...props}
-      render={(props) => <PubKeyProtocolProvider {...props}>{children}</PubKeyProtocolProvider>}
+      render={(props) => (
+        <PubKeyProtocolProvider {...props}>
+          <PubkeyProtocolConfigGuard>{children}</PubkeyProtocolConfigGuard>
+        </PubKeyProtocolProvider>
+      )}
     />
   )
 }

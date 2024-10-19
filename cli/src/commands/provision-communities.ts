@@ -1,7 +1,8 @@
 import { CommunityCreateOptions, getExplorerUrl } from '@pubkey-protocol/sdk'
 import { getConfig } from '../utils/get-config'
+import { createOrGetConfig } from './create-or-get-config'
 
-export const provisionCommunities: Omit<CommunityCreateOptions, 'authority' | 'feePayer'>[] = [
+export const provisionCommunities: Omit<CommunityCreateOptions, 'authority' | 'communityAuthority'>[] = [
   {
     name: 'PubKey',
     avatarUrl: 'https://github.com/pubkeyapp.png',
@@ -28,24 +29,27 @@ export const provisionCommunities: Omit<CommunityCreateOptions, 'authority' | 'f
 ]
 
 export async function provisionCommunitiesIfNeeded() {
-  const { authority, connection, endpoint, feePayer, cluster, sdk } = await getConfig()
+  const { authority, connection, endpoint, cluster, sdk } = await getConfig()
+  console.log(` -> Authority Account: ${authority.publicKey.toString()}`)
+  const { config } = await createOrGetConfig()
+  console.log(` -> Config Account: ${config.publicKey.toString()}`)
 
   const existing = await sdk.communityGetAll()
   const existingNames = existing.map((c) => c.name)
-  console.log(`Found ${existing.length} communities`, existingNames.join(', '))
+  console.log(` -> Found ${existing.length} communities`, existingNames.join(', '))
 
   for (const { avatarUrl, name, slug } of provisionCommunities.filter((c) => !existingNames.includes(c.name))) {
-    console.log(`Creating community: ${name}`)
+    console.log(` -> Creating community: ${name}`)
     const { input, tx: transaction } = await sdk.communityCreate({
       authority: authority.publicKey,
-      feePayer: feePayer.publicKey,
+      communityAuthority: authority.publicKey,
       avatarUrl,
       name,
       slug,
     })
-    transaction.sign([authority, feePayer])
+    transaction.sign([authority])
     const s = await connection.sendRawTransaction(transaction.serialize(), { skipPreflight: true })
-    console.log(`Created community: ${name} ${input.slug}`, s)
+    console.log(` -> Created community: ${name} ${input.slug}`, s)
     console.log(getExplorerUrl(`tx/${s}?cluster=custom&customUrl=http%3A%2F%2Flocalhost%3A8899`, cluster, endpoint))
   }
 }

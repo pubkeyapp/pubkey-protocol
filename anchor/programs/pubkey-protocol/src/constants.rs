@@ -1,6 +1,7 @@
 pub const PREFIX: &[u8] = b"pubkey_protocol";
 
 pub const COMMUNITY: &[u8] = b"community";
+pub const CONFIG: &[u8] = b"config";
 pub const PROFILE: &[u8] = b"profile";
 pub const POINTER: &[u8] = b"pointer";
 

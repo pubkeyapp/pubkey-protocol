@@ -71,6 +71,19 @@ pub mod pubkey_protocol {
     ) -> Result<()> {
         community::community_provider_enable(ctx, args)
     }
+    pub fn community_signer_add(
+        ctx: Context<CommunitySignerAdd>,
+        args: CommunitySignerAddArgs,
+    ) -> Result<()> {
+        community::community_signer_add(ctx, args)
+    }
+
+    pub fn community_signer_remove(
+        ctx: Context<CommunitySignerRemove>,
+        args: CommunitySignerRemoveArgs,
+    ) -> Result<()> {
+        community::community_signer_remove(ctx, args)
+    }
 
     pub fn community_update_authority_approve(
         ctx: Context<CommunityUpdateAuthorityApprove>,
@@ -98,11 +111,8 @@ pub mod pubkey_protocol {
         community::community_update_details(ctx, args)
     }
 
-    pub fn community_update_feepayers(
-        ctx: Context<UpdateFeePayers>,
-        args: UpdateFeePayersArgs,
-    ) -> Result<()> {
-        community::community_update_feepayers(ctx, args)
+    pub fn config_init(ctx: Context<ConfigInit>, args: ConfigInitArgs) -> Result<()> {
+        config::config_init(ctx, args)
     }
 
     pub fn verify_profile_identity(

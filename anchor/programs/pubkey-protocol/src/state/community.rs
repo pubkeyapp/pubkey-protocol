@@ -15,8 +15,8 @@ pub struct Community {
     pub name: String,
     // Avatar URL
     pub avatar_url: String,
-    // Fee payers, can be multiple
-    pub fee_payers: Vec<Pubkey>,
+    // Signers, can be multiple
+    pub signers: Vec<Pubkey>,
     // Authority that have been delegated to
     pub authority: Pubkey,
     // Pending authority that must sign to complete
@@ -33,8 +33,8 @@ pub struct Community {
 }
 
 impl Community {
-    pub fn size(fee_payers: &[Pubkey], providers: &[IdentityProvider]) -> usize {
-        let fee_payers_size = 4 + (fee_payers.len() * 32);
+    pub fn size(signers: &[Pubkey], providers: &[IdentityProvider]) -> usize {
+        let signers_size = 4 + (signers.len() * 32);
         let providers_size = 4 + (providers.len() * std::mem::size_of::<IdentityProvider>());
         let links_count = 6;
         let links_size = (1 + 4 + MAX_URL_SIZE) * links_count;
@@ -46,7 +46,7 @@ impl Community {
         4 + MAX_URL_SIZE +
         32 + // authority
         1 + 32 + // pending_authority (Option<Pubkey>)
-        fee_payers_size +
+        signers_size +
         providers_size +
         links_size
     }
@@ -54,7 +54,7 @@ impl Community {
     pub fn validate(&self) -> Result<()> {
         let avatar_url_len = self.avatar_url.len();
         let providers_len = self.providers.len();
-        let fee_payers_len = self.fee_payers.len();
+        let signers_len = self.signers.len();
 
         require!(is_valid_username(&self.slug), ProtocolError::InvalidSlug);
 
@@ -71,7 +71,7 @@ impl Community {
         );
 
         require!(
-            fee_payers_len <= MAX_VECTOR_SIZE.into(),
+            signers_len <= MAX_VECTOR_SIZE.into(),
             ProtocolError::MaxSizeReached
         );
 

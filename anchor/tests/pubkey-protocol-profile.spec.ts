@@ -3,10 +3,7 @@ import { Program } from '@coral-xyz/anchor'
 import { Keypair, LAMPORTS_PER_SOL, SystemProgram } from '@solana/web3.js'
 import { getPubKeyPointerPda, getPubKeyProfilePda, IdentityProvider } from '../src'
 import { PubkeyProtocol } from '../target/types/pubkey_protocol'
-import { createTestProfile } from './utils'
-import { airdropAccounts } from './utils/airdropper'
-import { getProfileAvatarUrl } from './utils/get-avatar-url'
-import { unique } from './utils/unique'
+import { airdropAccounts, createTestProfile, getProfileAvatarUrl, unique } from './utils'
 
 describe('pubkey-protocol-profile', () => {
   const username = unique('alice')

@@ -6,6 +6,6 @@ export const FEE_PAYER = [
   201, 180, 76, 27, 163, 29, 203, 181, 210, 8, 28, 97, 48,
 ]
 
-export function getDefaultFeePayer() {
+export function getFeePayerKeypair() {
   return Keypair.fromSecretKey(Uint8Array.from(FEE_PAYER))
 }
