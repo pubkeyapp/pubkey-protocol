@@ -39,8 +39,8 @@ export function PubkeyProtocolUiCommunitySocials({ community, ...props }: GroupP
 
 function MaybeSocial({ link, social }: { link?: string; social: Social }) {
   return link ? (
-    <Tooltip label={link.replace('https://', '')}>
-      <ActionIcon component={'a'} href={link} target="_blank" size="sm" variant="light">
+    <Tooltip label={link.replace('https://', '')} withArrow>
+      <ActionIcon component={'a'} href={link} target="_blank" size="xs" variant="light">
         <SocialIcon social={social} />
       </ActionIcon>
     </Tooltip>
@@ -50,17 +50,17 @@ function MaybeSocial({ link, social }: { link?: string; social: Social }) {
 function SocialIcon({ social }: { social: Social }) {
   switch (social) {
     case Social.Discord:
-      return <IconBrandDiscordFilled size={16} />
+      return <IconBrandDiscordFilled size={12} />
     case Social.Farcaster:
-      return <IconLetterW size={16} />
+      return <IconLetterW size={12} />
     case Social.Github:
-      return <IconBrandGithubFilled size={16} />
+      return <IconBrandGithubFilled size={12} />
     case Social.Telegram:
-      return <IconBrandTelegram size={16} />
+      return <IconBrandTelegram size={12} />
     case Social.Website:
-      return <IconWorldWww size={16} />
+      return <IconWorldWww size={12} />
     case Social.X:
-      return <IconBrandXFilled size={16} />
+      return <IconBrandXFilled size={12} />
     default:
       return null
   }

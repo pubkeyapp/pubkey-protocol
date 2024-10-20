@@ -1,7 +1,8 @@
-import { Button, Group, TextInput } from '@mantine/core'
+import { ActionIcon, TextInput } from '@mantine/core'
 import { useForm } from '@mantine/form'
 import { PubKeyCommunity } from '@pubkey-protocol/anchor'
 import { UiStack } from '@pubkey-ui/core'
+import { IconPlus } from '@tabler/icons-react'
 
 export function PubkeyProtocolUiCommunitySignerForm({
   community,
@@ -23,25 +24,20 @@ export function PubkeyProtocolUiCommunitySignerForm({
   })
 
   return (
-    <form
-      onSubmit={form.onSubmit((values) =>
-        submit({ ...values }).then(() => {
-          form.reset()
-        }),
-      )}
-    >
+    <form onSubmit={form.onSubmit((values) => submit({ ...values }).then(() => form.reset()))}>
       <UiStack>
         <TextInput
           description="Public key of the signer to add to the community."
           label="Signer"
           name="signer"
+          required
           {...form.getInputProps('signer')}
+          rightSection={
+            <ActionIcon disabled={!form.isValid()} variant="light" color="green" type="submit">
+              <IconPlus size="16" />
+            </ActionIcon>
+          }
         />
-        <Group justify="right">
-          <Button disabled={!form.isValid()} type="submit">
-            Add
-          </Button>
-        </Group>
       </UiStack>
     </form>
   )

@@ -4,6 +4,7 @@ import { UiDebugModal } from '@pubkey-ui/core'
 import { ReactNode } from 'react'
 import { PubkeyProtocolUiCommunityAnchor } from './pubkey-protocol-ui-community-anchor'
 import { PubkeyProtocolUiCommunityAvatar } from './pubkey-protocol-ui-community-avatar'
+import { PubkeyProtocolUiCommunitySocials } from './pubkey-protocol-ui-community-socials'
 
 export function PubkeyProtocolUiCommunityGridItem({
   children,
@@ -20,7 +21,7 @@ export function PubkeyProtocolUiCommunityGridItem({
         <PubkeyProtocolUiCommunityAvatar community={community} />
         <Stack gap={0}>
           <PubkeyProtocolUiCommunityAnchor community={community} to={`${basePath}/${community.slug}`} />
-          {children ?? community.slug}
+          {children ?? <PubkeyProtocolUiCommunitySocials community={community} />}
         </Stack>
       </Group>
       <UiDebugModal data={community} />
