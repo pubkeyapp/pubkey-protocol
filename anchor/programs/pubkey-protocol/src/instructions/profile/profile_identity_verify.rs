@@ -4,8 +4,8 @@ use crate::errors::*;
 use crate::state::*;
 
 #[derive(Accounts)]
-#[instruction(args: VerifyProfileIdentityArgs)]
-pub struct VerifyProfileIdentity<'info> {
+#[instruction(args: ProfileIdentityVerifyArgs)]
+pub struct ProfileIdentityVerify<'info> {
     #[account(mut)]
     pub community: Account<'info, Community>,
 
@@ -25,9 +25,9 @@ pub struct VerifyProfileIdentity<'info> {
     pub fee_payer: Signer<'info>,
 }
 
-pub fn verify_profile_identity(
-    ctx: Context<VerifyProfileIdentity>,
-    args: VerifyProfileIdentityArgs,
+pub fn profile_identity_verify(
+    ctx: Context<ProfileIdentityVerify>,
+    args: ProfileIdentityVerifyArgs,
 ) -> Result<()> {
     let community = &ctx.accounts.community;
     let profile = &mut ctx.accounts.profile;
@@ -68,7 +68,7 @@ pub fn verify_profile_identity(
 }
 
 #[derive(AnchorSerialize, AnchorDeserialize, Debug)]
-pub struct VerifyProfileIdentityArgs {
+pub struct ProfileIdentityVerifyArgs {
     provider: IdentityProvider,
     provider_id: String,
 }

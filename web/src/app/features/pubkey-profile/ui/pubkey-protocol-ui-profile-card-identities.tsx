@@ -1,5 +1,5 @@
-import { PubKeyProfile } from '@pubkey-protocol/anchor'
-import { UiGroup } from '@pubkey-ui/core'
+import { PubKeyCommunity, PubKeyProfile } from '@pubkey-protocol/anchor'
+import { UiStack } from '@pubkey-ui/core'
 import { PublicKey } from '@solana/web3.js'
 import { UiAppCard } from '../../../ui'
 import { useKeypair } from '../../keypair/data-access'
@@ -8,9 +8,11 @@ import { PubkeyProtocolUiProfileButtonAddIdentity } from './pubkey-protocol-ui-p
 import { PubkeyProtocolUiProfileButtonRemoveIdentity } from './pubkey-protocol-ui-profile-button-remove-identity'
 
 export function PubkeyProtocolUiProfileCardIdentities({
+  community,
   profile,
   signAuthority,
 }: {
+  community: PubKeyCommunity
   profile: PubKeyProfile
   signAuthority: PublicKey
 }) {
@@ -20,22 +22,28 @@ export function PubkeyProtocolUiProfileCardIdentities({
   return (
     <UiAppCard
       title="Identities"
-      action={canSign ? <PubkeyProtocolUiProfileButtonAddIdentity profile={profile} /> : null}
+      action={canSign ? <PubkeyProtocolUiProfileButtonAddIdentity community={community} profile={profile} /> : null}
     >
-      {profile.identities.map((item) => (
-        <UiGroup px="xs" key={item.providerId}>
-          <PubkeyProtocolUiIdentity identity={item} key={item.providerId} />
-          {canSign ? (
-            <PubkeyProtocolUiProfileButtonRemoveIdentity
-              provider={item.provider}
-              providerId={item.providerId}
-              authority={signAuthority}
-              feePayer={feePayer}
-              profile={profile}
-            />
-          ) : null}
-        </UiGroup>
-      ))}
+      <UiStack px="xs" gap="xl">
+        {profile.identities.map((item) => (
+          <PubkeyProtocolUiIdentity
+            identity={item}
+            key={item.providerId}
+            action={
+              canSign ? (
+                <PubkeyProtocolUiProfileButtonRemoveIdentity
+                  authority={signAuthority}
+                  community={community}
+                  feePayer={feePayer}
+                  profile={profile}
+                  provider={item.provider}
+                  providerId={item.providerId}
+                />
+              ) : null
+            }
+          ></PubkeyProtocolUiIdentity>
+        ))}
+      </UiStack>
     </UiAppCard>
   )
 }

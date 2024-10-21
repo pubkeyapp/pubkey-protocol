@@ -1,3 +1,4 @@
+export * from './pubkey-community-provider'
 export * from './use-community-is-authority-connected'
 export * from './use-mutation-community-create'
 export * from './use-mutation-community-provider-disable'

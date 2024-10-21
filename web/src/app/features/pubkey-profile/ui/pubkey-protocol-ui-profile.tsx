@@ -1,4 +1,4 @@
-import { Group, Stack } from '@mantine/core'
+import { Code, Group, Stack } from '@mantine/core'
 import { PubKeyProfile } from '@pubkey-protocol/anchor'
 import { UiDebugModal } from '@pubkey-ui/core'
 import { ReactNode } from 'react'
@@ -21,7 +21,10 @@ export function PubkeyProtocolUiProfile({
         <PubkeyProtocolUiProfileAvatar profile={profile} />
         <Stack gap={0}>
           <PubkeyProtocolUiProfileAnchor profile={profile} to={to} />
-          <Stack gap="xs">
+          <Group>
+            <Code>{profile.username}</Code>
+          </Group>
+          <Stack gap="xs" mt="md">
             {profile.identities?.map((identity) => (
               <PubkeyProtocolUiIdentity identity={identity} key={identity.providerId} />
             ))}

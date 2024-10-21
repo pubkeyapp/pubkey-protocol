@@ -1,6 +1,7 @@
 import { PubKeyCommunity } from '@pubkey-protocol/anchor'
 import { PublicKey } from '@solana/web3.js'
-import { convertPubKeyCommunitiesToMap, PubKeyCommunityMap } from './convert-to-map'
+import { convertPubKeyCommunitiesToMap, PubKeyCommunityMap } from '../../pubkey-community/data-access'
+
 import { createDevCommunity } from './index'
 
 export const pubkeyPda = new PublicKey('PubkntyGPcm1D7WHjzwiFUpfiRvBKd4YLRYuWwrWgC2')

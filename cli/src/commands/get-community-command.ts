@@ -37,7 +37,7 @@ export function getCommunityCommand(): Command {
       // Prompt the user for the necessary information
       const name = await ask('Enter the name of the community: ')
       console.log('Create community functionality goes here', name)
-      const { authority, cluster, connection, endpoint, feePayer, sdk } = await getConfig()
+      const { authority, cluster, connection, endpoint, sdk } = await getConfig()
 
       const { input, tx: transaction } = await sdk.communityCreate({
         authority: authority.publicKey,

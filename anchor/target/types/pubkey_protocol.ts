@@ -80,12 +80,12 @@ export type PubkeyProtocol = {
           "signer": true
         },
         {
+          "name": "community"
+        },
+        {
           "name": "feePayer",
           "writable": true,
-          "signer": true,
-          "relations": [
-            "profile"
-          ]
+          "signer": true
         },
         {
           "name": "systemProgram",
@@ -97,7 +97,7 @@ export type PubkeyProtocol = {
           "name": "args",
           "type": {
             "defined": {
-              "name": "addIdentityArgs"
+              "name": "profileIdentityAddArgs"
             }
           }
         }
@@ -862,12 +862,12 @@ export type PubkeyProtocol = {
           "signer": true
         },
         {
+          "name": "community"
+        },
+        {
           "name": "feePayer",
           "writable": true,
-          "signer": true,
-          "relations": [
-            "profile"
-          ]
+          "signer": true
         },
         {
           "name": "systemProgram",
@@ -948,12 +948,12 @@ export type PubkeyProtocol = {
           "signer": true
         },
         {
+          "name": "community"
+        },
+        {
           "name": "feePayer",
           "writable": true,
-          "signer": true,
-          "relations": [
-            "profile"
-          ]
+          "signer": true
         }
       ],
       "args": [
@@ -1033,6 +1033,9 @@ export type PubkeyProtocol = {
           "signer": true
         },
         {
+          "name": "community"
+        },
+        {
           "name": "feePayer",
           "writable": true,
           "signer": true
@@ -1048,6 +1051,51 @@ export type PubkeyProtocol = {
           "type": {
             "defined": {
               "name": "profileCreateArgs"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "profileIdentityVerify",
+      "discriminator": [
+        79,
+        14,
+        169,
+        163,
+        144,
+        179,
+        241,
+        71
+      ],
+      "accounts": [
+        {
+          "name": "community",
+          "writable": true
+        },
+        {
+          "name": "profile",
+          "writable": true
+        },
+        {
+          "name": "pointer"
+        },
+        {
+          "name": "authority",
+          "signer": true
+        },
+        {
+          "name": "feePayer",
+          "writable": true,
+          "signer": true
+        }
+      ],
+      "args": [
+        {
+          "name": "args",
+          "type": {
+            "defined": {
+              "name": "profileIdentityVerifyArgs"
             }
           }
         }
@@ -1112,12 +1160,16 @@ export type PubkeyProtocol = {
           }
         },
         {
+          "name": "authority",
+          "signer": true
+        },
+        {
+          "name": "community"
+        },
+        {
           "name": "feePayer",
           "writable": true,
-          "signer": true,
-          "relations": [
-            "profile"
-          ]
+          "signer": true
         }
       ],
       "args": [
@@ -1125,7 +1177,7 @@ export type PubkeyProtocol = {
           "name": "args",
           "type": {
             "defined": {
-              "name": "updateProfileDetailsArgs"
+              "name": "profileUpdateDetailsArgs"
             }
           }
         }
@@ -1201,12 +1253,12 @@ export type PubkeyProtocol = {
           "signer": true
         },
         {
+          "name": "community"
+        },
+        {
           "name": "feePayer",
           "writable": true,
-          "signer": true,
-          "relations": [
-            "profile"
-          ]
+          "signer": true
         },
         {
           "name": "systemProgram",
@@ -1218,52 +1270,7 @@ export type PubkeyProtocol = {
           "name": "args",
           "type": {
             "defined": {
-              "name": "removeIdentityArgs"
-            }
-          }
-        }
-      ]
-    },
-    {
-      "name": "verifyProfileIdentity",
-      "discriminator": [
-        179,
-        83,
-        99,
-        171,
-        14,
-        91,
-        192,
-        133
-      ],
-      "accounts": [
-        {
-          "name": "community",
-          "writable": true
-        },
-        {
-          "name": "profile",
-          "writable": true
-        },
-        {
-          "name": "pointer"
-        },
-        {
-          "name": "authority",
-          "signer": true
-        },
-        {
-          "name": "feePayer",
-          "writable": true,
-          "signer": true
-        }
-      ],
-      "args": [
-        {
-          "name": "args",
-          "type": {
-            "defined": {
-              "name": "verifyProfileIdentityArgs"
+              "name": "profileIdentityRemoveArgs"
             }
           }
         }
@@ -1337,230 +1344,206 @@ export type PubkeyProtocol = {
     },
     {
       "code": 6002,
-      "name": "communityVerificationAlreadyExists",
-      "msg": "Community verification already exists"
-    },
-    {
-      "code": 6003,
       "name": "invalidAccountOwner",
       "msg": "Account not owned by program"
     },
     {
-      "code": 6004,
+      "code": 6003,
       "name": "accountTooLarge",
       "msg": "Account too large"
     },
     {
-      "code": 6005,
+      "code": 6004,
       "name": "authorityAlreadyExists",
       "msg": "Authority already exists"
     },
     {
-      "code": 6006,
+      "code": 6005,
       "name": "authorityNonExistent",
       "msg": "Authority does not exist"
     },
     {
-      "code": 6007,
+      "code": 6006,
       "name": "invalidAvatarUrl",
       "msg": "Invalid Avatar Url"
     },
     {
-      "code": 6008,
+      "code": 6007,
       "name": "invalidCommunityAuthority",
       "msg": "Invalid Community Authority"
     },
     {
-      "code": 6009,
+      "code": 6008,
       "name": "invalidDiscordId",
       "msg": "Invalid Discord ID"
     },
     {
-      "code": 6010,
+      "code": 6009,
       "name": "invalidDiscordUrl",
       "msg": "Invalid Discord URL"
     },
     {
-      "code": 6011,
+      "code": 6010,
       "name": "invalidFarcasterId",
       "msg": "Invalid Farcaster ID"
     },
     {
-      "code": 6012,
+      "code": 6011,
       "name": "invalidFarcasterUrl",
       "msg": "Invalid Farcaster URL"
     },
     {
-      "code": 6013,
+      "code": 6012,
       "name": "invalidFeePayer",
       "msg": "Invalid Fee payer"
     },
     {
-      "code": 6014,
+      "code": 6013,
       "name": "invalidGitHubId",
       "msg": "Invalid GitHub ID"
     },
     {
-      "code": 6015,
+      "code": 6014,
       "name": "invalidGitHubUrl",
       "msg": "Invalid GitHub URL"
     },
     {
-      "code": 6016,
+      "code": 6015,
       "name": "invalidGoogleId",
       "msg": "Invalid Google ID"
     },
     {
-      "code": 6017,
+      "code": 6016,
       "name": "invalidGoogleUrl",
       "msg": "Invalid Google URL"
     },
     {
-      "code": 6018,
+      "code": 6017,
       "name": "invalidName",
       "msg": "Invalid Name"
     },
     {
-      "code": 6019,
+      "code": 6018,
       "name": "invalidProviderIdTooLong",
       "msg": "Invalid Provider ID (too long)"
     },
     {
-      "code": 6020,
+      "code": 6019,
       "name": "invalidProviderIdNotFound",
       "msg": "Invalid Provider ID (not found)"
     },
     {
-      "code": 6021,
+      "code": 6020,
       "name": "invalidProviderNameTooLong",
       "msg": "Invalid Provider Name (too long)"
     },
     {
-      "code": 6022,
+      "code": 6021,
       "name": "invalidSlug",
       "msg": "Invalid Slug"
     },
     {
-      "code": 6023,
+      "code": 6022,
       "name": "invalidSolanaPubKey",
       "msg": "Invalid Solana Public Key"
     },
     {
-      "code": 6024,
+      "code": 6023,
       "name": "invalidTelegramId",
       "msg": "Invalid Telegram ID"
     },
     {
-      "code": 6025,
+      "code": 6024,
       "name": "invalidTelegramUrl",
       "msg": "Invalid Telegram URL"
     },
     {
-      "code": 6026,
+      "code": 6025,
       "name": "invalidUsername",
       "msg": "Invalid Username"
     },
     {
-      "code": 6027,
+      "code": 6026,
       "name": "invalidWebsiteUrl",
       "msg": "Invalid Website URL"
     },
     {
-      "code": 6028,
+      "code": 6027,
       "name": "invalidXid",
       "msg": "Invalid X ID"
     },
     {
-      "code": 6029,
+      "code": 6028,
       "name": "invalidXurl",
       "msg": "Invalid X URL"
     },
     {
-      "code": 6030,
+      "code": 6029,
       "name": "identityProfileInvalid",
       "msg": "Invalid Identity Profile Authority"
     },
     {
-      "code": 6031,
+      "code": 6030,
       "name": "identityAlreadyExists",
       "msg": "Identity already exists"
     },
     {
-      "code": 6032,
+      "code": 6031,
       "name": "identityNonExistent",
       "msg": "Identity does not exist"
     },
     {
-      "code": 6033,
+      "code": 6032,
       "name": "maxSizeReached",
       "msg": "Array reached max size"
     },
     {
-      "code": 6034,
+      "code": 6033,
       "name": "providerAlreadyExists",
       "msg": "Provider already exists"
     },
     {
-      "code": 6035,
+      "code": 6034,
       "name": "providerDoesNotExist",
       "msg": "Provider does not exist"
     },
     {
-      "code": 6036,
+      "code": 6035,
       "name": "signerAlreadyExists",
       "msg": "Signer already exists"
     },
     {
-      "code": 6037,
+      "code": 6036,
       "name": "signerDoesNotExist",
       "msg": "Signer does not exist"
     },
     {
-      "code": 6038,
+      "code": 6037,
       "name": "signerRequired",
       "msg": "At least one signer is required"
     },
     {
-      "code": 6039,
+      "code": 6038,
       "name": "unAuthorized",
       "msg": "Account unauthorized to perform this action"
     },
     {
-      "code": 6040,
+      "code": 6039,
       "name": "unauthorizedCommunityAction",
       "msg": "Unauthorized community action"
     },
     {
-      "code": 6041,
+      "code": 6040,
       "name": "unAuthorizedCommunityAuthority",
       "msg": "Account is not defined in config.community_authority"
+    },
+    {
+      "code": 6041,
+      "name": "unAuthorizedCommunitySigner",
+      "msg": "Account is not a signer for this community"
     }
   ],
   "types": [
-    {
-      "name": "addIdentityArgs",
-      "type": {
-        "kind": "struct",
-        "fields": [
-          {
-            "name": "provider",
-            "type": {
-              "defined": {
-                "name": "identityProvider"
-              }
-            }
-          },
-          {
-            "name": "providerId",
-            "type": "string"
-          },
-          {
-            "name": "name",
-            "type": "string"
-          }
-        ]
-      }
-    },
     {
       "name": "community",
       "type": {
@@ -1876,10 +1859,6 @@ export type PubkeyProtocol = {
             "type": "string"
           },
           {
-            "name": "feePayer",
-            "type": "pubkey"
-          },
-          {
             "name": "authorities",
             "type": {
               "vec": "pubkey"
@@ -1943,13 +1922,77 @@ export type PubkeyProtocol = {
       }
     },
     {
-      "name": "removeIdentityArgs",
+      "name": "profileIdentityAddArgs",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "provider",
+            "type": {
+              "defined": {
+                "name": "identityProvider"
+              }
+            }
+          },
+          {
+            "name": "providerId",
+            "type": "string"
+          },
+          {
+            "name": "name",
+            "type": "string"
+          }
+        ]
+      }
+    },
+    {
+      "name": "profileIdentityRemoveArgs",
       "type": {
         "kind": "struct",
         "fields": [
           {
             "name": "providerId",
             "type": "string"
+          }
+        ]
+      }
+    },
+    {
+      "name": "profileIdentityVerifyArgs",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "provider",
+            "type": {
+              "defined": {
+                "name": "identityProvider"
+              }
+            }
+          },
+          {
+            "name": "providerId",
+            "type": "string"
+          }
+        ]
+      }
+    },
+    {
+      "name": "profileUpdateDetailsArgs",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "newName",
+            "type": {
+              "option": "string"
+            }
+          },
+          {
+            "name": "newAvatarUrl",
+            "type": {
+              "option": "string"
+            }
           }
         ]
       }
@@ -2006,50 +2049,6 @@ export type PubkeyProtocol = {
             "type": {
               "option": "string"
             }
-          }
-        ]
-      }
-    },
-    {
-      "name": "updateProfileDetailsArgs",
-      "type": {
-        "kind": "struct",
-        "fields": [
-          {
-            "name": "authority",
-            "type": "pubkey"
-          },
-          {
-            "name": "newName",
-            "type": {
-              "option": "string"
-            }
-          },
-          {
-            "name": "newAvatarUrl",
-            "type": {
-              "option": "string"
-            }
-          }
-        ]
-      }
-    },
-    {
-      "name": "verifyProfileIdentityArgs",
-      "type": {
-        "kind": "struct",
-        "fields": [
-          {
-            "name": "provider",
-            "type": {
-              "defined": {
-                "name": "identityProvider"
-              }
-            }
-          },
-          {
-            "name": "providerId",
-            "type": "string"
           }
         ]
       }

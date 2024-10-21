@@ -53,7 +53,6 @@ export function createDevProfile({
 
   return {
     bump: 0,
-    feePayer: PublicKey.default,
     identities,
     publicKey,
     name,

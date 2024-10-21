@@ -1,12 +1,14 @@
-import { IdentityProvider } from '@pubkey-protocol/anchor'
+import { IdentityProvider, PubKeyCommunity } from '@pubkey-protocol/anchor'
 import { ellipsify } from '@pubkey-protocol/sdk'
 import { toastError, toastSuccess, UiCard, UiInfo, UiLoader } from '@pubkey-ui/core'
 import { usePubKeyProtocol } from '../../pubkey-protocol'
 import { useMutationProfileCreate, useQueryGetProfileByProviderNullable } from '../data-access'
 import { PubkeyProtocolUiProfileCreateForm } from '../ui'
 
-export function PubkeyProfileFeatureCreate() {
-  const mutation = useMutationProfileCreate()
+export function PubkeyProfileFeatureCreate({ community }: { community: PubKeyCommunity }) {
+  const mutation = useMutationProfileCreate({
+    community: community.publicKey,
+  })
   const { authority } = usePubKeyProtocol()
   const pointerQuery = useQueryGetProfileByProviderNullable({
     provider: IdentityProvider.Solana,
