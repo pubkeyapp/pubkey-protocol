@@ -130,36 +130,35 @@ export function convertAnchorIdentityProviders(providers: AnchorIdentityProvider
 }
 
 export interface PubKeyProfile {
-  publicKey: PublicKey
   authorities: PublicKey[]
   avatarUrl: string
-  feePayer?: PublicKey
   bump?: number
   identities: PubKeyIdentity[]
   name: string
+  publicKey: PublicKey
   username: string
 }
 
 export interface PubKeyIdentity {
+  communities?: PublicKey[]
   name: string
   provider: IdentityProvider
   providerId: string
-  communities?: PublicKey[]
 }
 
 export interface PubKeyPointer {
-  publicKey: PublicKey
-  provider: IdentityProvider
-  providerId: string
   bump?: number
   profile: PublicKey
+  provider: IdentityProvider
+  providerId: string
+  publicKey: PublicKey
 }
 
 export interface PubKeyConfig {
-  publicKey: PublicKey
   bump: number
   communityAuthority: PublicKey
   configAuthority: PublicKey
+  publicKey: PublicKey
 }
 
 export interface PubKeyCommunity {

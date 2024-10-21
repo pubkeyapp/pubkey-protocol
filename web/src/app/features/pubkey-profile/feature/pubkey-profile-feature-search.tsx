@@ -1,7 +1,7 @@
 import { ActionIcon, Select, TextInput } from '@mantine/core'
 import { useForm } from '@mantine/form'
 import { IdentityProvider, PubKeyProfile } from '@pubkey-protocol/anchor'
-import { GetProfileByProvider, GetProfileByUsername } from '@pubkey-protocol/sdk'
+import { ProfileGetByProvider, ProfileGetByUsername } from '@pubkey-protocol/sdk'
 import { toastError, toastInfo, toastSuccess, UiCard, UiStack } from '@pubkey-ui/core'
 import { IconSearch } from '@tabler/icons-react'
 import { useState } from 'react'
@@ -25,14 +25,14 @@ export function PubkeyProfileFeatureSearch() {
 function SearchByProvider() {
   const [result, setResult] = useState<PubKeyProfile | null>(null)
   const { sdk } = usePubKeyProtocol()
-  const form = useForm<GetProfileByProvider>({
+  const form = useForm<ProfileGetByProvider>({
     initialValues: {
       provider: IdentityProvider.Solana,
       providerId: '',
     },
   })
 
-  async function submit({ provider, providerId }: GetProfileByProvider) {
+  async function submit({ provider, providerId }: ProfileGetByProvider) {
     setResult(null)
     sdk
       .profileGetByProvider({ provider, providerId })
@@ -80,9 +80,9 @@ function SearchByProvider() {
 function SearchByUsername() {
   const [result, setResult] = useState<PubKeyProfile | null>(null)
   const { sdk } = usePubKeyProtocol()
-  const form = useForm<GetProfileByUsername>({ initialValues: { username: '' } })
+  const form = useForm<ProfileGetByUsername>({ initialValues: { username: '' } })
 
-  async function submit({ username }: GetProfileByUsername) {
+  async function submit({ username }: ProfileGetByUsername) {
     setResult(null)
     sdk
       .profileGetByUsernameNullable({ username })

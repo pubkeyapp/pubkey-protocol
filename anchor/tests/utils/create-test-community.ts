@@ -3,23 +3,23 @@ import { getPubKeyCommunityPda, PubkeyProtocol } from '../../src'
 import { getCommunityAvatarUrl } from './get-avatar-url'
 
 export async function createTestCommunity({
-  slug,
-  program,
   authority,
-  wallet,
+  communityAuthority,
   config,
+  program,
+  slug,
 }: {
-  slug: string
-  program: anchor.Program<PubkeyProtocol>
   authority: anchor.web3.Keypair
-  wallet: anchor.Wallet
+  communityAuthority: anchor.web3.PublicKey
   config: anchor.web3.PublicKey
+  program: anchor.Program<PubkeyProtocol>
+  slug: string
 }) {
   try {
     const [community] = getPubKeyCommunityPda({ programId: program.programId, slug })
 
     // console.log(
-    //   `createTestCommunity: community authority ${wallet.publicKey.toString()} created ${slug} with authority ${authority.publicKey.toString()}`,
+    //   `createTestCommunity: community authority ${communityAuthority.toString()} created ${slug} with authority ${authority.publicKey.toString()}`,
     // )
 
     await program.methods
@@ -30,7 +30,7 @@ export async function createTestCommunity({
       })
       .accountsStrict({
         community,
-        communityAuthority: wallet.publicKey,
+        communityAuthority,
         authority: authority.publicKey,
         config,
         systemProgram: anchor.web3.SystemProgram.programId,

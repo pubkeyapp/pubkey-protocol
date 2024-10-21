@@ -15,18 +15,10 @@ pub struct Profile {
     pub name: String,
     // Avatar URL
     pub avatar_url: String,
-    // Remote fee payer
-    pub fee_payer: Pubkey,
     // Authorities that have been delegated to
     pub authorities: Vec<Pubkey>,
     // Identities user have added onto
     pub identities: Vec<Identity>,
-}
-
-#[derive(AnchorSerialize, AnchorDeserialize, Clone, Copy, Debug)]
-pub struct CommunityVerification {
-    pub community: Pubkey,
-    pub verified_by: Pubkey,
 }
 
 impl Profile {
@@ -37,8 +29,6 @@ impl Profile {
         let identities_size = 4 + // Vector discriminator
         identities.iter().map(|identity| Identity::size(identity)).sum::<usize>();
 
-        let communities_size = 4 + (0 * std::mem::size_of::<CommunityVerification>());
-
         8 + // Anchor discriminator
         1 + // bump
         4 + MAX_USERNAME_SIZE +
@@ -46,8 +36,7 @@ impl Profile {
         4 + MAX_URL_SIZE +
         32 + // fee_payer
         authorities_size +
-        identities_size +
-        communities_size
+        identities_size
     }
 
     pub fn validate(&self) -> Result<()> {

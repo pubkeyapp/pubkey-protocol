@@ -1,7 +1,7 @@
 import { Button, Group, Select, TextInput } from '@mantine/core'
 import { useForm } from '@mantine/form'
 import { modals } from '@mantine/modals'
-import { IdentityProvider, PubKeyProfile } from '@pubkey-protocol/anchor'
+import { IdentityProvider, PubKeyCommunity, PubKeyProfile } from '@pubkey-protocol/anchor'
 import { ellipsify } from '@pubkey-protocol/sdk'
 import { UiStack } from '@pubkey-ui/core'
 import { getEnumOptions } from '../../../ui'
@@ -13,8 +13,14 @@ export interface PubKeyProfileAddIdentityInput {
   provider: IdentityProvider
 }
 
-export function PubkeyProtocolUiProfileButtonAddIdentity({ profile }: { profile: PubKeyProfile }) {
-  const mutation = useMutationAddIdentity()
+export function PubkeyProtocolUiProfileButtonAddIdentity({
+  community,
+  profile,
+}: {
+  community: PubKeyCommunity
+  profile: PubKeyProfile
+}) {
+  const mutation = useMutationAddIdentity({ community: community.publicKey })
 
   async function submit({ provider, providerId, name }: PubKeyProfileAddIdentityInput) {
     return mutation.mutateAsync({

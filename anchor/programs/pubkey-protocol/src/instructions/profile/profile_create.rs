@@ -33,9 +33,11 @@ pub struct ProfileCreate<'info> {
 
     pub authority: Signer<'info>,
 
+    pub community: Account<'info, Community>,
+
     #[account(
       mut,
-      constraint = fee_payer.key().ne(&authority.key()) @ ProtocolError::InvalidFeePayer
+      constraint = community.check_for_signer(&fee_payer.key()) @ ProtocolError::UnAuthorizedCommunitySigner,
     )]
     pub fee_payer: Signer<'info>,
 
@@ -43,9 +45,9 @@ pub struct ProfileCreate<'info> {
 }
 
 pub fn profile_create(ctx: Context<ProfileCreate>, args: ProfileCreateArgs) -> Result<()> {
-    let profile = &mut ctx.accounts.profile;
     let authority = ctx.accounts.authority.key();
-    let fee_payer = ctx.accounts.fee_payer.key();
+    let community = &ctx.accounts.community;
+    let profile = &mut ctx.accounts.profile;
     let pointer = &mut ctx.accounts.pointer;
 
     // Creating pointer account
@@ -69,7 +71,7 @@ pub fn profile_create(ctx: Context<ProfileCreate>, args: ProfileCreateArgs) -> R
         provider: IdentityProvider::Solana,
         provider_id: authority.key().to_string(),
         name: "Primary Wallet".to_owned(),
-        communities: vec![],
+        communities: vec![community.key()],
     };
 
     profile.set_inner(Profile {
@@ -77,7 +79,6 @@ pub fn profile_create(ctx: Context<ProfileCreate>, args: ProfileCreateArgs) -> R
         username,
         name,
         avatar_url,
-        fee_payer,
         authorities: vec![authority],
         identities: vec![set_primary_wallet],
     });

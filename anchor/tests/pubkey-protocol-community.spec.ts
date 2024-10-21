@@ -33,11 +33,11 @@ fdescribe('pubkey-protocol-community', () => {
   beforeEach(async () => {
     communitySlug = unique('acme')
     community = await createTestCommunity({
-      slug: communitySlug,
-      program,
       authority: communityAuthority,
-      wallet: feePayer,
+      communityAuthority: feePayer.publicKey,
       config,
+      program,
+      slug: communitySlug,
     })
   })
 
@@ -410,7 +410,7 @@ fdescribe('pubkey-protocol-community', () => {
         } catch (error) {
           // console.log('error', error)
           expect(error.error.errorCode.code).toEqual('UnAuthorizedCommunityAuthority')
-          expect(error.error.errorCode.number).toEqual(6041)
+          expect(error.error.errorCode.number).toEqual(6040)
           expect(error.error.errorMessage).toEqual('Account is not defined in config.community_authority')
         }
       })
@@ -437,7 +437,7 @@ fdescribe('pubkey-protocol-community', () => {
           expect(true).toBe(false)
         } catch (error) {
           expect(error.error.errorCode.code).toBe('UnAuthorized')
-          expect(error.error.errorCode.number).toEqual(6039)
+          expect(error.error.errorCode.number).toEqual(6038)
         }
       })
     })
@@ -456,7 +456,7 @@ fdescribe('pubkey-protocol-community', () => {
           expect(true).toBe(false)
         } catch (error) {
           expect(error.error.errorCode.code).toBe('UnAuthorized')
-          expect(error.error.errorCode.number).toEqual(6039)
+          expect(error.error.errorCode.number).toEqual(6038)
         }
       })
 
@@ -473,7 +473,7 @@ fdescribe('pubkey-protocol-community', () => {
           expect(true).toBe(false)
         } catch (error) {
           expect(error.error.errorCode.code).toBe('UnAuthorized')
-          expect(error.error.errorCode.number).toEqual(6039)
+          expect(error.error.errorCode.number).toEqual(6038)
         }
       })
 
@@ -492,7 +492,7 @@ fdescribe('pubkey-protocol-community', () => {
           expect(true).toBe(false)
         } catch (error) {
           expect(error.error.errorCode.code).toBe('UnAuthorized')
-          expect(error.error.errorCode.number).toEqual(6039)
+          expect(error.error.errorCode.number).toEqual(6038)
         }
       })
     })
@@ -514,7 +514,7 @@ fdescribe('pubkey-protocol-community', () => {
           expect(true).toBe(false)
         } catch (error) {
           expect(error.error.errorCode.code).toBe('UnAuthorized')
-          expect(error.error.errorCode.number).toEqual(6039)
+          expect(error.error.errorCode.number).toEqual(6038)
         }
       })
 
@@ -534,7 +534,7 @@ fdescribe('pubkey-protocol-community', () => {
           expect(true).toBe(false)
         } catch (error) {
           expect(error.error.errorCode.code).toBe('UnAuthorized')
-          expect(error.error.errorCode.number).toEqual(6039)
+          expect(error.error.errorCode.number).toEqual(6038)
         }
       })
     })
@@ -561,7 +561,7 @@ fdescribe('pubkey-protocol-community', () => {
         } catch (error) {
           // Check that the error is related to unauthorized action
           expect(error.error.errorCode.code).toEqual('UnAuthorized')
-          expect(error.error.errorCode.number).toEqual(6039)
+          expect(error.error.errorCode.number).toEqual(6038)
           expect(error.error.errorMessage).toEqual('Account unauthorized to perform this action')
         }
 

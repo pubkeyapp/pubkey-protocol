@@ -14,16 +14,17 @@ pub struct ProfileAuthorityRemove<'info> {
         &profile.username.as_bytes()
       ],
       bump = profile.bump,
-      has_one = fee_payer @ ProtocolError::UnAuthorized,
       constraint = profile.check_for_authority(&authority.key()) @ ProtocolError::UnAuthorized
     )]
     pub profile: Account<'info, Profile>,
 
     pub authority: Signer<'info>,
 
+    pub community: Account<'info, Community>,
+
     #[account(
       mut,
-      constraint = fee_payer.key().ne(&authority.key()) @ ProtocolError::InvalidFeePayer
+      constraint = community.check_for_signer(&fee_payer.key()) @ ProtocolError::UnAuthorizedCommunitySigner,
     )]
     pub fee_payer: Signer<'info>,
 }

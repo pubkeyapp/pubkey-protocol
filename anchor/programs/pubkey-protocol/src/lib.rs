@@ -35,19 +35,25 @@ pub mod pubkey_protocol {
     }
 
     pub fn profile_update_details(
-        ctx: Context<UpdateProfileDetails>,
-        args: UpdateProfileDetailsArgs,
+        ctx: Context<ProfileUpdateDetails>,
+        args: ProfileUpdateDetailsArgs,
     ) -> Result<()> {
         profile::profile_update_details(ctx, args)
     }
 
     // Identity Actions
-    pub fn add_identity(ctx: Context<AddIdentity>, args: AddIdentityArgs) -> Result<()> {
-        identity::add(ctx, args)
+    pub fn add_identity(
+        ctx: Context<ProfileIdentityAdd>,
+        args: ProfileIdentityAddArgs,
+    ) -> Result<()> {
+        profile::profile_identity_add(ctx, args)
     }
 
-    pub fn remove_identity(ctx: Context<RemoveIdentity>, args: RemoveIdentityArgs) -> Result<()> {
-        identity::remove(ctx, args)
+    pub fn profile_identity_remove(
+        ctx: Context<ProfileIdentityRemove>,
+        args: ProfileIdentityRemoveArgs,
+    ) -> Result<()> {
+        profile::profile_identity_remove(ctx, args)
     }
 
     // Community Actions
@@ -115,10 +121,10 @@ pub mod pubkey_protocol {
         config::config_init(ctx, args)
     }
 
-    pub fn verify_profile_identity(
-        ctx: Context<VerifyProfileIdentity>,
-        args: VerifyProfileIdentityArgs,
+    pub fn profile_identity_verify(
+        ctx: Context<ProfileIdentityVerify>,
+        args: ProfileIdentityVerifyArgs,
     ) -> Result<()> {
-        community::verify_profile_identity(ctx, args)
+        profile::profile_identity_verify(ctx, args)
     }
 }

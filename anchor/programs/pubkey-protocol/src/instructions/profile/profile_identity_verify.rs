@@ -4,11 +4,8 @@ use crate::errors::*;
 use crate::state::*;
 
 #[derive(Accounts)]
-#[instruction(args: VerifyProfileIdentityArgs)]
-pub struct VerifyProfileIdentity<'info> {
-    #[account(mut)]
-    pub community: Account<'info, Community>,
-
+#[instruction(args: ProfileIdentityVerifyArgs)]
+pub struct ProfileIdentityVerify<'info> {
     #[account(mut)]
     pub profile: Account<'info, Profile>,
 
@@ -18,16 +15,20 @@ pub struct VerifyProfileIdentity<'info> {
       )]
     pub pointer: Account<'info, Pointer>,
 
-    #[account(constraint = community.check_for_authority(&authority.key()) @ ProtocolError::UnAuthorized)]
     pub authority: Signer<'info>,
 
-    #[account(mut)]
+    pub community: Account<'info, Community>,
+
+    #[account(
+      mut,
+      constraint = community.check_for_signer(&fee_payer.key()) @ ProtocolError::UnAuthorizedCommunitySigner,
+    )]
     pub fee_payer: Signer<'info>,
 }
 
-pub fn verify_profile_identity(
-    ctx: Context<VerifyProfileIdentity>,
-    args: VerifyProfileIdentityArgs,
+pub fn profile_identity_verify(
+    ctx: Context<ProfileIdentityVerify>,
+    args: ProfileIdentityVerifyArgs,
 ) -> Result<()> {
     let community = &ctx.accounts.community;
     let profile = &mut ctx.accounts.profile;
@@ -68,7 +69,7 @@ pub fn verify_profile_identity(
 }
 
 #[derive(AnchorSerialize, AnchorDeserialize, Debug)]
-pub struct VerifyProfileIdentityArgs {
+pub struct ProfileIdentityVerifyArgs {
     provider: IdentityProvider,
     provider_id: String,
 }

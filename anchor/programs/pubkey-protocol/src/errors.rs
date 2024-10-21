@@ -6,8 +6,6 @@ pub enum ProtocolError {
     CannotRemoveLastAuthority,
     #[msg("Cannot remove the Solana provider")]
     CannotRemoveSolanaProvider,
-    #[msg("Community verification already exists")]
-    CommunityVerificationAlreadyExists,
     #[msg("Account not owned by program")]
     InvalidAccountOwner,
     #[msg("Account too large")]
@@ -86,4 +84,6 @@ pub enum ProtocolError {
     UnauthorizedCommunityAction,
     #[msg("Account is not defined in config.community_authority")]
     UnAuthorizedCommunityAuthority,
+    #[msg("Account is not a signer for this community")]
+    UnAuthorizedCommunitySigner,
 }

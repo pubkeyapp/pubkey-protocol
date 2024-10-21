@@ -86,4 +86,18 @@ impl Community {
     pub fn check_for_authority(&self, authority: &Pubkey) -> bool {
         &self.authority == authority
     }
+
+    pub fn check_for_signer(&self, authority: &Pubkey) -> bool {
+        msg!(
+            "Checking if signers {} contains {}",
+            self.signers
+                .iter()
+                .map(|s| s.to_string())
+                .collect::<Vec<String>>()
+                .join(", "),
+            authority.to_string()
+        );
+
+        self.signers.iter().any(|s| s == authority)
+    }
 }

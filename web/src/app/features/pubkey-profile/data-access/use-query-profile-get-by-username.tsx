@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query'
 import { usePubKeyProtocol } from '../../pubkey-protocol'
 
-export function useQueryGetProfileByUsername({ username }: { username: string }) {
+export function useQueryProfileGetByUsername({ username }: { username: string }) {
   const { sdk, cluster } = usePubKeyProtocol()
 
   return useQuery({

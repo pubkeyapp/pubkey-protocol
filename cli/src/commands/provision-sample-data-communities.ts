@@ -6,15 +6,15 @@ import { createOrGetConfig } from './create-or-get-config'
 type ProvisionCommunityCreate = Omit<CommunityCreateOptions, 'authority' | 'communityAuthority'>
 type ProvisionCommunityUpdate = Omit<CommunityUpdateOptions, 'authority' | 'feePayer' | 'slug'>
 
-interface MapItem {
+export interface CommunityMapItem {
   create: ProvisionCommunityCreate
   providers?: IdentityProvider[]
   signers?: string[]
   update?: ProvisionCommunityUpdate
 }
-type ProvisionMap = Record<string, MapItem>
+export type CommunityProvisionMap = Record<string, CommunityMapItem>
 
-const provisionMap: ProvisionMap = {
+export const communityProvisionMap: CommunityProvisionMap = {
   pubkey: {
     create: {
       name: 'PubKey',
@@ -62,7 +62,7 @@ const provisionMap: ProvisionMap = {
       website: 'https://deanslist.services',
       x: 'https://x.com/deanslistDAO',
     },
-    providers: [IdentityProvider.Discord],
+    providers: [IdentityProvider.Discord, IdentityProvider.Github],
     signers: ['PPLAPR9qXjkQ8QhY7nBXgsEDXVnZ4VBghzNXfnmT4Uw'],
   },
   gibwork: {
@@ -98,7 +98,7 @@ const provisionMap: ProvisionMap = {
   },
 }
 
-export async function provisionCommunitiesIfNeeded() {
+export async function provisionSampleDataCommunities() {
   const { authority, connection, endpoint, cluster, sdk } = await getConfig()
   console.log(` -> Authority Account: ${authority.publicKey.toString()}`)
   const { config } = await createOrGetConfig()
@@ -108,13 +108,7 @@ export async function provisionCommunitiesIfNeeded() {
   const existingNames = existing.map((c) => c.name)
   console.log(` -> Found ${existing.length} communities`, existingNames.join(', '))
 
-  const communitiesMap = Object.keys(provisionMap)
-    .filter((slug) => !existingNames.includes(slug))
-    .reduce((map, slug) => ({ ...map, [slug]: provisionMap[slug] }), {} as ProvisionMap)
-
-  console.log('communitiesMap', communitiesMap)
-
-  const communitiesCreate = Object.keys(provisionMap).map((slug) => provisionMap[slug].create)
+  const communitiesCreate = Object.keys(communityProvisionMap).map((slug) => communityProvisionMap[slug].create)
 
   for (const { avatarUrl, name, slug } of communitiesCreate.filter((c) => !existingNames.includes(c.name))) {
     console.log(` -> Creating community: ${name}`)
@@ -131,9 +125,9 @@ export async function provisionCommunitiesIfNeeded() {
     console.log(getExplorerUrl(`tx/${s}?cluster=custom&customUrl=http%3A%2F%2Flocalhost%3A8899`, cluster, endpoint))
   }
 
-  const communitiesUpdate = Object.keys(provisionMap)
-    .filter((slug) => Object.keys(provisionMap[slug].update ?? {}).length > 0)
-    .map((slug) => ({ ...provisionMap[slug].update, slug }))
+  const communitiesUpdate = Object.keys(communityProvisionMap)
+    .filter((slug) => Object.keys(communityProvisionMap[slug].update ?? {}).length > 0)
+    .map((slug) => ({ ...communityProvisionMap[slug].update, slug }))
 
   for (const input of communitiesUpdate) {
     console.log(` -> Updating community: ${input.slug}`)
@@ -148,9 +142,9 @@ export async function provisionCommunitiesIfNeeded() {
     console.log(getExplorerUrl(`tx/${s}?cluster=custom&customUrl=http%3A%2F%2Flocalhost%3A8899`, cluster, endpoint))
   }
 
-  const communitiesSignerAdd = Object.keys(provisionMap)
-    .filter((slug) => Object.keys(provisionMap[slug].signers ?? []).length > 0)
-    .map((slug) => ({ signers: provisionMap[slug].signers, slug }))
+  const communitiesSignerAdd = Object.keys(communityProvisionMap)
+    .filter((slug) => Object.keys(communityProvisionMap[slug].signers ?? []).length > 0)
+    .map((slug) => ({ signers: communityProvisionMap[slug].signers, slug }))
 
   for (const signers of communitiesSignerAdd) {
     for (const signer of signers.signers) {
@@ -168,9 +162,9 @@ export async function provisionCommunitiesIfNeeded() {
     }
   }
 
-  const communitiesProviderEnable = Object.keys(provisionMap)
-    .filter((slug) => Object.keys(provisionMap[slug].providers ?? []).length > 0)
-    .map((slug) => ({ providers: provisionMap[slug].providers, slug }))
+  const communitiesProviderEnable = Object.keys(communityProvisionMap)
+    .filter((slug) => Object.keys(communityProvisionMap[slug].providers ?? []).length > 0)
+    .map((slug) => ({ providers: communityProvisionMap[slug].providers, slug }))
 
   for (const providers of communitiesProviderEnable) {
     for (const provider of providers.providers) {

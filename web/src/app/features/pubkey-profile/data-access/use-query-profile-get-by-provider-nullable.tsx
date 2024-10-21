@@ -2,7 +2,7 @@ import { IdentityProvider } from '@pubkey-protocol/anchor'
 import { useQuery } from '@tanstack/react-query'
 import { usePubKeyProtocol } from '../../pubkey-protocol'
 
-export function useQueryGetProfileByProviderNullable({
+export function useQueryProfileGetByProviderNullable({
   provider,
   providerId,
 }: {
