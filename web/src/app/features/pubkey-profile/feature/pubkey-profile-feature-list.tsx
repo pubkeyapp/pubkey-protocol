@@ -1,21 +1,16 @@
-import { UiDebug, UiLoader, UiPage, UiStack } from '@pubkey-ui/core'
-import { IconUsersGroup } from '@tabler/icons-react'
+import { UiDebug, UiLoader, UiStack } from '@pubkey-ui/core'
 import { useQueryGetProfiles } from '../data-access'
-import { PubkeyProfileUiProfileGrid } from '../ui'
+import { PubkeyProtocolUiProfileGrid } from '../ui'
 
 export function PubkeyProfileFeatureList({ basePath }: { basePath: string }) {
   const query = useQueryGetProfiles()
 
-  return (
-    <UiPage leftAction={<IconUsersGroup />} title="Profiles">
-      {query.isLoading ? (
-        <UiLoader />
-      ) : (
-        <UiStack>
-          <PubkeyProfileUiProfileGrid profiles={query.data ?? []} basePath={basePath} />
-          <UiDebug data={query.data ?? []} />
-        </UiStack>
-      )}
-    </UiPage>
+  return query.isLoading ? (
+    <UiLoader />
+  ) : (
+    <UiStack>
+      <PubkeyProtocolUiProfileGrid profiles={query.data ?? []} basePath={basePath} />
+      <UiDebug data={query.data ?? []} />
+    </UiStack>
   )
 }
