@@ -96,8 +96,6 @@ export function PubKeyProtocolProvider({
         return `https://warpcast.com/${identity.name}`
       case IdentityProvider.Github:
         return `https://github.com/${identity.name}`
-      case IdentityProvider.Google:
-        return `https://google.com/${identity.name}`
       case IdentityProvider.Solana:
         return getExplorerUrl(`address/${identity.providerId}`)
       case IdentityProvider.Telegram:

@@ -1,5 +1,5 @@
 import { Code, Group, Stack } from '@mantine/core'
-import { PubKeyProfile } from '@pubkey-protocol/anchor'
+import { PubKeyCommunity, PubKeyProfile } from '@pubkey-protocol/anchor'
 import { ellipsify } from '@pubkey-protocol/sdk'
 import { UiCard, UiDebugModal, UiGroup, UiStack } from '@pubkey-ui/core'
 import { PublicKey } from '@solana/web3.js'
@@ -12,7 +12,13 @@ import { PubkeyProtocolUiProfileAvatarUpdateButton } from './pubkey-protocol-ui-
 import { PubkeyProtocolUiProfileCardAuthorities } from './pubkey-protocol-ui-profile-card-authorities'
 import { PubkeyProtocolUiProfileCardIdentities } from './pubkey-protocol-ui-profile-card-identities'
 
-export function PubkeyProtocolUiProfileCard({ profile }: { profile: PubKeyProfile }) {
+export function PubkeyProtocolUiProfileCard({
+  community,
+  profile,
+}: {
+  community: PubKeyCommunity
+  profile: PubKeyProfile
+}) {
   const { authority } = usePubKeyProtocol()
 
   const signAuthority = useMemo(
@@ -45,9 +51,21 @@ export function PubkeyProtocolUiProfileCard({ profile }: { profile: PubKeyProfil
 
               {signAuthority ? (
                 <UiStack mt="md">
-                  <PubkeyProtocolUiProfileCardIdentities profile={profile} signAuthority={signAuthority} />
-                  <PubkeyProtocolUiProfileCardAuthorities profile={profile} signAuthority={signAuthority} />
-                  <PubkeyProtocolUiProfileAvatarUpdateButton profile={profile} signAuthority={signAuthority} />
+                  <PubkeyProtocolUiProfileCardIdentities
+                    community={community}
+                    profile={profile}
+                    signAuthority={signAuthority}
+                  />
+                  <PubkeyProtocolUiProfileCardAuthorities
+                    community={community}
+                    profile={profile}
+                    signAuthority={signAuthority}
+                  />
+                  <PubkeyProtocolUiProfileAvatarUpdateButton
+                    community={community}
+                    profile={profile}
+                    signAuthority={signAuthority}
+                  />
                 </UiStack>
               ) : null}
             </Stack>

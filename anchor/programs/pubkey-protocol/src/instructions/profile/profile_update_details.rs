@@ -6,8 +6,8 @@ use crate::state::*;
 use crate::utils::*;
 
 #[derive(Accounts)]
-#[instruction(args: UpdateProfileDetailsArgs)]
-pub struct UpdateProfileDetails<'info> {
+#[instruction(args: ProfileUpdateDetailsArgs)]
+pub struct ProfileUpdateDetails<'info> {
     #[account(
       mut,
       seeds = [
@@ -16,21 +16,23 @@ pub struct UpdateProfileDetails<'info> {
         &profile.username.as_bytes()
       ],
       bump = profile.bump,
-      has_one = fee_payer @ ProtocolError::UnAuthorized,
-      constraint = profile.check_for_authority(&args.authority) @ ProtocolError::UnAuthorized
+      constraint = profile.check_for_authority(&authority.key()) @ ProtocolError::UnAuthorized
     )]
     pub profile: Account<'info, Profile>,
 
+    pub authority: Signer<'info>,
+    pub community: Account<'info, Community>,
+
     #[account(
       mut,
-      constraint = fee_payer.key().ne(&args.authority) @ ProtocolError::InvalidFeePayer
+      constraint = community.check_for_signer(&fee_payer.key()) @ ProtocolError::UnAuthorizedCommunitySigner,
     )]
     pub fee_payer: Signer<'info>,
 }
 
 pub fn profile_update_details(
-    ctx: Context<UpdateProfileDetails>,
-    args: UpdateProfileDetailsArgs,
+    ctx: Context<ProfileUpdateDetails>,
+    args: ProfileUpdateDetailsArgs,
 ) -> Result<()> {
     let profile = &mut ctx.accounts.profile;
 
@@ -53,8 +55,7 @@ pub fn profile_update_details(
 }
 
 #[derive(AnchorSerialize, AnchorDeserialize)]
-pub struct UpdateProfileDetailsArgs {
-    pub authority: Pubkey,
+pub struct ProfileUpdateDetailsArgs {
     pub new_name: Option<String>,
     pub new_avatar_url: Option<String>,
 }
