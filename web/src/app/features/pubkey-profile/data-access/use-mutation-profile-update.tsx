@@ -1,14 +1,14 @@
-import { ProfileUpdateDetailsOptions, PublicKeyString } from '@pubkey-protocol/sdk'
+import { ProfileUpdateOptions, PublicKeyString } from '@pubkey-protocol/sdk'
 import { useMutation } from '@tanstack/react-query'
 import { usePubKeyProtocol } from '../../pubkey-protocol'
 
-export function useMutationUpdateAvatarUrl({ community }: { community: PublicKeyString }) {
+export function useMutationProfileUpdate({ community }: { community: PublicKeyString }) {
   const { authority, feePayer, sdk, signAndConfirmTransaction, onError, onSuccess } = usePubKeyProtocol()
 
   return useMutation({
-    mutationFn: (options: Omit<ProfileUpdateDetailsOptions, 'authority' | 'community' | 'feePayer'>) =>
+    mutationFn: (options: Omit<ProfileUpdateOptions, 'authority' | 'community' | 'feePayer'>) =>
       sdk
-        .profileUpdateDetails({ ...options, authority, feePayer, community })
+        .profileUpdate({ ...options, authority, feePayer, community })
         .then((x) => signAndConfirmTransaction(x, { withFeePayer: false })),
     onError,
     onSuccess,

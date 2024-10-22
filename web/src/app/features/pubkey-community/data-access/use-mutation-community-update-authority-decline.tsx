@@ -8,7 +8,7 @@ export function useMutationCommunityUpdateAuthorityDecline({ community }: { comm
   return useMutation({
     mutationFn: ({ authority }: { authority: PublicKeyString }) =>
       sdk
-        .communityUpdateAuthorityDecline({
+        .communityAuthorityDecline({
           authority,
           feePayer,
           slug: community.slug,

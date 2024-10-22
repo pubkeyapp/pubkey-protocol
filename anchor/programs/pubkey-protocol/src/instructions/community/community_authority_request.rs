@@ -6,7 +6,7 @@ use crate::state::*;
 
 #[derive(Accounts)]
 #[instruction()]
-pub struct CommunityUpdateAuthorityRequest<'info> {
+pub struct CommunityAuthorityRequest<'info> {
     #[account(
         mut,
         seeds = [
@@ -21,9 +21,9 @@ pub struct CommunityUpdateAuthorityRequest<'info> {
     pub authority: Signer<'info>,
 }
 
-pub fn community_update_authority_request(
-    ctx: Context<CommunityUpdateAuthorityRequest>,
-    args: CommunityUpdateAuthorityRequestArgs,
+pub fn community_authority_request(
+    ctx: Context<CommunityAuthorityRequest>,
+    args: CommunityAuthorityRequestArgs,
 ) -> Result<()> {
     let community = &mut ctx.accounts.community;
 
@@ -34,6 +34,6 @@ pub fn community_update_authority_request(
 }
 
 #[derive(AnchorSerialize, AnchorDeserialize)]
-pub struct CommunityUpdateAuthorityRequestArgs {
+pub struct CommunityAuthorityRequestArgs {
     pub new_authority: Pubkey,
 }

@@ -4,7 +4,7 @@ import { usePubKeyProtocol } from '../../pubkey-protocol'
 
 export type PubKeyAddIdentity = Omit<ProfileIdentityAddOptions, 'authority' | 'community' | 'feePayer'>
 
-export function useMutationAddIdentity({ community }: { community: PublicKeyString }) {
+export function useMutationProfileIdentityAdd({ community }: { community: PublicKeyString }) {
   const { authority, feePayer, sdk, signAndConfirmTransaction, onError, onSuccess } = usePubKeyProtocol()
 
   return useMutation({

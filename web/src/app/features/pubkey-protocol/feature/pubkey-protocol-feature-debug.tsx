@@ -4,15 +4,15 @@ import { UiDebug, UiPage } from '@pubkey-ui/core'
 import { IconBug } from '@tabler/icons-react'
 import { ExplorerLink } from '../../cluster/cluster-ui'
 import { useQueryCommunityGetAll } from '../../pubkey-community/data-access'
-import { useQueryGetPointers, useQueryProfileGetAll } from '../../pubkey-profile/data-access'
-import { useMutationConfigInit, usePubKeyProtocol, useQueryConfigGet } from '../data-access'
+import { useQueryProfileGetAll } from '../../pubkey-profile/data-access'
+import { useMutationConfigInit, usePubKeyProtocol, useQueryConfigGet, useQueryPointerGetAll } from '../data-access'
 
 export function PubkeyProtocolFeatureDebug() {
   const mutationConfigInit = useMutationConfigInit()
   const queryCommunityAccounts = useQueryCommunityGetAll()
   const queryConfigAccount = useQueryConfigGet()
   const queryProfileAccounts = useQueryProfileGetAll()
-  const queryPointerAccounts = useQueryGetPointers()
+  const queryPointerAccounts = useQueryPointerGetAll()
   const { program, sdk } = usePubKeyProtocol()
 
   return (

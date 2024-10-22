@@ -72,7 +72,7 @@ fdescribe('pubkey-protocol-community', () => {
           x: 'https://x.com/test',
         }
         await program.methods
-          .communityUpdateDetails(input)
+          .communityUpdate(input)
           .accounts({
             community,
             authority: communityAuthority.publicKey,
@@ -95,7 +95,7 @@ fdescribe('pubkey-protocol-community', () => {
     describe('Authorities', () => {
       it('should request an authority update', async () => {
         await program.methods
-          .communityUpdateAuthorityRequest({
+          .communityAuthorityRequest({
             newAuthority: communityAuthority2.publicKey,
           })
           .accountsStrict({
@@ -112,7 +112,7 @@ fdescribe('pubkey-protocol-community', () => {
       it('should approve an authority update', async () => {
         // First, initiate the authority update
         await program.methods
-          .communityUpdateAuthorityRequest({
+          .communityAuthorityRequest({
             newAuthority: communityAuthority2.publicKey,
           })
           .accountsStrict({
@@ -124,7 +124,7 @@ fdescribe('pubkey-protocol-community', () => {
 
         // Then, approve the authority update
         await program.methods
-          .communityUpdateAuthorityApprove()
+          .communityAuthorityApprove()
           .accountsStrict({
             community,
             newAuthority: communityAuthority2.publicKey,
@@ -142,7 +142,7 @@ fdescribe('pubkey-protocol-community', () => {
 
         // First, initiate the authority update
         await program.methods
-          .communityUpdateAuthorityRequest({
+          .communityAuthorityRequest({
             newAuthority,
           })
           .accountsStrict({
@@ -154,7 +154,7 @@ fdescribe('pubkey-protocol-community', () => {
 
         // Then, decline the authority update
         await program.methods
-          .communityUpdateAuthorityDecline()
+          .communityAuthorityDecline()
           .accountsStrict({
             community,
             authority: communityAuthority.publicKey,
@@ -418,7 +418,7 @@ fdescribe('pubkey-protocol-community', () => {
       it('should not allow a non-authority to update a community', async () => {
         try {
           await program.methods
-            .communityUpdateDetails({
+            .communityUpdate({
               avatarUrl: getCommunityAvatarUrl(`${communitySlug}_new`),
               name: `${communitySlug} updated`,
               discord: 'https://discord.gg/users/test',
@@ -446,7 +446,7 @@ fdescribe('pubkey-protocol-community', () => {
       it('should not allow a non-authority to update an authority', async () => {
         try {
           await program.methods
-            .communityUpdateAuthorityApprove()
+            .communityAuthorityApprove()
             .accountsStrict({
               community,
               newAuthority: unauthorizedAuthority.publicKey,
@@ -463,7 +463,7 @@ fdescribe('pubkey-protocol-community', () => {
       it('should not allow a non-authority to update an authority', async () => {
         try {
           await program.methods
-            .communityUpdateAuthorityDecline()
+            .communityAuthorityDecline()
             .accountsStrict({
               community,
               authority: unauthorizedAuthority.publicKey,
@@ -480,7 +480,7 @@ fdescribe('pubkey-protocol-community', () => {
       it('should not allow a non-authority to update an authority', async () => {
         try {
           await program.methods
-            .communityUpdateAuthorityRequest({
+            .communityAuthorityRequest({
               newAuthority: communityAuthority2.publicKey,
             })
             .accountsStrict({

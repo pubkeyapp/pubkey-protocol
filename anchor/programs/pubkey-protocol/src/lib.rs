@@ -15,48 +15,22 @@ declare_id!("PUBKEYsiC4c87gFa5qGcH7t6VobVu3A4QqPUA2wzvam");
 pub mod pubkey_protocol {
   use super::*;
 
-  // Profile Actions
-    pub fn profile_authority_add(
-        ctx: Context<ProfileAuthorityAdd>,
-        args: ProfileAuthorityAddArgs,
+  // Community Actions
+    pub fn community_authority_approve(ctx: Context<CommunityAuthorityApprove>) -> Result<()> {
+        community::community_authority_approve(ctx)
+    }
+
+    pub fn community_authority_decline(ctx: Context<CommunityAuthorityDecline>) -> Result<()> {
+        community::community_authority_decline(ctx)
+    }
+
+    pub fn community_authority_request(
+        ctx: Context<CommunityAuthorityRequest>,
+        args: CommunityAuthorityRequestArgs,
     ) -> Result<()> {
-        profile::profile_authority_add(ctx, args)
+        community::community_authority_request(ctx, args)
     }
 
-    pub fn profile_authority_remove(
-        ctx: Context<ProfileAuthorityRemove>,
-        args: ProfileAuthorityRemoveArgs,
-    ) -> Result<()> {
-        profile::profile_authority_remove(ctx, args)
-    }
-
-    pub fn profile_create(ctx: Context<ProfileCreate>, args: ProfileCreateArgs) -> Result<()> {
-        profile::profile_create(ctx, args)
-    }
-
-    pub fn profile_update_details(
-        ctx: Context<ProfileUpdateDetails>,
-        args: ProfileUpdateDetailsArgs,
-    ) -> Result<()> {
-        profile::profile_update_details(ctx, args)
-    }
-
-    // Identity Actions
-    pub fn add_identity(
-        ctx: Context<ProfileIdentityAdd>,
-        args: ProfileIdentityAddArgs,
-    ) -> Result<()> {
-        profile::profile_identity_add(ctx, args)
-    }
-
-    pub fn profile_identity_remove(
-        ctx: Context<ProfileIdentityRemove>,
-        args: ProfileIdentityRemoveArgs,
-    ) -> Result<()> {
-        profile::profile_identity_remove(ctx, args)
-    }
-
-    // Community Actions
     pub fn community_create(
         ctx: Context<CommunityCreate>,
         args: CommunityCreateArgs,
@@ -77,6 +51,7 @@ pub mod pubkey_protocol {
     ) -> Result<()> {
         community::community_provider_enable(ctx, args)
     }
+
     pub fn community_signer_add(
         ctx: Context<CommunitySignerAdd>,
         args: CommunitySignerAddArgs,
@@ -91,34 +66,48 @@ pub mod pubkey_protocol {
         community::community_signer_remove(ctx, args)
     }
 
-    pub fn community_update_authority_approve(
-        ctx: Context<CommunityUpdateAuthorityApprove>,
+    pub fn community_update(
+        ctx: Context<CommunityUpdate>,
+        args: CommunityUpdateArgs,
     ) -> Result<()> {
-        community::community_update_authority_approve(ctx)
-    }
-
-    pub fn community_update_authority_decline(
-        ctx: Context<CommunityUpdateAuthorityDecline>,
-    ) -> Result<()> {
-        community::community_update_authority_decline(ctx)
-    }
-
-    pub fn community_update_authority_request(
-        ctx: Context<CommunityUpdateAuthorityRequest>,
-        args: CommunityUpdateAuthorityRequestArgs,
-    ) -> Result<()> {
-        community::community_update_authority_request(ctx, args)
-    }
-
-    pub fn community_update_details(
-        ctx: Context<UpdateCommunityDetails>,
-        args: UpdateCommunityDetailsArgs,
-    ) -> Result<()> {
-        community::community_update_details(ctx, args)
+        community::community_update(ctx, args)
     }
 
     pub fn config_init(ctx: Context<ConfigInit>, args: ConfigInitArgs) -> Result<()> {
         config::config_init(ctx, args)
+    }
+
+    // Profile Actions
+    pub fn profile_authority_add(
+        ctx: Context<ProfileAuthorityAdd>,
+        args: ProfileAuthorityAddArgs,
+    ) -> Result<()> {
+        profile::profile_authority_add(ctx, args)
+    }
+
+    pub fn profile_authority_remove(
+        ctx: Context<ProfileAuthorityRemove>,
+        args: ProfileAuthorityRemoveArgs,
+    ) -> Result<()> {
+        profile::profile_authority_remove(ctx, args)
+    }
+
+    pub fn profile_create(ctx: Context<ProfileCreate>, args: ProfileCreateArgs) -> Result<()> {
+        profile::profile_create(ctx, args)
+    }
+
+    pub fn profile_identity_add(
+        ctx: Context<ProfileIdentityAdd>,
+        args: ProfileIdentityAddArgs,
+    ) -> Result<()> {
+        profile::profile_identity_add(ctx, args)
+    }
+
+    pub fn profile_identity_remove(
+        ctx: Context<ProfileIdentityRemove>,
+        args: ProfileIdentityRemoveArgs,
+    ) -> Result<()> {
+        profile::profile_identity_remove(ctx, args)
     }
 
     pub fn profile_identity_verify(
@@ -127,4 +116,9 @@ pub mod pubkey_protocol {
     ) -> Result<()> {
         profile::profile_identity_verify(ctx, args)
     }
+
+    pub fn profile_update(ctx: Context<ProfileUpdate>, args: ProfileUpdateArgs) -> Result<()> {
+        profile::profile_update(ctx, args)
+    }
+
 }

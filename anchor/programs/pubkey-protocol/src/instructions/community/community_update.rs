@@ -6,8 +6,8 @@ use crate::state::*;
 use crate::utils::*;
 
 #[derive(Accounts)]
-#[instruction(args: UpdateCommunityDetailsArgs)]
-pub struct UpdateCommunityDetails<'info> {
+#[instruction(args: CommunityUpdateArgs)]
+pub struct CommunityUpdate<'info> {
     #[account(
         mut,
         seeds = [
@@ -25,14 +25,14 @@ pub struct UpdateCommunityDetails<'info> {
     pub authority: Signer<'info>,
 }
 
-pub fn community_update_details(
-    ctx: Context<UpdateCommunityDetails>,
-    args: UpdateCommunityDetailsArgs,
+pub fn community_update(
+    ctx: Context<CommunityUpdate>,
+    args: CommunityUpdateArgs,
 ) -> Result<()> {
     let community = &mut ctx.accounts.community;
 
     // Creating community account
-    let UpdateCommunityDetailsArgs {
+    let CommunityUpdateArgs {
         avatar_url,
         discord,
         farcaster,
@@ -103,7 +103,7 @@ pub fn community_update_details(
 }
 
 #[derive(AnchorDeserialize, AnchorSerialize)]
-pub struct UpdateCommunityDetailsArgs {
+pub struct CommunityUpdateArgs {
     pub avatar_url: Option<String>,
     pub discord: Option<String>,
     pub farcaster: Option<String>,

@@ -6,8 +6,8 @@ use crate::state::*;
 use crate::utils::*;
 
 #[derive(Accounts)]
-#[instruction(args: ProfileUpdateDetailsArgs)]
-pub struct ProfileUpdateDetails<'info> {
+#[instruction(args: ProfileUpdateArgs)]
+pub struct ProfileUpdate<'info> {
     #[account(
       mut,
       seeds = [
@@ -30,9 +30,9 @@ pub struct ProfileUpdateDetails<'info> {
     pub fee_payer: Signer<'info>,
 }
 
-pub fn profile_update_details(
-    ctx: Context<ProfileUpdateDetails>,
-    args: ProfileUpdateDetailsArgs,
+pub fn profile_update(
+    ctx: Context<ProfileUpdate>,
+    args: ProfileUpdateArgs,
 ) -> Result<()> {
     let profile = &mut ctx.accounts.profile;
 
@@ -55,7 +55,7 @@ pub fn profile_update_details(
 }
 
 #[derive(AnchorSerialize, AnchorDeserialize)]
-pub struct ProfileUpdateDetailsArgs {
+pub struct ProfileUpdateArgs {
     pub new_name: Option<String>,
     pub new_avatar_url: Option<String>,
 }

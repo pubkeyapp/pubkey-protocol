@@ -8,7 +8,7 @@ export function useMutationCommunityUpdateAuthorityApprove({ community }: { comm
   return useMutation({
     mutationFn: ({ newAuthority }: { newAuthority: PublicKeyString }) =>
       sdk
-        .communityUpdateAuthorityApprove({
+        .communityAuthorityApprove({
           feePayer,
           newAuthority,
           slug: community.slug,

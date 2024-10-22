@@ -36,40 +36,52 @@ export const PUBKEY_PROTOCOL_SEED_CONFIG = new TextEncoder().encode('config')
 export const PUBKEY_PROTOCOL_SEED_POINTER = new TextEncoder().encode('pointer')
 export const PUBKEY_PROTOCOL_SEED_PROFILE = new TextEncoder().encode('profile')
 
+export interface GetPubKeyCommunityPdaOptions {
+  programId: PublicKeyString
+  slug: string
+}
+
 // Helper method to get the Community PDA
-export function getPubKeyCommunityPda({ programId, slug }: { programId: PublicKeyString; slug: string }) {
+export function getPubKeyCommunityPda({ programId, slug }: GetPubKeyCommunityPdaOptions) {
   return PublicKey.findProgramAddressSync(
     [PUBKEY_PROTOCOL_PREFIX, PUBKEY_PROTOCOL_SEED_COMMUNITY, stringToUint8Array(slug)],
     new PublicKey(programId),
   )
 }
 
+export interface GetPubKeyConfigPdaOptions {
+  programId: PublicKeyString
+}
+
 // Helper method to get the Config PDA
-export function getPubKeyConfigPda({ programId }: { programId: PublicKeyString }) {
+export function getPubKeyConfigPda({ programId }: GetPubKeyConfigPdaOptions) {
   return PublicKey.findProgramAddressSync(
     [PUBKEY_PROTOCOL_PREFIX, PUBKEY_PROTOCOL_SEED_CONFIG],
     new PublicKey(programId),
   )
 }
 
+export interface GetPubKeyProfilePdaOptions {
+  programId: PublicKeyString
+  username: string
+}
+
 // Helper method to get the PubKeyProfile PDA
-export function getPubKeyProfilePda({ programId, username }: { programId: PublicKeyString; username: string }) {
+export function getPubKeyProfilePda({ programId, username }: GetPubKeyProfilePdaOptions) {
   return PublicKey.findProgramAddressSync(
     [PUBKEY_PROTOCOL_PREFIX, PUBKEY_PROTOCOL_SEED_PROFILE, stringToUint8Array(username)],
     new PublicKey(programId),
   )
 }
 
-// Helper method to get the PubKeyPointer PDA
-export function getPubKeyPointerPda({
-  programId,
-  provider,
-  providerId,
-}: {
+export interface GetPubKeyPointerPdaOptions {
   programId: PublicKeyString
   provider: IdentityProvider
   providerId: string
-}) {
+}
+
+// Helper method to get the PubKeyPointer PDA
+export function getPubKeyPointerPda({ programId, provider, providerId }: GetPubKeyPointerPdaOptions) {
   const hash = sha256(
     Uint8Array.from([
       ...PUBKEY_PROTOCOL_PREFIX,

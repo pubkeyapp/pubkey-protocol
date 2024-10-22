@@ -1,11 +1,10 @@
 import { Button, Group, Select, TextInput } from '@mantine/core'
 import { useForm } from '@mantine/form'
 import { modals } from '@mantine/modals'
-import { IdentityProvider, PubKeyCommunity, PubKeyProfile } from '@pubkey-protocol/sdk'
-import { ellipsify } from '@pubkey-protocol/sdk'
+import { ellipsify, IdentityProvider, PubKeyCommunity, PubKeyProfile } from '@pubkey-protocol/sdk'
 import { UiStack } from '@pubkey-ui/core'
 import { getEnumOptions } from '../../../ui'
-import { useMutationAddIdentity } from '../data-access'
+import { useMutationProfileIdentityAdd } from '../data-access'
 
 export interface PubKeyProfileAddIdentityInput {
   name: string
@@ -20,7 +19,7 @@ export function PubkeyProtocolUiProfileButtonAddIdentity({
   community: PubKeyCommunity
   profile: PubKeyProfile
 }) {
-  const mutation = useMutationAddIdentity({ community: community.publicKey })
+  const mutation = useMutationProfileIdentityAdd({ community: community.publicKey })
 
   async function submit({ provider, providerId, name }: PubKeyProfileAddIdentityInput) {
     return mutation.mutateAsync({

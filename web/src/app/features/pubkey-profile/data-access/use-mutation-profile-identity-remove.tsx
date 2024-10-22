@@ -2,7 +2,7 @@ import { ProfileIdentityRemoveOptions, PublicKeyString } from '@pubkey-protocol/
 import { useMutation } from '@tanstack/react-query'
 import { usePubKeyProtocol } from '../../pubkey-protocol'
 
-export function useMutationRemoveIdentity({ community }: { community: PublicKeyString }) {
+export function useMutationProfileIdentityRemove({ community }: { community: PublicKeyString }) {
   const { sdk, signAndConfirmTransaction, onError, onSuccess } = usePubKeyProtocol()
 
   return useMutation({

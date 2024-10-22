@@ -101,7 +101,7 @@ describe('pubkey-protocol-profile', () => {
           newAvatarUrl: getProfileAvatarUrl(`${username}_new`),
         }
         await program.methods
-          .profileUpdateDetails(input)
+          .profileUpdate(input)
           .accountsStrict({
             authority: aliceWalletOne.publicKey,
             community,
@@ -179,7 +179,7 @@ describe('pubkey-protocol-profile', () => {
         const [profile] = getPubKeyProfilePda({ username, programId: program.programId })
 
         await program.methods
-          .addIdentity({
+          .profileIdentityAdd({
             provider: convertToAnchorIdentityProvider(IdentityProvider.Discord),
             providerId: discordIdentity.providerId,
             name: `${username}123`,

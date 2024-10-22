@@ -1,7 +1,7 @@
 import { ActionIcon } from '@mantine/core'
 import { IdentityProvider, PubKeyCommunity, PubKeyProfile, PublicKeyString } from '@pubkey-protocol/sdk'
 import { IconTrash } from '@tabler/icons-react'
-import { useMutationRemoveIdentity } from '../data-access'
+import { useMutationProfileIdentityRemove } from '../data-access'
 
 export function PubkeyProtocolUiProfileButtonRemoveIdentity({
   authority,
@@ -18,7 +18,7 @@ export function PubkeyProtocolUiProfileButtonRemoveIdentity({
   provider: IdentityProvider
   providerId: string
 }) {
-  const mutation = useMutationRemoveIdentity({
+  const mutation = useMutationProfileIdentityRemove({
     community: community.publicKey,
   })
 

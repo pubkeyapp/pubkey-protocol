@@ -8,7 +8,7 @@ export function useMutationCommunityUpdateAuthorityRequest({ community }: { comm
   return useMutation({
     mutationFn: ({ authority, newAuthority }: { authority: PublicKeyString; newAuthority: PublicKeyString }) =>
       sdk
-        .communityUpdateAuthorityRequest({
+        .communityAuthorityRequest({
           slug: community.slug,
           newAuthority,
           authority,

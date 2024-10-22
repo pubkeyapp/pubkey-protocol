@@ -1,5 +1,6 @@
 export * from '@pubkey-protocol/anchor'
 export * from './lib/pubkey-protocol-sdk'
+export * from './lib/pubkey-protocol-sdk-interfaces'
 export * from './lib/utils/anchor-keypair-wallet'
 export * from './lib/utils/ellipsify'
 export * from './lib/utils/get-avatar-url-community'
