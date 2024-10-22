@@ -2,6 +2,8 @@ import { IdentityProvider } from '@pubkey-protocol/anchor'
 import { CommunityCreateOptions, CommunityUpdateOptions, getExplorerUrl } from '@pubkey-protocol/sdk'
 import { getConfig } from '../utils/get-config'
 import { createOrGetConfig } from './create-or-get-config'
+import { ProvisionSampleDataOptions } from './provision-sample-data'
+import { sleep } from './sleep'
 
 type ProvisionCommunityCreate = Omit<CommunityCreateOptions, 'authority' | 'communityAuthority'>
 type ProvisionCommunityUpdate = Omit<CommunityUpdateOptions, 'authority' | 'feePayer' | 'slug'>
@@ -98,7 +100,7 @@ export const communityProvisionMap: CommunityProvisionMap = {
   },
 }
 
-export async function provisionSampleDataCommunities() {
+export async function provisionSampleDataCommunities(options: ProvisionSampleDataOptions) {
   const { authority, connection, endpoint, cluster, sdk } = await getConfig()
   console.log(` -> Authority Account: ${authority.publicKey.toString()}`)
   const { config } = await createOrGetConfig()
@@ -120,9 +122,14 @@ export async function provisionSampleDataCommunities() {
       slug,
     })
     transaction.sign([authority])
+    if (options.dryRun) {
+      console.log(` -> Dry run, skipping create community: ${name} ${input.slug}`)
+      continue
+    }
     const s = await connection.sendRawTransaction(transaction.serialize(), { skipPreflight: true })
     console.log(` -> Created community: ${name} ${input.slug}`, s)
     console.log(getExplorerUrl(`tx/${s}?cluster=custom&customUrl=http%3A%2F%2Flocalhost%3A8899`, cluster, endpoint))
+    await sleep(options.timeout)
   }
 
   const communitiesUpdate = Object.keys(communityProvisionMap)
@@ -137,9 +144,14 @@ export async function provisionSampleDataCommunities() {
       feePayer: authority.publicKey,
     })
     transaction.sign([authority])
+    if (options.dryRun) {
+      console.log(` -> Dry run, skipping update community: ${input.slug}`)
+      continue
+    }
     const s = await connection.sendRawTransaction(transaction.serialize(), { skipPreflight: true })
     console.log(` -> Updated community: ${input.slug}`, s)
     console.log(getExplorerUrl(`tx/${s}?cluster=custom&customUrl=http%3A%2F%2Flocalhost%3A8899`, cluster, endpoint))
+    await sleep(options.timeout)
   }
 
   const communitiesSignerAdd = Object.keys(communityProvisionMap)
@@ -156,9 +168,14 @@ export async function provisionSampleDataCommunities() {
         feePayer: authority.publicKey,
       })
       transaction.sign([authority])
+      if (options.dryRun) {
+        console.log(` -> Dry run, skipping signer ${signer} to community: ${signers.slug}`)
+        continue
+      }
       const s = await connection.sendRawTransaction(transaction.serialize(), { skipPreflight: true })
       console.log(` -> Added signers to community: ${signers.slug}`, s)
       console.log(getExplorerUrl(`tx/${s}?cluster=custom&customUrl=http%3A%2F%2Flocalhost%3A8899`, cluster, endpoint))
+      await sleep(options.timeout)
     }
   }
 
@@ -176,9 +193,14 @@ export async function provisionSampleDataCommunities() {
         feePayer: authority.publicKey,
       })
       transaction.sign([authority])
+      if (options.dryRun) {
+        console.log(` -> Dry run, skipping provider ${provider} for community: ${providers.slug}`)
+        continue
+      }
       const s = await connection.sendRawTransaction(transaction.serialize(), { skipPreflight: true })
       console.log(` -> Enabled provider ${provider} for community: ${providers.slug}`, s)
       console.log(getExplorerUrl(`tx/${s}?cluster=custom&customUrl=http%3A%2F%2Flocalhost%3A8899`, cluster, endpoint))
+      await sleep(options.timeout)
     }
   }
 }

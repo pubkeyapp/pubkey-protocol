@@ -8,6 +8,8 @@ import {
 } from '@pubkey-protocol/sdk'
 import { getConfig } from '../utils/get-config'
 import { createOrGetConfig } from './create-or-get-config'
+import { ProvisionSampleDataOptions } from './provision-sample-data'
+import { sleep } from './sleep'
 
 type ProvisionProfileCreate = Omit<ProfileCreateOptions, 'authority' | 'community' | 'feePayer'>
 type ProvisionProfileIdentityAdd = Omit<ProfileIdentityAddOptions, 'authority' | 'community' | 'feePayer' | 'username'>
@@ -84,7 +86,7 @@ export const profileProvisionMap: ProfileProvisionMap = {
   },
 }
 
-export async function provisionSampleDataProfiles() {
+export async function provisionSampleDataProfiles(options: ProvisionSampleDataOptions) {
   const { authority: communityAuthority, connection, endpoint, cluster, sdk } = await getConfig()
   console.log(` -> Authority Account: ${communityAuthority.publicKey.toString()}`)
   const { config } = await createOrGetConfig()
@@ -113,9 +115,14 @@ export async function provisionSampleDataProfiles() {
       username,
     })
     transaction.sign([communityAuthority, authority])
+    if (options.dryRun) {
+      console.log(` -> Dry run, skipping create profile: ${name} ${input.username}`)
+      return
+    }
     const s = await connection.sendRawTransaction(transaction.serialize(), { skipPreflight: true })
     console.log(` -> Created profile: ${name} ${input.username}`, s)
     console.log(getExplorerUrl(`tx/${s}?cluster=custom&customUrl=http%3A%2F%2Flocalhost%3A8899`, cluster, endpoint))
+    await sleep(options.timeout)
   }
 
   const profilesIdentitiesAdd = Object.keys(profileProvisionMap)
@@ -135,9 +142,16 @@ export async function provisionSampleDataProfiles() {
         username,
       })
       transaction.sign([communityAuthority, authority])
+      if (options.dryRun) {
+        console.log(
+          ` -> Dry run, skipping identity ${identity.provider} ${identity.providerId} to profile: ${username}`,
+        )
+        continue
+      }
       const s = await connection.sendRawTransaction(transaction.serialize(), { skipPreflight: true })
       console.log(` -> Added identity to profile: ${username}`, s)
       console.log(getExplorerUrl(`tx/${s}?cluster=custom&customUrl=http%3A%2F%2Flocalhost%3A8899`, cluster, endpoint))
+      await sleep(options.timeout)
     }
   }
 
@@ -157,9 +171,16 @@ export async function provisionSampleDataProfiles() {
         username,
       })
       transaction.sign([communityAuthority])
+      if (options.dryRun) {
+        console.log(
+          ` -> Dry run, skipping verify ${verification.community} ${verification.provider} ${verification.providerId} to profile: ${username}`,
+        )
+        continue
+      }
       const s = await connection.sendRawTransaction(transaction.serialize(), { skipPreflight: true })
       console.log(` -> ${verification.community} Verified ${verification.provider} identity to profile: ${username}`, s)
       console.log(getExplorerUrl(`tx/${s}?cluster=custom&customUrl=http%3A%2F%2Flocalhost%3A8899`, cluster, endpoint))
+      await sleep(options.timeout)
     }
   }
 }

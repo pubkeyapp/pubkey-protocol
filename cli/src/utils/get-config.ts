@@ -15,6 +15,10 @@ export async function getConfig() {
   const configAuthority = getConfigKeypair()
   const authority = await getKeypairFromFile(process.env.AUTHORITY_KEYPAIR_PATH)
 
+  console.log(`Endpoint: ${endpoint}`)
+  console.log(`Config Authority: ${configAuthority.publicKey.toString()}`)
+  console.log(`Authority: ${authority.publicKey.toString()}`)
+
   return {
     authority,
     cluster,
