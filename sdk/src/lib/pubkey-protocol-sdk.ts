@@ -136,17 +136,19 @@ export class PubkeyProtocolSdk {
 
   async communityGetAll(): Promise<PubKeyCommunity[]> {
     return this.program.account.community.all().then((accounts) =>
-      accounts.map(
-        ({ account, publicKey }) =>
-          ({
-            ...account,
-            publicKey,
-            providers: convertAnchorIdentityProviders(account.providers),
-            signers: account.signers.map((s) => s.toString()),
-            authority: account.authority.toString(),
-            pendingAuthority: account.pendingAuthority?.toString(),
-          } as PubKeyCommunity),
-      ),
+      accounts
+        .map(
+          ({ account, publicKey }) =>
+            ({
+              ...account,
+              publicKey,
+              providers: convertAnchorIdentityProviders(account.providers),
+              signers: account.signers.map((s) => s.toString()),
+              authority: account.authority.toString(),
+              pendingAuthority: account.pendingAuthority?.toString(),
+            } as PubKeyCommunity),
+        )
+        .sort((a, b) => (a.slug > b.slug ? 1 : -1)),
     )
   }
 
@@ -352,15 +354,17 @@ export class PubkeyProtocolSdk {
 
   async profileGetAll(): Promise<PubKeyProfile[]> {
     return this.program.account.profile.all().then((accounts) =>
-      accounts.map(({ account, publicKey }) => ({
-        publicKey,
-        ...account,
-        identities: account.identities.map((identity) => ({
-          ...identity,
-          provider: convertAnchorIdentityProvider(identity.provider),
-          communities: identity.communities.map((c) => c.toString()),
-        })),
-      })),
+      accounts
+        .map(({ account, publicKey }) => ({
+          publicKey,
+          ...account,
+          identities: account.identities.map((identity) => ({
+            ...identity,
+            provider: convertAnchorIdentityProvider(identity.provider),
+            communities: identity.communities.map((c) => c.toString()),
+          })),
+        }))
+        .sort((a, b) => (a.username > b.username ? 1 : -1)),
     )
   }
 
