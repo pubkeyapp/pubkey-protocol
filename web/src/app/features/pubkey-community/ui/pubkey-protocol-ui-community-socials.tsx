@@ -1,5 +1,5 @@
 import { ActionIcon, Group, GroupProps, Tooltip } from '@mantine/core'
-import { PubKeyCommunity } from '@pubkey-protocol/anchor'
+import { PubKeyCommunity } from '@pubkey-protocol/sdk'
 import {
   IconBrandDiscordFilled,
   IconBrandGithubFilled,

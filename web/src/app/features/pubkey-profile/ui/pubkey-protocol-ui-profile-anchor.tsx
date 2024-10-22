@@ -1,5 +1,5 @@
 import { Anchor, Text } from '@mantine/core'
-import { PubKeyProfile } from '@pubkey-protocol/anchor'
+import { PubKeyProfile } from '@pubkey-protocol/sdk'
 import { Link } from 'react-router-dom'
 
 export function PubkeyProtocolUiProfileAnchor({ profile, to }: { profile: PubKeyProfile; to?: string }) {

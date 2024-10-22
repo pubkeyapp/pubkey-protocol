@@ -1,5 +1,5 @@
 import { Group, Text } from '@mantine/core'
-import { IdentityProvider, PubKeyCommunity } from '@pubkey-protocol/anchor'
+import { IdentityProvider, PubKeyCommunity } from '@pubkey-protocol/sdk'
 import { UiCard, UiStack } from '@pubkey-ui/core'
 import { PubkeyProtocolUiIdentityProviderIcon } from '../../pubkey-profile/ui'
 

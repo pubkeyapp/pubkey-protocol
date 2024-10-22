@@ -1,6 +1,6 @@
 import { ActionIcon, TextInput } from '@mantine/core'
 import { useForm } from '@mantine/form'
-import { PubKeyCommunity } from '@pubkey-protocol/anchor'
+import { PubKeyCommunity } from '@pubkey-protocol/sdk'
 import { UiStack } from '@pubkey-ui/core'
 import { IconPlus } from '@tabler/icons-react'
 

@@ -1,5 +1,5 @@
 import { Code, Group, Stack } from '@mantine/core'
-import { PubKeyCommunity } from '@pubkey-protocol/anchor'
+import { PubKeyCommunity } from '@pubkey-protocol/sdk'
 import { ellipsify } from '@pubkey-protocol/sdk'
 import { UiCard, UiDebugModal, UiGroup } from '@pubkey-ui/core'
 import { ReactNode } from 'react'

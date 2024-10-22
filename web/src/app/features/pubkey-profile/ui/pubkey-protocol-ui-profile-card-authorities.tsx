@@ -1,6 +1,5 @@
 import { Text } from '@mantine/core'
-import { PubKeyCommunity, PubKeyProfile } from '@pubkey-protocol/anchor'
-import { ellipsify } from '@pubkey-protocol/sdk'
+import { ellipsify, PubKeyCommunity, PubKeyProfile, PublicKeyString } from '@pubkey-protocol/sdk'
 import { UiGroup } from '@pubkey-ui/core'
 import { PublicKey } from '@solana/web3.js'
 import { UiAppCard } from '../../../ui'
@@ -15,7 +14,7 @@ export function PubkeyProtocolUiProfileCardAuthorities({
 }: {
   community: PubKeyCommunity
   profile: PubKeyProfile
-  signAuthority: PublicKey
+  signAuthority: PublicKeyString
 }) {
   const canSign = signAuthority !== PublicKey.default
   const { feePayer } = useKeypair()

@@ -1,4 +1,4 @@
-import { PubKeyCommunity } from '@pubkey-protocol/anchor'
+import { PubKeyCommunity } from '@pubkey-protocol/sdk'
 import { toastError, UiCard } from '@pubkey-ui/core'
 import { useMutationCommunityUpdate, useQueryCommunityGetBySlug } from '../data-access'
 import { PubkeyProtocolUiCommunityUpdateForm } from '../ui'

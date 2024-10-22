@@ -1,4 +1,4 @@
-import { PubKeyProfile } from '@pubkey-protocol/anchor'
+import { PubKeyProfile } from '@pubkey-protocol/sdk'
 import { PublicKey } from '@solana/web3.js'
 import { convertPubKeyProfilesToMap, PubKeyProfileMap } from './convert-to-map'
 import { losPda, pubkeyPda } from './dev-data-communities'

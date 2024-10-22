@@ -1,4 +1,4 @@
-import { PubKeyCommunity } from '@pubkey-protocol/anchor'
+import { PubKeyCommunity } from '@pubkey-protocol/sdk'
 import { PublicKey } from '@solana/web3.js'
 import { convertPubKeyCommunitiesToMap, PubKeyCommunityMap } from '../../pubkey-community/data-access'
 

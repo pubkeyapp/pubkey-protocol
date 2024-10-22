@@ -1,5 +1,14 @@
-import { IdentityProvider, PubKeyCommunity, PubKeyIdentity, PubKeyProfile } from '@pubkey-protocol/anchor'
-import { ellipsify, getAvatarUrlCommunity, getAvatarUrlProfile, slugify } from '@pubkey-protocol/sdk'
+import {
+  ellipsify,
+  getAvatarUrlCommunity,
+  getAvatarUrlProfile,
+  IdentityProvider,
+  PubKeyCommunity,
+  PubKeyIdentity,
+  PubKeyProfile,
+  PublicKeyString,
+  slugify,
+} from '@pubkey-protocol/sdk'
 import { PublicKey } from '@solana/web3.js'
 
 export function createDevCommunity({
@@ -9,7 +18,7 @@ export function createDevCommunity({
 }: {
   avatarUrl?: string
   name: string
-  publicKey: PublicKey
+  publicKey: PublicKeyString
 }): PubKeyCommunity {
   const slug = slugify(name)
 
@@ -45,7 +54,7 @@ export function createDevProfile({
 }: {
   identities: PubKeyIdentity[]
   name: string
-  publicKey: PublicKey
+  publicKey: PublicKeyString
   username?: string
 }): PubKeyProfile {
   const username = props.username ?? slugify(name)
@@ -68,7 +77,7 @@ export function createDevIdentity({
   providerId,
   name,
 }: {
-  communities: PublicKey[]
+  communities: PublicKeyString[]
   provider: IdentityProvider
   providerId: string
   name?: string
@@ -86,7 +95,7 @@ export function createDevIdentityDiscord({
   name,
   providerId,
 }: {
-  communities: PublicKey[]
+  communities: PublicKeyString[]
   name?: string
   providerId: string
 }): PubKeyIdentity {
@@ -97,7 +106,7 @@ export function createDevIdentityFarcaster({
   name,
   providerId,
 }: {
-  communities: PublicKey[]
+  communities: PublicKeyString[]
   name?: string
   providerId: string
 }): PubKeyIdentity {
@@ -108,7 +117,7 @@ export function createDevIdentityGithub({
   name,
   providerId,
 }: {
-  communities: PublicKey[]
+  communities: PublicKeyString[]
   name?: string
   providerId: string
 }): PubKeyIdentity {
@@ -119,7 +128,7 @@ export function createDevIdentityGoogle({
   name,
   providerId,
 }: {
-  communities: PublicKey[]
+  communities: PublicKeyString[]
   name?: string
   providerId: string
 }): PubKeyIdentity {
@@ -130,7 +139,7 @@ export function createDevIdentitySolana({
   name,
   providerId,
 }: {
-  communities: PublicKey[]
+  communities: PublicKeyString[]
   name?: string
   providerId: string
 }): PubKeyIdentity {
@@ -141,7 +150,7 @@ export function createDevIdentityTelegram({
   name,
   providerId,
 }: {
-  communities: PublicKey[]
+  communities: PublicKeyString[]
   name?: string
   providerId: string
 }): PubKeyIdentity {
@@ -152,7 +161,7 @@ export function createDevIdentityX({
   name,
   providerId,
 }: {
-  communities: PublicKey[]
+  communities: PublicKeyString[]
   name?: string
   providerId: string
 }): PubKeyIdentity {

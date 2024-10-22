@@ -1,5 +1,5 @@
 import { Code, Group, Stack } from '@mantine/core'
-import { PubKeyCommunity, PubKeyProfile } from '@pubkey-protocol/anchor'
+import { PubKeyCommunity, PubKeyProfile } from '@pubkey-protocol/sdk'
 import { ellipsify } from '@pubkey-protocol/sdk'
 import { UiCard, UiDebugModal, UiGroup, UiStack } from '@pubkey-ui/core'
 import { PublicKey } from '@solana/web3.js'

@@ -1,4 +1,4 @@
-import { PubKeyCommunity } from '@pubkey-protocol/anchor'
+import { PubKeyCommunity } from '@pubkey-protocol/sdk'
 import { UiAvatar, UiAvatarProps } from '../../../ui/ui-avatar'
 
 export function PubkeyProtocolUiCommunityAvatar({

@@ -1,5 +1,5 @@
 import { ActionIcon, ActionIconProps, Tooltip } from '@mantine/core'
-import { PubKeyCommunity } from '@pubkey-protocol/anchor'
+import { PubKeyCommunity } from '@pubkey-protocol/sdk'
 import { Link } from 'react-router-dom'
 import { PubkeyProtocolUiCommunityAvatar } from './pubkey-protocol-ui-community-avatar'
 

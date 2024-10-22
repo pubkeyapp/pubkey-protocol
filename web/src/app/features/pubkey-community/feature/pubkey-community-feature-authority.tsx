@@ -1,5 +1,5 @@
 import { Box, Button, Text } from '@mantine/core'
-import { PubKeyCommunity } from '@pubkey-protocol/anchor'
+import { PubKeyCommunity } from '@pubkey-protocol/sdk'
 import { toastError, UiCard, UiInfo, UiStack } from '@pubkey-ui/core'
 import { useWallet } from '@solana/wallet-adapter-react'
 import { ExplorerLink } from '../../cluster/cluster-ui'

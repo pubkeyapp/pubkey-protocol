@@ -1,5 +1,5 @@
 import { Switch } from '@mantine/core'
-import { IdentityProvider, PubKeyCommunity } from '@pubkey-protocol/anchor'
+import { IdentityProvider, PubKeyCommunity } from '@pubkey-protocol/sdk'
 import { toastError, toastSuccess } from '@pubkey-ui/core'
 import {
   useMutationCommunityProviderDisable,

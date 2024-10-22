@@ -1,5 +1,5 @@
 import { Anchor, Text, TextProps } from '@mantine/core'
-import { PubKeyCommunity } from '@pubkey-protocol/anchor'
+import { PubKeyCommunity } from '@pubkey-protocol/sdk'
 import { Link } from 'react-router-dom'
 
 export function PubkeyProtocolUiCommunityAnchor({

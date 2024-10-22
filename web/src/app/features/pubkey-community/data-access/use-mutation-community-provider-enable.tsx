@@ -1,5 +1,4 @@
-import { IdentityProvider, PubKeyCommunity } from '@pubkey-protocol/anchor'
-import { PublicKeyString } from '@pubkey-protocol/sdk'
+import { IdentityProvider, PubKeyCommunity, PublicKeyString } from '@pubkey-protocol/sdk'
 import { useMutation } from '@tanstack/react-query'
 import { usePubKeyProtocol } from '../../pubkey-protocol'
 

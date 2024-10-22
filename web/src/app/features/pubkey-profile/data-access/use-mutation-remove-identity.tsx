@@ -1,9 +1,8 @@
-import { ProfileIdentityRemoveOptions } from '@pubkey-protocol/sdk'
-import { PublicKey } from '@solana/web3.js'
+import { ProfileIdentityRemoveOptions, PublicKeyString } from '@pubkey-protocol/sdk'
 import { useMutation } from '@tanstack/react-query'
 import { usePubKeyProtocol } from '../../pubkey-protocol'
 
-export function useMutationRemoveIdentity({ community }: { community: PublicKey }) {
+export function useMutationRemoveIdentity({ community }: { community: PublicKeyString }) {
   const { sdk, signAndConfirmTransaction, onError, onSuccess } = usePubKeyProtocol()
 
   return useMutation({

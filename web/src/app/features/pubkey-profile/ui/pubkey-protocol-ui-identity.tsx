@@ -1,8 +1,6 @@
 import { Divider, Group, Text } from '@mantine/core'
-import { PubKeyIdentity } from '@pubkey-protocol/anchor'
-import { ellipsify } from '@pubkey-protocol/sdk'
+import { ellipsify, PubKeyIdentity, PublicKeyString } from '@pubkey-protocol/sdk'
 import { UiAnchor, UiGroup, UiStack } from '@pubkey-ui/core'
-import { PublicKey } from '@solana/web3.js'
 import { ReactNode } from 'react'
 import { usePubKeyCommunity } from '../../pubkey-community/data-access'
 import { PubkeyProtocolUiCommunityAvatarAnchor } from '../../pubkey-community/ui'
@@ -40,7 +38,7 @@ export function PubkeyProtocolUiIdentity({ action, identity }: { action?: ReactN
   )
 }
 
-export function VerifiedBy({ communities: communityIds }: { communities: PublicKey[] }) {
+export function VerifiedBy({ communities: communityIds }: { communities: PublicKeyString[] }) {
   const { communityMap } = usePubKeyCommunity()
 
   // map and sort the communities by name

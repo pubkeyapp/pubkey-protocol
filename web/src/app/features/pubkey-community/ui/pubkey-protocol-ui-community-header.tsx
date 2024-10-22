@@ -1,4 +1,4 @@
-import { PubKeyCommunity } from '@pubkey-protocol/anchor'
+import { PubKeyCommunity } from '@pubkey-protocol/sdk'
 import { UiStack } from '@pubkey-ui/core'
 import { PubkeyProtocolUiCommunityAnchor } from './pubkey-protocol-ui-community-anchor'
 import { PubkeyProtocolUiCommunityAvatar } from './pubkey-protocol-ui-community-avatar'

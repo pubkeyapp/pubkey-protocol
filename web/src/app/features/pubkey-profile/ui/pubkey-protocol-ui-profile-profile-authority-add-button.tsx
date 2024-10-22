@@ -1,5 +1,5 @@
 import { Button } from '@mantine/core'
-import { PubKeyCommunity, PubKeyProfile } from '@pubkey-protocol/anchor'
+import { PubKeyCommunity, PubKeyProfile, PublicKeyString } from '@pubkey-protocol/sdk'
 import { PublicKey } from '@solana/web3.js'
 import { useMutationProfileAuthorityAdd } from '../data-access'
 
@@ -9,9 +9,9 @@ export function PubkeyProtocolUiProfileProfileAuthorityAddButton({
   feePayer,
   profile: { username },
 }: {
-  authority: PublicKey
+  authority: PublicKeyString
   community: PubKeyCommunity
-  feePayer: PublicKey
+  feePayer: PublicKeyString
   profile: PubKeyProfile
 }) {
   const mutation = useMutationProfileAuthorityAdd({ community: community.publicKey })

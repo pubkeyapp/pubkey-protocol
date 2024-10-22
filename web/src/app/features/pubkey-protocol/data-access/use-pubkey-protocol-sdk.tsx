@@ -1,4 +1,4 @@
-import { getPubkeyProtocolProgramId } from '@pubkey-protocol/anchor'
+import { getPubkeyProtocolProgramId } from '@pubkey-protocol/sdk'
 import { PubkeyProtocolSdk } from '@pubkey-protocol/sdk'
 import { AnchorWallet, Wallet } from '@solana/wallet-adapter-react'
 import { Cluster as SolanaCluster, Connection } from '@solana/web3.js'

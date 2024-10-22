@@ -32,17 +32,7 @@ export function getProfileCommand(): Command {
         return
       }
 
-      // FIXME: Move this logic to the SDK, we should return strings, not PublicKeys
-      console.log(
-        inspect(
-          {
-            ...profile,
-            authorities: profile.authorities.map((a) => a.toString()),
-            publicKey: profile.publicKey.toString(),
-          },
-          { colors: true, depth: 3 },
-        ),
-      )
+      console.log(inspect(profile, { colors: true, depth: 3 }))
     })
 
   // command

@@ -15,6 +15,7 @@ import {
   PubKeyPointer,
   PubKeyProfile,
   PubkeyProtocol,
+  PublicKeyString,
 } from '@pubkey-protocol/anchor'
 import {
   AccountInfo,
@@ -32,11 +33,9 @@ import { getAvatarUrlProfile } from './utils/get-avatar-url-profile'
 import { isValidPublicKey } from './utils/is-valid-public-key'
 import { slugify } from './utils/slugify'
 
-export type PublicKeyString = PublicKey | string
-
 export interface PubKeyProfileSdkOptions {
   readonly connection: Connection
-  readonly programId?: PublicKey
+  readonly programId?: PublicKeyString
   readonly provider: AnchorProvider
 }
 
@@ -47,19 +46,19 @@ export interface CommunityCreateInput {
 }
 
 export interface CommunityCreateOptions {
-  communityAuthority: PublicKey
-  authority: PublicKey
+  communityAuthority: PublicKeyString
+  authority: PublicKeyString
   avatarUrl?: string
   name: string
   slug?: string
 }
 
 export interface CommunityUpdateOptions {
-  authority: PublicKey
+  authority: PublicKeyString
   avatarUrl?: string
   discord?: string
   farcaster?: string
-  feePayer: PublicKey
+  feePayer: PublicKeyString
   github?: string
   name?: string
   slug: string
@@ -86,9 +85,9 @@ export interface ProfileAuthorityAddOptions {
 
 export interface ProfileCreateOptions {
   avatarUrl?: string
-  authority: PublicKey
-  community: PublicKey
-  feePayer: PublicKey
+  authority: PublicKeyString
+  community: PublicKeyString
+  feePayer: PublicKeyString
   name: string
   username?: string
 }
@@ -103,9 +102,9 @@ export interface ProfileGetByUsername {
 }
 
 export interface ProfileIdentityAddOptions {
-  authority: PublicKey
-  community: PublicKey
-  feePayer: PublicKey
+  authority: PublicKeyString
+  community: PublicKeyString
+  feePayer: PublicKeyString
   name: string
   provider: IdentityProvider
   providerId: string
@@ -113,17 +112,17 @@ export interface ProfileIdentityAddOptions {
 }
 
 export interface ProfileIdentityRemoveOptions {
-  authority: PublicKey
-  community: PublicKey
-  feePayer: PublicKey
+  authority: PublicKeyString
+  community: PublicKeyString
+  feePayer: PublicKeyString
   username: string
   providerId: string
   provider: IdentityProvider
 }
 export interface ProfileIdentityVerifyOptions {
-  authority: PublicKey
-  community: PublicKey
-  feePayer: PublicKey
+  authority: PublicKeyString
+  community: PublicKeyString
+  feePayer: PublicKeyString
   username: string
   providerId: string
   provider: IdentityProvider
@@ -147,7 +146,7 @@ export class PubkeyProtocolSdk {
   constructor(options: PubKeyProfileSdkOptions) {
     this.connection = options.connection
     this.provider = options.provider
-    this.programId = options.programId || PUBKEY_PROTOCOL_PROGRAM_ID
+    this.programId = options.programId ? new PublicKey(options.programId) : PUBKEY_PROTOCOL_PROGRAM_ID
     this.program = getPubkeyProtocolProgram(this.provider)
   }
 
@@ -155,6 +154,7 @@ export class PubkeyProtocolSdk {
     input: CommunityCreateInput
     tx: VersionedTransaction
   }> {
+    const authority = new PublicKey(options.authority)
     const slug = options.slug?.length ? options.slug : slugify(options.name)
     const avatarUrl = options.avatarUrl || getAvatarUrlCommunity(slug)
     const [config] = this.pdaConfig()
@@ -176,7 +176,7 @@ export class PubkeyProtocolSdk {
       })
       .instruction()
 
-    const tx = await this.createTransaction({ ix, feePayer: options.authority })
+    const tx = await this.createTransaction({ ix, feePayer: authority })
 
     return { input, tx }
   }
@@ -189,6 +189,9 @@ export class PubkeyProtocolSdk {
             ...account,
             publicKey,
             providers: convertAnchorIdentityProviders(account.providers),
+            signers: account.signers.map((s) => s.toString()),
+            authority: account.authority.toString(),
+            pendingAuthority: account.pendingAuthority?.toString(),
           } as PubKeyCommunity),
       ),
     )
@@ -204,9 +207,12 @@ export class PubkeyProtocolSdk {
     return this.program.account.community.fetch(options.community).then(
       (account) =>
         ({
+          publicKey: options.community.toString(),
           ...account,
-          publicKey: options.community,
           providers: convertAnchorIdentityProviders(account.providers),
+          signers: account.signers.map((s) => s.toString()),
+          authority: account.authority.toString(),
+          pendingAuthority: account.pendingAuthority?.toString(),
         } as PubKeyCommunity),
     )
   }
@@ -299,6 +305,7 @@ export class PubkeyProtocolSdk {
 
   async communityUpdate(options: CommunityUpdateOptions) {
     const [community] = this.pdaCommunity({ slug: options.slug })
+    const feePayer = new PublicKey(options.feePayer)
 
     const input = {
       avatarUrl: options.avatarUrl?.length ? options.avatarUrl : null,
@@ -318,7 +325,7 @@ export class PubkeyProtocolSdk {
       })
       .instruction()
 
-    const tx = await this.createTransaction({ ix, feePayer: options.feePayer })
+    const tx = await this.createTransaction({ ix, feePayer })
 
     return { input, tx }
   }
@@ -460,11 +467,12 @@ export class PubkeyProtocolSdk {
       const identities = res.identities.map((identity) => ({
         ...identity,
         provider: convertAnchorIdentityProvider(identity.provider),
+        communities: identity.communities.map((c) => c.toString()),
       }))
 
       return {
-        ...res,
         publicKey: options.profile,
+        ...res,
         identities,
       }
     })
@@ -560,6 +568,7 @@ export class PubkeyProtocolSdk {
   async profileCreate(options: ProfileCreateOptions) {
     const username = options.username?.length ? options.username : slugify(options.name)
     const community = new PublicKey(options.community)
+    const feePayer = new PublicKey(options.feePayer)
     const [profile] = this.pdaProfile({ username })
     const [pointer] = this.pdaPointer({
       provider: IdentityProvider.Solana,
@@ -575,14 +584,14 @@ export class PubkeyProtocolSdk {
       .accountsStrict({
         authority: options.authority,
         community,
-        feePayer: options.feePayer,
+        feePayer,
         pointer,
         profile,
         systemProgram: SystemProgram.programId,
       })
       .instruction()
 
-    const tx = await this.createTransaction({ ix, feePayer: options.feePayer })
+    const tx = await this.createTransaction({ ix, feePayer })
 
     return { input, tx }
   }

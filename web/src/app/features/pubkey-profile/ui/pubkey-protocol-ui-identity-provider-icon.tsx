@@ -1,4 +1,4 @@
-import { IdentityProvider } from '@pubkey-protocol/anchor'
+import { IdentityProvider } from '@pubkey-protocol/sdk'
 import {
   IconBrandDiscordFilled,
   IconBrandGithubFilled,

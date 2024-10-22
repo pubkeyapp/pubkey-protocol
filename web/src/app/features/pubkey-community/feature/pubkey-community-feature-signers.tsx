@@ -1,5 +1,5 @@
 import { ActionIcon, Group } from '@mantine/core'
-import { PubKeyCommunity } from '@pubkey-protocol/anchor'
+import { PubKeyCommunity } from '@pubkey-protocol/sdk'
 import { toastError, UiCard, UiStack } from '@pubkey-ui/core'
 import { IconTrash } from '@tabler/icons-react'
 import { ExplorerLink } from '../../cluster/cluster-ui'

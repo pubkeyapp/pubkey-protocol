@@ -1,12 +1,11 @@
-import { IdentityProvider, PubKeyIdentity } from '@pubkey-protocol/anchor'
-import { PubkeyProtocolSdk } from '@pubkey-protocol/sdk'
+import { PubKeyIdentity } from '@pubkey-protocol/anchor'
+import { IdentityProvider, PubkeyProtocolSdk, PublicKeyString } from '@pubkey-protocol/sdk'
 import { toastError, UiAlert, UiLoader } from '@pubkey-ui/core'
 import {
   AccountInfo,
   Cluster as SolanaCluster,
   Connection,
   ParsedAccountData,
-  PublicKey,
   VersionedTransaction,
 } from '@solana/web3.js'
 import { useQueryClient } from '@tanstack/react-query'
@@ -18,9 +17,9 @@ import { usePubkeyProtocolSdk } from './use-pubkey-protocol-sdk'
 import { useQueryGetProgramAccount } from './use-query-get-program-account'
 
 export interface PubKeyProfileProviderContext {
-  authority: PublicKey
+  authority: PublicKeyString
   cluster: Cluster
-  feePayer: PublicKey
+  feePayer: PublicKeyString
   getExplorerUrl: (path: string) => string
   getIdentityUrl: (identity: PubKeyIdentity) => string | undefined
   onError: (err: unknown) => void
@@ -40,7 +39,10 @@ export function PubKeyProtocolProvider({
   wallet,
 }: {
   children: ReactNode
-} & Omit<SolanaConnectionRenderProps, 'connection' | 'publicKey'> & { connection: Connection; publicKey: PublicKey }) {
+} & Omit<SolanaConnectionRenderProps, 'connection' | 'publicKey'> & {
+    connection: Connection
+    publicKey: PublicKeyString
+  }) {
   const client = useQueryClient()
   const { cluster, getExplorerUrl } = useCluster()
   const { feePayer, feePayerSign } = useKeypair()

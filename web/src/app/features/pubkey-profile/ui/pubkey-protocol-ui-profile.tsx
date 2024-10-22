@@ -1,5 +1,5 @@
 import { Code, Group, Stack } from '@mantine/core'
-import { PubKeyProfile } from '@pubkey-protocol/anchor'
+import { PubKeyProfile } from '@pubkey-protocol/sdk'
 import { UiCard, UiDebugModal } from '@pubkey-ui/core'
 import { ReactNode } from 'react'
 import { PubkeyProtocolUiIdentity } from './pubkey-protocol-ui-identity'

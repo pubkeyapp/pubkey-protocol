@@ -1,6 +1,6 @@
 import { ActionIcon, Select, TextInput } from '@mantine/core'
 import { useForm } from '@mantine/form'
-import { IdentityProvider, PubKeyProfile } from '@pubkey-protocol/anchor'
+import { IdentityProvider, PubKeyProfile } from '@pubkey-protocol/sdk'
 import { ProfileGetByProvider, ProfileGetByUsername } from '@pubkey-protocol/sdk'
 import { toastError, toastInfo, toastSuccess, UiCard, UiStack } from '@pubkey-ui/core'
 import { IconSearch } from '@tabler/icons-react'

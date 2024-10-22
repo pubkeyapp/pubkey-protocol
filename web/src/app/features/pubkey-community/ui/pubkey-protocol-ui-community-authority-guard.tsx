@@ -1,5 +1,5 @@
 import { Text } from '@mantine/core'
-import { PubKeyCommunity } from '@pubkey-protocol/anchor'
+import { PubKeyCommunity } from '@pubkey-protocol/sdk'
 import { UiGroup, UiStack, UiWarning } from '@pubkey-ui/core'
 import { WalletMultiButton } from '@pubkeyapp/wallet-adapter-mantine-ui'
 import { ReactNode } from 'react'
@@ -20,10 +20,10 @@ export function PubkeyProtocolUiCommunityAuthorityGuard({
   ) : (
     <UiStack>
       <UiWarning
-        title="Connect Authority Wallet"
+        title="Community Authority required"
         message={
           <UiStack>
-            <Text>Connect the wallet that is currently managing the community to continue.</Text>
+            <Text>Connect the community authority wallet to continue.</Text>
             <ExplorerLink
               size="xs"
               ff="mono"

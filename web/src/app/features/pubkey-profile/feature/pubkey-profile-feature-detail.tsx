@@ -1,5 +1,5 @@
 import { Group } from '@mantine/core'
-import { PubKeyCommunity } from '@pubkey-protocol/anchor'
+import { PubKeyCommunity } from '@pubkey-protocol/sdk'
 import { UiBack, UiDebugModal, UiLoader, UiPage, UiStack, UiWarning } from '@pubkey-ui/core'
 import { useParams } from 'react-router-dom'
 import { PubkeyProtocolUiCommunitySelect } from '../../pubkey-community/ui'

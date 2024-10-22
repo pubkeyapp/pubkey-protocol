@@ -32,13 +32,7 @@ export function getCommunityCommand(): Command {
         return
       }
 
-      // FIXME: Move this logic to the SDK, we should return strings, not PublicKeys
-      console.log({
-        ...community,
-        authority: community.authority.toString(),
-        publicKey: community.publicKey.toString(),
-        signers: community.signers.map((s) => s.toString()),
-      })
+      console.log(community)
     })
 
   command

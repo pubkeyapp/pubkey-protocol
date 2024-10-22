@@ -1,4 +1,4 @@
-import { PubKeyProfile } from '@pubkey-protocol/anchor'
+import { PubKeyProfile } from '@pubkey-protocol/sdk'
 import { UiAvatar } from '../../../ui/ui-avatar'
 
 export function PubkeyProtocolUiProfileAvatar({ profile: { avatarUrl, username } }: { profile: PubKeyProfile }) {

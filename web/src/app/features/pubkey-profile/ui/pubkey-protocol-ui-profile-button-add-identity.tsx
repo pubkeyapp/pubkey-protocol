@@ -1,7 +1,7 @@
 import { Button, Group, Select, TextInput } from '@mantine/core'
 import { useForm } from '@mantine/form'
 import { modals } from '@mantine/modals'
-import { IdentityProvider, PubKeyCommunity, PubKeyProfile } from '@pubkey-protocol/anchor'
+import { IdentityProvider, PubKeyCommunity, PubKeyProfile } from '@pubkey-protocol/sdk'
 import { ellipsify } from '@pubkey-protocol/sdk'
 import { UiStack } from '@pubkey-ui/core'
 import { getEnumOptions } from '../../../ui'

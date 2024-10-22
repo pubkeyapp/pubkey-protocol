@@ -1,5 +1,5 @@
 import { Box, UnstyledButton } from '@mantine/core'
-import { PubKeyCommunity, PubKeyProfile } from '@pubkey-protocol/anchor'
+import { PubKeyCommunity, PubKeyProfile, PublicKeyString } from '@pubkey-protocol/sdk'
 import { PublicKey } from '@solana/web3.js'
 import { UiAppCard } from '../../../ui'
 import { useMutationUpdateAvatarUrl } from '../data-access'
@@ -12,7 +12,7 @@ export function PubkeyProtocolUiProfileAvatarUpdateButton({
 }: {
   community: PubKeyCommunity
   profile: PubKeyProfile
-  signAuthority: PublicKey
+  signAuthority: PublicKeyString
 }) {
   const canSign = signAuthority !== PublicKey.default
   const mutation = useMutationUpdateAvatarUrl({ community: community.publicKey })

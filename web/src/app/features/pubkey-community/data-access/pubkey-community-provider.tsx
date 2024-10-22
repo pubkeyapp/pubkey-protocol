@@ -1,4 +1,4 @@
-import { PubKeyCommunity } from '@pubkey-protocol/anchor'
+import { PubKeyCommunity } from '@pubkey-protocol/sdk'
 import { UiError, UiLoader } from '@pubkey-ui/core'
 import { createContext, ReactNode, useContext, useEffect, useMemo, useState } from 'react'
 import { useQueryCommunityGetAll } from './use-query-community-get-all'
@@ -42,11 +42,12 @@ export function PubKeyCommunityProvider({ children }: { children: ReactNode }) {
     return <UiLoader />
   }
 
-  if (!query.data) {
+  if (!query.data?.length) {
     return <UiError message="No communities found" />
   }
+
   if (!community) {
-    return <UiError message="No community found" />
+    return <UiLoader />
   }
 
   const value: PubKeyCommunityProviderContext = {

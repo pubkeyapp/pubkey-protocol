@@ -1,4 +1,4 @@
-import { PubKeyCommunity } from '@pubkey-protocol/anchor'
+import { PubKeyCommunity } from '@pubkey-protocol/sdk'
 import { useWallet } from '@solana/wallet-adapter-react'
 import { useMemo } from 'react'
 

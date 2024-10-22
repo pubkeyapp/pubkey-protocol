@@ -1,5 +1,5 @@
 import { Group } from '@mantine/core'
-import { IdentityProvider, PubKeyCommunity } from '@pubkey-protocol/anchor'
+import { IdentityProvider, PubKeyCommunity } from '@pubkey-protocol/sdk'
 import { ellipsify } from '@pubkey-protocol/sdk'
 import { toastError, toastSuccess, UiBack, UiCard, UiInfo, UiLoader, UiPage } from '@pubkey-ui/core'
 import { PubkeyProtocolUiCommunitySelect } from '../../pubkey-community/ui'

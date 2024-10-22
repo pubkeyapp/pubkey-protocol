@@ -5,6 +5,8 @@ import { Cluster, PublicKey } from '@solana/web3.js'
 import PubkeyProtocolIDL from '../target/idl/pubkey_protocol.json'
 import type { PubkeyProtocol } from '../target/types/pubkey_protocol'
 
+export type PublicKeyString = PublicKey | string
+
 // Re-export the generated IDL and type
 export { PubkeyProtocol, PubkeyProtocolIDL }
 
@@ -35,23 +37,26 @@ export const PUBKEY_PROTOCOL_SEED_POINTER = new TextEncoder().encode('pointer')
 export const PUBKEY_PROTOCOL_SEED_PROFILE = new TextEncoder().encode('profile')
 
 // Helper method to get the Community PDA
-export function getPubKeyCommunityPda({ programId, slug }: { programId: PublicKey; slug: string }) {
+export function getPubKeyCommunityPda({ programId, slug }: { programId: PublicKeyString; slug: string }) {
   return PublicKey.findProgramAddressSync(
     [PUBKEY_PROTOCOL_PREFIX, PUBKEY_PROTOCOL_SEED_COMMUNITY, stringToUint8Array(slug)],
-    programId,
+    new PublicKey(programId),
   )
 }
 
 // Helper method to get the Config PDA
-export function getPubKeyConfigPda({ programId }: { programId: PublicKey }) {
-  return PublicKey.findProgramAddressSync([PUBKEY_PROTOCOL_PREFIX, PUBKEY_PROTOCOL_SEED_CONFIG], programId)
+export function getPubKeyConfigPda({ programId }: { programId: PublicKeyString }) {
+  return PublicKey.findProgramAddressSync(
+    [PUBKEY_PROTOCOL_PREFIX, PUBKEY_PROTOCOL_SEED_CONFIG],
+    new PublicKey(programId),
+  )
 }
 
 // Helper method to get the PubKeyProfile PDA
-export function getPubKeyProfilePda({ programId, username }: { programId: PublicKey; username: string }) {
+export function getPubKeyProfilePda({ programId, username }: { programId: PublicKeyString; username: string }) {
   return PublicKey.findProgramAddressSync(
     [PUBKEY_PROTOCOL_PREFIX, PUBKEY_PROTOCOL_SEED_PROFILE, stringToUint8Array(username)],
-    programId,
+    new PublicKey(programId),
   )
 }
 
@@ -61,7 +66,7 @@ export function getPubKeyPointerPda({
   provider,
   providerId,
 }: {
-  programId: PublicKey
+  programId: PublicKeyString
   provider: IdentityProvider
   providerId: string
 }) {
@@ -74,7 +79,7 @@ export function getPubKeyPointerPda({
     ]),
   )
 
-  return PublicKey.findProgramAddressSync([hash], programId)
+  return PublicKey.findProgramAddressSync([hash], new PublicKey(programId))
 }
 
 export enum IdentityProvider {
@@ -130,17 +135,17 @@ export function convertAnchorIdentityProviders(providers: AnchorIdentityProvider
 }
 
 export interface PubKeyProfile {
-  authorities: PublicKey[]
+  authorities: PublicKeyString[]
   avatarUrl: string
   bump?: number
   identities: PubKeyIdentity[]
   name: string
-  publicKey: PublicKey
+  publicKey: PublicKeyString
   username: string
 }
 
 export interface PubKeyIdentity {
-  communities?: PublicKey[]
+  communities?: PublicKeyString[]
   name: string
   provider: IdentityProvider
   providerId: string
@@ -148,31 +153,31 @@ export interface PubKeyIdentity {
 
 export interface PubKeyPointer {
   bump?: number
-  profile: PublicKey
+  profile: PublicKeyString
   provider: IdentityProvider
   providerId: string
-  publicKey: PublicKey
+  publicKey: PublicKeyString
 }
 
 export interface PubKeyConfig {
   bump: number
-  communityAuthority: PublicKey
-  configAuthority: PublicKey
-  publicKey: PublicKey
+  communityAuthority: PublicKeyString
+  configAuthority: PublicKeyString
+  publicKey: PublicKeyString
 }
 
 export interface PubKeyCommunity {
-  authority: PublicKey
+  authority: PublicKeyString
   avatarUrl: string
   bump: number
   discord?: string
   farcaster?: string
   github?: string
   name: string
-  pendingAuthority: PublicKey | null
+  pendingAuthority: PublicKeyString | null
   providers: IdentityProvider[]
-  publicKey: PublicKey
-  signers: PublicKey[]
+  publicKey: PublicKeyString
+  signers: PublicKeyString[]
   slug: string
   telegram?: string
   website?: string

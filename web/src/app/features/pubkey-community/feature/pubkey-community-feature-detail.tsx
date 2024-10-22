@@ -1,4 +1,4 @@
-import { PubKeyCommunity } from '@pubkey-protocol/anchor'
+import { PubKeyCommunity } from '@pubkey-protocol/sdk'
 import { ellipsify } from '@pubkey-protocol/sdk'
 import {
   UiAnchor,

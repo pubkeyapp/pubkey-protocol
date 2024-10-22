@@ -1,4 +1,4 @@
-import { PubKeyProfile } from '@pubkey-protocol/anchor'
+import { PubKeyProfile } from '@pubkey-protocol/sdk'
 
 export type PubKeyProfileMap = Record<string, PubKeyProfile>
 

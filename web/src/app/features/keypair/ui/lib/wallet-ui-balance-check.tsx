@@ -2,7 +2,7 @@ import { Button, Group, Text } from '@mantine/core'
 import { UiWarning } from '@pubkey-ui/core'
 import { PublicKey } from '@solana/web3.js'
 import { useCluster } from '../../../cluster/cluster-data-access'
-import { useGetBalance, useRequestAirdrop } from '../../data-access/lib/keypair-data-access'
+import { useGetBalance, useRequestAirdrop } from '../../data-access'
 
 export function WalletUiBalanceCheck({ address, label = 'Account not found' }: { address: PublicKey; label?: string }) {
   const { cluster } = useCluster()
