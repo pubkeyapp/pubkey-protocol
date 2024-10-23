@@ -64,6 +64,7 @@ pub fn profile_create(ctx: Context<ProfileCreate>, args: ProfileCreateArgs) -> R
     let ProfileCreateArgs {
         username,
         name,
+        bio,
         avatar_url,
     } = args;
 
@@ -78,6 +79,7 @@ pub fn profile_create(ctx: Context<ProfileCreate>, args: ProfileCreateArgs) -> R
         bump: ctx.bumps.profile,
         username,
         name,
+        bio,
         avatar_url,
         authorities: vec![authority],
         identities: vec![set_primary_wallet],
@@ -92,5 +94,6 @@ pub fn profile_create(ctx: Context<ProfileCreate>, args: ProfileCreateArgs) -> R
 pub struct ProfileCreateArgs {
     pub username: String,
     pub name: String,
+    pub bio: String,
     pub avatar_url: String,
 }

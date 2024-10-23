@@ -8,6 +8,7 @@ pub const POINTER: &[u8] = b"pointer";
 pub const MAX_USERNAME_SIZE: usize = 20;
 pub const MAX_SLUG_SIZE: usize = MAX_USERNAME_SIZE;
 pub const MAX_NAME_SIZE: usize = 50;
+pub const MAX_BIO_SIZE: usize = 1000;
 pub const MAX_URL_SIZE: usize = 100;
 pub const MAX_PROVIDER_ID_SIZE: usize = 50;
 pub const MAX_PROVIDER_NAME_SIZE: usize = 50;

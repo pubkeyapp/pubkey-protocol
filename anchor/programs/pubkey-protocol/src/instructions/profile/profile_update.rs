@@ -30,15 +30,17 @@ pub struct ProfileUpdate<'info> {
     pub fee_payer: Signer<'info>,
 }
 
-pub fn profile_update(
-    ctx: Context<ProfileUpdate>,
-    args: ProfileUpdateArgs,
-) -> Result<()> {
+pub fn profile_update(ctx: Context<ProfileUpdate>, args: ProfileUpdateArgs) -> Result<()> {
     let profile = &mut ctx.accounts.profile;
 
     if let Some(new_name) = args.new_name {
         require!(is_valid_name(&new_name), ProtocolError::InvalidName);
         profile.name = new_name;
+    }
+
+    if let Some(new_bio) = args.new_bio {
+        require!(is_valid_bio(&new_bio), ProtocolError::InvalidBio);
+        profile.bio = new_bio;
     }
 
     if let Some(new_avatar_url) = args.new_avatar_url {
@@ -57,5 +59,6 @@ pub fn profile_update(
 #[derive(AnchorSerialize, AnchorDeserialize)]
 pub struct ProfileUpdateArgs {
     pub new_name: Option<String>,
+    pub new_bio: Option<String>,
     pub new_avatar_url: Option<String>,
 }

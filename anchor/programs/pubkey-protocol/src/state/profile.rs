@@ -13,6 +13,8 @@ pub struct Profile {
     pub username: String,
     // Name
     pub name: String,
+    // Bio
+    pub bio: String,
     // Avatar URL
     pub avatar_url: String,
     // Authorities that have been delegated to
@@ -33,6 +35,7 @@ impl Profile {
         1 + // bump
         4 + MAX_USERNAME_SIZE +
         4 + MAX_NAME_SIZE +
+        4 + MAX_BIO_SIZE +
         4 + MAX_URL_SIZE +
         32 + // fee_payer
         authorities_size +
@@ -40,10 +43,6 @@ impl Profile {
     }
 
     pub fn validate(&self) -> Result<()> {
-        let avatar_url_len = self.avatar_url.len();
-        let identities_len = self.identities.len();
-        let authorities_len = self.authorities.len();
-
         // Username
         require!(
             is_valid_username(&self.username),
@@ -53,30 +52,26 @@ impl Profile {
         // Name
         require!(is_valid_name(&self.name), ProtocolError::InvalidName);
 
+        // Bio
+        require!(is_valid_bio(&self.name), ProtocolError::InvalidBio);
+
         // Avatar URL
         require!(
             is_valid_url(&self.avatar_url),
             ProtocolError::InvalidAvatarURL
         );
-        require!(
-            avatar_url_len > 0 && avatar_url_len <= MAX_URL_SIZE,
-            ProtocolError::InvalidAvatarURL
-        );
 
         // Authorities
         require!(
-            authorities_len <= MAX_VECTOR_SIZE.into(),
+            is_valid_authorities(&self.authorities),
             ProtocolError::MaxSizeReached
         );
 
         // Identities
         require!(
-            identities_len <= MAX_VECTOR_SIZE.into(),
+            is_valid_identities(&self.identities),
             ProtocolError::MaxSizeReached
         );
-        for identity in self.identities.clone() {
-            identity.validate()?;
-        }
 
         Ok(())
     }
