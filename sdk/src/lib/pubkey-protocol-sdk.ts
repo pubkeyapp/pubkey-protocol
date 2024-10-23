@@ -417,7 +417,13 @@ export class PubkeyProtocolSdk {
   async profileGetByProviderNullable(options: ProfileGetByProvider): Promise<PubKeyProfile | null> {
     const [pointer] = this.pdaPointer(options)
 
-    const { profile } = await this.pointerGet({ pointer })
+    const found = await this.pointerGetNullable({ pointer })
+
+    if (!found) {
+      return null
+    }
+
+    const { profile } = found
 
     return this.profileGetNullable({ profile })
   }
