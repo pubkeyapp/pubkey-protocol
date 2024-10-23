@@ -7,42 +7,33 @@ use anchor_lang::prelude::*;
 
 #[account]
 pub struct Profile {
-    // Bump of the PDA
-    pub bump: u8,
-    // Username
+   pub bump: u8,
     pub username: String,
-    // Name
     pub name: String,
-    // Avatar URL
     pub avatar_url: String,
-    // Authorities that have been delegated to
+    pub bio: String, 
     pub authorities: Vec<Pubkey>,
-    // Identities user have added onto
     pub identities: Vec<Identity>,
-    // Bio field
-    pub bio: String,  // New bio field
 }
 
 
 impl Profile {
     pub fn size(authorities: &[Pubkey], identities: &[Identity]) -> usize {
-        let authorities_size = 4 + // Vector discriminator
-        (authorities.len() * 32); // Total authorities pubkey length
-
-        let identities_size = 4 + // Vector discriminator
-        identities.iter().map(|identity| Identity::size(identity)).sum::<usize>();
+        let authorities_size = 4 + (authorities.len() * 32); 
+        let identities_size = 4 + identities.iter().map(|identity| Identity::size(identity)).sum::<usize>();
 
         8 + // Anchor discriminator
         1 + // bump
         4 + MAX_USERNAME_SIZE +
         4 + MAX_NAME_SIZE +
         4 + MAX_URL_SIZE +
-        4 + MAX_BIO_SIZE + // Add the bio size
-        32 + // fee_payer
+        4 + MAX_BIO_SIZE + 
+        32 + 
         authorities_size +
         identities_size
     }
 }
+
 
     pub fn validate(&self) -> Result<()> {
         let avatar_url_len = self.avatar_url.len();
