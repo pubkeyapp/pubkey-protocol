@@ -58,15 +58,17 @@ pub fn profile_create(ctx: Context<ProfileCreate>, args: ProfileCreateArgs) -> R
         provider_id: authority.to_string(),
     });
 
-    pointer.validate()?;
+    pointer.validate()?;  // Validate pointer
 
-    // Creating profile account
+    // Extracting args including the new bio field
     let ProfileCreateArgs {
         username,
         name,
         avatar_url,
+        bio, // Extract the bio field
     } = args;
 
+    // Setting up the primary wallet identity
     let set_primary_wallet = Identity {
         provider: IdentityProvider::Solana,
         provider_id: authority.key().to_string(),
@@ -74,23 +76,27 @@ pub fn profile_create(ctx: Context<ProfileCreate>, args: ProfileCreateArgs) -> R
         communities: vec![community.key()],
     };
 
+    // Creating profile account with the new bio field
     profile.set_inner(Profile {
         bump: ctx.bumps.profile,
         username,
         name,
         avatar_url,
+        bio, // Include the bio field
         authorities: vec![authority],
         identities: vec![set_primary_wallet],
     });
 
-    profile.validate()?;
+    profile.validate()?;  // Validate the profile
 
     Ok(())
 }
+
 
 #[derive(AnchorSerialize, AnchorDeserialize)]
 pub struct ProfileCreateArgs {
     pub username: String,
     pub name: String,
     pub avatar_url: String,
+    pub bio: String, // New bio field
 }
