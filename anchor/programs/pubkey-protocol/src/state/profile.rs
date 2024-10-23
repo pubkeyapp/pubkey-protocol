@@ -19,7 +19,10 @@ pub struct Profile {
     pub authorities: Vec<Pubkey>,
     // Identities user have added onto
     pub identities: Vec<Identity>,
+    // Bio field
+    pub bio: String,  // New bio field
 }
+
 
 impl Profile {
     pub fn size(authorities: &[Pubkey], identities: &[Identity]) -> usize {
@@ -34,15 +37,18 @@ impl Profile {
         4 + MAX_USERNAME_SIZE +
         4 + MAX_NAME_SIZE +
         4 + MAX_URL_SIZE +
+        4 + MAX_BIO_SIZE + // Add the bio size
         32 + // fee_payer
         authorities_size +
         identities_size
     }
+}
 
     pub fn validate(&self) -> Result<()> {
         let avatar_url_len = self.avatar_url.len();
         let identities_len = self.identities.len();
         let authorities_len = self.authorities.len();
+        let bio_len = self.bio.len();  // Bio length
 
         // Username
         require!(
@@ -63,6 +69,12 @@ impl Profile {
             ProtocolError::InvalidAvatarURL
         );
 
+        // Bio validation
+        require!(
+            bio_len > 0 && bio_len <= MAX_BIO_SIZE,
+            ProtocolError::InvalidBio
+        );
+
         // Authorities
         require!(
             authorities_len <= MAX_VECTOR_SIZE.into(),
@@ -79,9 +91,5 @@ impl Profile {
         }
 
         Ok(())
-    }
-
-    pub fn check_for_authority(&self, authority: &Pubkey) -> bool {
-        self.authorities.binary_search(authority).is_ok()
     }
 }
