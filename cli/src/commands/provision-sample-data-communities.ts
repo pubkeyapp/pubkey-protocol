@@ -32,9 +32,9 @@ export const communityProvisionMap: CommunityProvisionMap = {
     },
     providers: [IdentityProvider.Discord, IdentityProvider.Github, IdentityProvider.X],
     signers: [
+      'PKNW4GoGFQQvwfq6MmmBxHm7tGRMcWKxpUubAeJ4Zuu',
+      'Link6EYLf3dWBwvJjFzUZFFi48cGtaNRr5vhMW1JbEh',
       'PPLAPR9qXjkQ8QhY7nBXgsEDXVnZ4VBghzNXfnmT4Uw',
-      'Dd1JSwojUsptwFa97A3WRZU1SijCWYo9Qa3xLxT8yzb7',
-      'BumrJWH5kf4MXZ5bEg7VyZY6oXAMr78jXC1mFiDAE3u3',
     ],
   },
   los: {
