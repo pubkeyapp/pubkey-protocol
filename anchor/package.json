@@ -1,6 +1,6 @@
 {
   "name": "@pubkey-protocol/anchor",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "dependencies": {
     "@coral-xyz/anchor": "^0.30.1",
     "@solana/web3.js": "^1.91.0",
