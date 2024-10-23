@@ -5,9 +5,11 @@ import { UiStack } from '@pubkey-ui/core'
 
 export function PubkeyProtocolUiCommunityAuthorityForm({
   community,
+  disabled,
   submit,
 }: {
   community: PubKeyCommunity
+  disabled?: boolean
   submit: (input: { authority: string; newAuthority: string }) => Promise<void>
 }) {
   const form = useForm<{ authority: string; newAuthority: string }>({
@@ -39,12 +41,13 @@ export function PubkeyProtocolUiCommunityAuthorityForm({
         <TextInput
           description="The new authority that will be managing the community."
           required
+          disabled={disabled}
           label="New Authority"
           name="newAuthority"
           {...form.getInputProps('newAuthority')}
         />
         <Group justify="right">
-          <Button disabled={!form.isValid()} type="submit">
+          <Button disabled={disabled || !form.isValid()} type="submit">
             Save
           </Button>
         </Group>

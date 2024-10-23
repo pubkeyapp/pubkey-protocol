@@ -6,9 +6,11 @@ import { PubKeyCommunityUpdateInput } from '../data-access'
 
 export function PubkeyProtocolUiCommunityUpdateForm({
   community,
+  disabled,
   submit,
 }: {
   community: PubKeyCommunity
+  disabled?: boolean
   submit: (input: PubKeyCommunityUpdateInput) => Promise<void>
 }) {
   const form = useForm<PubKeyCommunityUpdateInput>({
@@ -35,15 +37,23 @@ export function PubkeyProtocolUiCommunityUpdateForm({
           name="slug"
           {...form.getInputProps('slug')}
         />
-        <TextInput description="The community's name." name="name" label="Name" {...form.getInputProps('name')} />
+        <TextInput
+          disabled={disabled}
+          description="The community's name."
+          name="name"
+          label="Name"
+          {...form.getInputProps('name')}
+        />
 
         <TextInput
+          disabled={disabled}
           description="Link to the community's avatar image."
           label="Avatar URL"
           {...form.getInputProps('avatarUrl')}
         />
 
         <TextInput
+          disabled={disabled}
           description="Link to a Discord invite. Should start with https://discord.gg/"
           placeholder="https://discord.gg/..."
           name="discord"
@@ -51,6 +61,7 @@ export function PubkeyProtocolUiCommunityUpdateForm({
           {...form.getInputProps('discord')}
         />
         <TextInput
+          disabled={disabled}
           description="Link to a Farcaster channel. Should start with https://warpcast.com/"
           placeholder="https://warpcast.com/..."
           name="farcaster"
@@ -58,6 +69,7 @@ export function PubkeyProtocolUiCommunityUpdateForm({
           {...form.getInputProps('farcaster')}
         />
         <TextInput
+          disabled={disabled}
           description="Link to the community's Github repository. Should start with https://github.com/"
           placeholder="https://github.com/..."
           name="github"
@@ -65,6 +77,7 @@ export function PubkeyProtocolUiCommunityUpdateForm({
           {...form.getInputProps('github')}
         />
         <TextInput
+          disabled={disabled}
           description="Link to the community's Telegram channel. Should start with https://t.me/"
           placeholder="https://t.me/..."
           name="telegram"
@@ -72,6 +85,7 @@ export function PubkeyProtocolUiCommunityUpdateForm({
           {...form.getInputProps('telegram')}
         />
         <TextInput
+          disabled={disabled}
           description="Link to the community's website. Should start with https://"
           placeholder="https://..."
           name="website"
@@ -79,6 +93,7 @@ export function PubkeyProtocolUiCommunityUpdateForm({
           {...form.getInputProps('website')}
         />
         <TextInput
+          disabled={disabled}
           description="Link to the community's X channel. Should start with https://x.com/"
           placeholder="https://x.com/..."
           name="x"
@@ -86,7 +101,9 @@ export function PubkeyProtocolUiCommunityUpdateForm({
           {...form.getInputProps('x')}
         />
         <Group justify="right">
-          <Button type="submit">Save</Button>
+          <Button disabled={disabled} type="submit">
+            Save
+          </Button>
         </Group>
       </UiStack>
     </form>

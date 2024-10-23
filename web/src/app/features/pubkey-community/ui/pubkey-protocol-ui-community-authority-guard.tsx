@@ -1,41 +1,45 @@
-import { Text } from '@mantine/core'
-import { PubKeyCommunity } from '@pubkey-protocol/sdk'
-import { UiGroup, UiStack, UiWarning } from '@pubkey-ui/core'
+import { Group, Text } from '@mantine/core'
+import { ellipsify, PubKeyCommunity } from '@pubkey-protocol/sdk'
+import { UiInfo, UiStack } from '@pubkey-ui/core'
 import { WalletMultiButton } from '@pubkeyapp/wallet-adapter-mantine-ui'
 import { ReactNode } from 'react'
 import { ExplorerLink } from '../../cluster/cluster-ui'
 import { useCommunityIsAuthorityConnected } from '../data-access'
 
 export function PubkeyProtocolUiCommunityAuthorityGuard({
-  children,
   community,
+  render,
 }: {
-  children: ReactNode
   community: PubKeyCommunity
+  render: ({ disabled }: { disabled: boolean }) => ReactNode
 }) {
   const hasAuthority = useCommunityIsAuthorityConnected({ community })
 
   return hasAuthority ? (
-    children
+    render({ disabled: false })
   ) : (
     <UiStack>
-      <UiWarning
-        title="Community Authority required"
+      {render({ disabled: true })}
+      <UiInfo
+        title="Community Authority required!"
         message={
           <UiStack>
-            <Text>Connect the community authority wallet to continue.</Text>
-            <ExplorerLink
-              size="xs"
-              ff="mono"
-              path={`account/${community.authority}`}
-              label={community.authority?.toString()}
-            />
+            <Group align="baseline" gap={4} wrap="nowrap">
+              <Text span>Connect the community authority wallet</Text>
+              <ExplorerLink
+                size="sm"
+                ff="mono"
+                path={`account/${community.authority}`}
+                label={ellipsify(community.authority?.toString(), 8)}
+              />
+              <Text span>to enable this feature.</Text>
+            </Group>
+            <Group justify="end">
+              <WalletMultiButton size="xs" />
+            </Group>
           </UiStack>
         }
       />
-      <UiGroup justify="end">
-        <WalletMultiButton />
-      </UiGroup>
     </UiStack>
   )
 }

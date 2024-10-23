@@ -9,9 +9,11 @@ import {
 
 export function PubkeyCommunityFeatureProviderToggle({
   community,
+  disabled,
   provider,
 }: {
   community: PubKeyCommunity
+  disabled?: boolean
   provider: IdentityProvider
 }) {
   const query = useQueryCommunityGetBySlug({ slug: community.slug })
@@ -44,7 +46,7 @@ export function PubkeyCommunityFeatureProviderToggle({
 
   return (
     <Switch
-      disabled={isLoading || provider === IdentityProvider.Solana}
+      disabled={disabled || isLoading || provider === IdentityProvider.Solana}
       label={hasProvider ? 'Disable' : 'Enable'}
       labelPosition="left"
       checked={hasProvider}

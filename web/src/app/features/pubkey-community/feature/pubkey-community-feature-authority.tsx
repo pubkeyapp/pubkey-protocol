@@ -2,6 +2,7 @@ import { Box, Button, Text } from '@mantine/core'
 import { PubKeyCommunity } from '@pubkey-protocol/sdk'
 import { toastError, UiCard, UiInfo, UiStack } from '@pubkey-ui/core'
 import { useWallet } from '@solana/wallet-adapter-react'
+import { UiAbout } from '../../../ui'
 import { ExplorerLink } from '../../cluster/cluster-ui'
 import {
   useMutationCommunityUpdateAuthorityApprove,
@@ -22,6 +23,12 @@ export function PubkeyCommunityFeatureAuthority({ community }: { community: PubK
 
   return (
     <UiCard>
+      <UiAbout
+        title="About Authority"
+        content={
+          'The authority is the wallet that is managing the community. It manages signers, providers and can update the community details.'
+        }
+      />
       {community.pendingAuthority?.toString()?.length ? (
         <div>
           <UiStack>
@@ -91,19 +98,23 @@ export function PubkeyCommunityFeatureAuthority({ community }: { community: PubK
           </UiStack>
         </div>
       ) : (
-        <PubkeyProtocolUiCommunityAuthorityGuard community={community}>
-          <PubkeyProtocolUiCommunityAuthorityForm
-            community={community}
-            submit={(input) =>
-              mutationRequest
-                .mutateAsync(input)
-                .then(async () => {
-                  await query.refetch()
-                })
-                .catch((err) => toastError(`Error: ${err}`))
-            }
-          />
-        </PubkeyProtocolUiCommunityAuthorityGuard>
+        <PubkeyProtocolUiCommunityAuthorityGuard
+          community={community}
+          render={({ disabled }) => (
+            <PubkeyProtocolUiCommunityAuthorityForm
+              disabled={disabled}
+              community={community}
+              submit={(input) =>
+                mutationRequest
+                  .mutateAsync(input)
+                  .then(async () => {
+                    await query.refetch()
+                  })
+                  .catch((err) => toastError(`Error: ${err}`))
+              }
+            />
+          )}
+        />
       )}
     </UiCard>
   )
