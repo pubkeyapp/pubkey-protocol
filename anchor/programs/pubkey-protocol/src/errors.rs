@@ -86,4 +86,6 @@ pub enum ProtocolError {
     UnAuthorizedCommunityAuthority,
     #[msg("Account is not a signer for this community")]
     UnAuthorizedCommunitySigner,
+   #[msg("The bio size exceeds the maximum allowed size.")]
+    InvalidBioSize,
 }
