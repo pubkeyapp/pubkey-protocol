@@ -1,5 +1,5 @@
 import { PubKeyIdentity } from '@pubkey-protocol/anchor'
-import { IdentityProvider, PubkeyProtocolSdk, PublicKeyString } from '@pubkey-protocol/sdk'
+import { IdentityProvider, PubKeyProtocolSdk, PublicKeyString } from '@pubkey-protocol/sdk'
 import { toastError, UiAlert, UiLoader } from '@pubkey-ui/core'
 import {
   AccountInfo,
@@ -25,7 +25,7 @@ export interface PubKeyProfileProviderContext {
   onError: (err: unknown) => void
   onSuccess: (tx: string) => Promise<void>
   program?: AccountInfo<ParsedAccountData> | null
-  sdk: PubkeyProtocolSdk
+  sdk: PubKeyProtocolSdk
   signAndConfirmTransaction: (tx: VersionedTransaction, options?: { withFeePayer: boolean }) => Promise<string>
 }
 

@@ -54,7 +54,7 @@ import { getAvatarUrlProfile } from './utils/get-avatar-url-profile'
 import { isValidPublicKey } from './utils/is-valid-public-key'
 import { slugify } from './utils/slugify'
 
-export class PubkeyProtocolSdk {
+export class PubKeyProtocolSdk {
   private readonly connection: Connection
   private readonly program: Program<PubkeyProtocol>
   private readonly provider: AnchorProvider

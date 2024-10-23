@@ -2,7 +2,7 @@ import { AnchorProvider } from '@coral-xyz/anchor'
 import { IdentityProvider, PUBKEY_PROTOCOL_PROGRAM_ID } from '@pubkey-protocol/anchor'
 import { airdropIfRequired, getKeypairFromFile } from '@solana-developers/helpers'
 import { Connection, Keypair, LAMPORTS_PER_SOL, PublicKey } from '@solana/web3.js'
-import { PubkeyProtocolSdk } from './pubkey-protocol-sdk'
+import { PubKeyProtocolSdk } from './pubkey-protocol-sdk'
 import { AnchorKeypairWallet } from './utils/anchor-keypair-wallet'
 
 import { getAvatarUrlProfile } from './utils/get-avatar-url-profile'
@@ -17,7 +17,7 @@ xdescribe('sdk', () => {
     commitment: 'confirmed',
   })
 
-  const sdk = new PubkeyProtocolSdk({ programId, connection, provider })
+  const sdk = new PubKeyProtocolSdk({ programId, connection, provider })
 
   beforeEach(async () => {
     feePayer = await getKeypairFromFile()
@@ -27,7 +27,7 @@ xdescribe('sdk', () => {
 
   it('should work', () => {
     console.log('FeePayer', feePayer.publicKey.toBase58())
-    const sdk = new PubkeyProtocolSdk({ programId, connection, provider })
+    const sdk = new PubKeyProtocolSdk({ programId, connection, provider })
 
     const [profilePDA, profileBump] = sdk.pdaProfile({ username: 'test' })
     expect(profilePDA).toBeTruthy()

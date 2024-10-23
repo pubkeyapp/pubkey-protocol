@@ -1,8 +1,8 @@
 import { AnchorProvider } from '@coral-xyz/anchor'
-import { AnchorKeypairWallet, PubkeyProtocolSdk } from '@pubkey-protocol/sdk'
+import { AnchorKeypairWallet, PubKeyProtocolSdk } from '@pubkey-protocol/sdk'
 import { Connection, Keypair, PublicKey } from '@solana/web3.js'
 
-let sdk: PubkeyProtocolSdk | null = null
+let sdk: PubKeyProtocolSdk | null = null
 export async function getPubkeyProtocolSdk({
   connection,
   programId,
@@ -19,7 +19,7 @@ export async function getPubkeyProtocolSdk({
     skipPreflight: true,
   })
 
-  sdk = new PubkeyProtocolSdk({
+  sdk = new PubKeyProtocolSdk({
     connection,
     programId,
     provider,
@@ -46,7 +46,7 @@ async function assertProgramDeployed({ connection, programId }: { connection: Co
   }
 }
 
-export async function assertConfigInitialized({ sdk }: { sdk: PubkeyProtocolSdk }) {
+export async function assertConfigInitialized({ sdk }: { sdk: PubKeyProtocolSdk }) {
   try {
     const account = await sdk.configGetNullable()
     console.log(` -> Config initialized: configAuthority: ${account?.configAuthority?.toString()}`)
