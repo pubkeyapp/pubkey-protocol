@@ -143,7 +143,7 @@ export class PubKeyProtocolSdk {
               ...account,
               publicKey,
               providers: convertAnchorIdentityProviders(account.providers),
-              signers: account.signers.map((s) => s.toString()),
+              signers: account.signers.map((s) => s.toString()).sort(),
               authority: account.authority.toString(),
               pendingAuthority: account.pendingAuthority?.toString(),
             } as PubKeyCommunity),
@@ -165,7 +165,7 @@ export class PubKeyProtocolSdk {
           publicKey: options.community.toString(),
           ...account,
           providers: convertAnchorIdentityProviders(account.providers),
-          signers: account.signers.map((s) => s.toString()),
+          signers: account.signers.map((s) => s.toString()).sort(),
           authority: account.authority.toString(),
           pendingAuthority: account.pendingAuthority?.toString(),
         } as PubKeyCommunity),
@@ -358,6 +358,7 @@ export class PubKeyProtocolSdk {
         .map(({ account, publicKey }) => ({
           publicKey,
           ...account,
+          authorities: account.authorities.map((a) => a.toString()).sort(),
           identities: account.identities.map((identity) => ({
             ...identity,
             provider: convertAnchorIdentityProvider(identity.provider),
@@ -380,6 +381,7 @@ export class PubKeyProtocolSdk {
     return this.program.account.profile.fetch(publicKey).then((account) => ({
       publicKey,
       ...account,
+      authorities: account.authorities.map((a) => a.toString()).sort(),
       identities: account.identities.map((identity) => ({
         ...identity,
         provider: convertAnchorIdentityProvider(identity.provider),
