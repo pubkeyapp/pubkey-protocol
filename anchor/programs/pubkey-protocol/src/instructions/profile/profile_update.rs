@@ -42,11 +42,16 @@ pub fn profile_update(
     }
 
     if let Some(new_avatar_url) = args.new_avatar_url {
-        require!(
-            is_valid_url(&new_avatar_url),
-            ProtocolError::InvalidAvatarURL
-        );
+        require!(is_valid_url(&new_avatar_url), ProtocolError::InvalidAvatarURL);
         profile.avatar_url = new_avatar_url;
+    }
+
+    if let Some(new_bio) = args.new_bio {
+        require!(
+            new_bio.len() <= MAX_BIO_SIZE,
+            ProtocolError::InvalidBioSize
+        );
+        profile.bio = new_bio;
     }
 
     profile.validate()?;
@@ -58,4 +63,6 @@ pub fn profile_update(
 pub struct ProfileUpdateArgs {
     pub new_name: Option<String>,
     pub new_avatar_url: Option<String>,
+    pub new_bio: Option<String>,  
 }
+
