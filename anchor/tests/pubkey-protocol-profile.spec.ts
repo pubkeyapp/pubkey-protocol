@@ -98,6 +98,7 @@ describe('pubkey-protocol-profile', () => {
         const input = {
           authority: aliceWalletOne.publicKey,
           newName: 'Test Profile',
+          newBio: 'This is Alice’s bio', 
           newAvatarUrl: getProfileAvatarUrl(`${username}_new`),
         }
         await program.methods
@@ -111,9 +112,10 @@ describe('pubkey-protocol-profile', () => {
           .signers([communityAuthority, aliceWalletOne])
           .rpc()
 
-        const { avatarUrl: newAvatarUrl, name: newName } = await program.account.profile.fetch(profile)
+        const { avatarUrl: newAvatarUrl, name: newName, bio: newBio } = await program.account.profile.fetch(profile)
         expect(newAvatarUrl).toStrictEqual(input.newAvatarUrl)
         expect(newName).toStrictEqual(input.newName)
+        expect(newBio).toStrictEqual(input.newBio)
       })
     })
     describe('Authorities', () => {
