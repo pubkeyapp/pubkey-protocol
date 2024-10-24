@@ -1,11 +1,10 @@
 import { Group, Text, TextProps } from '@mantine/core'
-import { PUBKEY_PROFILE_PROGRAM_ID } from '@pubkey-program-library/anchor'
+import { PUBKEY_PROTOCOL_PROGRAM_ID } from '@pubkey-protocol/sdk'
+import { ellipsify } from '@pubkey-protocol/sdk'
 import { UiAnchor, UiCopy } from '@pubkey-ui/core'
 import { TOKEN_2022_PROGRAM_ID, TOKEN_PROGRAM_ID } from '@solana/spl-token'
 import { createContext, ReactNode, useContext, useMemo } from 'react'
 import { useKeypair } from './features/keypair/data-access'
-
-import { ellipsify } from './ui/ellipsify'
 
 export interface Label {
   name: string
@@ -21,7 +20,7 @@ export interface AppLabelsProviderContext {
 const Context = createContext<AppLabelsProviderContext>({} as AppLabelsProviderContext)
 
 const defaultLabels: Label[] = [
-  { publicKey: PUBKEY_PROFILE_PROGRAM_ID.toString(), name: 'PubKey Profile Program' },
+  { publicKey: PUBKEY_PROTOCOL_PROGRAM_ID.toString(), name: 'PubKey Protocol' },
   { publicKey: TOKEN_PROGRAM_ID.toString(), name: 'Token' },
   { publicKey: TOKEN_2022_PROGRAM_ID.toString(), name: 'Token 2022' },
 ]

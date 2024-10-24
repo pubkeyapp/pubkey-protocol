@@ -17,8 +17,8 @@
     "allowSyntheticDefaultImports": true,
     "baseUrl": ".",
     "paths": {
-      "@pubkey-program-library/anchor": ["anchor/src/index.ts"],
-      "@pubkey-program-library/sdk": ["sdk/src/index.ts"]
+      "@pubkey-protocol/anchor": ["anchor/src/index.ts"],
+      "@pubkey-protocol/sdk": ["sdk/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

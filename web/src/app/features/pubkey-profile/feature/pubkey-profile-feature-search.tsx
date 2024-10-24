@@ -1,44 +1,41 @@
 import { ActionIcon, Select, TextInput } from '@mantine/core'
 import { useForm } from '@mantine/form'
-import { PubKeyIdentityProvider, PubKeyProfile } from '@pubkey-program-library/anchor'
-import { GetProfileByProvider, GetProfileByUsername } from '@pubkey-program-library/sdk'
-import { toastError, toastInfo, toastSuccess, UiCard, UiPage, UiStack } from '@pubkey-ui/core'
+import { IdentityProvider, PubKeyProfile } from '@pubkey-protocol/sdk'
+import { ProfileGetByProvider, ProfileGetByUsername } from '@pubkey-protocol/sdk'
+import { toastError, toastInfo, toastSuccess, UiCard, UiStack } from '@pubkey-ui/core'
 import { IconSearch } from '@tabler/icons-react'
 import { useState } from 'react'
 import { getEnumOptions } from '../../../ui'
-import { usePubKeyProfile } from '../data-access'
-import { PubkeyProfileUiProfile } from '../ui'
+import { usePubKeyProtocol } from '../../pubkey-protocol'
+import { PubkeyProtocolUiProfile } from '../ui'
 
 export function PubkeyProfileFeatureSearch() {
-  const { sdk, program } = usePubKeyProfile()
   return (
-    <UiPage leftAction={<IconSearch />} title="Search">
-      <UiStack>
-        <UiCard title="Search by Username">
-          <SearchByUsername />
-        </UiCard>
-        <UiCard title="Search by Provider">
-          <SearchByProvider />
-        </UiCard>
-      </UiStack>
-    </UiPage>
+    <UiStack>
+      <UiCard title="Search by Username">
+        <SearchByUsername />
+      </UiCard>
+      <UiCard title="Search by Provider">
+        <SearchByProvider />
+      </UiCard>
+    </UiStack>
   )
 }
 
 function SearchByProvider() {
   const [result, setResult] = useState<PubKeyProfile | null>(null)
-  const { sdk } = usePubKeyProfile()
-  const form = useForm<GetProfileByProvider>({
+  const { sdk } = usePubKeyProtocol()
+  const form = useForm<ProfileGetByProvider>({
     initialValues: {
-      provider: PubKeyIdentityProvider.Solana,
+      provider: IdentityProvider.Solana,
       providerId: '',
     },
   })
 
-  async function submit({ provider, providerId }: GetProfileByProvider) {
+  async function submit({ provider, providerId }: ProfileGetByProvider) {
     setResult(null)
     sdk
-      .getProfileByProvider({ provider, providerId })
+      .profileGetByProvider({ provider, providerId })
       .then((profile) => {
         toastSuccess(`Found ${profile.username}`)
         setResult(profile)
@@ -53,7 +50,7 @@ function SearchByProvider() {
     <form onSubmit={form.onSubmit((values) => submit(values))}>
       <UiStack>
         <Select
-          data={getEnumOptions(PubKeyIdentityProvider)}
+          data={getEnumOptions(IdentityProvider)}
           name="provider"
           label="Provider"
           {...form.getInputProps('provider')}
@@ -72,7 +69,7 @@ function SearchByProvider() {
 
         {result ? (
           <UiCard>
-            <PubkeyProfileUiProfile profile={result} />{' '}
+            <PubkeyProtocolUiProfile profile={result} to={`/profiles/${result.username}`} />
           </UiCard>
         ) : null}
       </UiStack>
@@ -82,13 +79,13 @@ function SearchByProvider() {
 
 function SearchByUsername() {
   const [result, setResult] = useState<PubKeyProfile | null>(null)
-  const { sdk } = usePubKeyProfile()
-  const form = useForm<GetProfileByUsername>({ initialValues: { username: '' } })
+  const { sdk } = usePubKeyProtocol()
+  const form = useForm<ProfileGetByUsername>({ initialValues: { username: '' } })
 
-  async function submit({ username }: GetProfileByUsername) {
+  async function submit({ username }: ProfileGetByUsername) {
     setResult(null)
     sdk
-      .getProfileByUsernameNullable({ username })
+      .profileGetByUsernameNullable({ username })
       .then((profile) => {
         if (profile) {
           toastSuccess(`Found ${profile.username}`)
@@ -118,7 +115,7 @@ function SearchByUsername() {
         />
         {result ? (
           <UiCard>
-            <PubkeyProfileUiProfile profile={result} />{' '}
+            <PubkeyProtocolUiProfile profile={result} to={`/profiles/${result.username}`} />{' '}
           </UiCard>
         ) : null}
       </UiStack>

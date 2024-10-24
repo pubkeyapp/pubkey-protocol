@@ -1,9 +1,9 @@
 import { ActionIcon, Badge, Button, Group, Loader, Table, Text } from '@mantine/core'
+import { ellipsify } from '@pubkey-protocol/sdk'
 import { UiError, UiInfo, UiStack, UiTime } from '@pubkey-ui/core'
 import { PublicKey } from '@solana/web3.js'
 import { IconRefresh } from '@tabler/icons-react'
 import { useMemo, useState } from 'react'
-import { ellipsify } from '../../../../ui'
 import { ExplorerLink } from '../../../cluster/cluster-ui'
 import { useGetSignatures } from '../../data-access'
 

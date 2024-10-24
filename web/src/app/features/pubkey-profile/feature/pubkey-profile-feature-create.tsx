@@ -1,20 +1,32 @@
-import { PubKeyIdentityProvider } from '@pubkey-program-library/anchor'
-import { toastError, toastSuccess, UiCard, UiInfo, UiLoader, UiPage } from '@pubkey-ui/core'
-import { IconUserPlus } from '@tabler/icons-react'
-import { ellipsify } from '../../../ui'
-import { useGetProfileByProviderNullable, useMutationCreateProfile, usePubKeyProfile } from '../data-access'
-import { PubkeyProfileUiCreateForm } from '../ui'
+import { Group } from '@mantine/core'
+import { IdentityProvider, PubKeyCommunity } from '@pubkey-protocol/sdk'
+import { ellipsify } from '@pubkey-protocol/sdk'
+import { toastError, toastSuccess, UiBack, UiCard, UiInfo, UiLoader, UiPage } from '@pubkey-ui/core'
+import { PubkeyProtocolUiCommunitySelect } from '../../pubkey-community/ui'
+import { usePubKeyProtocol } from '../../pubkey-protocol'
+import { useMutationProfileCreate, useQueryProfileGetByProviderNullable } from '../data-access'
+import { PubkeyProtocolUiProfileCreateForm } from '../ui'
 
-export function PubkeyProfileFeatureCreate() {
-  const mutation = useMutationCreateProfile()
-  const { authority } = usePubKeyProfile()
-  const pointerQuery = useGetProfileByProviderNullable({
-    provider: PubKeyIdentityProvider.Solana,
+export function PubkeyProfileFeatureCreate({ community }: { community: PubKeyCommunity }) {
+  const mutation = useMutationProfileCreate({
+    community: community.publicKey,
+  })
+  const { authority } = usePubKeyProtocol()
+  const pointerQuery = useQueryProfileGetByProviderNullable({
+    provider: IdentityProvider.Solana,
     providerId: authority.toString(),
   })
 
   return (
-    <UiPage leftAction={<IconUserPlus />} title="Create Profile">
+    <UiPage
+      leftAction={<UiBack />}
+      title="Create Profile"
+      rightAction={
+        <Group>
+          <PubkeyProtocolUiCommunitySelect />
+        </Group>
+      }
+    >
       {pointerQuery.isLoading ? (
         <UiLoader />
       ) : pointerQuery.data ? (
@@ -25,7 +37,7 @@ export function PubkeyProfileFeatureCreate() {
         />
       ) : (
         <UiCard title="Create Profile">
-          <PubkeyProfileUiCreateForm
+          <PubkeyProtocolUiProfileCreateForm
             submit={(input) =>
               mutation
                 .mutateAsync(input)

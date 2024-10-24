@@ -1,11 +1,11 @@
 [toolchain]
 
 [features]
-seeds = false
+resolution = true
 skip-lint = false
 
 [programs.localnet]
-pubkey_profile = "PPLxwat1miBwyQHq5afxLzdXyAMG4jPp6981yQA5hyb"
+pubkey_profile = "PUBKEYsiC4c87gFa5qGcH7t6VobVu3A4QqPUA2wzvam"
 
 [registry]
 url = "https://api.apr.dev"
@@ -15,7 +15,7 @@ cluster = "Localnet"
 wallet = "~/.config/solana/id.json"
 
 [scripts]
-test = "../node_modules/.bin/nx run anchor:jest"
+test = "../node_modules/.bin/nx run anchor:jest --runInBand"
 
 [test]
 startup_wait = 5000
