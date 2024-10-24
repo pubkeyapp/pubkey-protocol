@@ -38,6 +38,8 @@ pub enum ProtocolError {
     InvalidGoogleURL,
     #[msg("Invalid Name")]
     InvalidName,
+    #[msg("Invalid Bio")]
+    InvalidBio,
     #[msg("Invalid Provider ID (too long)")]
     InvalidProviderIDTooLong,
     #[msg("Invalid Provider ID (not found)")]

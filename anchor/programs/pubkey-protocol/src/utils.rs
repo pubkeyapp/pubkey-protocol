@@ -1,5 +1,6 @@
 use anchor_lang::{prelude::*, system_program};
 
+use crate::constants::*;
 use crate::errors::*;
 use crate::id;
 use crate::state::*;
@@ -20,7 +21,7 @@ pub fn is_valid_username(username: &str) -> bool {
 }
 
 pub fn is_valid_name(name: &str) -> bool {
-    if name.len() < 3 || name.len() > 50 {
+    if name.len() < 3 || name.len() > MAX_NAME_SIZE {
         return false;
     }
 
@@ -29,7 +30,21 @@ pub fn is_valid_name(name: &str) -> bool {
     true
 }
 
+pub fn is_valid_bio(bio: &str) -> bool {
+    if bio.len() < 20 || bio.len() > MAX_BIO_SIZE {
+        return false;
+    }
+
+    // TODO - may want to consider the same things we'll consider on {is_valid_name}
+
+    true
+}
+
 pub fn is_valid_url(url: &str) -> bool {
+    if url.len() > 0 && url.len() <= MAX_URL_SIZE {
+        return false;
+    }
+
     let starts_with_http = url.starts_with("http://") || url.starts_with("https://");
 
     let has_valid_protocol_format = url.matches("://").count() == 1 && !url.contains(":///");
@@ -57,6 +72,28 @@ pub fn is_valid_url(url: &str) -> bool {
     let valid_domain = has_valid_domain_or_localhost && no_start_or_end_hyphen_in_domain;
 
     valid_scheme && valid_path && valid_domain
+}
+
+pub fn is_valid_authorities(authorities: &Vec<Pubkey>) -> bool {
+    if authorities.len() <= MAX_VECTOR_SIZE.into() {
+        return false;
+    }
+
+    true
+}
+
+pub fn is_valid_identities(identities: &Vec<Identity>) -> bool {
+    if identities.len() <= MAX_VECTOR_SIZE.into() {
+        return false;
+    }
+
+    for identity in identities.clone() {
+        if identity.validate().is_err() {
+            return false;
+        }
+    }
+
+    true
 }
 
 pub fn is_valid_provider_id(id: &str, platform: &IdentityProvider) -> bool {
