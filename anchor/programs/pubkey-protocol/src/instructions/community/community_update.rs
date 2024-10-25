@@ -41,6 +41,7 @@ pub fn community_update(
         telegram,
         website,
         x,
+        description,
     } = args;
 
     // Update fields if they are provided
@@ -99,6 +100,14 @@ pub fn community_update(
         community.x = Some(x);
     }
 
+    if let Some(description) = description {
+      require!(
+          description.len() >= 1 && description.len() <= MAX_DESCRIPTION_SIZE,
+          ProtocolError::InvalidDescription
+      );
+      community.description = Some(description);
+  }
+
     Ok(())
 }
 
@@ -112,4 +121,5 @@ pub struct CommunityUpdateArgs {
     pub telegram: Option<String>,
     pub website: Option<String>,
     pub x: Option<String>,
+    pub description: Option<String>,
 }

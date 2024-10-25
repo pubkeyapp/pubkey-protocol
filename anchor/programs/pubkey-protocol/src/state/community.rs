@@ -30,6 +30,8 @@ pub struct Community {
     pub telegram: Option<String>,
     pub website: Option<String>,
     pub x: Option<String>,
+    // Optional description field with a max length of 256 characters
+    pub description: Option<String>,
 }
 
 impl Community {
@@ -48,7 +50,8 @@ impl Community {
         1 + 32 + // pending_authority (Option<Pubkey>)
         signers_size +
         providers_size +
-        links_size
+        links_size +
+        4 + MAX_DESCRIPTION_SIZE // description size
     }
 
     pub fn validate(&self) -> Result<()> {
@@ -79,6 +82,13 @@ impl Community {
             providers_len <= MAX_VECTOR_SIZE.into(),
             ProtocolError::MaxSizeReached
         );
+
+        if let Some(description) = &self.description {
+          require!(
+              description.len() >= 1 && description.len() <= MAX_DESCRIPTION_SIZE,
+              ProtocolError::InvalidDescription
+          );
+      }
 
         Ok(())
     }

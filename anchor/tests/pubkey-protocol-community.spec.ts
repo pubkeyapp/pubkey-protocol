@@ -58,6 +58,7 @@ fdescribe('pubkey-protocol-community', () => {
         expect(communityAccount.telegram).toBeNull()
         expect(communityAccount.website).toBeNull()
         expect(communityAccount.x).toBeNull()
+        expect(communityAccount.description).toBeNull()
       })
 
       it('should update community details', async () => {
@@ -70,6 +71,7 @@ fdescribe('pubkey-protocol-community', () => {
           telegram: 'https://t.me/test',
           website: 'https://test.com',
           x: 'https://x.com/test',
+          description: 'This is a test description',
         }
         await program.methods
           .communityUpdate(input)
@@ -89,6 +91,7 @@ fdescribe('pubkey-protocol-community', () => {
         expect(updatedCommunity.website).toEqual(input.website)
         expect(updatedCommunity.x).toEqual(input.x)
         expect(updatedCommunity.avatarUrl).toEqual(input.avatarUrl)
+        expect(updatedCommunity.description).toEqual(input.description)
       })
     })
 

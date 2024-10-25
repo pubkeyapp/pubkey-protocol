@@ -41,6 +41,7 @@ pub fn community_create(ctx: Context<CommunityCreate>, args: CommunityCreateArgs
         slug,
         name,
         avatar_url,
+        description,
     } = args;
 
     community.set_inner(Community {
@@ -58,6 +59,7 @@ pub fn community_create(ctx: Context<CommunityCreate>, args: CommunityCreateArgs
         telegram: None,
         website: None,
         x: None,
+        description,
     });
 
     community.validate()?;
@@ -70,4 +72,5 @@ pub struct CommunityCreateArgs {
     pub slug: String,
     pub avatar_url: String,
     pub name: String,
+    pub description: Option<String>,
 }
