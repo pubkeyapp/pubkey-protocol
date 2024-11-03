@@ -24,6 +24,7 @@ export const communityProvisionMap: CommunityProvisionMap = {
       avatarUrl: 'https://github.com/pubkeyapp.png',
     },
     update: {
+      description: 'The social layer on Solana.',
       discord: 'https://discord.gg/XxuZQeDPNf',
       github: 'https://github.com/pubkeyapp',
       farcaster: 'https://warpcast.com/pubkey',
@@ -44,6 +45,7 @@ export const communityProvisionMap: CommunityProvisionMap = {
       avatarUrl: 'https://github.com/legends-of-sol.png',
     },
     update: {
+      description: 'Solana bear market enjoyooooors building meme coins but with JPEGs.',
       discord: 'https://discord.gg/kQb7YQYePS',
       github: 'https://github.com/legends-of-sol',
       website: 'https://legendsofsol.com',
@@ -59,6 +61,7 @@ export const communityProvisionMap: CommunityProvisionMap = {
       avatarUrl: 'https://github.com/dean-s-list.png',
     },
     update: {
+      description: 'A Service DAO turned Network State, consisting of Web3 power users providing feedback sessions.',
       discord: 'https://discord.gg/deanslist',
       github: 'https://github.com/dean-s-list',
       website: 'https://deanslist.services',
@@ -74,6 +77,7 @@ export const communityProvisionMap: CommunityProvisionMap = {
       avatarUrl: 'https://github.com/gibwork.png',
     },
     update: {
+      description: 'Gibwork is a Web3 platform connecting businesses with freelance talent. Powered by $SOL & $WORK.',
       discord: 'https://discord.gg/G54VHkcuHS',
       github: 'https://github.com/gibwork',
       website: 'https://gib.work',
@@ -90,6 +94,8 @@ export const communityProvisionMap: CommunityProvisionMap = {
       avatarUrl: 'https://github.com/marinade-finance.png',
     },
     update: {
+      description:
+        'Marinade is a stake automation platform that automatically delegates to 100+ best-performing nodes.',
       discord: 'https://discord.gg/yTdH8YkYKg',
       github: 'https://github.com/marinade-finance',
       website: 'https://marinade.finance',

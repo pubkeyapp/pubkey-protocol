@@ -1478,71 +1478,76 @@ export type PubkeyProtocol = {
     },
     {
       "code": 6029,
+      "name": "invalidDescription",
+      "msg": "Invalid description"
+    },
+    {
+      "code": 6030,
       "name": "identityProfileInvalid",
       "msg": "Invalid Identity Profile Authority"
     },
     {
-      "code": 6030,
+      "code": 6031,
       "name": "identityAlreadyExists",
       "msg": "Identity already exists"
     },
     {
-      "code": 6031,
+      "code": 6032,
       "name": "identityNonExistent",
       "msg": "Identity does not exist"
     },
     {
-      "code": 6032,
+      "code": 6033,
       "name": "maxSizeReached",
       "msg": "Array reached max size"
     },
     {
-      "code": 6033,
+      "code": 6034,
       "name": "providerAlreadyExists",
       "msg": "Provider already exists"
     },
     {
-      "code": 6034,
+      "code": 6035,
       "name": "providerDoesNotExist",
       "msg": "Provider does not exist"
     },
     {
-      "code": 6035,
+      "code": 6036,
       "name": "signerAlreadyExists",
       "msg": "Signer already exists"
     },
     {
-      "code": 6036,
+      "code": 6037,
       "name": "signerDoesNotExist",
       "msg": "Signer does not exist"
     },
     {
-      "code": 6037,
+      "code": 6038,
       "name": "signerRequired",
       "msg": "At least one signer is required"
     },
     {
-      "code": 6038,
+      "code": 6039,
       "name": "unAuthorized",
       "msg": "Account unauthorized to perform this action"
     },
     {
-      "code": 6039,
+      "code": 6040,
       "name": "unauthorizedCommunityAction",
       "msg": "Unauthorized community action"
     },
     {
-      "code": 6040,
+      "code": 6041,
       "name": "unAuthorizedCommunityAuthority",
       "msg": "Account is not defined in config.community_authority"
     },
     {
-      "code": 6041,
+      "code": 6042,
       "name": "unAuthorizedCommunitySigner",
       "msg": "Account is not a signer for this community"
     },
     {
-      "code": 6042,
+      "code": 6043,
       "name": "invalidBioSize",
       "msg": "Biography too long. Maximum characters allowed: 256"
     }
@@ -1627,6 +1632,12 @@ export type PubkeyProtocol = {
           },
           {
             "name": "x",
+            "type": {
+              "option": "string"
+            }
+          },
+          {
+            "name": "description",
             "type": {
               "option": "string"
             }
@@ -1771,6 +1782,12 @@ export type PubkeyProtocol = {
           },
           {
             "name": "x",
+            "type": {
+              "option": "string"
+            }
+          },
+          {
+            "name": "description",
             "type": {
               "option": "string"
             }

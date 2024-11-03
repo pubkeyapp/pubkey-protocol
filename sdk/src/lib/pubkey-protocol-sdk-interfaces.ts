@@ -48,6 +48,7 @@ export interface CommunityCreateOptions {
 export interface CommunityUpdateOptions {
   authority: PublicKeyString
   avatarUrl?: string
+  description?: string
   discord?: string
   farcaster?: string
   feePayer: PublicKeyString

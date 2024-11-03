@@ -60,6 +60,8 @@ pub enum ProtocolError {
     InvalidXID,
     #[msg("Invalid X URL")]
     InvalidXURL,
+    #[msg("Invalid description")]
+    InvalidDescription,
     #[msg("Invalid Identity Profile Authority")]
     IdentityProfileInvalid,
     #[msg("Identity already exists")]

@@ -58,6 +58,7 @@ pub fn community_create(ctx: Context<CommunityCreate>, args: CommunityCreateArgs
         telegram: None,
         website: None,
         x: None,
+        description: None,
     });
 
     community.validate()?;
