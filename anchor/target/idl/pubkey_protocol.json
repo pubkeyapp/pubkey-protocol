@@ -1541,7 +1541,7 @@
       "msg": "Account is not a signer for this community"
     },
     {
-      "code": 6042,
+      "code": 6043,
       "name": "InvalidBioSize",
       "msg": "Biography too long. Maximum characters allowed: 256"
     }
@@ -1667,12 +1667,6 @@
           {
             "name": "name",
             "type": "string"
-          },
-          {
-            "name": "description",
-            "type": {
-              "option": "string"
-            }
           }
         ]
       }

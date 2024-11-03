@@ -2,6 +2,7 @@ import { PubKeyCommunity } from '@pubkey-protocol/sdk'
 import { UiStack } from '@pubkey-ui/core'
 import { PubkeyProtocolUiCommunityAnchor } from './pubkey-protocol-ui-community-anchor'
 import { PubkeyProtocolUiCommunityAvatar } from './pubkey-protocol-ui-community-avatar'
+import { PubkeyProtocolUiCommunityDescription } from './pubkey-protocol-ui-community-description'
 import { PubkeyProtocolUiCommunitySocials } from './pubkey-protocol-ui-community-socials'
 
 export function PubkeyProtocolUiCommunityHeader({ community, to }: { community: PubKeyCommunity; to?: string }) {
@@ -9,6 +10,7 @@ export function PubkeyProtocolUiCommunityHeader({ community, to }: { community: 
     <UiStack justify="center" align="center" w="100%" my="lg">
       <PubkeyProtocolUiCommunityAvatar community={community} size="xl" />
       <PubkeyProtocolUiCommunityAnchor community={community} to={to} />
+      <PubkeyProtocolUiCommunityDescription community={community} />
       <PubkeyProtocolUiCommunitySocials community={community} />
     </UiStack>
   )

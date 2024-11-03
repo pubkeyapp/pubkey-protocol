@@ -16,6 +16,7 @@ export function PubkeyProtocolUiCommunityUpdateForm({
   const form = useForm<PubKeyCommunityUpdateInput>({
     initialValues: {
       avatarUrl: community.avatarUrl ?? '',
+      description: community.description ?? '',
       discord: community.discord ?? '',
       farcaster: community.farcaster ?? '',
       github: community.github ?? '',
@@ -44,14 +45,19 @@ export function PubkeyProtocolUiCommunityUpdateForm({
           label="Name"
           {...form.getInputProps('name')}
         />
-
+        <TextInput
+          disabled={disabled}
+          description="The community's description."
+          label="Description"
+          name="description"
+          {...form.getInputProps('description')}
+        />
         <TextInput
           disabled={disabled}
           description="Link to the community's avatar image."
           label="Avatar URL"
           {...form.getInputProps('avatarUrl')}
         />
-
         <TextInput
           disabled={disabled}
           description="Link to a Discord invite. Should start with https://discord.gg/"

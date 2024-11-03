@@ -183,6 +183,7 @@ export interface PubKeyCommunity {
   authority: PublicKeyString
   avatarUrl: string
   bump: number
+  description?: string
   discord?: string
   farcaster?: string
   github?: string

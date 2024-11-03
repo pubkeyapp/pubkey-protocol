@@ -142,6 +142,7 @@ export class PubKeyProtocolSdk {
       accounts
         .map(({ account, publicKey }) => ({
           ...account,
+          description: account.description ?? undefined,
           discord: account.discord ?? undefined,
           farcaster: account.farcaster ?? undefined,
           github: account.github ?? undefined,
@@ -158,7 +159,7 @@ export class PubKeyProtocolSdk {
     )
   }
 
-  async communityGet(options: CommunityGet) {
+  async communityGet(options: CommunityGet): Promise<PubKeyCommunity | null> {
     const community = this.communityGetPda(options)
     const account = await this.communityGetFetch({
       community,
@@ -169,6 +170,7 @@ export class PubKeyProtocolSdk {
       return {
         ...account,
         authority: account.authority.toString(),
+        description: account.description ?? undefined,
         discord: account.discord ?? undefined,
         farcaster: account.farcaster ?? undefined,
         github: account.github ?? undefined,
@@ -275,6 +277,7 @@ export class PubKeyProtocolSdk {
 
     const input = {
       avatarUrl: options.avatarUrl?.length ? options.avatarUrl : null,
+      description: options.description?.length ? options.description : null,
       discord: options.discord?.length ? options.discord : null,
       farcaster: options.farcaster?.length ? options.farcaster : null,
       github: options.github?.length ? options.github : null,
@@ -414,7 +417,7 @@ export class PubKeyProtocolSdk {
   async profileAuthorityAdd(options: ProfileAuthorityAddOptions) {
     const [profile] = this.pdaProfile({ username: options.username })
     const authority = new PublicKey(options.authority)
-    const community = new PublicKey(options.community)
+    const community = this.communityGetPda({ community: options.community })
     const feePayer = new PublicKey(options.feePayer)
     const newAuthority = new PublicKey(options.newAuthority)
 
@@ -436,7 +439,7 @@ export class PubKeyProtocolSdk {
     const [profile] = this.pdaProfile({ username: options.username })
     const authorityToRemove = new PublicKey(options.authorityToRemove)
     const authority = new PublicKey(options.authority)
-    const community = new PublicKey(options.community)
+    const community = this.communityGetPda({ community: options.community })
     const feePayer = new PublicKey(options.feePayer)
 
     const ix = await this.program.methods
@@ -454,7 +457,7 @@ export class PubKeyProtocolSdk {
 
   async profileCreate(options: ProfileCreateOptions) {
     const username = options.username?.length ? options.username : slugify(options.name)
-    const community = new PublicKey(options.community)
+    const community = this.communityGetPda({ community: options.community })
     const feePayer = new PublicKey(options.feePayer)
     const [profile] = this.pdaProfile({ username })
     const [pointer] = this.pdaPointer({
@@ -486,7 +489,7 @@ export class PubKeyProtocolSdk {
   async profileUpdate(options: ProfileUpdateOptions) {
     const [profile] = this.pdaProfile({ username: options.username })
     const authority = new PublicKey(options.authority)
-    const community = new PublicKey(options.community)
+    const community = this.communityGetPda({ community: options.community })
     const feePayer = new PublicKey(options.feePayer)
 
     const ix = await this.program.methods
@@ -510,7 +513,7 @@ export class PubKeyProtocolSdk {
     const [profile] = this.pdaProfile({ username: options.username })
     const [pointer] = this.pdaPointer({ providerId: options.providerId, provider: options.provider })
     const authority = new PublicKey(options.authority)
-    const community = new PublicKey(options.community)
+    const community = this.communityGetPda({ community: options.community })
     const feePayer = new PublicKey(options.feePayer)
 
     const ix = await this.program.methods
@@ -536,7 +539,7 @@ export class PubKeyProtocolSdk {
     const [profile] = this.pdaProfile({ username: options.username })
     const [pointer] = this.pdaPointer({ providerId: options.providerId, provider: options.provider })
     const authority = new PublicKey(options.authority)
-    const community = new PublicKey(options.community)
+    const community = this.communityGetPda({ community: options.community })
     const feePayer = new PublicKey(options.feePayer)
 
     const ix = await this.program.methods
@@ -558,7 +561,7 @@ export class PubKeyProtocolSdk {
     const [profile] = this.pdaProfile({ username: options.username })
     const [pointer] = this.pdaPointer({ providerId: options.providerId, provider: options.provider })
     const authority = new PublicKey(options.authority)
-    const community = new PublicKey(options.community)
+    const community = this.communityGetPda({ community: options.community })
     const feePayer = new PublicKey(options.feePayer)
 
     const ix = await this.program.methods

@@ -30,7 +30,6 @@ pub struct Community {
     pub telegram: Option<String>,
     pub website: Option<String>,
     pub x: Option<String>,
-    // Optional description field with a max length of 256 characters
     pub description: Option<String>,
 }
 

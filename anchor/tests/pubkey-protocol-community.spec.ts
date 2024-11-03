@@ -5,7 +5,7 @@ import { convertToAnchorIdentityProvider, getPubKeyCommunityPda, IdentityProvide
 import { PubkeyProtocol } from '../target/types/pubkey_protocol'
 import { airdropAccounts, createOrGetTestConfig, createTestCommunity, getCommunityAvatarUrl, unique } from './utils'
 
-fdescribe('pubkey-protocol-community', () => {
+describe('pubkey-protocol-community', () => {
   // Configure the client to use the local cluster.
   const provider = anchor.AnchorProvider.env()
   anchor.setProvider(provider)
@@ -84,6 +84,7 @@ fdescribe('pubkey-protocol-community', () => {
 
         const updatedCommunity = await program.account.community.fetch(community)
         expect(updatedCommunity.name).toEqual(input.name)
+        expect(updatedCommunity.description).toEqual(input.description)
         expect(updatedCommunity.discord).toEqual(input.discord)
         expect(updatedCommunity.farcaster).toEqual(input.farcaster)
         expect(updatedCommunity.github).toEqual(input.github)
@@ -413,7 +414,7 @@ fdescribe('pubkey-protocol-community', () => {
         } catch (error) {
           // console.log('error', error)
           expect(error.error.errorCode.code).toEqual('UnAuthorizedCommunityAuthority')
-          expect(error.error.errorCode.number).toEqual(6040)
+          expect(error.error.errorCode.number).toEqual(6041)
           expect(error.error.errorMessage).toEqual('Account is not defined in config.community_authority')
         }
       })
@@ -425,6 +426,7 @@ fdescribe('pubkey-protocol-community', () => {
               avatarUrl: getCommunityAvatarUrl(`${communitySlug}_new`),
               name: `${communitySlug} updated`,
               discord: 'https://discord.gg/users/test',
+              description: 'This is a test description',
               farcaster: 'https://warpcast.com/test',
               github: 'https://github.com/test',
               telegram: 'https://t.me/test',
@@ -440,7 +442,7 @@ fdescribe('pubkey-protocol-community', () => {
           expect(true).toBe(false)
         } catch (error) {
           expect(error.error.errorCode.code).toBe('UnAuthorized')
-          expect(error.error.errorCode.number).toEqual(6038)
+          expect(error.error.errorCode.number).toEqual(6039)
         }
       })
     })
@@ -459,7 +461,7 @@ fdescribe('pubkey-protocol-community', () => {
           expect(true).toBe(false)
         } catch (error) {
           expect(error.error.errorCode.code).toBe('UnAuthorized')
-          expect(error.error.errorCode.number).toEqual(6038)
+          expect(error.error.errorCode.number).toEqual(6039)
         }
       })
 
@@ -476,7 +478,7 @@ fdescribe('pubkey-protocol-community', () => {
           expect(true).toBe(false)
         } catch (error) {
           expect(error.error.errorCode.code).toBe('UnAuthorized')
-          expect(error.error.errorCode.number).toEqual(6038)
+          expect(error.error.errorCode.number).toEqual(6039)
         }
       })
 
@@ -495,7 +497,7 @@ fdescribe('pubkey-protocol-community', () => {
           expect(true).toBe(false)
         } catch (error) {
           expect(error.error.errorCode.code).toBe('UnAuthorized')
-          expect(error.error.errorCode.number).toEqual(6038)
+          expect(error.error.errorCode.number).toEqual(6039)
         }
       })
     })
@@ -517,7 +519,7 @@ fdescribe('pubkey-protocol-community', () => {
           expect(true).toBe(false)
         } catch (error) {
           expect(error.error.errorCode.code).toBe('UnAuthorized')
-          expect(error.error.errorCode.number).toEqual(6038)
+          expect(error.error.errorCode.number).toEqual(6039)
         }
       })
 
@@ -537,7 +539,7 @@ fdescribe('pubkey-protocol-community', () => {
           expect(true).toBe(false)
         } catch (error) {
           expect(error.error.errorCode.code).toBe('UnAuthorized')
-          expect(error.error.errorCode.number).toEqual(6038)
+          expect(error.error.errorCode.number).toEqual(6039)
         }
       })
     })
@@ -564,7 +566,7 @@ fdescribe('pubkey-protocol-community', () => {
         } catch (error) {
           // Check that the error is related to unauthorized action
           expect(error.error.errorCode.code).toEqual('UnAuthorized')
-          expect(error.error.errorCode.number).toEqual(6038)
+          expect(error.error.errorCode.number).toEqual(6039)
           expect(error.error.errorMessage).toEqual('Account unauthorized to perform this action')
         }
 

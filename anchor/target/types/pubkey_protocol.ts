@@ -1547,7 +1547,7 @@ export type PubkeyProtocol = {
       "msg": "Account is not a signer for this community"
     },
     {
-      "code": 6042,
+      "code": 6043,
       "name": "invalidBioSize",
       "msg": "Biography too long. Maximum characters allowed: 256"
     }
@@ -1673,12 +1673,6 @@ export type PubkeyProtocol = {
           {
             "name": "name",
             "type": "string"
-          },
-          {
-            "name": "description",
-            "type": {
-              "option": "string"
-            }
           }
         ]
       }
