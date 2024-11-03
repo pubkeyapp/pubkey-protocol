@@ -967,6 +967,86 @@ export type PubkeyProtocol = {
       ]
     },
     {
+      "name": "profileDelete",
+      "discriminator": [
+        215,
+        16,
+        204,
+        198,
+        21,
+        186,
+        115,
+        133
+      ],
+      "accounts": [
+        {
+          "name": "profile",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  112,
+                  117,
+                  98,
+                  107,
+                  101,
+                  121,
+                  95,
+                  112,
+                  114,
+                  111,
+                  116,
+                  111,
+                  99,
+                  111,
+                  108
+                ]
+              },
+              {
+                "kind": "const",
+                "value": [
+                  112,
+                  114,
+                  111,
+                  102,
+                  105,
+                  108,
+                  101
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "profile.username",
+                "account": "profile"
+              }
+            ]
+          },
+          "relations": [
+            "pointer"
+          ]
+        },
+        {
+          "name": "pointer",
+          "writable": true
+        },
+        {
+          "name": "authority",
+          "signer": true
+        },
+        {
+          "name": "community"
+        },
+        {
+          "name": "feePayer",
+          "writable": true,
+          "signer": true
+        }
+      ],
+      "args": []
+    },
+    {
       "name": "profileIdentityAdd",
       "discriminator": [
         247,
@@ -1548,6 +1628,11 @@ export type PubkeyProtocol = {
     },
     {
       "code": 6043,
+      "name": "unableToDeleteProfile",
+      "msg": "Cannot delete profile, too many identities found"
+    },
+    {
+      "code": 6044,
       "name": "invalidBioSize",
       "msg": "Biography too long. Maximum characters allowed: 256"
     }

@@ -1,5 +1,5 @@
 import { Button, Group } from '@mantine/core'
-import { UiDebugModal, UiLoader, UiPage, UiStack } from '@pubkey-ui/core'
+import { UiDebugModal, UiInfo, UiLoader, UiPage, UiStack } from '@pubkey-ui/core'
 import { IconUser } from '@tabler/icons-react'
 import { Link } from 'react-router-dom'
 import { PubkeyProtocolUiCommunitySelect } from '../../pubkey-community/ui'
@@ -28,10 +28,12 @@ export function PubkeyProfileFeatureList({ basePath }: { basePath: string }) {
     >
       {query.isLoading ? (
         <UiLoader />
-      ) : (
+      ) : query.data?.length ? (
         <UiStack>
           <PubkeyProtocolUiProfileGrid profiles={query.data ?? []} basePath={basePath} />
         </UiStack>
+      ) : (
+        <UiInfo message="No profiles found" />
       )}
     </UiPage>
   )

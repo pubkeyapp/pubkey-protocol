@@ -1,6 +1,7 @@
 export * from './use-mutation-profile-authority-add'
 export * from './use-mutation-profile-identity-add'
 export * from './use-mutation-profile-create'
+export * from './use-mutation-profile-delete'
 export * from './use-mutation-profile-authority-remove'
 export * from './use-mutation-profile-identity-remove'
 export * from './use-mutation-profile-update'

@@ -94,4 +94,17 @@ impl Profile {
     pub fn check_for_authority(&self, authority: &Pubkey) -> bool {
         self.authorities.binary_search(authority).is_ok()
     }
+
+    pub fn check_if_deletable(&self, authority: &Pubkey) -> bool {
+        // Make sure we have at most one identity
+        if self.identities.len() > 1 {
+            return false;
+        }
+        // This identity should be the authority
+        if !self.identities.iter().any(|i| i.provider == IdentityProvider::Solana && i.provider_id == authority.to_string()) {
+            return false;
+        }
+        // Make sure the authority is in the authorities list
+        self.authorities.binary_search(authority).is_ok()
+    }
 }

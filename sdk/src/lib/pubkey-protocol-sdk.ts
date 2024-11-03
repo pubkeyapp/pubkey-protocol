@@ -44,6 +44,7 @@ import {
   ProfileAuthorityAddOptions,
   ProfileAuthorityRemoveOptions,
   ProfileCreateOptions,
+  ProfileDeleteOptions,
   ProfileGet,
   ProfileGetByProvider,
   ProfileIdentityAddOptions,
@@ -176,7 +177,7 @@ export class PubKeyProtocolSdk {
         github: account.github ?? undefined,
         pendingAuthority: account.pendingAuthority?.toString() ?? undefined,
         providers: convertAnchorIdentityProviders(account.providers),
-        publicKey: options.community.toString(),
+        publicKey: community.toString(),
         signers: account.signers.map((s) => s.toString()).sort(),
         telegram: account.telegram ?? undefined,
         website: account.website ?? undefined,
@@ -396,7 +397,7 @@ export class PubKeyProtocolSdk {
         communities: identity.communities.map((c) => c.toString()),
         provider: convertAnchorIdentityProvider(identity.provider),
       })),
-      publicKey: options.profile.toString(),
+      publicKey: profile.toString(),
     }
   }
 
@@ -484,6 +485,32 @@ export class PubKeyProtocolSdk {
     const tx = await this.createTransaction({ feePayer, ix })
 
     return { input, tx }
+  }
+
+  async profileDelete(options: ProfileDeleteOptions) {
+    const [profile] = this.pdaProfile({ username: options.username })
+    const authority = new PublicKey(options.authority)
+    const community = new PublicKey(options.community)
+    const feePayer = new PublicKey(options.feePayer)
+    const [pointer] = this.pdaPointer({
+      provider: IdentityProvider.Solana,
+      providerId: authority.toString(),
+    })
+
+    const ix = await this.program.methods
+      .profileDelete()
+      .accountsStrict({
+        authority,
+        community,
+        feePayer,
+        pointer,
+        profile,
+      })
+      .instruction()
+
+    const tx = await this.createTransaction({ feePayer, ix })
+
+    return { tx }
   }
 
   async profileUpdate(options: ProfileUpdateOptions) {

@@ -95,6 +95,13 @@ export interface ProfileCreateOptions {
   username?: string
 }
 
+export interface ProfileDeleteOptions {
+  authority: PublicKeyString
+  community: PublicKeyString
+  feePayer: PublicKeyString
+  username: string
+}
+
 export interface ProfileGet {
   nullable?: boolean
   profile: PublicKeyString

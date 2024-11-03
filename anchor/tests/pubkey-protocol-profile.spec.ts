@@ -116,7 +116,48 @@ describe('pubkey-protocol-profile', () => {
         expect(newAvatarUrl).toStrictEqual(input.newAvatarUrl)
         expect(newName).toStrictEqual(input.newName)
       })
+
+      it('should create and delete a profile', async () => {
+        const testUsername = unique('alice')
+        const testWallet = Keypair.generate()
+        const [profile] = getPubKeyProfilePda({ username: testUsername, programId: program.programId })
+        const [pointer] = getPubKeyPointerPda({
+          programId: program.programId,
+          provider: IdentityProvider.Solana,
+          providerId: testWallet.publicKey.toString(),
+        })
+
+        await createTestProfile({
+          community,
+          communityAuthority,
+          username: testUsername,
+          program,
+          profileOwner: testWallet,
+        })
+
+        const { authorities } = await program.account.profile.fetch(profile)
+        expect(authorities).toEqual([testWallet.publicKey])
+
+        // Delete the profile
+        await program.methods
+          .profileDelete()
+          .accountsStrict({
+            authority: testWallet.publicKey,
+            community,
+            feePayer: communityAuthority.publicKey,
+            pointer,
+            profile,
+          })
+          .signers([communityAuthority, testWallet])
+          .rpc()
+
+        const profileAfter = await program.account.profile.fetchNullable(profile)
+        const pointerAfter = await program.account.pointer.fetchNullable(pointer)
+        expect(profileAfter).toBeNull()
+        expect(pointerAfter).toBeNull()
+      })
     })
+
     describe('Authorities', () => {
       it('should add an authority', async () => {
         const [profile] = getPubKeyProfilePda({ username, programId: program.programId })

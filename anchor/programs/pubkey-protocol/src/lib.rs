@@ -96,6 +96,10 @@ pub mod pubkey_protocol {
         profile::profile_create(ctx, args)
     }
 
+    pub fn profile_delete(ctx: Context<ProfileDelete>) -> Result<()> {
+        profile::profile_delete(ctx)
+    }
+
     pub fn profile_identity_add(
         ctx: Context<ProfileIdentityAdd>,
         args: ProfileIdentityAddArgs,

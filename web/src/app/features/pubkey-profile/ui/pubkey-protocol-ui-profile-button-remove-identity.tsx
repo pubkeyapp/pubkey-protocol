@@ -10,6 +10,7 @@ export function PubkeyProtocolUiProfileButtonRemoveIdentity({
   profile,
   provider,
   providerId,
+  refresh,
 }: {
   authority: PublicKeyString
   community: PubKeyCommunity
@@ -17,19 +18,22 @@ export function PubkeyProtocolUiProfileButtonRemoveIdentity({
   profile: PubKeyProfile
   provider: IdentityProvider
   providerId: string
+  refresh: () => void
 }) {
   const mutation = useMutationProfileIdentityRemove({
     community: community.publicKey,
   })
 
   function submit() {
-    return mutation.mutateAsync({
-      authority,
-      feePayer,
-      providerId,
-      provider,
-      username: profile.username,
-    })
+    return mutation
+      .mutateAsync({
+        authority,
+        feePayer,
+        providerId,
+        provider,
+        username: profile.username,
+      })
+      .then(refresh)
   }
 
   return (

@@ -7,5 +7,6 @@ export function useQueryProfileGet({ username }: { username: string }) {
   return useQuery({
     queryKey: ['pubkey-protocol', 'profileGet', { cluster, username }],
     queryFn: () => sdk.profileGet({ profile: username }),
+    retry: false,
   })
 }

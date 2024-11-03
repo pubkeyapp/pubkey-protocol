@@ -1,6 +1,5 @@
 import { Code, Group, Stack } from '@mantine/core'
-import { PubKeyCommunity, PubKeyProfile } from '@pubkey-protocol/sdk'
-import { ellipsify } from '@pubkey-protocol/sdk'
+import { ellipsify, PubKeyCommunity, PubKeyProfile } from '@pubkey-protocol/sdk'
 import { UiCard, UiDebugModal, UiGroup, UiStack } from '@pubkey-ui/core'
 import { PublicKey } from '@solana/web3.js'
 import { useMemo } from 'react'
@@ -11,13 +10,16 @@ import { PubkeyProtocolUiProfileAvatar } from './pubkey-protocol-ui-profile-avat
 import { PubkeyProtocolUiProfileAvatarUpdateButton } from './pubkey-protocol-ui-profile-avatar-update-button'
 import { PubkeyProtocolUiProfileCardAuthorities } from './pubkey-protocol-ui-profile-card-authorities'
 import { PubkeyProtocolUiProfileCardIdentities } from './pubkey-protocol-ui-profile-card-identities'
+import { PubkeyProtocolUiProfileDeleteButton } from './pubkey-protocol-ui-profile-delete-button'
 
 export function PubkeyProtocolUiProfileCard({
   community,
   profile,
+  refresh,
 }: {
   community: PubKeyCommunity
   profile: PubKeyProfile
+  refresh: () => void
 }) {
   const { authority } = usePubKeyProtocol()
 
@@ -58,6 +60,7 @@ export function PubkeyProtocolUiProfileCard({
                   <PubkeyProtocolUiProfileCardIdentities
                     community={community}
                     profile={profile}
+                    refresh={refresh}
                     signAuthority={signAuthority}
                   />
                   <PubkeyProtocolUiProfileCardAuthorities
@@ -66,6 +69,11 @@ export function PubkeyProtocolUiProfileCard({
                     signAuthority={signAuthority}
                   />
                   <PubkeyProtocolUiProfileAvatarUpdateButton
+                    community={community}
+                    profile={profile}
+                    signAuthority={signAuthority}
+                  />
+                  <PubkeyProtocolUiProfileDeleteButton
                     community={community}
                     profile={profile}
                     signAuthority={signAuthority}

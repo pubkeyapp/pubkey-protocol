@@ -10,10 +10,12 @@ import { PubkeyProtocolUiProfileButtonRemoveIdentity } from './pubkey-protocol-u
 export function PubkeyProtocolUiProfileCardIdentities({
   community,
   profile,
+  refresh,
   signAuthority,
 }: {
   community: PubKeyCommunity
   profile: PubKeyProfile
+  refresh: () => void
   signAuthority: PublicKeyString
 }) {
   const canSign = signAuthority !== PublicKey.default
@@ -28,7 +30,7 @@ export function PubkeyProtocolUiProfileCardIdentities({
         {profile.identities.map((item) => (
           <PubkeyProtocolUiIdentity
             identity={item}
-            key={item.providerId}
+            key={`${item.provider}-${item.providerId}`}
             action={
               canSign ? (
                 <PubkeyProtocolUiProfileButtonRemoveIdentity
@@ -38,6 +40,7 @@ export function PubkeyProtocolUiProfileCardIdentities({
                   profile={profile}
                   provider={item.provider}
                   providerId={item.providerId}
+                  refresh={refresh}
                 />
               ) : null
             }

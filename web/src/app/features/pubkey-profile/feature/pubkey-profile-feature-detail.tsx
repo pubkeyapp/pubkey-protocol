@@ -26,7 +26,7 @@ export function PubkeyProfileFeatureDetail({ community }: { community: PubKeyCom
         {query.isLoading ? (
           <UiLoader />
         ) : query.data ? (
-          <PubkeyProtocolUiProfileCard community={community} profile={query.data} />
+          <PubkeyProtocolUiProfileCard community={community} profile={query.data} refresh={query.refetch} />
         ) : (
           <UiWarning message="Profile not found" />
         )}

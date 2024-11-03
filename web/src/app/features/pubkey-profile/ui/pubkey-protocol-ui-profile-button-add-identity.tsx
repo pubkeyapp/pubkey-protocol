@@ -52,7 +52,7 @@ function PubKeyProfileUiAddIdentityForm({
   submit,
 }: {
   loading: boolean
-  submit: (input: PubKeyProfileAddIdentityInput) => Promise<string>
+  submit: (input: PubKeyProfileAddIdentityInput) => Promise<string | undefined>
 }) {
   const form = useForm<PubKeyProfileAddIdentityInput>({
     initialValues: {

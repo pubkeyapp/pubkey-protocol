@@ -1,6 +1,6 @@
 import { PubKeyIdentity } from '@pubkey-protocol/anchor'
 import { IdentityProvider, PubKeyProtocolSdk, PublicKeyString } from '@pubkey-protocol/sdk'
-import { toastError, UiAlert, UiLoader } from '@pubkey-ui/core'
+import { toastError, toastWarning, UiAlert, UiLoader } from '@pubkey-ui/core'
 import {
   AccountInfo,
   Cluster as SolanaCluster,
@@ -23,10 +23,13 @@ export interface PubKeyProfileProviderContext {
   getExplorerUrl: (path: string) => string
   getIdentityUrl: (identity: PubKeyIdentity) => string | undefined
   onError: (err: unknown) => void
-  onSuccess: (tx: string) => Promise<void>
+  onSuccess: (tx: string | undefined) => Promise<void>
   program?: AccountInfo<ParsedAccountData> | null
   sdk: PubKeyProtocolSdk
-  signAndConfirmTransaction: (tx: VersionedTransaction, options?: { withFeePayer: boolean }) => Promise<string>
+  signAndConfirmTransaction: (
+    tx: VersionedTransaction,
+    options?: { withFeePayer: boolean },
+  ) => Promise<string | undefined>
 }
 
 const Context = createContext<PubKeyProfileProviderContext>({} as PubKeyProfileProviderContext)
@@ -53,7 +56,10 @@ export function PubKeyProtocolProvider({
   })
   const programAccountQuery = useQueryGetProgramAccount({ cluster, sdk })
 
-  async function onSuccess(tx: string) {
+  async function onSuccess(tx: string | undefined) {
+    if (!tx) {
+      return
+    }
     await Promise.all([
       client.invalidateQueries({ queryKey: ['pubkey-protocol', 'getProfiles'] }),
       client.invalidateQueries({ queryKey: ['pubkey-protocol', 'getProfileByUsername'] }),
@@ -63,11 +69,16 @@ export function PubKeyProtocolProvider({
 
   async function sendAndConfirmTransaction({ transaction }: { transaction: VersionedTransaction }): Promise<string> {
     const { blockhash, lastValidBlockHeight } = await connection.getLatestBlockhash()
-    const signature = await connection.sendTransaction(transaction, { skipPreflight: true })
-    console.log(`Sent: ${signature}`)
-    await connection.confirmTransaction({ blockhash, lastValidBlockHeight, signature }, 'confirmed')
-    console.log(`Confirmed: ${getExplorerUrl(`tx/${signature}`)}`)
-    return signature
+    try {
+      const signature = await connection.sendTransaction(transaction, { skipPreflight: true })
+      console.log(`Sent: ${signature}`)
+      await connection.confirmTransaction({ blockhash, lastValidBlockHeight, signature }, 'confirmed')
+      console.log(`Confirmed: ${getExplorerUrl(`tx/${signature}`)}`)
+      return signature
+    } catch (err) {
+      toastError(`Error sending transaction: ${err}`)
+      return ''
+    }
   }
 
   async function signAndConfirmTransaction(
@@ -80,8 +91,14 @@ export function PubKeyProtocolProvider({
       toastError('Wallet not connected')
       throw new Error('Wallet not connected')
     }
-    const userSignedTx = await signTransaction(tx)
+    const userSignedTx = await signTransaction(tx).catch((err) => {
+      toastWarning(`Error signing transaction: ${err}`)
+      return null
+    })
 
+    if (!userSignedTx) {
+      return
+    }
     if (!options.withFeePayer) {
       return sendAndConfirmTransaction({ transaction: userSignedTx })
     }
