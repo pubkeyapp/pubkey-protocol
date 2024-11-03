@@ -26,6 +26,11 @@ export interface CommunityAuthorityRequest {
   feePayer: PublicKeyString
 }
 
+export interface CommunityGet {
+  community: PublicKeyString
+  nullable?: boolean
+}
+
 export interface CommunityCreateInput {
   avatarUrl: string
   name: string
@@ -54,6 +59,16 @@ export interface CommunityUpdateOptions {
   x?: string
 }
 
+export interface ConfigGet {
+  config: PublicKeyString
+  nullable?: boolean
+}
+
+export interface PointerGet {
+  nullable?: boolean
+  pointer: PublicKeyString
+}
+
 export interface ProfileAuthorityAddOptions {
   authority: PublicKeyString
   community: PublicKeyString
@@ -79,13 +94,15 @@ export interface ProfileCreateOptions {
   username?: string
 }
 
-export interface ProfileGetByProvider {
-  provider: IdentityProvider
-  providerId: string
+export interface ProfileGet {
+  nullable?: boolean
+  profile: PublicKeyString
 }
 
-export interface ProfileGetByUsername {
-  username: string
+export interface ProfileGetByProvider {
+  nullable?: boolean
+  provider: IdentityProvider
+  providerId: string
 }
 
 export interface ProfileIdentityAddOptions {

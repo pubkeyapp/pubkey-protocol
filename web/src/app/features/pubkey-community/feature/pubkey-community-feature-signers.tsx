@@ -4,16 +4,12 @@ import { toastError, UiCard, UiStack } from '@pubkey-ui/core'
 import { IconTrash } from '@tabler/icons-react'
 import { UiAbout } from '../../../ui'
 import { ExplorerLink } from '../../cluster/cluster-ui'
-import {
-  useMutationCommunitySignerAdd,
-  useMutationCommunitySignerRemove,
-  useQueryCommunityGetBySlug,
-} from '../data-access'
+import { useMutationCommunitySignerAdd, useMutationCommunitySignerRemove, useQueryCommunityGet } from '../data-access'
 import { PubkeyProtocolUiCommunitySignerForm } from '../ui'
 import { PubkeyProtocolUiCommunityAuthorityGuard } from '../ui/pubkey-protocol-ui-community-authority-guard'
 
 export function PubkeyCommunityFeatureSigners({ community }: { community: PubKeyCommunity }) {
-  const query = useQueryCommunityGetBySlug({ slug: community.slug })
+  const query = useQueryCommunityGet({ community: community.slug })
   const mutationAdd = useMutationCommunitySignerAdd({ community })
   const mutationRemove = useMutationCommunitySignerRemove({ community })
 

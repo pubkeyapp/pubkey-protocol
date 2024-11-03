@@ -186,7 +186,7 @@ export interface PubKeyCommunity {
   farcaster?: string
   github?: string
   name: string
-  pendingAuthority: PublicKeyString | null
+  pendingAuthority?: PublicKeyString
   providers: IdentityProvider[]
   publicKey: PublicKeyString
   signers: PublicKeyString[]
