@@ -4,7 +4,7 @@ import { toastError, toastSuccess } from '@pubkey-ui/core'
 import {
   useMutationCommunityProviderDisable,
   useMutationCommunityProviderEnable,
-  useQueryCommunityGetBySlug,
+  useQueryCommunityGet,
 } from '../data-access'
 
 export function PubkeyCommunityFeatureProviderToggle({
@@ -16,7 +16,7 @@ export function PubkeyCommunityFeatureProviderToggle({
   disabled?: boolean
   provider: IdentityProvider
 }) {
-  const query = useQueryCommunityGetBySlug({ slug: community.slug })
+  const query = useQueryCommunityGet({ community: community.slug })
   const mutationDisable = useMutationCommunityProviderDisable({ community })
   const mutationEnable = useMutationCommunityProviderEnable({ community })
 

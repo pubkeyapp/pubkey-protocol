@@ -1,5 +1,4 @@
-import { PubKeyCommunity } from '@pubkey-protocol/sdk'
-import { ellipsify } from '@pubkey-protocol/sdk'
+import { ellipsify, PubKeyCommunity } from '@pubkey-protocol/sdk'
 import {
   UiAnchor,
   UiBack,
@@ -14,7 +13,7 @@ import {
 } from '@pubkey-ui/core'
 import { useParams } from 'react-router-dom'
 import { ExplorerLink } from '../../cluster/cluster-ui'
-import { useQueryCommunityGetBySlug } from '../data-access'
+import { useQueryCommunityGet } from '../data-access'
 import { PubkeyProtocolUiCommunityAvatar, PubkeyProtocolUiCommunityHeader } from '../ui/'
 import { PubkeyCommunityFeatureAuthority } from './pubkey-community-feature-authority'
 import { PubkeyCommunityFeatureProviders } from './pubkey-community-feature-providers'
@@ -24,7 +23,7 @@ import { PubkeyCommunityFeatureSigners } from './pubkey-community-feature-signer
 export function PubkeyCommunityFeatureDetail() {
   const { slug } = useParams() as { slug: string }
 
-  const query = useQueryCommunityGetBySlug({ slug })
+  const query = useQueryCommunityGet({ community: slug })
 
   return query.isLoading ? (
     <UiLoader />

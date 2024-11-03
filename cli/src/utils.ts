@@ -48,7 +48,7 @@ async function assertProgramDeployed({ connection, programId }: { connection: Co
 
 export async function assertConfigInitialized({ sdk }: { sdk: PubKeyProtocolSdk }) {
   try {
-    const account = await sdk.configGetNullable()
+    const account = await sdk.configGet({nullable: true})
     console.log(` -> Config initialized: configAuthority: ${account?.configAuthority?.toString()}`)
     return account
   } catch (err) {

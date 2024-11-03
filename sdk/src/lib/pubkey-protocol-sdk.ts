@@ -36,13 +36,16 @@ import {
   CommunityAuthorityRequest,
   CommunityCreateInput,
   CommunityCreateOptions,
+  CommunityGet,
   CommunityUpdateOptions,
+  ConfigGet,
   CreateTransactionOptions,
+  PointerGet,
   ProfileAuthorityAddOptions,
   ProfileAuthorityRemoveOptions,
   ProfileCreateOptions,
+  ProfileGet,
   ProfileGetByProvider,
-  ProfileGetByUsername,
   ProfileIdentityAddOptions,
   ProfileIdentityRemoveOptions,
   ProfileIdentityVerifyOptions,
@@ -137,45 +140,53 @@ export class PubKeyProtocolSdk {
   async communityGetAll(): Promise<PubKeyCommunity[]> {
     return this.program.account.community.all().then((accounts) =>
       accounts
-        .map(
-          ({ account, publicKey }) =>
-            ({
-              ...account,
-              publicKey,
-              providers: convertAnchorIdentityProviders(account.providers),
-              signers: account.signers.map((s) => s.toString()).sort(),
-              authority: account.authority.toString(),
-              pendingAuthority: account.pendingAuthority?.toString(),
-            } as PubKeyCommunity),
-        )
+        .map(({ account, publicKey }) => ({
+          ...account,
+          discord: account.discord ?? undefined,
+          farcaster: account.farcaster ?? undefined,
+          github: account.github ?? undefined,
+          telegram: account.telegram ?? undefined,
+          website: account.website ?? undefined,
+          x: account.x ?? undefined,
+          publicKey,
+          providers: convertAnchorIdentityProviders(account.providers),
+          signers: account.signers.map((s) => s.toString()).sort(),
+          authority: account.authority.toString(),
+          pendingAuthority: account.pendingAuthority?.toString() ?? undefined,
+        }))
         .sort((a, b) => (a.slug > b.slug ? 1 : -1)),
     )
   }
 
-  async communityGet({ community }: { community: string }) {
-    return isValidPublicKey(community)
-      ? await this.communityGetByPda({ community: new PublicKey(community) })
-      : await this.communityGetBySlug({ slug: community })
-  }
+  async communityGet(options: CommunityGet) {
+    const community = this.communityGetPda(options)
+    const account = await this.communityGetFetch({
+      community,
+      nullable: options.nullable,
+    })
 
-  async communityGetByPda(options: { community: PublicKey }): Promise<PubKeyCommunity> {
-    return this.program.account.community.fetch(options.community).then(
-      (account) =>
-        ({
-          publicKey: options.community.toString(),
-          ...account,
-          providers: convertAnchorIdentityProviders(account.providers),
-          signers: account.signers.map((s) => s.toString()).sort(),
-          authority: account.authority.toString(),
-          pendingAuthority: account.pendingAuthority?.toString(),
-        } as PubKeyCommunity),
-    )
-  }
+    if (account) {
+      return {
+        ...account,
+        authority: account.authority.toString(),
+        discord: account.discord ?? undefined,
+        farcaster: account.farcaster ?? undefined,
+        github: account.github ?? undefined,
+        pendingAuthority: account.pendingAuthority?.toString() ?? undefined,
+        providers: convertAnchorIdentityProviders(account.providers),
+        publicKey: options.community.toString(),
+        signers: account.signers.map((s) => s.toString()).sort(),
+        telegram: account.telegram ?? undefined,
+        website: account.website ?? undefined,
+        x: account.x ?? undefined,
+      }
+    }
 
-  async communityGetBySlug(options: { slug: string }): Promise<PubKeyCommunity> {
-    const [community] = this.pdaCommunity({ slug: options.slug })
+    if (options.nullable) {
+      return null
+    }
 
-    return this.communityGetByPda({ community: community })
+    throw new Error('Community not found')
   }
 
   async communityProviderDisable(options: {
@@ -285,28 +296,19 @@ export class PubKeyProtocolSdk {
     return { input, tx }
   }
 
-  async configGet(): Promise<PubKeyConfig> {
+  async configGet(options: { nullable?: boolean }): Promise<PubKeyConfig | null> {
     const [config] = this.pdaConfig()
 
-    return this.program.account.config.fetch(config).then(
-      (res) =>
-        ({
-          ...res,
-          publicKey: config,
-        } as PubKeyConfig),
-    )
-  }
+    const res = await this.configGetFetch({ config, nullable: options.nullable })
 
-  async configGetNullable(): Promise<PubKeyConfig | null> {
-    const [config] = this.pdaConfig()
+    if (!res) {
+      return null
+    }
 
-    return this.program.account.config.fetchNullable(config).then(
-      (res) =>
-        ({
-          ...res,
-          publicKey: config,
-        } as PubKeyConfig),
-    )
+    return {
+      ...res,
+      publicKey: config.toString(),
+    }
   }
 
   async configInit(options: { communityAuthority: PublicKeyString; authority: PublicKeyString }) {
@@ -344,12 +346,17 @@ export class PubKeyProtocolSdk {
     )
   }
 
-  async pointerGet(options: { pointer: PublicKey }) {
-    return this.program.account.pointer.fetch(options.pointer)
-  }
+  async pointerGet(options: PointerGet) {
+    const res = await this.pointerGetFetch(options)
 
-  async pointerGetNullable(options: { pointer: PublicKey }) {
-    return this.program.account.pointer.fetchNullable(options.pointer)
+    if (!res) {
+      return null
+    }
+
+    return {
+      ...res,
+      publicKey: options.pointer.toString(),
+    }
   }
 
   async profileGetAll(): Promise<PubKeyProfile[]> {
@@ -369,77 +376,39 @@ export class PubKeyProtocolSdk {
     )
   }
 
-  async profileGet(options: { profile: string }) {
-    const profile = options.profile
-    return isValidPublicKey(profile)
-      ? await this.profileGetByPda({ profile: new PublicKey(profile) })
-      : await this.profileGetByUsername({ username: profile })
-  }
+  async profileGet(options: ProfileGet): Promise<PubKeyProfile | null> {
+    const profile = this.profileGetPda(options)
 
-  async profileGetByPda(options: { profile: PublicKey }): Promise<PubKeyProfile> {
-    const publicKey = new PublicKey(options.profile)
-    return this.program.account.profile.fetch(publicKey).then((account) => ({
-      publicKey,
+    const account = await this.profileGetFetch({ profile, nullable: options.nullable })
+
+    if (!account) {
+      return null
+    }
+
+    return {
       ...account,
       authorities: account.authorities.map((a) => a.toString()).sort(),
       identities: account.identities.map((identity) => ({
         ...identity,
-        provider: convertAnchorIdentityProvider(identity.provider),
         communities: identity.communities.map((c) => c.toString()),
-      })),
-    }))
-  }
-
-  async profileGetNullable(options: { profile: PublicKey }): Promise<PubKeyProfile | null> {
-    return this.program.account.profile.fetchNullable(options.profile).then((res) => {
-      if (!res) {
-        return null
-      }
-      const identities = res.identities.map((identity) => ({
-        ...identity,
         provider: convertAnchorIdentityProvider(identity.provider),
-      }))
-
-      return {
-        ...res,
-        publicKey: options.profile,
-        identities,
-      }
-    })
+      })),
+      publicKey: options.profile.toString(),
+    }
   }
 
-  async profileGetByProvider(options: ProfileGetByProvider): Promise<PubKeyProfile> {
+  async profileGetByProvider(options: ProfileGetByProvider): Promise<PubKeyProfile | null> {
     const [pointer] = this.pdaPointer(options)
 
-    const { profile } = await this.pointerGet({ pointer })
+    const pointerData = await this.pointerGet({ pointer, nullable: options.nullable })
 
-    return this.profileGetByPda({ profile })
-  }
-
-  async profileGetByProviderNullable(options: ProfileGetByProvider): Promise<PubKeyProfile | null> {
-    const [pointer] = this.pdaPointer(options)
-
-    const found = await this.pointerGetNullable({ pointer })
-
-    if (!found) {
-      return null
+    if (!pointerData) {
+      throw new Error('Pointer not found')
     }
 
-    const { profile } = found
+    const { profile } = pointerData
 
-    return this.profileGetNullable({ profile })
-  }
-
-  async profileGetByUsername(options: ProfileGetByUsername): Promise<PubKeyProfile> {
-    const [profile] = this.pdaProfile({ username: options.username })
-
-    return this.profileGetByPda({ profile })
-  }
-
-  async profileGetByUsernameNullable(options: ProfileGetByUsername): Promise<PubKeyProfile | null> {
-    const [profile] = this.pdaProfile({ username: options.username })
-
-    return this.profileGetNullable({ profile })
+    return this.profileGet({ profile, nullable: options.nullable })
   }
 
   async profileAuthorityAdd(options: ProfileAuthorityAddOptions) {
@@ -523,7 +492,8 @@ export class PubKeyProtocolSdk {
     const ix = await this.program.methods
       .profileUpdate({
         newAvatarUrl: options.avatarUrl ?? null,
-        newName: options.name,
+        newName: options.name ?? null,
+        newBio: options.bio ?? null,
       })
       .accountsStrict({
         authority,
@@ -614,6 +584,50 @@ export class PubKeyProtocolSdk {
     const payerKey = new PublicKey(options.feePayer)
     const message: TransactionMessage = new TransactionMessage({ instructions, payerKey, recentBlockhash })
     return new VersionedTransaction(message.compileToV0Message())
+  }
+
+  private communityGetFetch(options: CommunityGet) {
+    return options.nullable
+      ? this.program.account.community.fetchNullable(options.community)
+      : this.program.account.community.fetch(options.community)
+  }
+
+  private communityGetPda(options: { community: PublicKeyString }): PublicKey {
+    if (isValidPublicKey(options.community)) {
+      return new PublicKey(options.community)
+    }
+
+    const [community] = this.pdaCommunity({ slug: options.community.toString() })
+
+    return community
+  }
+
+  private configGetFetch(options: ConfigGet) {
+    return options.nullable
+      ? this.program.account.config.fetchNullable(options.config)
+      : this.program.account.config.fetch(options.config)
+  }
+
+  private pointerGetFetch(options: PointerGet) {
+    return options.nullable
+      ? this.program.account.pointer.fetchNullable(options.pointer)
+      : this.program.account.pointer.fetch(options.pointer)
+  }
+
+  private profileGetFetch(options: ProfileGet) {
+    return options.nullable
+      ? this.program.account.profile.fetchNullable(options.profile)
+      : this.program.account.profile.fetch(options.profile)
+  }
+
+  private profileGetPda(options: { profile: PublicKeyString }): PublicKey {
+    if (isValidPublicKey(options.profile)) {
+      return new PublicKey(options.profile)
+    }
+
+    const [profile] = this.pdaProfile({ username: options.profile.toString() })
+
+    return profile
   }
 
   pdaCommunity(options: Omit<GetPubKeyCommunityPdaOptions, 'programId'>): [PublicKey, number] {

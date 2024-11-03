@@ -3,7 +3,7 @@ import { getConfig } from '../utils/get-config'
 
 export async function createOrGetConfig() {
   const { authority, configAuthority, connection, sdk } = await getConfig()
-  const exists = await sdk.configGetNullable()
+  const exists = await sdk.configGet({ nullable: true })
 
   if (exists?.configAuthority) {
     console.log(` -> Found config with authority ${exists?.configAuthority?.toString()}`)
@@ -23,5 +23,5 @@ export async function createOrGetConfig() {
   console.log(
     ` -> Created config with authority ${configAuthority.publicKey.toString()}, community authority ${authority.publicKey.toString()}`,
   )
-  return { config: await sdk.configGetNullable(), signature }
+  return { config: await sdk.configGet({ nullable: true }), signature }
 }

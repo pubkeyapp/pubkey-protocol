@@ -154,6 +154,7 @@ export interface PubKeyProfile {
   name: string
   publicKey: PublicKeyString
   username: string
+  bio: string | null
 }
 
 export interface PubKeyIdentity {
@@ -186,7 +187,7 @@ export interface PubKeyCommunity {
   farcaster?: string
   github?: string
   name: string
-  pendingAuthority: PublicKeyString | null
+  pendingAuthority?: PublicKeyString
   providers: IdentityProvider[]
   publicKey: PublicKeyString
   signers: PublicKeyString[]

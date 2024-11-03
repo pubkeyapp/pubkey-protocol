@@ -8,7 +8,7 @@ import {
   useMutationCommunityUpdateAuthorityApprove,
   useMutationCommunityUpdateAuthorityDecline,
   useMutationCommunityUpdateAuthorityRequest,
-  useQueryCommunityGetBySlug,
+  useQueryCommunityGet,
 } from '../data-access'
 import { PubkeyProtocolUiCommunityAuthorityForm } from '../ui'
 
@@ -16,7 +16,7 @@ import { PubkeyProtocolUiCommunityAuthorityGuard } from '../ui/pubkey-protocol-u
 
 export function PubkeyCommunityFeatureAuthority({ community }: { community: PubKeyCommunity }) {
   const { publicKey } = useWallet()
-  const query = useQueryCommunityGetBySlug({ slug: community.slug })
+  const query = useQueryCommunityGet({ community: community.slug })
   const mutationApprove = useMutationCommunityUpdateAuthorityApprove({ community })
   const mutationDecline = useMutationCommunityUpdateAuthorityDecline({ community })
   const mutationRequest = useMutationCommunityUpdateAuthorityRequest({ community })

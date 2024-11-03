@@ -1,12 +1,12 @@
 import { PubKeyCommunity } from '@pubkey-protocol/sdk'
 import { toastError, UiCard } from '@pubkey-ui/core'
 import { UiAbout } from '../../../ui'
-import { useMutationCommunityUpdate, useQueryCommunityGetBySlug } from '../data-access'
+import { useMutationCommunityUpdate, useQueryCommunityGet } from '../data-access'
 import { PubkeyProtocolUiCommunityUpdateForm } from '../ui'
 import { PubkeyProtocolUiCommunityAuthorityGuard } from '../ui/pubkey-protocol-ui-community-authority-guard'
 
 export function PubkeyCommunityFeatureSettings({ community }: { community: PubKeyCommunity }) {
-  const query = useQueryCommunityGetBySlug({ slug: community.slug })
+  const query = useQueryCommunityGet({ community: community.slug })
   const mutation = useMutationCommunityUpdate()
 
   return (

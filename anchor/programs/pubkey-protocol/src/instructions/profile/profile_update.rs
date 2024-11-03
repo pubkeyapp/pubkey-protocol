@@ -49,6 +49,13 @@ pub fn profile_update(
         profile.avatar_url = new_avatar_url;
     }
 
+    if let Some(new_bio) = args.new_bio {
+        require!(
+            new_bio.len() <= MAX_BIO_SIZE,
+            ProtocolError::InvalidBioSize
+        );
+        profile.bio = Some(new_bio);
+    }
     profile.validate()?;
 
     Ok(())
@@ -58,4 +65,5 @@ pub fn profile_update(
 pub struct ProfileUpdateArgs {
     pub new_name: Option<String>,
     pub new_avatar_url: Option<String>,
+    pub new_bio: Option<String>,  
 }

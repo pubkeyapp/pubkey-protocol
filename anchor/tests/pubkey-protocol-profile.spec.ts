@@ -99,6 +99,7 @@ describe('pubkey-protocol-profile', () => {
           authority: aliceWalletOne.publicKey,
           newName: 'Test Profile',
           newAvatarUrl: getProfileAvatarUrl(`${username}_new`),
+          newBio: 'This is a test bio',
         }
         await program.methods
           .profileUpdate(input)

@@ -19,6 +19,8 @@ pub struct Profile {
     pub authorities: Vec<Pubkey>,
     // Identities user have added onto
     pub identities: Vec<Identity>,
+    // Biography of the user
+    pub bio: Option<String>,
 }
 
 impl Profile {
@@ -34,6 +36,7 @@ impl Profile {
         4 + MAX_USERNAME_SIZE +
         4 + MAX_NAME_SIZE +
         4 + MAX_URL_SIZE +
+        4 + MAX_BIO_SIZE +
         32 + // fee_payer
         authorities_size +
         identities_size
@@ -43,6 +46,7 @@ impl Profile {
         let avatar_url_len = self.avatar_url.len();
         let identities_len = self.identities.len();
         let authorities_len = self.authorities.len();
+        let bio_len = self.bio.as_ref().map_or(0, |b| b.len());
 
         // Username
         require!(
@@ -73,6 +77,12 @@ impl Profile {
         require!(
             identities_len <= MAX_VECTOR_SIZE.into(),
             ProtocolError::MaxSizeReached
+        );
+
+        // Bio validation
+        require!(
+            bio_len <= MAX_BIO_SIZE,
+            ProtocolError::InvalidBioSize
         );
         for identity in self.identities.clone() {
             identity.validate()?;

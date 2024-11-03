@@ -1,7 +1,6 @@
 import { ActionIcon, Select, TextInput } from '@mantine/core'
 import { useForm } from '@mantine/form'
-import { IdentityProvider, PubKeyProfile } from '@pubkey-protocol/sdk'
-import { ProfileGetByProvider, ProfileGetByUsername } from '@pubkey-protocol/sdk'
+import { IdentityProvider, ProfileGet, ProfileGetByProvider, PubKeyProfile } from '@pubkey-protocol/sdk'
 import { toastError, toastInfo, toastSuccess, UiCard, UiStack } from '@pubkey-ui/core'
 import { IconSearch } from '@tabler/icons-react'
 import { useState } from 'react'
@@ -37,11 +36,15 @@ function SearchByProvider() {
     sdk
       .profileGetByProvider({ provider, providerId })
       .then((profile) => {
-        toastSuccess(`Found ${profile.username}`)
+        if (!profile) {
+          toastError(`Provider ${provider} ${providerId} not found`)
+          return
+        }
+        toastSuccess(`Found ${profile?.username}`)
         setResult(profile)
       })
       .catch((err) => {
-        toastError(`Provider ${provider} ${providerId} not found`)
+        toastError(`Error fetching provider ${provider} ${providerId}`)
         console.log('err', err)
       })
   }
@@ -80,12 +83,12 @@ function SearchByProvider() {
 function SearchByUsername() {
   const [result, setResult] = useState<PubKeyProfile | null>(null)
   const { sdk } = usePubKeyProtocol()
-  const form = useForm<ProfileGetByUsername>({ initialValues: { username: '' } })
+  const form = useForm<ProfileGet>({ initialValues: { profile: '' } })
 
-  async function submit({ username }: ProfileGetByUsername) {
+  async function submit({ profile }: ProfileGet) {
     setResult(null)
     sdk
-      .profileGetByUsernameNullable({ username })
+      .profileGet({ profile, nullable: true })
       .then((profile) => {
         if (profile) {
           toastSuccess(`Found ${profile.username}`)
@@ -95,7 +98,7 @@ function SearchByUsername() {
         }
       })
       .catch((err) => {
-        toastError(`User ${username} not found`)
+        toastError(`User ${profile} not found`)
         console.log('err', err)
       })
   }
@@ -104,9 +107,9 @@ function SearchByUsername() {
     <form onSubmit={form.onSubmit((values) => submit(values))}>
       <UiStack>
         <TextInput
-          name="username"
+          name="profile"
           label="Username"
-          {...form.getInputProps('username')}
+          {...form.getInputProps('profile')}
           rightSection={
             <ActionIcon variant="light" type="submit">
               <IconSearch size="16" />

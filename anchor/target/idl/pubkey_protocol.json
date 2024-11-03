@@ -1539,6 +1539,11 @@
       "code": 6042,
       "name": "UnAuthorizedCommunitySigner",
       "msg": "Account is not a signer for this community"
+    },
+    {
+      "code": 6042,
+      "name": "InvalidBioSize",
+      "msg": "Biography too long. Maximum characters allowed: 256"
     }
   ],
   "types": [
@@ -1945,6 +1950,12 @@
                 }
               }
             }
+          },
+          {
+            "name": "bio",
+            "type": {
+              "option": "string"
+            }
           }
         ]
       }
@@ -2062,6 +2073,12 @@
           },
           {
             "name": "new_avatar_url",
+            "type": {
+              "option": "string"
+            }
+          },
+          {
+            "name": "new_bio",
             "type": {
               "option": "string"
             }

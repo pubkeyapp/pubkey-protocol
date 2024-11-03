@@ -81,6 +81,7 @@ pub fn profile_create(ctx: Context<ProfileCreate>, args: ProfileCreateArgs) -> R
         avatar_url,
         authorities: vec![authority],
         identities: vec![set_primary_wallet],
+        bio: None,
     });
 
     profile.validate()?;

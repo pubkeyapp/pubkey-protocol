@@ -66,7 +66,7 @@ xdescribe('sdk', () => {
       community: PublicKey.unique(),
     })
     console.log('Created', created)
-    const profile = await sdk.profileGetByUsername({ username })
+    const profile = await sdk.profileGet({ profile: username })
     console.log('Profile', profile)
     // ASSERT
   })

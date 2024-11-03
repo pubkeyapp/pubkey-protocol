@@ -56,6 +56,7 @@ export function createDevProfile({
   name: string
   publicKey: PublicKeyString
   username?: string
+  bio?: string
 }): PubKeyProfile {
   const username = props.username ?? slugify(name)
   const avatarUrl = getAvatarUrlProfile(username)
@@ -68,6 +69,7 @@ export function createDevProfile({
     username,
     authorities: [],
     avatarUrl,
+    bio: props.bio ?? null,
   }
 }
 

@@ -12,7 +12,7 @@ export function getConfigCommand(): Command {
     .action(async () => {
       const { sdk } = await getConfig()
 
-      const config = await sdk.configGetNullable()
+      const config = await sdk.configGet({ nullable: true })
 
       console.log(
         config?.configAuthority

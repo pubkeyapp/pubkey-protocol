@@ -3,13 +3,13 @@ import { PubKeyCommunity } from '@pubkey-protocol/sdk'
 import { UiBack, UiDebugModal, UiLoader, UiPage, UiStack, UiWarning } from '@pubkey-ui/core'
 import { useParams } from 'react-router-dom'
 import { PubkeyProtocolUiCommunitySelect } from '../../pubkey-community/ui'
-import { useQueryProfileGetByUsername } from '../data-access'
+import { useQueryProfileGet } from '../data-access'
 import { PubkeyProtocolUiProfileCard } from '../ui'
 
 export function PubkeyProfileFeatureDetail({ community }: { community: PubKeyCommunity }) {
   const { username } = useParams() as { username: string }
 
-  const query = useQueryProfileGetByUsername({ username })
+  const query = useQueryProfileGet({ username })
 
   return (
     <UiPage
