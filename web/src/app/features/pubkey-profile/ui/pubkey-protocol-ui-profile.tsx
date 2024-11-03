@@ -24,6 +24,11 @@ export function PubkeyProtocolUiProfile({
           <Group>
             <Code>{profile.username}</Code>
           </Group>
+          {profile.bio && (
+            <Group>
+              <Code>{profile.bio}</Code>
+            </Group>
+          )}
           <Stack gap="xs" mt="md">
             {profile.identities?.map((identity) => (
               <UiCard key={`${identity.provider}-${identity.providerId}`}>

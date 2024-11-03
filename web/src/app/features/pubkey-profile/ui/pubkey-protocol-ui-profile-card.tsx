@@ -48,7 +48,11 @@ export function PubkeyProtocolUiProfileCard({
               <Group>
                 <Code>{profile.username}</Code>
               </Group>
-
+              {profile.bio && (
+                <Group>
+                  <Code>{profile.bio}</Code>
+                </Group>
+              )}
               {signAuthority ? (
                 <UiStack mt="md">
                   <PubkeyProtocolUiProfileCardIdentities

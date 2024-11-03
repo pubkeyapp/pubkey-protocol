@@ -12,3 +12,4 @@ pub const MAX_URL_SIZE: usize = 100;
 pub const MAX_PROVIDER_ID_SIZE: usize = 50;
 pub const MAX_PROVIDER_NAME_SIZE: usize = 50;
 pub const MAX_VECTOR_SIZE: u16 = u16::MAX;
+pub const MAX_BIO_SIZE: usize = 256;

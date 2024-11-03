@@ -86,4 +86,6 @@ pub enum ProtocolError {
     UnAuthorizedCommunityAuthority,
     #[msg("Account is not a signer for this community")]
     UnAuthorizedCommunitySigner,
+    #[msg("Biography too long. Maximum characters allowed: 256")]
+    InvalidBioSize,
 }

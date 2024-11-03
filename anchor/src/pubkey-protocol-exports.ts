@@ -154,6 +154,7 @@ export interface PubKeyProfile {
   name: string
   publicKey: PublicKeyString
   username: string
+  bio: string | null
 }
 
 export interface PubKeyIdentity {

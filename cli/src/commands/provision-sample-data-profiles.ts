@@ -5,6 +5,7 @@ import {
   ProfileCreateOptions,
   ProfileIdentityAddOptions,
   ProfileIdentityVerifyOptions,
+  ProfileUpdateOptions,
 } from '@pubkey-protocol/sdk'
 import { getConfig } from '../utils/get-config'
 import { createOrGetConfig } from './create-or-get-config'
@@ -17,6 +18,7 @@ type ProvisionProfileIdentityVerify = Omit<
   ProfileIdentityVerifyOptions,
   'authority' | 'community' | 'feePayer' | 'username'
 > & { community: string }
+type ProvisionProfileUpdate = Omit<ProfileUpdateOptions, 'authority' | 'community' | 'feePayer' | 'username'>
 
 interface ProfileAuthority {
   publicKey: string
@@ -27,6 +29,7 @@ export interface ProfileMapItem {
   authority: ProfileAuthority
   create: ProvisionProfileCreate
   identities?: ProvisionProfileIdentityAdd[]
+  update?: ProvisionProfileUpdate
   verifications?: ProvisionProfileIdentityVerify[]
 }
 export type ProfileProvisionMap = Record<string, ProfileMapItem>
@@ -41,6 +44,9 @@ export const profileProvisionMap: ProfileProvisionMap = {
     create: {
       name: 'Alice',
       avatarUrl: `https://api.dicebear.com/9.x/bottts-neutral/svg?seed=alice`,
+    },
+    update: {
+      bio: "Alice's updated bio",
     },
     identities: [
       { provider: IdentityProvider.Github, providerId: '123123', name: 'pubkey_alice' },
@@ -69,6 +75,9 @@ export const profileProvisionMap: ProfileProvisionMap = {
     create: {
       name: 'Bob',
       avatarUrl: `https://api.dicebear.com/9.x/bottts-neutral/svg?seed=bob`,
+    },
+    update: {
+      bio: "Bob's updated bio",
     },
     identities: [
       { provider: IdentityProvider.Discord, providerId: '456456', name: 'pubkey_bob' },
@@ -121,6 +130,27 @@ export async function provisionSampleDataProfiles(options: ProvisionSampleDataOp
     }
     const s = await connection.sendRawTransaction(transaction.serialize(), { skipPreflight: true })
     console.log(` -> Created profile: ${name} ${input.username}`, s)
+    console.log(getExplorerUrl(`tx/${s}?cluster=custom&customUrl=http%3A%2F%2Flocalhost%3A8899`, cluster, endpoint))
+    await sleep(options.timeout)
+  }
+
+  const profilesUpdate = Object.keys(profileProvisionMap)
+    .filter((username) => Object.keys(profileProvisionMap[username].update ?? {}).length > 0)
+    .map((username) => ({ update: profileProvisionMap[username].update, username }))
+
+  for (const { update, username } of profilesUpdate) {
+    const authority = getKeypairFromByteArray(profileProvisionMap[username].authority.secretKey)
+
+    const transaction = await sdk.profileUpdate({
+      authority: authority.publicKey,
+      community: defaultCommunity.publicKey,
+      feePayer: communityAuthority.publicKey,
+      username,
+      ...update,
+    })
+    transaction.sign([communityAuthority, authority])
+    const s = await connection.sendRawTransaction(transaction.serialize(), { skipPreflight: true })
+    console.log(` -> Updated profile: ${username}`, s)
     console.log(getExplorerUrl(`tx/${s}?cluster=custom&customUrl=http%3A%2F%2Flocalhost%3A8899`, cluster, endpoint))
     await sleep(options.timeout)
   }

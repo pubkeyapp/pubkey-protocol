@@ -1540,6 +1540,11 @@ export type PubkeyProtocol = {
       "code": 6041,
       "name": "unAuthorizedCommunitySigner",
       "msg": "Account is not a signer for this community"
+    },
+    {
+      "code": 6042,
+      "name": "invalidBioSize",
+      "msg": "Biography too long. Maximum characters allowed: 256"
     }
   ],
   "types": [
@@ -1928,6 +1933,12 @@ export type PubkeyProtocol = {
                 }
               }
             }
+          },
+          {
+            "name": "bio",
+            "type": {
+              "option": "string"
+            }
           }
         ]
       }
@@ -2045,6 +2056,12 @@ export type PubkeyProtocol = {
           },
           {
             "name": "newAvatarUrl",
+            "type": {
+              "option": "string"
+            }
+          },
+          {
+            "name": "newBio",
             "type": {
               "option": "string"
             }
