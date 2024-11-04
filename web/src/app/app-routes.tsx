@@ -1,13 +1,12 @@
 import { Group } from '@mantine/core'
-import { UiHeaderLink, UiNotFound, UiThemeLink, UiThemeSwitch } from '@pubkey-ui/core'
+import { UiHeaderLink, UiNotFound, UiThemeLink } from '@pubkey-ui/core'
 import { lazy } from 'react'
 import { Link, Navigate, RouteObject, useRoutes } from 'react-router-dom'
 import { AppLayout } from './app-layout'
-import { ClusterUiSelect } from './features/cluster/cluster-ui'
 import { DevFeature } from './features/dev/feature'
 import { HomeFeature } from './features/home/feature'
 import { KeypairFeature } from './features/keypair/feature'
-import { KeypairUiBalance, KeypairUiSelect } from './features/keypair/ui'
+import { KeypairUiBalance } from './features/keypair/ui'
 import { WalletIcon } from './features/solana'
 
 const ClusterFeature = lazy(() => import('./features/cluster/cluster-feature'))
@@ -17,10 +16,10 @@ const PubkeyProfileFeature = lazy(() => import('./features/pubkey-profile/featur
 const PubkeyProtocolFeature = lazy(() => import('./features/pubkey-protocol/feature/pubkey-protocol.routes'))
 
 const links: UiHeaderLink[] = [
+  { label: 'Home', link: '/home' },
   { label: 'Communities', link: '/communities' },
   { label: 'Profiles', link: '/profiles' },
   { label: 'Debug', link: '/debug' },
-  { label: 'Dev', link: '/dev' },
 ]
 
 const routes: RouteObject[] = [
@@ -46,10 +45,7 @@ export function AppRoutes() {
       profile={
         <Group>
           <KeypairUiBalance />
-          <KeypairUiSelect />
-          <ClusterUiSelect />
           <WalletIcon />
-          <UiThemeSwitch />
         </Group>
       }
     >
