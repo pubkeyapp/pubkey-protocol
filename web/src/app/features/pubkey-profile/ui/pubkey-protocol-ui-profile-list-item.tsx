@@ -1,11 +1,11 @@
 import { Code, Group, Stack } from '@mantine/core'
-import { PubKeyProfile } from '@pubkey-protocol/sdk'
-import { ellipsify } from '@pubkey-protocol/sdk'
+import { ellipsify, PubKeyProfile } from '@pubkey-protocol/sdk'
 import { UiCard, UiDebugModal, UiGroup } from '@pubkey-ui/core'
 import { ReactNode } from 'react'
 import { ExplorerLink } from '../../cluster/cluster-ui'
 import { PubkeyProtocolUiProfileAnchor } from './pubkey-protocol-ui-profile-anchor'
 import { PubkeyProtocolUiProfileAvatar } from './pubkey-protocol-ui-profile-avatar'
+import { PubkeyProtocolUiProfileBio } from './pubkey-protocol-ui-profile-bio'
 
 export function PubkeyProtocolUiProfileListItem({
   children,
@@ -38,11 +38,7 @@ export function PubkeyProtocolUiProfileListItem({
               <Group>
                 <Code>{profile.username}</Code>
               </Group>
-              {profile.bio && (
-                <Group>
-                  <Code>{profile.bio}</Code>
-                </Group>
-              )}
+              <PubkeyProtocolUiProfileBio profile={profile} />
               {children}
             </Stack>
           </Stack>

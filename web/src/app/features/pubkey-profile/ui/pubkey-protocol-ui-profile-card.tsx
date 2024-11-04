@@ -1,16 +1,19 @@
-import { Code, Group, Stack } from '@mantine/core'
+import { Box, Code, Group, Stack } from '@mantine/core'
 import { ellipsify, PubKeyCommunity, PubKeyProfile } from '@pubkey-protocol/sdk'
 import { UiCard, UiDebugModal, UiGroup, UiStack } from '@pubkey-ui/core'
 import { PublicKey } from '@solana/web3.js'
 import { useMemo } from 'react'
+import { UiAppCard } from '../../../ui'
 import { ExplorerLink } from '../../cluster/cluster-ui'
 import { usePubKeyProtocol } from '../../pubkey-protocol'
+import { useMutationProfileUpdate } from '../data-access'
 import { PubkeyProtocolUiProfileAnchor } from './pubkey-protocol-ui-profile-anchor'
 import { PubkeyProtocolUiProfileAvatar } from './pubkey-protocol-ui-profile-avatar'
-import { PubkeyProtocolUiProfileAvatarUpdateButton } from './pubkey-protocol-ui-profile-avatar-update-button'
+import { PubkeyProtocolUiProfileBio } from './pubkey-protocol-ui-profile-bio'
 import { PubkeyProtocolUiProfileCardAuthorities } from './pubkey-protocol-ui-profile-card-authorities'
 import { PubkeyProtocolUiProfileCardIdentities } from './pubkey-protocol-ui-profile-card-identities'
 import { PubkeyProtocolUiProfileDeleteButton } from './pubkey-protocol-ui-profile-delete-button'
+import { PubkeyProtocolUiProfileUpdateForm } from './pubkey-protocol-ui-profile-update-form'
 
 export function PubkeyProtocolUiProfileCard({
   community,
@@ -22,7 +25,7 @@ export function PubkeyProtocolUiProfileCard({
   refresh: () => void
 }) {
   const { authority } = usePubKeyProtocol()
-
+  const mutation = useMutationProfileUpdate({ community: community.publicKey })
   const signAuthority = useMemo(
     () => profile.authorities?.find((a) => a.toString() === authority.toString()) ?? PublicKey.default,
     [profile.authorities, authority],
@@ -50,29 +53,34 @@ export function PubkeyProtocolUiProfileCard({
               <Group>
                 <Code>{profile.username}</Code>
               </Group>
-              {profile.bio && (
-                <Group>
-                  <Code>{profile.bio}</Code>
-                </Group>
-              )}
-              {signAuthority ? (
+              <PubkeyProtocolUiProfileBio profile={profile} />
+              <PubkeyProtocolUiProfileCardIdentities
+                community={community}
+                profile={profile}
+                refresh={refresh}
+                signAuthority={signAuthority}
+              />
+              {signAuthority !== PublicKey.default ? (
                 <UiStack mt="md">
-                  <PubkeyProtocolUiProfileCardIdentities
-                    community={community}
-                    profile={profile}
-                    refresh={refresh}
-                    signAuthority={signAuthority}
-                  />
                   <PubkeyProtocolUiProfileCardAuthorities
                     community={community}
                     profile={profile}
                     signAuthority={signAuthority}
                   />
-                  <PubkeyProtocolUiProfileAvatarUpdateButton
-                    community={community}
-                    profile={profile}
-                    signAuthority={signAuthority}
-                  />
+                  <UiAppCard title="Update Profile">
+                    <Box px="sm">
+                      <PubkeyProtocolUiProfileUpdateForm
+                        profile={profile}
+                        submit={(input) =>
+                          mutation
+                            .mutateAsync(input)
+                            .then(() => refresh())
+                            .catch((err) => console.log(err))
+                        }
+                        disabled={!signAuthority || mutation.isPending}
+                      />
+                    </Box>
+                  </UiAppCard>
                   <PubkeyProtocolUiProfileDeleteButton
                     community={community}
                     profile={profile}

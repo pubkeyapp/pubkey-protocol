@@ -5,6 +5,7 @@ import { ReactNode } from 'react'
 import { PubkeyProtocolUiIdentity } from './pubkey-protocol-ui-identity'
 import { PubkeyProtocolUiProfileAnchor } from './pubkey-protocol-ui-profile-anchor'
 import { PubkeyProtocolUiProfileAvatar } from './pubkey-protocol-ui-profile-avatar'
+import { PubkeyProtocolUiProfileBio } from './pubkey-protocol-ui-profile-bio'
 
 export function PubkeyProtocolUiProfile({
   children,
@@ -24,11 +25,9 @@ export function PubkeyProtocolUiProfile({
           <Group>
             <Code>{profile.username}</Code>
           </Group>
-          {profile.bio && (
-            <Group>
-              <Code>{profile.bio}</Code>
-            </Group>
-          )}
+          <Group mt="md">
+            <PubkeyProtocolUiProfileBio profile={profile} />
+          </Group>
           <Stack gap="xs" mt="md">
             {profile.identities?.map((identity) => (
               <UiCard key={`${identity.provider}-${identity.providerId}`}>
