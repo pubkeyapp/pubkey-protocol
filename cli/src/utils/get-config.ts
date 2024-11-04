@@ -12,7 +12,9 @@ export async function getConfig() {
   const programId = new PublicKey(process.env.PUBKEY_PROTOCOL_PROGRAM_ID || PUBKEY_PROTOCOL_PROGRAM_ID)
   const connection = new Connection(endpoint, 'confirmed')
   const sdk = await getPubkeyProtocolSdk({ connection, programId })
-  const configAuthority = getConfigKeypair()
+  const configAuthority = process.env.CONFIG_KEYPAIR_PATH
+    ? await getKeypairFromFile(process.env.CONFIG_KEYPAIR_PATH)
+    : getConfigKeypair()
   const authority = await getKeypairFromFile(process.env.AUTHORITY_KEYPAIR_PATH)
 
   console.log(`Endpoint: ${endpoint}`)

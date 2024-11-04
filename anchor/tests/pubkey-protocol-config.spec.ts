@@ -20,4 +20,26 @@ describe('pubkey-protocol-config', () => {
       expect(config.configAuthority).toEqual(feePayer.publicKey)
     })
   })
+
+  describe('delete operations', () => {
+    xit('should delete a pointer', async () => {
+      // FIXME: implement this test
+      const res = await createOrGetTestConfig(program, feePayer.publicKey)
+      const config = await program.account.config.fetch(res.config)
+
+      // TBD
+
+      expect(true).toBe(true)
+    })
+
+    xit('should delete a profile', async () => {
+      // FIXME: implement this test
+      const res = await createOrGetTestConfig(program, feePayer.publicKey)
+      const config = await program.account.config.fetch(res.config)
+
+      // TBD
+
+      expect(true).toBe(true)
+    })
+  })
 })

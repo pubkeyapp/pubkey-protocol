@@ -7,6 +7,36 @@ export function getConfigCommand(): Command {
   const command = new Command('config').description('Manage config')
 
   command
+    .command('delete-pointer <pointer>')
+    .description('Delete a pointer')
+    .action(async (pointer: string) => {
+      const { configAuthority, cluster, connection, endpoint, sdk } = await getConfig()
+      const { tx: transaction } = await sdk.configDeletePointer({
+        configAuthority: configAuthority.publicKey,
+        pointer,
+      })
+      transaction.sign([configAuthority])
+      const s = await connection.sendRawTransaction(transaction.serialize(), { skipPreflight: true })
+      console.log(`Created pointer: ${pointer}`, s)
+      console.log(getExplorerUrl(`tx/${s}?cluster=custom&customUrl=http%3A%2F%2Flocalhost%3A8899`, cluster, endpoint))
+    })
+
+  command
+    .command('delete-profile <profile>')
+    .description('Delete a profile')
+    .action(async (profile: string) => {
+      const { configAuthority, cluster, connection, endpoint, sdk } = await getConfig()
+      const { tx: transaction } = await sdk.configDeleteProfile({
+        configAuthority: configAuthority.publicKey,
+        profile,
+      })
+      transaction.sign([configAuthority])
+      const s = await connection.sendRawTransaction(transaction.serialize(), { skipPreflight: true })
+      console.log(`Created profile: ${profile}`, s)
+      console.log(getExplorerUrl(`tx/${s}?cluster=custom&customUrl=http%3A%2F%2Flocalhost%3A8899`, cluster, endpoint))
+    })
+
+  command
     .command('get')
     .description('Get the config')
     .action(async () => {

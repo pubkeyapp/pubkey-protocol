@@ -1,4 +1,4 @@
-import { Button } from '@mantine/core'
+import { Button, Group } from '@mantine/core'
 import { ellipsify } from '@pubkey-protocol/sdk'
 import { UiDebug, UiPage } from '@pubkey-ui/core'
 import { IconBug } from '@tabler/icons-react'
@@ -13,14 +13,37 @@ export function PubkeyProtocolFeatureDebug() {
   const queryConfigAccount = useQueryConfigGet()
   const queryProfileAccounts = useQueryProfileGetAll()
   const queryPointerAccounts = useQueryPointerGetAll()
-  const { program, sdk } = usePubKeyProtocol()
+  const { connection, program, sdk } = usePubKeyProtocol()
 
   return (
     <UiPage
       leftAction={<IconBug />}
       title="Debug"
       rightAction={
-        <ExplorerLink ff="mono" path={`account/${sdk.programId}`} label={ellipsify(sdk.programId.toString())} />
+        <Group>
+          <Button
+            onClick={() => {
+              connection.getProgramAccounts(sdk.programId).then((accounts) => {
+                console.log('accounts', accounts)
+                for (const { account, pubkey } of accounts
+                  .map((i) => i)
+                  .sort((a, b) => a.account.lamports - b.account.lamports)) {
+                  console.log(
+                    `pubkey: ${pubkey.toString()} lamports ${account.lamports}`,
+                    account.data
+                      // first 32 bytes
+                      .slice(0, 8)
+                      .join(', '),
+                  )
+                }
+              })
+            }}
+          >
+            All Program Accounts
+          </Button>
+
+          <ExplorerLink ff="mono" path={`account/${sdk.programId}`} label={ellipsify(sdk.programId.toString())} />
+        </Group>
       }
     >
       {queryConfigAccount.data?.configAuthority ? null : (
@@ -33,13 +56,13 @@ export function PubkeyProtocolFeatureDebug() {
       <UiDebug
         data={{
           program,
-          configAccount: queryConfigAccount?.data,
-          communityAccounts: queryCommunityAccounts.data,
-          communityAccountsError: queryCommunityAccounts.error,
-          profileAccounts: queryProfileAccounts.data,
-          profileAccountsError: queryProfileAccounts.error,
-          pointerAccounts: queryPointerAccounts.data,
-          pointerAccountsError: queryPointerAccounts.error,
+          configAccount: queryConfigAccount?.data ?? null,
+          communityAccounts: queryCommunityAccounts.data ?? [],
+          communityAccountsError: queryCommunityAccounts.error ? queryCommunityAccounts.error.message : null,
+          profileAccounts: queryProfileAccounts.data ?? [],
+          profileAccountsError: queryProfileAccounts.error ? queryProfileAccounts.error.message : null,
+          pointerAccounts: queryPointerAccounts.data ?? [],
+          pointerAccountsError: queryPointerAccounts.error ? queryPointerAccounts.error.message : null,
         }}
         open
       />

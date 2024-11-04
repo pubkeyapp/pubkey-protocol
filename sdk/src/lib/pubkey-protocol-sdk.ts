@@ -299,6 +299,43 @@ export class PubKeyProtocolSdk {
 
     return { input, tx }
   }
+  async configDeletePointer(options: { configAuthority: PublicKeyString; pointer: PublicKeyString }) {
+    const [config] = this.pdaConfig()
+    const pointer = new PublicKey(options.pointer)
+    const configAuthority = new PublicKey(options.configAuthority)
+
+    const ix = await this.program.methods
+      .configDeletePointer()
+      .accounts({
+        config,
+        configAuthority,
+        pointer,
+      })
+      .instruction()
+
+    const tx = await this.createTransaction({ feePayer: configAuthority, ix })
+
+    return { tx }
+  }
+
+  async configDeleteProfile(options: { configAuthority: PublicKeyString; profile: PublicKeyString }) {
+    const [config] = this.pdaConfig()
+    const profile = this.profileGetPda({ profile: new PublicKey(options.profile) })
+    const configAuthority = new PublicKey(options.configAuthority)
+
+    const ix = await this.program.methods
+      .configDeleteProfile()
+      .accounts({
+        config,
+        configAuthority,
+        profile,
+      })
+      .instruction()
+
+    const tx = await this.createTransaction({ feePayer: configAuthority, ix })
+
+    return { tx }
+  }
 
   async configGet(options: { nullable?: boolean }): Promise<PubKeyConfig | null> {
     const [config] = this.pdaConfig()

@@ -631,6 +631,64 @@
       ]
     },
     {
+      "name": "config_delete_pointer",
+      "discriminator": [
+        127,
+        151,
+        20,
+        152,
+        180,
+        177,
+        230,
+        96
+      ],
+      "accounts": [
+        {
+          "name": "config",
+          "writable": true
+        },
+        {
+          "name": "config_authority",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "pointer",
+          "writable": true
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "config_delete_profile",
+      "discriminator": [
+        28,
+        66,
+        90,
+        94,
+        127,
+        245,
+        235,
+        199
+      ],
+      "accounts": [
+        {
+          "name": "config",
+          "writable": true
+        },
+        {
+          "name": "config_authority",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "profile",
+          "writable": true
+        }
+      ],
+      "args": []
+    },
+    {
       "name": "config_init",
       "discriminator": [
         13,

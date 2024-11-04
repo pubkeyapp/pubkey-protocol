@@ -65,5 +65,5 @@ pub fn profile_update(
 pub struct ProfileUpdateArgs {
     pub new_name: Option<String>,
     pub new_avatar_url: Option<String>,
-    pub new_bio: Option<String>,  
+    pub new_bio: Option<String>,
 }

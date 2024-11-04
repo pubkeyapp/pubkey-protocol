@@ -73,6 +73,14 @@ pub mod pubkey_protocol {
         community::community_update(ctx, args)
     }
 
+    pub fn config_delete_pointer(ctx: Context<ConfigDeletePointer>) -> Result<()> {
+        config::config_delete_pointer(ctx)
+    }
+
+    pub fn config_delete_profile(ctx: Context<ConfigDeleteProfile>) -> Result<()> {
+        config::config_delete_profile(ctx)
+    }
+
     pub fn config_init(ctx: Context<ConfigInit>, args: ConfigInitArgs) -> Result<()> {
         config::config_init(ctx, args)
     }

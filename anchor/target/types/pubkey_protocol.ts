@@ -637,6 +637,64 @@ export type PubkeyProtocol = {
       ]
     },
     {
+      "name": "configDeletePointer",
+      "discriminator": [
+        127,
+        151,
+        20,
+        152,
+        180,
+        177,
+        230,
+        96
+      ],
+      "accounts": [
+        {
+          "name": "config",
+          "writable": true
+        },
+        {
+          "name": "configAuthority",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "pointer",
+          "writable": true
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "configDeleteProfile",
+      "discriminator": [
+        28,
+        66,
+        90,
+        94,
+        127,
+        245,
+        235,
+        199
+      ],
+      "accounts": [
+        {
+          "name": "config",
+          "writable": true
+        },
+        {
+          "name": "configAuthority",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "profile",
+          "writable": true
+        }
+      ],
+      "args": []
+    },
+    {
       "name": "configInit",
       "discriminator": [
         13,

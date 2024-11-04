@@ -19,6 +19,7 @@ import { useQueryGetProgramAccount } from './use-query-get-program-account'
 export interface PubKeyProfileProviderContext {
   authority: PublicKeyString
   cluster: Cluster
+  connection: Connection
   feePayer: PublicKeyString
   getExplorerUrl: (path: string) => string
   getIdentityUrl: (identity: PubKeyIdentity) => string | undefined
@@ -129,6 +130,7 @@ export function PubKeyProtocolProvider({
   const value: PubKeyProfileProviderContext = {
     authority: publicKey,
     cluster,
+    connection,
     feePayer,
     getExplorerUrl,
     getIdentityUrl,
