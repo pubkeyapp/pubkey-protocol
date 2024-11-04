@@ -1,7 +1,6 @@
-import { SimpleGrid } from '@mantine/core'
+import { Box, Divider, SimpleGrid } from '@mantine/core'
 import { PubKeyProfile } from '@pubkey-protocol/sdk'
-import { UiCard } from '@pubkey-ui/core'
-import { PubkeyProtocolUiIdentity } from './pubkey-protocol-ui-identity'
+import { PubkeyProtocolUiIdentityIcons } from './pubkey-protocol-ui-identity-icons'
 import { PubkeyProtocolUiProfileListItem } from './pubkey-protocol-ui-profile-list-item'
 
 export function PubkeyProtocolUiProfileGrid({ profiles, basePath }: { profiles: PubKeyProfile[]; basePath?: string }) {
@@ -13,11 +12,10 @@ export function PubkeyProtocolUiProfileGrid({ profiles, basePath }: { profiles: 
           profile={profile}
           to={`${basePath}/${profile.username}`}
         >
-          {profile.identities?.map((identity) => (
-            <UiCard key={`${identity.provider}-${identity.providerId}`}>
-              <PubkeyProtocolUiIdentity identity={identity} key={identity.providerId} />
-            </UiCard>
-          ))}
+          <Box>
+            <Divider label="Identities" labelPosition="left" my={4} />
+            <PubkeyProtocolUiIdentityIcons identities={profile.identities} />
+          </Box>
         </PubkeyProtocolUiProfileListItem>
       ))}
     </SimpleGrid>

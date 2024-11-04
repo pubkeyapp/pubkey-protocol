@@ -24,7 +24,11 @@ export function PubkeyProtocolUiProfileCardIdentities({
   return (
     <UiAppCard
       title="Identities"
-      action={canSign ? <PubkeyProtocolUiProfileButtonAddIdentity community={community} profile={profile} /> : null}
+      action={
+        canSign ? (
+          <PubkeyProtocolUiProfileButtonAddIdentity community={community} profile={profile} refresh={refresh} />
+        ) : null
+      }
     >
       <UiStack px="xs" gap="xl">
         {profile.identities.map((item) => (

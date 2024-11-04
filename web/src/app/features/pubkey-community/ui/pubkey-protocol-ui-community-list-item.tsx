@@ -1,6 +1,5 @@
-import { Code, Group, Stack } from '@mantine/core'
-import { PubKeyCommunity } from '@pubkey-protocol/sdk'
-import { ellipsify } from '@pubkey-protocol/sdk'
+import { Group, Stack, Text } from '@mantine/core'
+import { ellipsify, PubKeyCommunity } from '@pubkey-protocol/sdk'
 import { UiCard, UiDebugModal, UiGroup } from '@pubkey-ui/core'
 import { ReactNode } from 'react'
 import { ExplorerLink } from '../../cluster/cluster-ui'
@@ -24,9 +23,9 @@ export function PubkeyProtocolUiCommunityListItem({
           <Stack>
             <Stack gap={0}>
               <PubkeyProtocolUiCommunityAnchor community={community} to={to} />
-              <Group>
-                <Code>{community.slug.trim()}</Code>
-              </Group>
+              <Text size="xs" c="dimmed">
+                {community.slug}
+              </Text>
             </Stack>
             <Stack>{children}</Stack>
           </Stack>

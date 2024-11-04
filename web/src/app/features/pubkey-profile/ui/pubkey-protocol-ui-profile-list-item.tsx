@@ -1,4 +1,4 @@
-import { Code, Group, Stack } from '@mantine/core'
+import { Group, Stack, Text } from '@mantine/core'
 import { ellipsify, PubKeyProfile } from '@pubkey-protocol/sdk'
 import { UiCard, UiDebugModal, UiGroup } from '@pubkey-ui/core'
 import { ReactNode } from 'react'
@@ -35,9 +35,9 @@ export function PubkeyProtocolUiProfileListItem({
               </Group>
             </UiGroup>
             <Stack w="100%">
-              <Group>
-                <Code>{profile.username}</Code>
-              </Group>
+              <Text size="sm" c="dimmed">
+                {profile.username}
+              </Text>
               <PubkeyProtocolUiProfileBio profile={profile} />
               {children}
             </Stack>

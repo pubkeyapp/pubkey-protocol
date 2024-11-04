@@ -1,5 +1,5 @@
 import { Button, Group } from '@mantine/core'
-import { UiDebugModal, UiLoader, UiPage, UiStack } from '@pubkey-ui/core'
+import { UiDebugModal, UiLoader, UiPage } from '@pubkey-ui/core'
 import { IconUsers } from '@tabler/icons-react'
 import { Link } from 'react-router-dom'
 import { useQueryCommunityGetAll } from '../data-access'
@@ -24,9 +24,7 @@ export function PubkeyCommunityFeatureList({ basePath }: { basePath: string }) {
       {query.isLoading ? (
         <UiLoader />
       ) : (
-        <UiStack>
-          <PubkeyProtocolUiCommunityGrid communities={query.data ?? []} basePath={basePath} />
-        </UiStack>
+        <PubkeyProtocolUiCommunityGrid communities={query.data ?? []} basePath={basePath} />
       )}
     </UiPage>
   )

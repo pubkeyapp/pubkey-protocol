@@ -4,7 +4,7 @@
 
 PubKey Protocol is the social layer on Solana. It allows users to create and manage a profiles and verify their Social or Solana identities. The identities are verified by the communities in the network.
 
-For more information [join our Discord](https://discord.gg/XxuZQeDPNf) or reach out to [@pubkeyapp on X](https://x.com/pubkeyapp).
+For more information [join our Discord](https://discord.gg/XxuZQeDPNf) or reach out to [@PubKeyApp on X](https://x.com/PubKeyApp).
 
 ## Glossary
 

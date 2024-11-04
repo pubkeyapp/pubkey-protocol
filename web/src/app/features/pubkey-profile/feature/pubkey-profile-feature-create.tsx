@@ -1,7 +1,7 @@
 import { Group } from '@mantine/core'
-import { IdentityProvider, PubKeyCommunity } from '@pubkey-protocol/sdk'
-import { ellipsify } from '@pubkey-protocol/sdk'
+import { ellipsify, IdentityProvider, PubKeyCommunity } from '@pubkey-protocol/sdk'
 import { toastError, toastSuccess, UiBack, UiCard, UiInfo, UiLoader, UiPage } from '@pubkey-ui/core'
+import { useNavigate } from 'react-router-dom'
 import { PubkeyProtocolUiCommunitySelect } from '../../pubkey-community/ui'
 import { usePubKeyProtocol } from '../../pubkey-protocol'
 import { useMutationProfileCreate, useQueryProfileGetByProviderNullable } from '../data-access'
@@ -11,6 +11,7 @@ export function PubkeyProfileFeatureCreate({ community }: { community: PubKeyCom
   const mutation = useMutationProfileCreate({
     community: community.publicKey,
   })
+  const navigate = useNavigate()
   const { authority } = usePubKeyProtocol()
   const pointerQuery = useQueryProfileGetByProviderNullable({
     provider: IdentityProvider.Solana,
@@ -41,7 +42,10 @@ export function PubkeyProfileFeatureCreate({ community }: { community: PubKeyCom
             submit={(input) =>
               mutation
                 .mutateAsync(input)
-                .then(() => toastSuccess(`Profile created`))
+                .then(({ input }) => {
+                  toastSuccess(`Profile created`)
+                  navigate(`../${input.username}`)
+                })
                 .catch((err) => toastError(`Error: ${err}`))
             }
           />

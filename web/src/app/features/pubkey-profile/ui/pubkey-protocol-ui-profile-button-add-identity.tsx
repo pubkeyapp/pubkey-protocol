@@ -15,19 +15,27 @@ export interface PubKeyProfileAddIdentityInput {
 export function PubkeyProtocolUiProfileButtonAddIdentity({
   community,
   profile,
+  refresh,
 }: {
   community: PubKeyCommunity
   profile: PubKeyProfile
+  refresh: () => void
 }) {
   const mutation = useMutationProfileIdentityAdd({ community: community.publicKey })
 
   async function submit({ provider, providerId, name }: PubKeyProfileAddIdentityInput) {
-    return mutation.mutateAsync({
-      name: name ?? ellipsify(providerId),
-      providerId,
-      provider,
-      username: profile.username,
-    })
+    return mutation
+      .mutateAsync({
+        name: name ?? ellipsify(providerId),
+        providerId,
+        provider,
+        username: profile.username,
+      })
+      .then((res) => {
+        refresh()
+        modals.closeAll()
+        return res
+      })
   }
 
   return (

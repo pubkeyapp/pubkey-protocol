@@ -407,11 +407,13 @@ export class PubKeyProtocolSdk {
           publicKey,
           ...account,
           authorities: account.authorities.map((a) => a.toString()).sort(),
-          identities: account.identities.map((identity) => ({
-            ...identity,
-            provider: convertAnchorIdentityProvider(identity.provider),
-            communities: identity.communities.map((c) => c.toString()),
-          })),
+          identities: account.identities
+            .map((identity) => ({
+              ...identity,
+              provider: convertAnchorIdentityProvider(identity.provider),
+              communities: identity.communities.map((c) => c.toString()),
+            }))
+            .sort((a, b) => (a.provider > b.provider ? 1 : -1)),
         }))
         .sort((a, b) => (a.username > b.username ? 1 : -1)),
     )
@@ -429,11 +431,13 @@ export class PubKeyProtocolSdk {
     return {
       ...account,
       authorities: account.authorities.map((a) => a.toString()).sort(),
-      identities: account.identities.map((identity) => ({
-        ...identity,
-        communities: identity.communities.map((c) => c.toString()),
-        provider: convertAnchorIdentityProvider(identity.provider),
-      })),
+      identities: account.identities
+        .map((identity) => ({
+          ...identity,
+          communities: identity.communities.map((c) => c.toString()),
+          provider: convertAnchorIdentityProvider(identity.provider),
+        }))
+        .sort((a, b) => (a.provider > b.provider ? 1 : -1)),
       publicKey: profile.toString(),
     }
   }

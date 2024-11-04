@@ -16,8 +16,10 @@ export function useMutationProfileCreate({ community }: { community: PublicKeySt
           authority,
           feePayer,
         })
-        .then(({ tx }) => signAndConfirmTransaction(tx)),
+        .then(({ input, tx }) => signAndConfirmTransaction(tx).then((signature) => ({ signature, input }))),
     onError,
-    onSuccess,
+    onSuccess: ({ signature }) => {
+      return onSuccess(signature)
+    },
   })
 }

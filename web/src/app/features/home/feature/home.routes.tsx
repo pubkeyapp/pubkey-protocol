@@ -40,22 +40,23 @@ export default function HomeRoutes() {
   }
 
   return (
-    <UiPage>
+    <UiPage title="PubKey Protocol">
       <UiStack>
-        <UiCard title="About PubKey Protocol">
+        <UiCard>
           <Text>PubKey Protocol is the social layer on Solana.</Text>
           <Text>
             It allows users to create and manage a profiles and verify their Social or Solana identities. The identities
             are verified by the communities in the network.
           </Text>
+          <Text>Developers can use this information as a building block for their applications.</Text>
           <Text>
             For more information{' '}
             <Anchor target="_blank" href="https://discord.gg/XxuZQeDPNf">
               join our Discord
             </Anchor>{' '}
             or reach out to{' '}
-            <Anchor target="_blank" href="https://x.com/pubkeyapp">
-              @pubkeyapp on X
+            <Anchor target="_blank" href="https://x.com/PubKeyApp">
+              @PubKeyApp on X
             </Anchor>
             .
           </Text>

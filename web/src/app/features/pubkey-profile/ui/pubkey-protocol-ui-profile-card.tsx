@@ -1,4 +1,4 @@
-import { Box, Code, Group, Stack } from '@mantine/core'
+import { Box, Group, Stack, Text } from '@mantine/core'
 import { ellipsify, PubKeyCommunity, PubKeyProfile } from '@pubkey-protocol/sdk'
 import { UiCard, UiDebugModal, UiGroup, UiStack } from '@pubkey-ui/core'
 import { PublicKey } from '@solana/web3.js'
@@ -50,9 +50,9 @@ export function PubkeyProtocolUiProfileCard({
               </Group>
             </UiGroup>
             <Stack w="100%">
-              <Group>
-                <Code>{profile.username}</Code>
-              </Group>
+              <Text size="xs" c="dimmed">
+                {profile.username}
+              </Text>
               <PubkeyProtocolUiProfileBio profile={profile} />
               <PubkeyProtocolUiProfileCardIdentities
                 community={community}

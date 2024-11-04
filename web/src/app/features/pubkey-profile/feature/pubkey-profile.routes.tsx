@@ -11,13 +11,13 @@ export default function PubkeyProfileRoutes({ basePath }: { basePath: string }) 
   return (
     <PubKeyProtocolLoader>
       <PubKeyCommunityProvider>
-        <Router basePath={basePath} />
+        <ProfileRouter basePath={basePath} />
       </PubKeyCommunityProvider>
     </PubKeyProtocolLoader>
   )
 }
 
-export function Router({ basePath }: { basePath: string }) {
+export function ProfileRouter({ basePath }: { basePath: string }) {
   const { community } = usePubKeyCommunity()
 
   return useRoutes([
