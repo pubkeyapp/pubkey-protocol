@@ -17,7 +17,7 @@ export function useQueries({ address }: { address: PublicKey; commitment?: Commi
     },
     getSignatures: {
       queryKey: ['getSignatures', { endpoint: connection?.rpcEndpoint, address }],
-      queryFn: () => connection.getConfirmedSignaturesForAddress2(address),
+      queryFn: () => connection.getSignaturesForAddress(address),
     },
     requestAirdrop: {
       mutationKey: ['requestAirdrop', { endpoint: connection?.rpcEndpoint, address }],
