@@ -31,7 +31,7 @@ export function PubKeyCommunityProvider({ children }: { children: ReactNode }) {
       return
     }
     if (query.data.length) {
-      setCommunity(query.data[0])
+      setCommunity(query.data?.find((c) => c.slug === 'pubkey'))
     }
   }, [query.data, community])
 
