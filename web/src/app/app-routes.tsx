@@ -5,6 +5,7 @@ import { Link, Navigate, RouteObject, useRoutes } from 'react-router-dom'
 import { AppLayout } from './app-layout'
 import { ClusterUiSelect } from './features/cluster/cluster-ui'
 import { DevFeature } from './features/dev/feature'
+import { HomeFeature } from './features/home/feature'
 import { KeypairFeature } from './features/keypair/feature'
 import { KeypairUiBalance, KeypairUiSelect } from './features/keypair/ui'
 import { WalletIcon } from './features/solana'
@@ -25,6 +26,7 @@ const links: UiHeaderLink[] = [
 const routes: RouteObject[] = [
   { path: '/clusters', element: <ClusterFeature /> },
   { path: '/dev', element: <DevFeature /> },
+  { path: '/home', element: <HomeFeature /> },
   { path: '/keypairs/*', element: <KeypairFeature /> },
   { path: '/communities/*', element: <PubkeyCommunityFeature basePath="/communities" /> },
   { path: '/profiles/*', element: <PubkeyProfileFeature basePath="/profiles" /> },
@@ -33,7 +35,7 @@ const routes: RouteObject[] = [
 
 export function AppRoutes() {
   const router = useRoutes([
-    { path: '/', element: <Navigate to="/communities" replace /> },
+    { path: '/', element: <Navigate to="/home" replace /> },
     ...routes,
     { path: '*', element: <UiNotFound /> },
   ])
