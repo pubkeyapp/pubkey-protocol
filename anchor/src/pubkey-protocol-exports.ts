@@ -11,7 +11,7 @@ export type PublicKeyString = PublicKey | string
 export { PubkeyProtocol, PubkeyProtocolIDL }
 
 // This is a helper function to get the PubkeyProtocol Anchor program.
-export function getPubkeyProtocolProgram(provider: AnchorProvider) {
+export function getPubkeyProtocolProgram(provider: AnchorProvider): Program<PubkeyProtocol> {
   return new Program(PubkeyProtocolIDL as PubkeyProtocol, provider)
 }
 
