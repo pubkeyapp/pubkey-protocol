@@ -9,5 +9,5 @@
   },
   "type": "commonjs",
   "main": "./index.cjs",
-  "module": "./index.js"
+  "module": "./index.esm.js"
 }
